@@ -3,6 +3,7 @@ from pathlib import Path
 import pygame
 
 from seagulls._asset_manager import AssetManager
+from seagulls._game_object import GameObject
 
 
 class Seagulls:
@@ -13,9 +14,20 @@ class Seagulls:
 
     def __init__(self):
         self._init_pygame()
-        self.screen = pygame.display.set_mode((800, 600))
+        self._screen = pygame.display.set_mode((800, 600))
         self._asset_manager = AssetManager(Path("assets"))
         self._background = self._asset_manager.load_sprite("background", False)
+
+        self._player = GameObject(
+            pygame.Vector2(400, 300),
+            self._asset_manager.load_sprite("seagull/seagull-got-hit"),
+            pygame.Vector2(0, 0),
+        )
+        self._poop = GameObject(
+            pygame.Vector2(400, 400),
+            self._asset_manager.load_sprite("poop/poop-falling"),
+            pygame.Vector2(0, 0.2),
+        )
 
     def main_loop(self):
         while True:
@@ -41,10 +53,13 @@ class Seagulls:
         return False
 
     def _process_game_logic(self):
-        pass
+        self._player.move()
+        self._poop.move()
 
     def _draw(self):
-        self.screen.blit(self._background, (0, 0))
+        self._screen.blit(self._background, (0, 0))
+        self._player.draw(self._screen)
+        self._poop.draw(self._screen)
         pygame.display.flip()
 
 

@@ -1,4 +1,4 @@
-from pygame import Surface
+from pygame.surface import Surface
 from pygame.math import Vector2
 
 
@@ -11,7 +11,7 @@ class GameObject:
 
     def draw(self, surface: Surface):
         blit_position = self.position - Vector2(self.radius)
-        surface.blit(self.sprite, blit_position)
+        surface.blit(self.sprite, blit_position)  # type: ignore
 
     def move(self):
         self.position = self.position + self.velocity

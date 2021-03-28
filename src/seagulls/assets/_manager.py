@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pygame import Surface
+from pygame.surface import Surface
 from pygame.image import load
 
 

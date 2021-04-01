@@ -1,5 +1,10 @@
+from pathlib import Path
+
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Singleton, Dependency
+from seagulls.assets import AssetManager
+from seagulls.pygame._game_client import PygameClient
+from seagulls.scenes._simple import SimpleScene
 
 from ._example_command import ExampleCommand
 from ._launch_command import LaunchCommand
@@ -14,7 +19,21 @@ class SeagullsDiContainer(DeclarativeContainer):
         verbosity=_logging_verbosity,
     )
 
+    _pygame_client = Singleton(PygameClient)
+    _asset_manager = Singleton(
+        AssetManager,
+        assets_path=Path("assets"),
+    )
+    _simple_scene = Singleton(
+        SimpleScene,
+        asset_manager=_asset_manager,
+    )
+
     root_command = Singleton(RootCommand)
-    launch_command = Singleton(LaunchCommand)
+    launch_command = Singleton(
+        LaunchCommand,
+        pygame_client=_pygame_client,
+        scene=_simple_scene,
+    )
 
     example_command = Singleton(ExampleCommand)

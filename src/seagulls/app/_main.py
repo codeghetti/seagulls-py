@@ -41,7 +41,8 @@ def main():
         if not is_command:
             continue
 
-        cmd: CliCommand = provided()
+        logger.info(f"Initializing CliCommand: {provided}")
+        cmd: CliCommand = provider()
         subparser = sub_commands.add_parser(
             name=cmd.get_command_name(),
             help=cmd.get_command_help(),

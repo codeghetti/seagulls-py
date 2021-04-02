@@ -38,7 +38,11 @@ class LaunchCommand(CliCommand):
         window.render_scene(self._scene)
 
         try:
-            while True:
+            should_exit = False
+            while not should_exit:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        should_exit = True
                 window.render_scene(self._scene)
         except KeyboardInterrupt:
             window.close()

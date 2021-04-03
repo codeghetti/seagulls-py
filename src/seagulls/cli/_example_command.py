@@ -1,25 +1,18 @@
-from abc import ABC, abstractmethod
 from argparse import ArgumentParser
 from typing import Any, Dict
 
+from ._framework import CliCommand
 
-class BaseCliCommand(ABC):
-    @abstractmethod
+
+class ExampleCommand(CliCommand):
     def get_command_name(self) -> str:
-        pass
+        return "example"
 
-    @abstractmethod
     def get_command_help(self) -> str:
-        pass
+        return "Just an example command"
 
-    @abstractmethod
     def configure_parser(self, parser: ArgumentParser) -> None:
         pass
 
-    @abstractmethod
     def execute(self, args: Dict[str, Any]) -> None:
-        pass
-
-
-class CliCommand(BaseCliCommand, ABC):
-    pass
+        print("I don't do anything useful")

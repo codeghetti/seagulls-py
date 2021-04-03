@@ -1,10 +1,10 @@
 from argparse import ArgumentParser
 from typing import Dict, Any
 
-from ._command_interfaces import BaseCliCommand
+from ._framework import RootCliCommand
 
 
-class RootCommand(BaseCliCommand):
+class SeagullsCommand(RootCliCommand):
 
     def get_command_name(self) -> str:
         return "seagulls"

@@ -3,7 +3,7 @@ import logging
 import sys
 from argparse import ArgumentParser
 
-from ._command_interfaces import CliCommand
+from ._framework import CliCommand
 from ._di_container import SeagullsDiContainer
 
 logger = logging.getLogger(__name__)

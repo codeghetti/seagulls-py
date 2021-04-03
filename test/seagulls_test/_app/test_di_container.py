@@ -1,4 +1,4 @@
-from seagulls.app._di_container import SeagullsDiContainer
+from seagulls.cli._di_container import SeagullsDiContainer
 
 
 def test_sample():

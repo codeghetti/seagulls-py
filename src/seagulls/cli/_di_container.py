@@ -10,8 +10,8 @@ from seagulls.wizards import SimpleWizardFactory
 
 from ._example_command import ExampleCommand
 from ._launch_command import LaunchCommand
-from ._logging_client import LoggingClient
-from ._root_command import RootCommand
+from ._framework import LoggingClient
+from ._seagulls_command import SeagullsCommand
 
 
 class SeagullsDiContainer(DeclarativeContainer):
@@ -40,7 +40,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         wizard_factory=_wizard_factory,
     )
 
-    root_command = Singleton(RootCommand)
+    root_command = Singleton(SeagullsCommand)
     launch_command = Singleton(
         LaunchCommand,
         window_factory=_window_factory,

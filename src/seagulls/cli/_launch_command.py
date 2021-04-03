@@ -2,14 +2,13 @@ from argparse import ArgumentParser
 from typing import Any, Dict
 import logging
 
-import pygame
 from seagulls.pygame import (
     GameWindowFactory,
     GameScene, GameControls,
 )
 from seagulls.pygame import GameTimeUpdater
 
-from ._command_interfaces import CliCommand
+from ._framework import CliCommand
 
 logger = logging.getLogger(__name__)
 

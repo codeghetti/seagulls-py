@@ -39,8 +39,10 @@ class SimpleScene(GameScene):
 
     def update(self) -> None:
         self._ticks += 1
-        if self._ticks % 100 == 0:
+        # Occasionally spawn a new wizard unless we have 5 or more.
+        if self._ticks % 100 == 0 and len(self._wizards) < 5:
             self._spawn_wizard()
+
         for w in self._wizards:
             w.update()
 

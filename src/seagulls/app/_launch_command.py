@@ -5,7 +5,7 @@ import logging
 import pygame
 from seagulls.pygame import (
     GameWindowFactory,
-    GameScene,
+    GameScene, GameControls,
 )
 from seagulls.pygame import GameTimeUpdater
 
@@ -19,15 +19,18 @@ class LaunchCommand(CliCommand):
     _window_factory: GameWindowFactory
     _scene: GameScene
     _clock: GameTimeUpdater
+    _controls: GameControls
 
     def __init__(
             self,
             window_factory: GameWindowFactory,
             scene: GameScene,
-            clock: GameTimeUpdater):
+            clock: GameTimeUpdater,
+            controls: GameControls):
         self._window_factory = window_factory
         self._scene = scene
         self._clock = clock
+        self._controls = controls
 
     def get_command_name(self) -> str:
         return "launch"
@@ -44,12 +47,8 @@ class LaunchCommand(CliCommand):
         window.render_scene(self._scene)
 
         try:
-            should_exit = False
-            while not should_exit:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        should_exit = True
-
+            while not self._controls.should_quit():
+                self._controls.update()  # Update the game events
                 self._clock.update()  # Our global clock tracks the time between frames
                 self._scene.update()  # The scene tells all the rendered things to update state
                 window.render_scene(self._scene)  # Update our window to show the latest scene state

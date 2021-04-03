@@ -3,6 +3,7 @@ from ._game_clock import (
     GameTimeProvider,
     GameClock,
 )
+from ._game_controls import GameControls
 from ._game_window import (
     GameWindow,
     GameWindowFactory,
@@ -21,6 +22,7 @@ __all__ = [
     "GameTimeUpdater",
     "GameTimeProvider",
     "GameClock",
+    "GameControls",
     "GameWindow",
     "GameWindowFactory",
     "GameScene",

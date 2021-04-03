@@ -10,12 +10,10 @@ class AssetManager:
     def __init__(self, assets_path: Path):
         self._assets_path = assets_path
 
-    def load_sprite(self, name: str, with_alpha: bool = True) -> Surface:
+    def load_sprite(self, name: str) -> Surface:
         path = self._assets_path / f"sprites/{name}.png"
         loaded_sprite = load(path.resolve())
-        loaded_sprite.get_alpha()
-
-        if with_alpha:
-            return loaded_sprite.convert_alpha()
-        else:
+        if loaded_sprite.get_alpha() is None:
             return loaded_sprite.convert()
+        else:
+            return loaded_sprite.convert_alpha()

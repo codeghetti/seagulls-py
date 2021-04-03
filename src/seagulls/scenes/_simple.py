@@ -2,11 +2,12 @@ import logging
 from typing import List
 
 from pygame import Surface
-from pygame.time import Clock
 from seagulls.assets import AssetManager
-from seagulls.pygame._game_client import GameScene
-from seagulls.pygame._game_clock import GameTimeProvider
-from seagulls.wizards._simple import SimpleWizard, SimpleWizardFactory
+from seagulls.pygame import GameScene
+from seagulls.wizards import (
+    SimpleWizard,
+    SimpleWizardFactory,
+)
 
 logger = logging.getLogger(__name__)
 

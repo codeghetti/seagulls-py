@@ -1,7 +1,6 @@
 from pygame import Vector2, Surface
-from pygame.time import Clock
 from seagulls.assets import AssetManager
-from seagulls.pygame._game_clock import GameTimeProvider
+from seagulls.pygame import GameTimeProvider
 
 
 class SimpleWizard:

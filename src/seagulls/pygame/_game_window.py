@@ -1,18 +1,13 @@
 import logging
-from abc import ABC
 
 import pygame
 from pygame import Surface
+from ._game_scene import GameScene
 
 logger = logging.getLogger(__name__)
 
 
-class GameScene(ABC):
-    def render(self, surface: Surface) -> None:
-        pass
-
-
-class PygameWindowManager:
+class GameWindow:
 
     _screen: Surface
 
@@ -31,8 +26,16 @@ class PygameWindowManager:
         pygame.display.quit()
 
 
-class PygameClient:
+class GameWindowFactory:
 
-    def open(self, width: int, height: int) -> PygameWindowManager:
-        pygame.init()
-        return PygameWindowManager(pygame.display.set_mode((width, height)))
+    _created: bool
+
+    def __init__(self):
+        self._created = False
+
+    def create(self, width: int, height: int) -> GameWindow:
+        if self._created:
+            raise RuntimeError("Multiple game windows are not yet supported")
+
+        self._created = True
+        return GameWindow(pygame.display.set_mode((width, height)))

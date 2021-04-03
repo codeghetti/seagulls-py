@@ -1,9 +1,11 @@
 import logging
 from typing import List
 
-from pygame import Surface
 from seagulls.assets import AssetManager
-from seagulls.pygame import GameScene
+from seagulls.pygame import (
+    GameScene,
+    Surface,
+)
 from seagulls.wizards import (
     SimpleWizard,
     SimpleWizardFactory,

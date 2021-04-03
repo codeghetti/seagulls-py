@@ -1,7 +1,7 @@
 import logging
 
 import pygame
-from pygame import Surface
+from ._overwrites import Surface
 from ._game_scene import GameScene
 
 logger = logging.getLogger(__name__)
@@ -38,4 +38,5 @@ class GameWindowFactory:
             raise RuntimeError("Multiple game windows are not yet supported")
 
         self._created = True
-        return GameWindow(pygame.display.set_mode((width, height)))
+        surface = pygame.display.set_mode((width, height))
+        return GameWindow(surface)

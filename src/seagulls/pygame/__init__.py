@@ -8,6 +8,14 @@ from ._game_window import (
     GameWindowFactory,
 )
 from ._game_scene import GameScene
+from ._overwrites import (
+    Rect,
+    Surface,
+    Color,
+    PixelArray,
+    Vector2,
+    Vector3,
+)
 
 __all__ = [
     "GameTimeUpdater",
@@ -16,4 +24,10 @@ __all__ = [
     "GameWindow",
     "GameWindowFactory",
     "GameScene",
+    "Rect",
+    "Surface",
+    "Color",
+    "PixelArray",
+    "Vector2",
+    "Vector3",
 ]

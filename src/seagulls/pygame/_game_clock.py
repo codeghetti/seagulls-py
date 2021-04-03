@@ -5,7 +5,7 @@ from pygame.time import Clock
 
 class GameTimeUpdater(ABC):
     @abstractmethod
-    def update(self) -> int:
+    def update(self) -> None:
         pass
 
 

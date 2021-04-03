@@ -3,9 +3,11 @@ from typing import Any, Dict
 import logging
 
 import pygame
-from seagulls.pygame import GameWindowFactory
+from seagulls.pygame import (
+    GameWindowFactory,
+    GameScene,
+)
 from seagulls.pygame import GameTimeUpdater
-from seagulls.scenes import SimpleScene
 
 from ._command_interfaces import CliCommand
 
@@ -15,13 +17,13 @@ logger = logging.getLogger(__name__)
 class LaunchCommand(CliCommand):
 
     _window_factory: GameWindowFactory
-    _scene: SimpleScene
+    _scene: GameScene
     _clock: GameTimeUpdater
 
     def __init__(
             self,
             window_factory: GameWindowFactory,
-            scene: SimpleScene,
+            scene: GameScene,
             clock: GameTimeUpdater):
         self._window_factory = window_factory
         self._scene = scene

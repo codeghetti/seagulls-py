@@ -1,6 +1,9 @@
-from pygame import Vector2, Surface
 from seagulls.assets import AssetManager
-from seagulls.pygame import GameTimeProvider
+from seagulls.pygame import (
+    GameTimeProvider,
+    Vector2,
+    Surface,
+)
 
 
 class SimpleWizard:

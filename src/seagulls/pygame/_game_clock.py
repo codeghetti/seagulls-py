@@ -1,17 +1,22 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from pygame.time import Clock
 
 
 class GameTimeUpdater(ABC):
     @abstractmethod
-    def update(self) -> None:
+    def update(self, framerate: int = 0) -> None:
         pass
 
 
 class GameTimeProvider(ABC):
     @abstractmethod
     def get_time(self) -> int:
+        pass
+
+    @abstractmethod
+    def get_fps(self) -> float:
         pass
 
 
@@ -25,8 +30,11 @@ class GameClock(GameTimeUpdater, GameTimeProvider):
         self._ticks = 0
         self._delta = 0
 
-    def update(self) -> None:
-        self._delta = self._clock.tick()
+    def update(self, framerate: int = 0) -> None:
+        self._delta = self._clock.tick(framerate)
 
     def get_time(self) -> int:
         return self._delta
+
+    def get_fps(self) -> float:
+        return self._clock.get_fps()

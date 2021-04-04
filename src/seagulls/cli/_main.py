@@ -3,6 +3,8 @@ import logging
 import sys
 from argparse import ArgumentParser
 
+import pygame
+
 from ._framework import CliCommand
 from ._di_container import SeagullsDiContainer
 
@@ -10,6 +12,9 @@ logger = logging.getLogger(__name__)
 
 
 def main():
+    # Got tired of running into exceptions when this isn't initialized in time.
+    pygame.init()
+
     logging_verbosity = int(os.environ.get("VERBOSITY", "3"))
     if "DEBUG" in os.environ:
         logging_verbosity = 100  # 100 is higher than any log level we will ever have

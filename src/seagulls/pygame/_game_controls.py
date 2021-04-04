@@ -31,5 +31,12 @@ class GameControls:
 
         return False
 
+    def should_toggle_debug_hud(self) -> bool:
+        for event in self._events:
+            if self._is_key_event(event, pygame.K_BACKQUOTE):
+                return True
+
+        return False
+
     def _is_key_event(self, event: Event, key: int) -> bool:
         return event.type == pygame.KEYDOWN and event.key == key

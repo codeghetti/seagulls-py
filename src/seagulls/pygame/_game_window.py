@@ -13,7 +13,6 @@ class GameWindow:
 
     def __init__(self, screen: Surface):
         self._screen = screen
-        pygame.init()
 
     def set_title(self, title: str) -> None:
         pygame.display.set_caption(title)

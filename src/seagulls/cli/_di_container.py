@@ -6,6 +6,7 @@ from seagulls.assets import AssetManager
 from seagulls.pygame import GameWindowFactory, GameControls
 from seagulls.pygame import GameClock
 from seagulls.scenes import SimpleScene
+from seagulls.ui import DebugHud
 from seagulls.wizards import SimpleWizardFactory
 
 from ._example_command import ExampleCommand
@@ -28,6 +29,12 @@ class SeagullsDiContainer(DeclarativeContainer):
         AssetManager,
         assets_path=Path("assets"),
     )
+    _debug_hud = Singleton(
+        DebugHud,
+        controls=_game_controls,
+        clock=_game_clock,
+    )
+
     _wizard_factory = Singleton(
         SimpleWizardFactory,
         asset_manager=_asset_manager,
@@ -38,6 +45,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         SimpleScene,
         asset_manager=_asset_manager,
         wizard_factory=_wizard_factory,
+        debug_hud=_debug_hud,
     )
 
     root_command = Singleton(SeagullsCommand)

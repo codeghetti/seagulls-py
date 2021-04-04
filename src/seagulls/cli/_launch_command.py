@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 import logging
 
 from seagulls.pygame import (
@@ -38,7 +38,7 @@ class LaunchCommand(CliCommand):
         return "Launch the seagulls game."
 
     def configure_parser(self, parser: ArgumentParser) -> None:
-        parser.add_argument("--something-else", help="Not any more useful yet")
+        parser.add_argument("--limit-fps", help="Set upper bound FPS limit")
 
     def execute(self, args: Dict[str, Any]):
         window = self._window_factory.create(800, 600)
@@ -48,8 +48,12 @@ class LaunchCommand(CliCommand):
         try:
             while not self._controls.should_quit():
                 self._controls.update()  # Update the game events
-                self._clock.update()  # Our global clock tracks the time between frames
+                # Our global clock tracks the time between frames
+                self._clock.update(self._parse_fps_arg(args.get("limit_fps")))
                 self._scene.update()  # The scene tells all the rendered things to update state
                 window.render_scene(self._scene)  # Update our window to show the latest scene state
         except KeyboardInterrupt:
             window.close()
+
+    def _parse_fps_arg(self, arg: Optional[int]) -> int:
+        return int(arg) if arg else 0

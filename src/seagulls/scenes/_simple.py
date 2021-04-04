@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from typing import List
 
 from seagulls.assets import AssetManager
@@ -22,8 +23,8 @@ class SimpleScene(GameScene):
     _debug_hud: DebugHud
 
     _wizards: List[SimpleWizard]
-
-    _ticks: int
+    _start_time: datetime
+    _last_spawn_time: datetime
 
     def __init__(
             self,
@@ -39,13 +40,14 @@ class SimpleScene(GameScene):
         self._wizards = []
 
     def start(self) -> None:
-        self._ticks = 0
+        self._start_time = datetime.now()
         self._spawn_wizard()
 
     def update(self) -> None:
-        self._ticks += 1
-        # Occasionally spawn a new wizard unless we have 5 or more.
-        if self._ticks % 100 == 0 and len(self._wizards) < 5:
+        now = datetime.now()
+        spawn_delay = 1.5  # Seconds between wizard spawns
+
+        if (now - self._last_spawn_time).total_seconds() > spawn_delay:
             self._spawn_wizard()
 
         for w in self._wizards:
@@ -64,6 +66,7 @@ class SimpleScene(GameScene):
 
     def _spawn_wizard(self) -> None:
         self._wizards.append(self._wizard_factory.create())
+        self._last_spawn_time = datetime.now()
 
     def _get_background(self) -> Surface:
         return self._asset_manager.load_sprite("environment/environment-sky")

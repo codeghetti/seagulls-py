@@ -37,7 +37,7 @@ class DebugHud:
         if not self._active:
             return
 
-        fps = int(self._clock.get_fps())
+        fps = str(int(self._clock.get_fps())).rjust(3, " ")
         time = self._clock.get_time()
         img = self._font.render(f"FPS: {fps} | MS: {time}", True, (20, 20, 20))
         text_height = img.get_height()

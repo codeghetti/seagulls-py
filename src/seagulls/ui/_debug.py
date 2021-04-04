@@ -22,7 +22,7 @@ class DebugHud:
         self._clock = clock
         self._controls = controls
 
-        self._background = Surface((800, 20))
+        self._background = Surface((1024, 20))
         self._background.fill((100, 100, 100))
         self._background.set_alpha(100)
         self._font = Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 14)

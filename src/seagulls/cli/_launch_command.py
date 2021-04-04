@@ -41,7 +41,7 @@ class LaunchCommand(CliCommand):
         parser.add_argument("--limit-fps", help="Set upper bound FPS limit")
 
     def execute(self, args: Dict[str, Any]):
-        window = self._window_factory.create(800, 600)
+        window = self._window_factory.create(1024, 600)
         self._scene.start()
         window.render_scene(self._scene)
 

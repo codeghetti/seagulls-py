@@ -25,11 +25,14 @@ class SimpleWizard:
         self._controls = controls
 
         self._size = Vector2(64, 64)
-        self._position = Vector2(0, 568)
+        # This is the starting position for new wizards
+        self._position = Vector2(0, 518)
         self._velocity = Vector2(1, 0)
 
     def update(self) -> None:
-        if self._position.x > 790:
+        # A bit hacky but we flip the direction the wizard is moving
+        # When ever they get close to the edges of the screen
+        if self._position.x > 1015:
             self._velocity = Vector2(-1, 0)
         elif self._position.x < 10:
             self._velocity = Vector2(1, 0)

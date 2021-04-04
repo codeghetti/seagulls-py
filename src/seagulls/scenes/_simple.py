@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from functools import lru_cache
 from typing import List
 
 from seagulls.assets import AssetManager
@@ -56,7 +57,7 @@ class SimpleScene(GameScene):
         self._debug_hud.update()
 
     def render(self, surface: Surface) -> None:
-        background = self._get_background()
+        background = self._get_background().copy()
         for w in self._wizards:
             w.render(background)
 
@@ -68,5 +69,25 @@ class SimpleScene(GameScene):
         self._wizards.append(self._wizard_factory.create())
         self._last_spawn_time = datetime.now()
 
+    @lru_cache()
     def _get_background(self) -> Surface:
-        return self._asset_manager.load_sprite("environment/environment-sky")
+        # Start with the sky and render the other environment items on top of it
+        surface = self._asset_manager.load_sprite("environment/environment-sky")
+
+        things = [
+            # These need to be in the order they should be rendered on top of the sky
+            self._asset_manager.load_sprite("environment/environment-stars"),
+            self._asset_manager.load_sprite("environment/environment-wall"),
+            self._asset_manager.load_sprite("environment/environment-bookshelves"),
+            self._asset_manager.load_sprite("environment/environment-ladders"),
+            self._asset_manager.load_sprite("environment/environment-floor"),
+            self._asset_manager.load_sprite("environment/environment-rampart"),
+            self._asset_manager.load_sprite("environment/environment-perch"),
+            self._asset_manager.load_sprite("environment/environment-scrolls"),
+            self._asset_manager.load_sprite("environment/environment-spider"),
+        ]
+
+        for thing in things:
+            surface.blit(thing, (0, 0))
+
+        return surface

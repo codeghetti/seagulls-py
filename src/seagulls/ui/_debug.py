@@ -2,12 +2,12 @@ import logging
 from pathlib import Path
 
 from pygame.font import Font
-from seagulls.pygame import GameControls, GameClock, Surface
+from seagulls.pygame import GameControls, GameClock, Surface, GameObject
 
 logger = logging.getLogger(__name__)
 
 
-class DebugHud:
+class DebugHud(GameObject):
     """
     UI Component to display FPS and other debug information during gameplay.
     """

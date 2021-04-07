@@ -8,7 +8,10 @@ from ._game_window import (
     GameWindow,
     GameWindowFactory,
 )
-from ._game_scene import GameScene
+from ._game_scene import (
+    GameScene,
+    GameSceneObjects
+)
 from ._overwrites import (
     Rect,
     Surface,
@@ -17,15 +20,18 @@ from ._overwrites import (
     Vector2,
     Vector3,
 )
+from ._game_object import GameObject
 
 __all__ = [
     "GameTimeUpdater",
     "GameTimeProvider",
     "GameClock",
     "GameControls",
+    "GameObject",
     "GameWindow",
     "GameWindowFactory",
     "GameScene",
+    "GameSceneObjects",
     "Rect",
     "Surface",
     "Color",

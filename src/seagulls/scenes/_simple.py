@@ -6,7 +6,7 @@ from typing import List
 from seagulls.assets import AssetManager
 from seagulls.pygame import (
     GameScene,
-    Surface,
+    Surface, GameObject, GameSceneObjects,
 )
 from seagulls.ui import DebugHud
 from seagulls.wizards import (
@@ -23,22 +23,25 @@ class SimpleScene(GameScene):
     _wizard_factory: SimpleWizardFactory
     _debug_hud: DebugHud
 
-    _wizards: List[SimpleWizard]
     _start_time: datetime
     _last_spawn_time: datetime
+
+    _game_objects: GameSceneObjects
 
     def __init__(
             self,
             asset_manager: AssetManager,
+            game_objects: GameSceneObjects,
             wizard_factory: SimpleWizardFactory,
             debug_hud: DebugHud):
 
         self._asset_manager = asset_manager
         self._wizard_factory = wizard_factory
-        self._debug_hud = debug_hud
 
         self._ticks = 0
-        self._wizards = []
+
+        self._game_objects = game_objects
+        game_objects.add(debug_hud)
 
     def start(self) -> None:
         self._start_time = datetime.now()
@@ -51,23 +54,23 @@ class SimpleScene(GameScene):
         if (now - self._last_spawn_time).total_seconds() > spawn_delay:
             self._spawn_wizard()
 
-        for w in self._wizards:
-            w.update()
-
-        self._debug_hud.update()
+        for obj in self._game_objects.get_objects():
+            obj.update()
 
     def render(self, surface: Surface) -> None:
         background = self._get_background().copy()
-        for w in self._wizards:
-            w.render(background)
 
-        self._debug_hud.render(background)
+        for obj in self._game_objects.get_objects():
+            obj.render(background)
 
         surface.blit(background, (0, 0))
 
     def _spawn_wizard(self) -> None:
-        self._wizards.append(self._wizard_factory.create())
+        self.add_game_object(self._wizard_factory.create())
         self._last_spawn_time = datetime.now()
+
+    def add_game_object(self, obj: GameObject) -> None:
+        self._game_objects.add(obj)
 
     @lru_cache()
     def _get_background(self) -> Surface:

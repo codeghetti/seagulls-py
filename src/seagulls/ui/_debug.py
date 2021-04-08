@@ -2,7 +2,8 @@ import logging
 from pathlib import Path
 
 from pygame.font import Font
-from seagulls.pygame import GameControls, GameClock, Surface, GameObject, GameSceneObjects
+from seagulls.pygame import GameControls, GameClock, Surface, GameObject, GameSceneObjects, \
+    GameSceneManager
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ class DebugHud(GameObject):
     UI Component to display FPS and other debug information during gameplay.
     """
 
-    _scene_objects: GameSceneObjects
+    _scene_manager: GameSceneManager
     _clock: GameClock
     _controls: GameControls
 
@@ -21,10 +22,10 @@ class DebugHud(GameObject):
 
     def __init__(
             self,
-            scene_objects: GameSceneObjects,
+            scene_manager: GameSceneManager,
             clock: GameClock,
             controls: GameControls):
-        self._scene_objects = scene_objects
+        self.scene_manager = scene_manager
         self._clock = clock
         self._controls = controls
 
@@ -45,7 +46,7 @@ class DebugHud(GameObject):
 
         fps = str(int(self._clock.get_fps())).rjust(3, " ")
         time = self._clock.get_time()
-        num_objects = self._scene_objects.count_objects()
+        num_objects = self.scene_manager.get_scene_objects().count_objects()
         img = self._font.render(
             f"FPS: {fps} | MS: {time} | OBJECTS: {num_objects}",
             True,

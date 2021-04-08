@@ -11,7 +11,7 @@ from seagulls.pygame import (
     Surface,
     Rect,
     GameObject,
-    GameSceneObjects,
+    GameSceneObjects, GameSceneManager,
 )
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ class WizardFireballState(Enum):
 class WizardFireball(GameObject):
 
     _clock: GameTimeProvider
-    _scene_objects: GameSceneObjects
+    _scene_manager: GameSceneManager
     _asset_manager: AssetManager
     _sprite: Surface
 
@@ -38,11 +38,11 @@ class WizardFireball(GameObject):
     def __init__(
             self,
             clock: GameTimeProvider,
-            scene_objects: GameSceneObjects,
+            scene_manager: GameSceneManager,
             asset_manager: AssetManager,
             starting_position: Vector2):
         self._clock = clock
-        self._scene_objects = scene_objects
+        self._scene_manager = scene_manager
         self._asset_manager = asset_manager
 
         self._size = Vector2(64, 64)
@@ -105,22 +105,22 @@ class WizardFireball(GameObject):
 
 class WizardFireballFactory:
     _clock: GameTimeProvider
-    _scene_objects: GameSceneObjects
+    _scene_manager: GameSceneManager
     _asset_manager: AssetManager
 
     def __init__(
             self,
             clock: GameTimeProvider,
-            scene_objects: GameSceneObjects,
+            scene_manager: GameSceneManager,
             asset_manager: AssetManager):
         self._clock = clock
-        self._scene_objects = scene_objects
+        self._scene_manager = scene_manager
         self._asset_manager = asset_manager
 
     def create(self, starting_position: Vector2) -> WizardFireball:
         return WizardFireball(
             clock=self._clock,
-            scene_objects=self._scene_objects,
+            scene_manager=self._scene_manager,
             asset_manager=self._asset_manager,
             starting_position=starting_position,
         )

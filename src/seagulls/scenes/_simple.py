@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime
 from functools import lru_cache
-from typing import List
 
 from seagulls.assets import AssetManager
 from seagulls.pygame import (
@@ -27,11 +26,11 @@ class SimpleScene(GameScene):
     _last_spawn_time: datetime
 
     _game_objects: GameSceneObjects
+    _debug_hud: DebugHud
 
     def __init__(
             self,
             asset_manager: AssetManager,
-            game_objects: GameSceneObjects,
             wizard_factory: SimpleWizardFactory,
             debug_hud: DebugHud):
 
@@ -40,12 +39,20 @@ class SimpleScene(GameScene):
 
         self._ticks = 0
 
-        self._game_objects = game_objects
-        game_objects.add(debug_hud)
+        self._game_objects = GameSceneObjects()
+        self._debug_hud = debug_hud
 
     def start(self) -> None:
+        self._game_objects.clear()
+        self._game_objects.add(self._debug_hud)
         self._start_time = datetime.now()
         self._spawn_wizard()
+
+    def exit(self) -> None:
+        pass
+
+    def pause(self) -> None:
+        pass
 
     def update(self) -> None:
         now = datetime.now()
@@ -73,6 +80,9 @@ class SimpleScene(GameScene):
 
     def add_game_object(self, obj: GameObject) -> None:
         self._game_objects.add(obj)
+
+    def get_scene_objects(self) -> GameSceneObjects:
+        return self._game_objects
 
     @lru_cache()
     def _get_background(self) -> Surface:

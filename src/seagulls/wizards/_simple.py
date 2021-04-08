@@ -10,7 +10,7 @@ from seagulls.attacks import WizardFireballFactory
 from seagulls.pygame import (
     GameTimeProvider,
     Vector2,
-    Surface, Rect, GameObject, GameSceneObjects,
+    Surface, Rect, GameObject, GameSceneObjects, GameSceneManager,
 )
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ class WizardState(Enum):
 class SimpleWizard(GameObject):
 
     _clock: GameTimeProvider
-    _scene_objects: GameSceneObjects
+    _scene_manager: GameSceneManager
     _fireball_factory: WizardFireballFactory
     _asset_manager: AssetManager
     _sprite: Surface
@@ -39,11 +39,11 @@ class SimpleWizard(GameObject):
     def __init__(
             self,
             clock: GameTimeProvider,
-            scene_objects: GameSceneObjects,
+            scene_manager: GameSceneManager,
             fireball_factory: WizardFireballFactory,
             asset_manager: AssetManager):
         self._clock = clock
-        self._scene_objects = scene_objects
+        self._scene_manager = scene_manager
         self._fireball_factory = fireball_factory
         self._asset_manager = asset_manager
 
@@ -72,7 +72,7 @@ class SimpleWizard(GameObject):
         if self._current_state == WizardState.ATTACKING:
             if self._current_state_duration > 2000:
                 fireball = self._fireball_factory.create(self._position)
-                self._scene_objects.add(fireball)
+                self._scene_manager.get_scene_objects().add(fireball)
                 self._walk()
 
         self._position = self._position + (self._velocity * delta / 10)
@@ -162,25 +162,25 @@ class SimpleWizard(GameObject):
 
 class SimpleWizardFactory:
     _clock: GameTimeProvider
-    _scene_objects: GameSceneObjects
+    _scene_manager: GameSceneManager
     _fireball_factory: WizardFireballFactory
     _asset_manager: AssetManager
 
     def __init__(
             self,
             clock: GameTimeProvider,
-            scene_objects: GameSceneObjects,
+            scene_manager: GameSceneManager,
             fireball_factory: WizardFireballFactory,
             asset_manager: AssetManager):
         self._clock = clock
-        self._scene_objects = scene_objects
+        self._scene_manager = scene_manager
         self._fireball_factory = fireball_factory
         self._asset_manager = asset_manager
 
     def create(self) -> SimpleWizard:
         return SimpleWizard(
             clock=self._clock,
-            scene_objects=self._scene_objects,
+            scene_manager=self._scene_manager,
             fireball_factory=self._fireball_factory,
             asset_manager=self._asset_manager,
         )

@@ -10,7 +10,8 @@ from ._game_window import (
 )
 from ._game_scene import (
     GameScene,
-    GameSceneObjects
+    GameSceneObjects,
+    GameSceneManager,
 )
 from ._overwrites import (
     Rect,
@@ -32,6 +33,7 @@ __all__ = [
     "GameWindowFactory",
     "GameScene",
     "GameSceneObjects",
+    "GameSceneManager",
     "Rect",
     "Surface",
     "Color",

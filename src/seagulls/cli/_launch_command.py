@@ -4,7 +4,7 @@ import logging
 
 from seagulls.pygame import (
     GameWindowFactory,
-    GameScene, GameControls,
+    GameScene, GameControls, GameSceneManager,
 )
 from seagulls.pygame import GameTimeUpdater
 
@@ -17,6 +17,7 @@ class LaunchCommand(CliCommand):
 
     _window_factory: GameWindowFactory
     _scene: GameScene
+    _scene_manager: GameSceneManager
     _clock: GameTimeUpdater
     _controls: GameControls
 
@@ -24,10 +25,12 @@ class LaunchCommand(CliCommand):
             self,
             window_factory: GameWindowFactory,
             scene: GameScene,
+            scene_manager: GameSceneManager,
             clock: GameTimeUpdater,
             controls: GameControls):
         self._window_factory = window_factory
         self._scene = scene
+        self._scene_manager = scene_manager
         self._clock = clock
         self._controls = controls
 
@@ -42,7 +45,8 @@ class LaunchCommand(CliCommand):
 
     def execute(self, args: Dict[str, Any]):
         window = self._window_factory.create(1024, 600)
-        self._scene.start()
+        self._scene_manager.load_scene(self._scene)
+        self._scene_manager.start_scene()
         window.render_scene(self._scene)
 
         try:

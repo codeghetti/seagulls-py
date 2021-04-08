@@ -9,7 +9,6 @@ from seagulls.pygame import (
 )
 from seagulls.ui import DebugHud
 from seagulls.wizards import (
-    SimpleWizard,
     SimpleWizardFactory,
 )
 
@@ -20,7 +19,6 @@ class SimpleScene(GameScene):
 
     _asset_manager: AssetManager
     _wizard_factory: SimpleWizardFactory
-    _debug_hud: DebugHud
 
     _start_time: datetime
     _last_spawn_time: datetime

@@ -2,8 +2,13 @@ import logging
 from pathlib import Path
 
 from pygame.font import Font
-from seagulls.pygame import GameControls, GameClock, Surface, GameObject, GameSceneObjects, \
+from seagulls.pygame import (
+    GameControls,
+    GameClock,
+    Surface,
+    GameObject,
     GameSceneManager
+)
 
 logger = logging.getLogger(__name__)
 

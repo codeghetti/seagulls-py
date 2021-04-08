@@ -10,7 +10,10 @@ from seagulls.attacks import WizardFireballFactory
 from seagulls.pygame import (
     GameTimeProvider,
     Vector2,
-    Surface, Rect, GameObject, GameSceneObjects, GameSceneManager,
+    Surface,
+    Rect,
+    GameObject,
+    GameSceneManager,
 )
 
 logger = logging.getLogger(__name__)

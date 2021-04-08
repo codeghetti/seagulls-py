@@ -11,7 +11,7 @@ from seagulls.pygame import (
     Surface,
     Rect,
     GameObject,
-    GameSceneObjects, GameSceneManager,
+    GameSceneManager,
 )
 
 logger = logging.getLogger(__name__)

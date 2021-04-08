@@ -12,3 +12,7 @@ class GameObject(ABC):
     @abstractmethod
     def render(self, surface: Surface) -> None:
         pass
+
+    @abstractmethod
+    def is_destroyed(self) -> bool:
+        pass

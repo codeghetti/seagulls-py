@@ -51,6 +51,8 @@ class SimpleScene(GameScene):
         now = datetime.now()
         spawn_delay = 1.5  # Seconds between wizard spawns
 
+        self._game_objects.update()
+
         if (now - self._last_spawn_time).total_seconds() > spawn_delay:
             self._spawn_wizard()
 

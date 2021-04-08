@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 from pygame.font import Font
-from seagulls.pygame import GameControls, GameClock, Surface, GameObject
+from seagulls.pygame import GameControls, GameClock, Surface, GameObject, GameSceneObjects
 
 logger = logging.getLogger(__name__)
 
@@ -12,13 +12,19 @@ class DebugHud(GameObject):
     UI Component to display FPS and other debug information during gameplay.
     """
 
+    _scene_objects: GameSceneObjects
     _clock: GameClock
     _controls: GameControls
 
     _background: Surface
     _active: bool
 
-    def __init__(self, clock: GameClock, controls: GameControls):
+    def __init__(
+            self,
+            scene_objects: GameSceneObjects,
+            clock: GameClock,
+            controls: GameControls):
+        self._scene_objects = scene_objects
         self._clock = clock
         self._controls = controls
 
@@ -39,9 +45,17 @@ class DebugHud(GameObject):
 
         fps = str(int(self._clock.get_fps())).rjust(3, " ")
         time = self._clock.get_time()
-        img = self._font.render(f"FPS: {fps} | MS: {time}", True, (20, 20, 20))
+        num_objects = self._scene_objects.count_objects()
+        img = self._font.render(
+            f"FPS: {fps} | MS: {time} | OBJECTS: {num_objects}",
+            True,
+            (20, 20, 20)
+        )
         text_height = img.get_height()
         padding = (self._background.get_height() - text_height) / 2
 
         surface.blit(self._background, (0, 0))
         surface.blit(img, (10, padding))
+
+    def is_destroyed(self) -> bool:
+        return False

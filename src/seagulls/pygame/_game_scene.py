@@ -12,11 +12,19 @@ class GameSceneObjects:
     def __init__(self):
         self._objects = []
 
+    def update(self) -> None:
+        for index, obj in enumerate(self._objects):
+            if obj.is_destroyed():
+                del self._objects[index]
+
     def add(self, obj: GameObject) -> None:
         self._objects.append(obj)
 
     def get_objects(self) -> Tuple[GameObject, ...]:
         return tuple(self._objects)
+
+    def count_objects(self) -> int:
+        return len(self._objects)
 
 
 class GameScene(ABC):

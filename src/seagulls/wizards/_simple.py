@@ -6,11 +6,11 @@ from typing import List
 
 import pygame
 from seagulls.assets import AssetManager
-from seagulls.cli.attacks._wizard_fireball import WizardFireballFactory
+from seagulls.attacks import WizardFireballFactory
 from seagulls.pygame import (
     GameTimeProvider,
     Vector2,
-    Surface, GameControls, Rect, GameObject, GameScene, GameSceneObjects,
+    Surface, Rect, GameObject, GameSceneObjects,
 )
 
 logger = logging.getLogger(__name__)
@@ -155,6 +155,9 @@ class SimpleWizard(GameObject):
     @lru_cache()
     def _get_sprite_sheet(self) -> Surface:
         return self._asset_manager.load_sprite("wizard/wizard1-spritesheet")
+
+    def is_destroyed(self) -> bool:
+        return False
 
 
 class SimpleWizardFactory:

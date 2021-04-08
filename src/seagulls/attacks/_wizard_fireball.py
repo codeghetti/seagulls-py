@@ -9,7 +9,6 @@ from seagulls.pygame import (
     GameTimeProvider,
     Vector2,
     Surface,
-    GameControls,
     Rect,
     GameObject,
     GameSceneObjects,
@@ -57,11 +56,6 @@ class WizardFireball(GameObject):
         delta = self._clock.get_time()
         self._current_state_duration += delta
 
-        # if self._current_state == WizardState.ATTACKING:
-        #     if self._current_state_duration > 2000:
-        #         self._scene_objects.add(self)
-        #         self._walk()
-
         self._position = self._position + (self._velocity * delta / 10)
 
     def _set_state(self, state: WizardFireballState) -> None:
@@ -104,6 +98,9 @@ class WizardFireball(GameObject):
     @lru_cache()
     def _get_sprite_sheet(self) -> Surface:
         return self._asset_manager.load_sprite("attacks/fireball1/fireball-spritesheet")
+
+    def is_destroyed(self) -> bool:
+        return self._position.y < 0
 
 
 class WizardFireballFactory:

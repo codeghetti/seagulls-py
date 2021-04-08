@@ -3,7 +3,7 @@ from pathlib import Path
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Singleton, Dependency
 from seagulls.assets import AssetManager
-from seagulls.cli.attacks._wizard_fireball import WizardFireballFactory
+from seagulls.attacks import WizardFireballFactory
 from seagulls.pygame import GameWindowFactory, GameControls, GameSceneObjects
 from seagulls.pygame import GameClock
 from seagulls.scenes import SimpleScene
@@ -30,13 +30,15 @@ class SeagullsDiContainer(DeclarativeContainer):
         AssetManager,
         assets_path=Path("assets"),
     )
+
+    _simple_scene_objects = Singleton(GameSceneObjects)
+
     _debug_hud = Singleton(
         DebugHud,
+        scene_objects=_simple_scene_objects,
         controls=_game_controls,
         clock=_game_clock,
     )
-
-    _simple_scene_objects = Singleton(GameSceneObjects)
 
     _fireball_factory = Singleton(
         WizardFireballFactory,

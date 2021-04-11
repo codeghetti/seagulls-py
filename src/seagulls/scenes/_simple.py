@@ -36,6 +36,7 @@ class SimpleScene(GameScene):
         self._wizard_factory = wizard_factory
 
         self._ticks = 0
+        self._num_wizards = 0
 
         self._game_objects = GameSceneObjects()
         self._debug_hud = debug_hud
@@ -54,12 +55,14 @@ class SimpleScene(GameScene):
 
     def update(self) -> None:
         now = datetime.now()
-        spawn_delay = 1.5  # Seconds between wizard spawns
+        spawn_delay = 2.5  # Seconds between wizard spawns
 
         self._game_objects.update()
 
         if (now - self._last_spawn_time).total_seconds() > spawn_delay:
-            self._spawn_wizard()
+            if self._num_wizards - 15:
+                self._spawn_wizard()
+
 
         for obj in self._game_objects.get_objects():
             obj.update()
@@ -75,6 +78,7 @@ class SimpleScene(GameScene):
     def _spawn_wizard(self) -> None:
         self.add_game_object(self._wizard_factory.create())
         self._last_spawn_time = datetime.now()
+        self._num_wizards = self._num_wizards + 1
 
     def add_game_object(self, obj: GameObject) -> None:
         self._game_objects.add(obj)

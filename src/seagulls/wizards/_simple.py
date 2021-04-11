@@ -84,7 +84,7 @@ class SimpleWizard(GameObject):
         if self._current_state == WizardState.ATTACKING:
             return False
 
-        rnd = random() * 10000
+        rnd = random() * 1000
         return self._current_state_duration / 1000 > rnd
 
     def _attack(self) -> None:

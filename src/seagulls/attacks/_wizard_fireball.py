@@ -48,7 +48,7 @@ class WizardFireball(GameObject):
         self._size = Vector2(64, 64)
 
         self._position = starting_position
-        self._velocity = Vector2(0, -1)
+        self._velocity = Vector2(0, -3)
         self._current_state = WizardFireballState.SEEKING
         self._current_state_duration = 0
 

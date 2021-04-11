@@ -3,7 +3,7 @@ from datetime import datetime
 from functools import lru_cache
 
 from seagulls.assets import AssetManager
-from seagulls.pygame import (
+from seagulls.engine import (
     GameScene,
     Surface, GameObject, GameSceneObjects,
 )

@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 from pygame.font import Font
-from seagulls.pygame import (
+from seagulls.engine import (
     GameControls,
     GameClock,
     Surface,

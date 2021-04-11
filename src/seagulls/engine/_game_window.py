@@ -1,7 +1,7 @@
 import logging
 
 import pygame
-from ._overwrites import Surface
+from ._pyagme import Surface
 from ._game_scene import GameScene
 
 logger = logging.getLogger(__name__)

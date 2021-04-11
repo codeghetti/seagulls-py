@@ -13,7 +13,7 @@ from ._game_scene import (
     GameSceneObjects,
     GameSceneManager,
 )
-from ._overwrites import (
+from ._pyagme import (
     Rect,
     Surface,
     Color,
@@ -22,8 +22,14 @@ from ._overwrites import (
     Vector3,
 )
 from ._game_object import GameObject
+from ._collisions import (
+    flag_from_string,
+    CollidableObject
+)
 
 __all__ = [
+    "flag_from_string",
+    "CollidableObject",
     "GameTimeUpdater",
     "GameTimeProvider",
     "GameClock",

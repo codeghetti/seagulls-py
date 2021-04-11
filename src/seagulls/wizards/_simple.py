@@ -7,7 +7,7 @@ from typing import List
 import pygame
 from seagulls.assets import AssetManager
 from seagulls.attacks import WizardFireballFactory
-from seagulls.pygame import (
+from seagulls.engine import (
     GameTimeProvider,
     Vector2,
     Surface,

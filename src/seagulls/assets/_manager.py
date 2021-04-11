@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from seagulls.pygame import Surface
+from seagulls.engine import Surface
 from pygame.image import load
 
 

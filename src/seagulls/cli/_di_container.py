@@ -4,7 +4,7 @@ from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Singleton, Dependency
 from seagulls.assets import AssetManager
 from seagulls.attacks import WizardFireballFactory
-from seagulls.pygame import GameWindowFactory, GameControls, GameSceneManager, GameClock
+from seagulls.engine import GameWindowFactory, GameControls, GameSceneManager, GameClock
 from seagulls.scenes import SimpleScene
 from seagulls.ui import DebugHud
 from seagulls.wizards import SimpleWizardFactory

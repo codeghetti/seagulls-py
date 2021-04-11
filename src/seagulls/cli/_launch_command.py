@@ -2,11 +2,11 @@ from argparse import ArgumentParser
 from typing import Any, Dict, Optional
 import logging
 
-from seagulls.pygame import (
+from seagulls.engine import (
     GameWindowFactory,
     GameScene, GameControls, GameSceneManager,
 )
-from seagulls.pygame import GameTimeUpdater
+from seagulls.engine import GameTimeUpdater
 
 from ._framework import CliCommand
 

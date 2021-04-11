@@ -1,6 +1,6 @@
 import pygame
 
-# We create our own versions of these because pygame has some typing bugs.
+# We create our own versions of these because the pygame engine has some typing bugs.
 # https://github.com/pygame/pygame/issues/839#issuecomment-812919220
 Rect = pygame.rect.Rect
 Surface = pygame.surface.Surface

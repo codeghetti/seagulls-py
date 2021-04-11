@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from ._game_object import GameObject
 
-from ._overwrites import Surface
+from ._pyagme import Surface
 
 
 class GameSceneObjects:

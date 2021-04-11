@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from ._overwrites import Surface
+from ._pyagme import Surface
 
 
 class GameObject(ABC):

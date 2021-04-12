@@ -70,7 +70,6 @@ class SimpleWizard(GameObject):
 
         delta = self._clock.get_time()
         self._current_state_duration += delta
-        logger.info(self._current_state_duration)
 
         if self._current_state == WizardState.ATTACKING:
             if self._current_state_duration > 2000:

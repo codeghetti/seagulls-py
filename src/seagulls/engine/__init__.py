@@ -26,6 +26,7 @@ from ._collisions import (
     flag_from_string,
     CollidableObject
 )
+from ._game_settings import GameSettings
 
 __all__ = [
     "flag_from_string",
@@ -40,6 +41,7 @@ __all__ = [
     "GameScene",
     "GameSceneObjects",
     "GameSceneManager",
+    "GameSettings",
     "Rect",
     "Surface",
     "Color",

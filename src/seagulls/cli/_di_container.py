@@ -5,6 +5,7 @@ from dependency_injector.providers import Singleton, Dependency
 from seagulls.assets import AssetManager
 from seagulls.attacks import WizardFireballFactory
 from seagulls.engine import GameWindowFactory, GameControls, GameSceneManager, GameClock
+from seagulls.player import PlayerSeagull
 from seagulls.scenes import SimpleScene
 from seagulls.ui import DebugHud
 from seagulls.wizards import SimpleWizardFactory
@@ -53,8 +54,16 @@ class SeagullsDiContainer(DeclarativeContainer):
         clock=_game_clock,
         asset_manager=_asset_manager,
     )
+    _player_seagull = Singleton(
+        PlayerSeagull,
+        controls=_game_controls,
+        clock=_game_clock,
+        scene_manager=_scene_manager,
+        asset_manager=_asset_manager,
+    )
     _simple_scene = Singleton(
         SimpleScene,
+        player=_player_seagull,
         asset_manager=_asset_manager,
         wizard_factory=_wizard_factory,
         debug_hud=_debug_hud,

@@ -7,6 +7,7 @@ from seagulls.engine import (
     GameScene,
     Surface, GameObject, GameSceneObjects,
 )
+from seagulls.player import PlayerSeagull
 from seagulls.ui import DebugHud
 from seagulls.wizards import (
     SimpleWizardFactory,
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 class SimpleScene(GameScene):
 
+    _player: PlayerSeagull
     _asset_manager: AssetManager
     _wizard_factory: SimpleWizardFactory
 
@@ -28,10 +30,12 @@ class SimpleScene(GameScene):
 
     def __init__(
             self,
+            player: PlayerSeagull,
             asset_manager: AssetManager,
             wizard_factory: SimpleWizardFactory,
             debug_hud: DebugHud):
 
+        self._player = player
         self._asset_manager = asset_manager
         self._wizard_factory = wizard_factory
 
@@ -46,6 +50,7 @@ class SimpleScene(GameScene):
         self._game_objects.add(self._debug_hud)
         self._start_time = datetime.now()
         self._spawn_wizard()
+        self._game_objects.add(self._player)
 
     def exit(self) -> None:
         pass
@@ -62,7 +67,6 @@ class SimpleScene(GameScene):
         if (now - self._last_spawn_time).total_seconds() > spawn_delay:
             if self._num_wizards - 15:
                 self._spawn_wizard()
-
 
         for obj in self._game_objects.get_objects():
             obj.update()

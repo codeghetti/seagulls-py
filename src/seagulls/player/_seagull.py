@@ -42,6 +42,25 @@ class PlayerSeagull(GameObject):
         if self._controls.should_fire():
             logger.info("POOPING")
 
+        if self._controls.is_left_moving():
+            logger.info("MOVE LEFT")
+            self._velocity = Vector2(-1, 0)
+        elif self._controls.is_right_moving():
+            logger.info("MOVE RIGHT")
+            self._velocity = Vector2(1, 0)
+        else:
+            self._velocity = Vector2(0, 0)
+
+        delta = self._clock.get_time()
+
+        self._position = self._position + (self._velocity * delta / 10)
+
+        if self._position.x < 30:
+            self._position.x = 30
+
+        if self._position.x > 995:
+            self._position.x = 995
+
     def render(self, surface: Surface) -> None:
         sprite = self._get_sprite().copy().convert_alpha()
         radius = self._size.x / 2

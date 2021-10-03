@@ -4,9 +4,11 @@ from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Singleton, Dependency
 from seagulls.assets import AssetManager
 from seagulls.attacks import WizardFireballFactory
+from seagulls.cli._launch2_command import Launch2Command, GameManager
 from seagulls.engine import GameWindowFactory, GameControls, GameSceneManager, GameClock
 from seagulls.player import PlayerSeagull
 from seagulls.scenes import SimpleScene
+from seagulls.scenes._storybook import StorybookScene
 from seagulls.ui import DebugHud
 from seagulls.wizards import SimpleWizardFactory
 
@@ -68,15 +70,18 @@ class SeagullsDiContainer(DeclarativeContainer):
         wizard_factory=_wizard_factory,
         debug_hud=_debug_hud,
     )
+    _storybook_scene = Singleton(StorybookScene)
 
     root_command = Singleton(SeagullsCommand)
     launch_command = Singleton(
         LaunchCommand,
         window_factory=_window_factory,
-        scene=_simple_scene,
+        scene=_storybook_scene,
         scene_manager=_scene_manager,
         clock=_game_clock,
         controls=_game_controls,
     )
+    game_manager = Singleton(GameManager)
+    launch2_command = Singleton(Launch2Command, game_manager=game_manager)
 
     example_command = Singleton(ExampleCommand)

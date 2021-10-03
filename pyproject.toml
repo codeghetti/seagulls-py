@@ -10,6 +10,7 @@ packages = [
 
 [tool.poetry.scripts]
 seagulls = 'seagulls.cli:main'
+seagulls-next = 'seagulls.cli:cli_next'
 
 [tool.poetry.dependencies]
 python = "^3.8"

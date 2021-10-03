@@ -27,6 +27,10 @@ from ._collisions import (
     CollidableObject
 )
 from ._game_settings import GameSettings
+from ._scenedb import (
+    ILocateScenes,
+    ScenesClient
+)
 
 __all__ = [
     "flag_from_string",
@@ -48,4 +52,6 @@ __all__ = [
     "PixelArray",
     "Vector2",
     "Vector3",
+    "ILocateScenes",
+    "ScenesClient",
 ]

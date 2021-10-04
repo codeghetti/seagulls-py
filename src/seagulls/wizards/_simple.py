@@ -1,4 +1,3 @@
-import logging
 from enum import Enum, auto
 from functools import lru_cache
 from random import random
@@ -6,17 +5,7 @@ from typing import List
 
 import pygame
 from seagulls.assets import AssetManager
-from seagulls.attacks import WizardFireballFactory
-from seagulls.engine import (
-    GameTimeProvider,
-    Vector2,
-    Surface,
-    Rect,
-    GameObject,
-    GameSceneManager,
-)
-
-logger = logging.getLogger(__name__)
+from seagulls.engine import GameObject, GameClock, GameObjectsCollection, Surface, Vector2, Rect
 
 
 class WizardState(Enum):
@@ -27,9 +16,9 @@ class WizardState(Enum):
 
 class SimpleWizard(GameObject):
 
-    _clock: GameTimeProvider
-    _scene_manager: GameSceneManager
-    _fireball_factory: WizardFireballFactory
+    _clock: GameClock
+    _scene_objects: GameObjectsCollection
+    # _fireball_factory: WizardFireballFactory
     _asset_manager: AssetManager
     _sprite: Surface
 
@@ -39,32 +28,34 @@ class SimpleWizard(GameObject):
     _current_state: WizardState
     _current_state_duration: int  # time we have spent since switching to this state
 
+    _last_velocity: Vector2
+
     def __init__(
             self,
-            clock: GameTimeProvider,
-            scene_manager: GameSceneManager,
-            fireball_factory: WizardFireballFactory,
+            clock: GameClock,
+            scene_objects: GameObjectsCollection,
+            # fireball_factory: WizardFireballFactory,
             asset_manager: AssetManager):
         self._clock = clock
-        self._scene_manager = scene_manager
-        self._fireball_factory = fireball_factory
+        self._scene_objects = scene_objects
+        # self._fireball_factory = fireball_factory
         self._asset_manager = asset_manager
 
         self._size = Vector2(64, 64)
         # This is the starting position for new wizards
         self._position = Vector2(0, 518)
         self._velocity = Vector2(1, 0)
+        self._last_velocity = Vector2(1, 0)
         self._current_state = WizardState.WALKING
         self._current_state_duration = 0
 
-    def update(self) -> None:
+    def tick(self) -> None:
         # A bit hacky but we flip the direction the wizard is moving
         # When ever they get close to the edges of the screen
         if self._position.x > 1015:
-            self._velocity = Vector2(-1, 0)
+            self._set_velocity(Vector2(-1, 0))
         elif self._position.x < 10:
-            self._velocity = Vector2(1, 0)
-
+            self._set_velocity(Vector2(1, 0))
         if self._should_fire():
             self._attack()
 
@@ -73,8 +64,8 @@ class SimpleWizard(GameObject):
 
         if self._current_state == WizardState.ATTACKING:
             if self._current_state_duration > 2000:
-                fireball = self._fireball_factory.create(self._position)
-                self._scene_manager.get_scene_objects().add(fireball)
+                # fireball = self._fireball_factory.create(self._position)
+                # self._scene_manager.get_scene_objects().add(fireball)
                 self._walk()
 
         self._position = self._position + (self._velocity * delta / 10)
@@ -91,18 +82,22 @@ class SimpleWizard(GameObject):
             return
 
         self._set_state(WizardState.ATTACKING)
-        self._velocity = Vector2(0, 0)
+        self._set_velocity(Vector2(0, 0))
 
     def _walk(self) -> None:
         if self._current_state == WizardState.WALKING:
             return
 
         self._set_state(WizardState.WALKING)
-        self._velocity = Vector2(1, 0)
+        self._set_velocity(self._last_velocity)
 
     def _set_state(self, state: WizardState) -> None:
         self._current_state = state
         self._current_state_duration = 0
+
+    def _set_velocity(self, velocity: Vector2) -> None:
+        self._last_velocity = self._velocity
+        self._velocity = velocity
 
     def render(self, surface: Surface) -> None:
         sprite = self._get_sprite().copy().convert_alpha()
@@ -160,29 +155,3 @@ class SimpleWizard(GameObject):
 
     def is_destroyed(self) -> bool:
         return False
-
-
-class SimpleWizardFactory:
-    _clock: GameTimeProvider
-    _scene_manager: GameSceneManager
-    _fireball_factory: WizardFireballFactory
-    _asset_manager: AssetManager
-
-    def __init__(
-            self,
-            clock: GameTimeProvider,
-            scene_manager: GameSceneManager,
-            fireball_factory: WizardFireballFactory,
-            asset_manager: AssetManager):
-        self._clock = clock
-        self._scene_manager = scene_manager
-        self._fireball_factory = fireball_factory
-        self._asset_manager = asset_manager
-
-    def create(self) -> SimpleWizard:
-        return SimpleWizard(
-            clock=self._clock,
-            scene_manager=self._scene_manager,
-            fireball_factory=self._fireball_factory,
-            asset_manager=self._asset_manager,
-        )

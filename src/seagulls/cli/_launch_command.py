@@ -1,12 +1,8 @@
 from argparse import ArgumentParser
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 import logging
 
-from seagulls.engine import (
-    GameWindowFactory,
-    GameScene, GameControls, GameSceneManager,
-)
-from seagulls.engine import GameTimeUpdater
+from seagulls.engine import IProvideGameSessions
 
 from ._framework import CliCommand
 
@@ -15,24 +11,10 @@ logger = logging.getLogger(__name__)
 
 class LaunchCommand(CliCommand):
 
-    _window_factory: GameWindowFactory
-    _scene: GameScene
-    _scene_manager: GameSceneManager
-    _clock: GameTimeUpdater
-    _controls: GameControls
+    _game_session_manager: IProvideGameSessions
 
-    def __init__(
-            self,
-            window_factory: GameWindowFactory,
-            scene: GameScene,
-            scene_manager: GameSceneManager,
-            clock: GameTimeUpdater,
-            controls: GameControls):
-        self._window_factory = window_factory
-        self._scene = scene
-        self._scene_manager = scene_manager
-        self._clock = clock
-        self._controls = controls
+    def __init__(self, game_session_manager: IProvideGameSessions):
+        self._game_session_manager = game_session_manager
 
     def get_command_name(self) -> str:
         return "launch"
@@ -41,23 +23,13 @@ class LaunchCommand(CliCommand):
         return "Launch the seagulls game."
 
     def configure_parser(self, parser: ArgumentParser) -> None:
-        parser.add_argument("--limit-fps", help="Set upper bound FPS limit")
+        parser.add_argument("scene", help="Set upper bound FPS limit")
 
     def execute(self, args: Dict[str, Any]):
-        window = self._window_factory.create(1024, 600)
-        self._scene_manager.load_scene(self._scene)
-        self._scene_manager.start_scene()
-        window.render_scene(self._scene)
+        session = self._game_session_manager.get_session(args["scene"])
 
         try:
-            while not self._controls.should_quit():
-                self._controls.update()  # Update the game events
-                # Our global clock tracks the time between frames
-                self._clock.update(self._parse_fps_arg(args.get("limit_fps")))
-                self._scene.update()  # The scene tells all the rendered things to update state
-                window.render_scene(self._scene)  # Update our window to show the latest scene state
+            session.start()
+            session.wait_for_completion()
         except KeyboardInterrupt:
-            window.close()
-
-    def _parse_fps_arg(self, arg: Optional[int]) -> int:
-        return int(arg) if arg else 0
+            session.stop()

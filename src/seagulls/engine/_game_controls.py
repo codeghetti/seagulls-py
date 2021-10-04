@@ -1,20 +1,18 @@
-import logging
 from typing import List
 
 import pygame
 from pygame.event import Event
+from ._game_object import GameObject
 
-logger = logging.getLogger(__name__)
 
-
-class GameControls:
+class GameControls(GameObject):
 
     _events: List[Event]
 
     def __init__(self):
         self._events = []
 
-    def update(self):
+    def tick(self):
         self._events = pygame.event.get()
 
     def should_quit(self) -> bool:
@@ -52,3 +50,6 @@ class GameControls:
 
     def _is_key_up_event(self, event: Event, key: int) -> bool:
         return event.type == pygame.KEYUP and event.key == key
+
+    def render(self, surface: pygame.Surface) -> None:
+        pass

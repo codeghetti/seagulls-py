@@ -1,25 +1,9 @@
-from abc import ABC, abstractmethod
-
 from pygame.time import Clock
+from ._game_object import GameObject
+from ._pyagme import Surface
 
 
-class GameTimeUpdater(ABC):
-    @abstractmethod
-    def update(self, framerate: int = 0) -> None:
-        pass
-
-
-class GameTimeProvider(ABC):
-    @abstractmethod
-    def get_time(self) -> int:
-        pass
-
-    @abstractmethod
-    def get_fps(self) -> float:
-        pass
-
-
-class GameClock(GameTimeUpdater, GameTimeProvider):
+class GameClock(GameObject):
     _clock: Clock
     _ticks: int
     _delta: int
@@ -29,8 +13,11 @@ class GameClock(GameTimeUpdater, GameTimeProvider):
         self._ticks = 0
         self._delta = 0
 
-    def update(self, framerate: int = 0) -> None:
-        self._delta = self._clock.tick(framerate)
+    def tick(self) -> None:
+        self._delta = self._clock.tick()
+
+    def render(self, surface: Surface) -> None:
+        pass
 
     def get_time(self) -> int:
         return self._delta

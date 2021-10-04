@@ -1,9 +1,5 @@
-from ._simple import (
-    SimpleWizard,
-    SimpleWizardFactory,
-)
+from ._simple import SimpleWizard
 
 __all__ = [
     "SimpleWizard",
-    "SimpleWizardFactory",
 ]

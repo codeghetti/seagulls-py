@@ -2,15 +2,18 @@ import logging
 import time
 from abc import abstractmethod, ABC
 from argparse import ArgumentParser
+from enum import Enum, auto
 from functools import lru_cache
 from pathlib import Path
+from random import random
 from threading import Thread, Event
 from pygame.event import Event as PyGameEvent
-from typing import Dict, Any, Tuple, List
+from typing import Dict, Any, Tuple, List, Callable
 
 import pygame
 from pygame.image import load
 from pygame.time import Clock
+from pygame.transform import flip
 from seagulls.engine import Surface, Vector2, Rect
 
 from ._framework import CliCommand
@@ -180,6 +183,10 @@ class Bird(GameObject):
         sprite = self._get_sprite().copy().convert_alpha()
         radius = self._size.x / 2
         blit_position = self._position - Vector2(radius)
+
+        if self._game_controls.is_left_moving():
+            sprite = flip(sprite, True, False)
+
         surface.blit(sprite, (blit_position.x, blit_position.y))
 
     def _get_sprite(self) -> Surface:
@@ -193,11 +200,207 @@ class Bird(GameObject):
         colorkey = result.get_at((0, 0))
         result.set_colorkey(colorkey, pygame.RLEACCEL)
 
-        return result.convert_alpha()
+        return flip(result.convert_alpha(), True, False)
 
     @lru_cache()
     def _get_sprite_sheet(self) -> Surface:
         return self._asset_manager.load_sprite("seagull/seagull-walking")
+
+    def is_destroyed(self) -> bool:
+        return False
+
+
+class Background(GameObject):
+
+    _asset_manager: AssetManager
+
+    def __init__(
+            self,
+            asset_manager: AssetManager):
+        self._asset_manager = asset_manager
+
+    def tick(self) -> None:
+        pass
+
+    def render(self, surface: Surface) -> None:
+        background = self._get_cached_background()
+        surface.blit(background, (0, 0))
+
+    @lru_cache()
+    def _get_cached_background(self) -> Surface:
+        background = self._asset_manager.load_sprite("environment/environment-sky").copy()
+
+        things = [
+            # These need to be in the order they should be rendered on top of the sky
+            self._asset_manager.load_sprite("environment/environment-stars"),
+            self._asset_manager.load_sprite("environment/environment-wall"),
+            self._asset_manager.load_sprite("environment/environment-bookshelves"),
+            self._asset_manager.load_sprite("environment/environment-ladders"),
+            self._asset_manager.load_sprite("environment/environment-floor"),
+            self._asset_manager.load_sprite("environment/environment-rampart"),
+            self._asset_manager.load_sprite("environment/environment-perch"),
+            self._asset_manager.load_sprite("environment/environment-scrolls"),
+            self._asset_manager.load_sprite("environment/environment-spider"),
+        ]
+
+        for thing in things:
+            background.blit(thing, (0, 0))
+
+        return background
+
+
+class GameObjectsCollection:
+    _game_objects: List[GameObject]
+
+    def __init__(self) -> None:
+        self._game_objects = []
+
+    def add(self, game_object: GameObject) -> None:
+        self._game_objects.append(game_object)
+
+    def apply(self, func: Callable[[GameObject], None]) -> None:
+        for game_object in self._game_objects:
+            func(game_object)
+
+
+class WizardState(Enum):
+    STANDING = auto()
+    WALKING = auto()
+    ATTACKING = auto()
+
+
+class SimpleWizard(GameObject):
+
+    _clock: GameClock
+    _scene_objects: GameObjectsCollection
+    # _fireball_factory: WizardFireballFactory
+    _asset_manager: AssetManager
+    _sprite: Surface
+
+    _size: Vector2
+    _position: Vector2
+    _velocity: Vector2
+    _current_state: WizardState
+    _current_state_duration: int  # time we have spent since switching to this state
+
+    def __init__(
+            self,
+            clock: GameClock,
+            scene_objects: GameObjectsCollection,
+            # fireball_factory: WizardFireballFactory,
+            asset_manager: AssetManager):
+        self._clock = clock
+        self._scene_objects = scene_objects
+        # self._fireball_factory = fireball_factory
+        self._asset_manager = asset_manager
+
+        self._size = Vector2(64, 64)
+        # This is the starting position for new wizards
+        self._position = Vector2(0, 518)
+        self._velocity = Vector2(1, 0)
+        self._current_state = WizardState.WALKING
+        self._current_state_duration = 0
+
+    def tick(self) -> None:
+        # A bit hacky but we flip the direction the wizard is moving
+        # When ever they get close to the edges of the screen
+        if self._position.x > 1015:
+            self._velocity = Vector2(-1, 0)
+        elif self._position.x < 10:
+            self._velocity = Vector2(1, 0)
+
+        # if self._should_fire():
+        #     self._attack()
+
+        delta = self._clock.get_time()
+        self._current_state_duration += delta
+
+        # if self._current_state == WizardState.ATTACKING:
+        #     if self._current_state_duration > 2000:
+        #         fireball = self._fireball_factory.create(self._position)
+        #         self._scene_manager.get_scene_objects().add(fireball)
+        #         self._walk()
+
+        self._position = self._position + (self._velocity * delta / 10)
+
+    def _should_fire(self) -> bool:
+        if self._current_state == WizardState.ATTACKING:
+            return False
+
+        rnd = random() * 1000
+        return self._current_state_duration / 1000 > rnd
+
+    def _attack(self) -> None:
+        if self._current_state == WizardState.ATTACKING:
+            return
+
+        self._set_state(WizardState.ATTACKING)
+        self._velocity = Vector2(0, 0)
+
+    def _walk(self) -> None:
+        if self._current_state == WizardState.WALKING:
+            return
+
+        self._set_state(WizardState.WALKING)
+        self._velocity = Vector2(1, 0)
+
+    def _set_state(self, state: WizardState) -> None:
+        self._current_state = state
+        self._current_state_duration = 0
+
+    def render(self, surface: Surface) -> None:
+        sprite = self._get_sprite().copy().convert_alpha()
+        radius = self._size.x / 2
+        blit_position = self._position - Vector2(radius)
+        surface.blit(sprite, (blit_position.x, blit_position.y))
+
+    def _get_sprite(self) -> Surface:
+        frames = {
+            WizardState.WALKING: self._walking_frames(),
+            WizardState.ATTACKING: self._attacking_frames(),
+            WizardState.STANDING: self._standing_frames(),
+        }[self._current_state]
+
+        current_walking_frame = (self._current_state_duration / 300) % len(frames)
+        return frames[int(current_walking_frame)]
+
+    @lru_cache()
+    def _walking_frames(self) -> List[Surface]:
+        return [
+            self._sprite_sheet_slice(Rect((64 * 0, 0), (64, 64))),
+            self._sprite_sheet_slice(Rect((64 * 1, 0), (64, 64))),
+        ]
+
+    @lru_cache()
+    def _attacking_frames(self) -> List[Surface]:
+        return [
+            self._sprite_sheet_slice(Rect((64 * 2, 0), (64, 64))),
+            self._sprite_sheet_slice(Rect((64 * 3, 0), (64, 64))),
+            self._sprite_sheet_slice(Rect((64 * 4, 0), (64, 64))),
+        ]
+
+    @lru_cache()
+    def _standing_frames(self) -> List[Surface]:
+        return [
+            self._sprite_sheet_slice(Rect((64 * 0, 0), (64, 64))),
+            self._sprite_sheet_slice(Rect((64 * 2, 0), (64, 64))),
+        ]
+
+    def _sprite_sheet_slice(self, rect: Rect) -> Surface:
+        sprite_sheet = self._get_sprite_sheet()
+
+        result = Surface(rect.size)
+        result.blit(sprite_sheet, (0, 0), rect)
+
+        # Not really sure why this is needed but meh. Losing transparency if I don't do this.
+        colorkey = result.get_at((0, 0))
+        result.set_colorkey(colorkey, pygame.RLEACCEL)
+
+        return result.convert_alpha()
+
+    @lru_cache()
+    def _get_sprite_sheet(self) -> Surface:
+        return self._asset_manager.load_sprite("wizard/wizard1-spritesheet")
 
     def is_destroyed(self) -> bool:
         return False
@@ -209,7 +412,7 @@ class GameScene:
     __asset_manager: AssetManager
     _surface_renderer: SurfaceRenderer
     _game_controls = GameControls
-    _game_objects: Tuple[GameObject, ...]
+    _game_objects: GameObjectsCollection
     _should_quit: Event
 
     def __init__(self, name: str) -> None:
@@ -218,18 +421,30 @@ class GameScene:
         self._asset_manager = AssetManager()
 
         clock = GameClock()
+
         self._game_controls = GameControls()
         self._should_quit = Event()
 
-        self._game_objects = tuple([
-            clock,
-            self._game_controls,
-            Bird(
-                clock=clock,
-                asset_manager=self._asset_manager,
-                game_controls=self._game_controls,
-            ),
-        ])
+        background = Background(asset_manager=self._asset_manager)
+
+        bird = Bird(
+            clock=clock,
+            asset_manager=self._asset_manager,
+            game_controls=self._game_controls,
+        )
+
+        self._game_objects = GameObjectsCollection()
+
+        wizard = SimpleWizard(
+            clock=clock,
+            scene_objects=self._game_objects,
+            asset_manager=self._asset_manager)
+
+        self._game_objects.add(clock)
+        self._game_objects.add(self._game_controls)
+        self._game_objects.add(background)
+        self._game_objects.add(bird)
+        self._game_objects.add(wizard)
 
     def start(self) -> None:
         self._surface_renderer.start()
@@ -239,8 +454,7 @@ class GameScene:
         return self._game_controls.should_quit()
 
     def tick(self) -> None:
-        for game_object in self._game_objects:
-            game_object.tick()
+        self._game_objects.apply(lambda x: x.tick())
 
         if self._game_controls.should_quit():
             self._should_quit.set()
@@ -248,9 +462,8 @@ class GameScene:
         self._render()
 
     def _render(self) -> None:
-        background = self._asset_manager.load_sprite("environment/environment-sky").copy()
-        for game_object in self._game_objects:
-            game_object.render(background)
+        background = Surface((1024, 600))
+        self._game_objects.apply(lambda x: x.render(background))
 
         self._surface_renderer.render(background)
 

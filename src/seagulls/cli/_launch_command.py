@@ -23,7 +23,7 @@ class LaunchCommand(CliCommand):
         return "Launch the seagulls game."
 
     def configure_parser(self, parser: ArgumentParser) -> None:
-        parser.add_argument("scene", help="Set upper bound FPS limit")
+        parser.add_argument("scene", help="name of scene to load?")
 
     def execute(self, args: Dict[str, Any]):
         session = self._game_session_manager.get_session(args["scene"])

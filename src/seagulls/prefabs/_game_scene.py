@@ -1,8 +1,10 @@
+import random
 from pathlib import Path
 from threading import Event
 
 from seagulls.assets import AssetManager
 from seagulls.creatures import Bird
+from seagulls.debug import DebugHud
 from seagulls.engine import (
     Surface,
     IGameScene,
@@ -20,6 +22,7 @@ class SeagullGameScene(IGameScene):
 
     _name: str
     _asset_manager: AssetManager
+    _clock: GameClock
     _surface_renderer: SurfaceRenderer
     _game_controls = GameControls
     _game_objects: GameObjectsCollection
@@ -30,7 +33,7 @@ class SeagullGameScene(IGameScene):
         self._surface_renderer = SurfaceRenderer()
         self._asset_manager = AssetManager(Path("assets"))
 
-        clock = GameClock()
+        self._clock = GameClock()
 
         self._game_controls = GameControls()
         self._should_quit = Event()
@@ -38,7 +41,7 @@ class SeagullGameScene(IGameScene):
         background = SeagullsBackground(asset_manager=self._asset_manager)
 
         bird = Bird(
-            clock=clock,
+            clock=self._clock,
             asset_manager=self._asset_manager,
             game_controls=self._game_controls,
         )
@@ -46,15 +49,17 @@ class SeagullGameScene(IGameScene):
         self._game_objects = GameObjectsCollection()
 
         wizard = SimpleWizard(
-            clock=clock,
+            clock=self._clock,
             scene_objects=self._game_objects,
             asset_manager=self._asset_manager)
+        debug_hud = DebugHud(self._clock)
 
-        self._game_objects.add(clock)
+        self._game_objects.add(self._clock)
         self._game_objects.add(self._game_controls)
         self._game_objects.add(background)
         self._game_objects.add(bird)
         self._game_objects.add(wizard)
+        self._game_objects.add(debug_hud)
 
     def start(self) -> None:
         self._surface_renderer.start()

@@ -3,12 +3,13 @@ from pathlib import Path
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Dependency, Singleton
 from seagulls.assets import AssetManager
-from seagulls.engine import GameClock, GameControls
-from seagulls.prefabs import AsyncGameSessionManager
+from seagulls.cli._example_command import ExampleCommand
+from seagulls.cli._launch_command import LaunchCommand
+from seagulls.cli._seagulls_command import SeagullsCommand
+from seagulls.engine import GameClock, GameControls, SurfaceRenderer
+from seagulls.examples import AsyncGameSession, MainMenuScene, MainMenuSceneManager, \
+    MainMenuBackground
 
-from ._seagulls_command import SeagullsCommand
-from ._example_command import ExampleCommand
-from ._launch_command import LaunchCommand
 from ._framework import LoggingClient
 
 
@@ -25,49 +26,31 @@ class SeagullsDiContainer(DeclarativeContainer):
         AssetManager,
         assets_path=Path("assets"),
     )
+    _surface_renderer = Singleton(SurfaceRenderer)
 
-    # _debug_hud = Singleton(
-    #     DebugHud,
-    #     scene_manager=_scene_manager,
-    #     controls=_game_controls,
-    #     clock=_game_clock,
-    # )
-
-    # _fireball_factory = Singleton(
-    #     WizardFireballFactory,
-    #     clock=_game_clock,
-    #     scene_manager=_scene_manager,
-    #     asset_manager=_asset_manager,
-    # )
-
-    # _wizard_factory = Singleton(
-    #     SimpleWizardFactory,
-    #     scene_manager=_scene_manager,
-    #     fireball_factory=_fireball_factory,
-    #     clock=_game_clock,
-    #     asset_manager=_asset_manager,
-    # )
-    # _player_seagull = Singleton(
-    #     PlayerSeagull,
-    #     controls=_game_controls,
-    #     clock=_game_clock,
-    #     scene_manager=_scene_manager,
-    #     asset_manager=_asset_manager,
-    # )
-    # _simple_scene = Singleton(
-    #     SimpleScene,
-    #     player=_player_seagull,
-    #     asset_manager=_asset_manager,
-    #     wizard_factory=_wizard_factory,
-    #     debug_hud=_debug_hud,
-    # )
-
-    _game_session_manager = Singleton(AsyncGameSessionManager)
+    _main_menu_background = Singleton(
+        MainMenuBackground,
+        asset_manager=_asset_manager,
+    )
+    _main_menu_scene = Singleton(
+        MainMenuScene,
+        surface_renderer=_surface_renderer,
+        background=_main_menu_background,
+        game_controls=_game_controls,
+    )
+    _main_menu_scene_manager = Singleton(
+        MainMenuSceneManager,
+        scene=_main_menu_scene,
+    )
+    _game_session = Singleton(
+        AsyncGameSession,
+        scene_manager=_main_menu_scene_manager,
+    )
 
     root_command = Singleton(SeagullsCommand)
     launch_command = Singleton(
         LaunchCommand,
-        game_session_manager=_game_session_manager,
+        game_session=_game_session,
     )
 
     example_command = Singleton(ExampleCommand)

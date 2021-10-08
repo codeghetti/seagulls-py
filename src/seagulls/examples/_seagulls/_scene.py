@@ -1,21 +1,9 @@
-import random
 from pathlib import Path
 from threading import Event
 
 from seagulls.assets import AssetManager
-from seagulls.creatures import Bird
-from seagulls.debug import DebugHud
-from seagulls.engine import (
-    Surface,
-    IGameScene,
-    SurfaceRenderer,
-    GameControls,
-    GameObjectsCollection,
-    GameClock,
-)
-from seagulls.wizards import SimpleWizard
-
-from ._background import SeagullsBackground
+from seagulls.engine import IGameScene, GameClock, SurfaceRenderer, GameControls, \
+    GameObjectsCollection
 
 
 class SeagullGameScene(IGameScene):
@@ -24,7 +12,7 @@ class SeagullGameScene(IGameScene):
     _asset_manager: AssetManager
     _clock: GameClock
     _surface_renderer: SurfaceRenderer
-    _game_controls = GameControls
+    _game_controls: GameControls
     _game_objects: GameObjectsCollection
     _should_quit: Event
 
@@ -66,7 +54,7 @@ class SeagullGameScene(IGameScene):
         self.tick()
 
     def should_quit(self) -> bool:
-        return self._game_controls.should_quit()
+        return self._should_quit.is_set()
 
     def tick(self) -> None:
         self._game_objects.apply(lambda x: x.tick())

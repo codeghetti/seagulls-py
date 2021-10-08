@@ -18,7 +18,6 @@ class SimpleWizard(GameObject):
 
     _clock: GameClock
     _scene_objects: GameObjectsCollection
-    # _fireball_factory: WizardFireballFactory
     _asset_manager: AssetManager
     _sprite: Surface
 

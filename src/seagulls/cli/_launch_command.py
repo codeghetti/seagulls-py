@@ -23,7 +23,7 @@ class LaunchCommand(CliCommand):
         return "Launch the _seagulls game."
 
     def configure_parser(self, parser: ArgumentParser) -> None:
-        parser.add_argument("scene", help="name of scene to load")
+        pass
 
     def execute(self, args: Dict[str, Any]):
         try:

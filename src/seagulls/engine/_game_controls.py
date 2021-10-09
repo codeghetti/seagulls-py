@@ -45,6 +45,18 @@ class GameControls(GameObject):
 
         return False
 
+    def is_click_initialized(self) -> bool:
+        for event in self._events:
+            if not event.type == pygame.MOUSEBUTTONDOWN:
+                continue
+
+            return pygame.mouse.get_pressed(num_buttons=3)[0]
+
+        return False
+
+    def is_mouse_down(self) -> bool:
+        return pygame.mouse.get_pressed(num_buttons=3)[0]
+
     def _is_key_down_event(self, event: Event, key: int) -> bool:
         return event.type == pygame.KEYDOWN and event.key == key
 

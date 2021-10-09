@@ -35,6 +35,7 @@ class SeagullsDiContainer(DeclarativeContainer):
     _main_menu_scene = Singleton(
         MainMenuScene,
         surface_renderer=_surface_renderer,
+        asset_manager=_asset_manager,
         background=_main_menu_background,
         game_controls=_game_controls,
     )

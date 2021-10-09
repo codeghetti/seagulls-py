@@ -1,4 +1,5 @@
-from seagulls.engine import ILocateScenes, GameScene
+from seagulls.engine import GameScene, ILocateScenes
+
 from ._di_container import SeagullsDiContainer
 
 

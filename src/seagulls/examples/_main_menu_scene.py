@@ -2,19 +2,21 @@ import logging
 from functools import lru_cache
 from pathlib import Path
 from threading import Event
-from typing import Tuple, Dict
+from typing import Dict, Tuple
 
 import pygame
 from pygame.font import Font
+
 from seagulls.assets import AssetManager
 from seagulls.engine import (
-    IGameScene,
-    SurfaceRenderer,
-    GameObjectsCollection,
     GameControls,
-    Surface,
     GameObject,
-    IProvideGameScenes, Rect,
+    GameObjectsCollection,
+    IGameScene,
+    IProvideGameScenes,
+    Rect,
+    Surface,
+    SurfaceRenderer
 )
 
 logger = logging.getLogger(__name__)

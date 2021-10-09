@@ -1,9 +1,6 @@
 import logging
 
-from seagulls.engine import (
-    GameScene,
-    Surface, GameObject, GameSceneObjects,
-)
+from seagulls.engine import GameObject, GameScene, GameSceneObjects, Surface
 
 logger = logging.getLogger(__name__)
 

@@ -2,7 +2,8 @@ import logging
 from pathlib import Path
 
 from pygame.font import Font
-from seagulls.engine import GameObject, Surface, GameClock
+
+from seagulls.engine import GameClock, GameObject, Surface
 
 logger = logging.getLogger(__name__)
 

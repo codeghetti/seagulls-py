@@ -1,8 +1,9 @@
 import logging
 import time
-from threading import Thread, Event
+from threading import Event, Thread
 
 import pygame
+
 from seagulls.engine import IGameSession, IProvideGameScenes
 
 logger = logging.getLogger(__name__)

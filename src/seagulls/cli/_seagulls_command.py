@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from typing import Dict, Any
+from typing import Any, Dict
 
 from ._framework import RootCliCommand
 

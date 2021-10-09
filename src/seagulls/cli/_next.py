@@ -1,7 +1,7 @@
-import os
 import logging
+import os
 from abc import ABC
-from typing import Tuple, Generic, TypeVar
+from typing import Generic, Tuple, TypeVar
 
 import pygame
 

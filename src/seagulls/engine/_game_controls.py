@@ -2,6 +2,7 @@ from typing import List
 
 import pygame
 from pygame.event import Event
+
 from ._game_object import GameObject
 
 

@@ -1,6 +1,6 @@
+import logging
 from argparse import ArgumentParser
 from typing import Any, Dict
-import logging
 
 from seagulls.engine import IGameSession
 

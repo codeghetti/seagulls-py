@@ -3,15 +3,10 @@ from datetime import datetime
 from functools import lru_cache
 
 from seagulls.assets import AssetManager
-from seagulls.engine import (
-    GameScene,
-    Surface, GameObject, GameSceneObjects,
-)
+from seagulls.engine import GameObject, GameScene, GameSceneObjects, Surface
 from seagulls.player import PlayerSeagull
 from seagulls.ui import DebugHud
-from seagulls.wizards import (
-    SimpleWizardFactory,
-)
+from seagulls.wizards import SimpleWizardFactory
 
 logger = logging.getLogger(__name__)
 

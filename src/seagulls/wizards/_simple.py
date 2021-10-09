@@ -4,8 +4,16 @@ from random import random
 from typing import List
 
 import pygame
+
 from seagulls.assets import AssetManager
-from seagulls.engine import GameObject, GameClock, GameObjectsCollection, Surface, Vector2, Rect
+from seagulls.engine import (
+    GameClock,
+    GameObject,
+    GameObjectsCollection,
+    Rect,
+    Surface,
+    Vector2
+)
 
 
 class WizardState(Enum):

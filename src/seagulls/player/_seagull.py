@@ -2,14 +2,16 @@ import logging
 from functools import lru_cache
 
 import pygame
+
 from seagulls.assets import AssetManager
 from seagulls.engine import (
+    GameControls,
     GameObject,
-    Surface,
-    GameTimeProvider,
     GameSceneManager,
-    Vector2,
-    GameControls, Rect
+    GameTimeProvider,
+    Rect,
+    Surface,
+    Vector2
 )
 
 logger = logging.getLogger(__name__)

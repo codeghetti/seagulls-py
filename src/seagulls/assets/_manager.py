@@ -1,7 +1,8 @@
 from pathlib import Path
 
-from seagulls.engine import Surface
 from pygame.image import load
+
+from seagulls.engine import Surface
 
 
 class AssetManager:

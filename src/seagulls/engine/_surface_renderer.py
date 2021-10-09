@@ -1,6 +1,7 @@
 from functools import lru_cache
 
 import pygame
+
 from ._pyagme import Surface
 
 

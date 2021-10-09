@@ -2,13 +2,18 @@ from pathlib import Path
 
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Dependency, Singleton
+
 from seagulls.assets import AssetManager
 from seagulls.cli._example_command import ExampleCommand
 from seagulls.cli._launch_command import LaunchCommand
 from seagulls.cli._seagulls_command import SeagullsCommand
 from seagulls.engine import GameClock, GameControls, SurfaceRenderer
-from seagulls.examples import AsyncGameSession, MainMenuScene, MainMenuSceneManager, \
-    MainMenuBackground
+from seagulls.examples import (
+    AsyncGameSession,
+    MainMenuBackground,
+    MainMenuScene,
+    MainMenuSceneManager
+)
 
 from ._framework import LoggingClient
 

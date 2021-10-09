@@ -2,8 +2,13 @@ from pathlib import Path
 from threading import Event
 
 from seagulls.assets import AssetManager
-from seagulls.engine import IGameScene, GameClock, SurfaceRenderer, GameControls, \
-    GameObjectsCollection
+from seagulls.engine import (
+    GameClock,
+    GameControls,
+    GameObjectsCollection,
+    IGameScene,
+    SurfaceRenderer
+)
 
 
 class SeagullGameScene(IGameScene):

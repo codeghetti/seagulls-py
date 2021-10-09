@@ -1,7 +1,7 @@
 from ._main_menu_scene import (
     MainMenuBackground,
     MainMenuScene,
-    MainMenuSceneManager,
+    MainMenuSceneManager
 )
 from ._session import AsyncGameSession
 

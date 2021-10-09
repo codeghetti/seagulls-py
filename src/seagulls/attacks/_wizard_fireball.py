@@ -4,14 +4,15 @@ from functools import lru_cache
 from typing import List
 
 import pygame
+
 from seagulls.assets import AssetManager
 from seagulls.engine import (
-    GameTimeProvider,
-    Vector2,
-    Surface,
-    Rect,
     GameObject,
     GameSceneManager,
+    GameTimeProvider,
+    Rect,
+    Surface,
+    Vector2
 )
 
 logger = logging.getLogger(__name__)

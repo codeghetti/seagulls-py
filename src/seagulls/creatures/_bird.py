@@ -3,8 +3,16 @@ from functools import lru_cache
 
 import pygame
 from pygame.transform import flip
+
 from seagulls.assets import AssetManager
-from seagulls.engine import GameObject, GameClock, GameControls, Vector2, Surface, Rect
+from seagulls.engine import (
+    GameClock,
+    GameControls,
+    GameObject,
+    Rect,
+    Surface,
+    Vector2
+)
 
 logger = logging.getLogger(__name__)
 

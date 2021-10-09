@@ -1,4 +1,5 @@
 from pygame.time import Clock
+
 from ._game_object import GameObject
 from ._pyagme import Surface
 

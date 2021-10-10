@@ -12,8 +12,10 @@ from seagulls.examples import (
     AsyncGameSession,
     MainMenuBackground,
     MainMenuScene,
-    MainMenuSceneManager
+    MainMenuSceneManager,
+    WindowScene
 )
+from seagulls.examples.space_shooter import ShooterScene
 
 from ._framework import LoggingClient
 
@@ -43,10 +45,25 @@ class SeagullsDiContainer(DeclarativeContainer):
         asset_manager=_asset_manager,
         background=_main_menu_background,
         game_controls=_game_controls,
+        #how to I reference window_scene if it's not created YET!!!! AHHHH
     )
+
+    _space_shooter_scene = Singleton(
+        ShooterScene,
+        surface_renderer=_surface_renderer,
+        asset_manager=_asset_manager,
+        background=_main_menu_background,
+        game_controls=_game_controls
+    )
+
+    _window_scene = Singleton(
+        WindowScene,
+        active_scene=_main_menu_scene
+    )
+
     _main_menu_scene_manager = Singleton(
         MainMenuSceneManager,
-        scene=_main_menu_scene,
+        scene=_window_scene,
     )
     _game_session = Singleton(
         AsyncGameSession,

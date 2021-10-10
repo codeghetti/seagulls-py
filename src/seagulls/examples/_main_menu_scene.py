@@ -55,7 +55,9 @@ class MenuButton(GameObject):
     _button_height = 49
     _button_width = 190
 
-    def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
+    _window_scene: WindowScene
+
+    def __init__(self, asset_manager: AssetManager, game_controls: GameControls, window_scene: WindowScene):
         self._asset_manager = asset_manager
         self._game_controls = game_controls
 
@@ -87,6 +89,8 @@ class MenuButton(GameObject):
                 logger.debug("CLICKY")
                 self._is_clicked.set()
             if not self._game_controls.is_mouse_down():
+                if self._is_clicked.is_set():
+                    #_active_scene=shooter_scene
                 self._is_clicked.clear()
         else:
             self._is_highlighted.clear()
@@ -168,6 +172,22 @@ class MainMenuScene(IGameScene):
         self._game_objects.apply(lambda x: x.render(background))
 
         self._surface_renderer.render(background)
+
+
+class WindowScene(IGameScene):
+    _active_scene: IGameScene
+
+    def __init__(self, active_scene: IGameScene):
+        self._active_scene = active_scene
+
+    def start(self) -> None:
+        self._active_scene.start()
+
+    def should_quit(self) -> bool:
+        return self._active_scene.should_quit()
+
+    def tick(self) -> None:
+        self._active_scene.tick()
 
 
 class MainMenuSceneManager(IProvideGameScenes):

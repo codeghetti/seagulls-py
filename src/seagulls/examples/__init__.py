@@ -8,5 +8,8 @@ from ._session import AsyncGameSession, BlockingGameSession
 __all__ = [
     "MainMenuScene",
     "AsyncGameSession",
-    "BlockingGameSession"
+    "BlockingGameSession",
+    "ExampleSceneManager",
+    "SimpleStarsBackground",
+    "WindowScene",
 ]

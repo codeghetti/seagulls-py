@@ -16,6 +16,7 @@ from seagulls.examples import (
     SimpleStarsBackground,
     WindowScene
 )
+from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.space_shooter import ShooterScene
 
 from ._framework import LoggingClient
@@ -55,12 +56,15 @@ class SeagullsDiContainer(DeclarativeContainer):
         background=_main_menu_background,
         game_controls=_game_controls
     )
+    _seagulls_scene = Singleton(
+        SeagullsScene,
+    )
 
     _window_scene = Singleton(
         WindowScene,
         active_scene=_main_menu_scene,
         first_scene=_space_shooter_scene,
-        second_scene=_space_shooter_scene,
+        second_scene=_seagulls_scene,
     )
 
     _main_menu_scene_manager = Singleton(

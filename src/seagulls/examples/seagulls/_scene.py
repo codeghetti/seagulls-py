@@ -2,18 +2,22 @@ from pathlib import Path
 from threading import Event
 
 from seagulls.assets import AssetManager
+from seagulls.creatures import Bird
+from seagulls.debug import DebugHud
 from seagulls.engine import (
     GameClock,
     GameControls,
     GameObjectsCollection,
     IGameScene,
-    SurfaceRenderer
+    SurfaceRenderer, Surface
 )
+from seagulls.wizards import SimpleWizard
+
+from ._background import SeagullsBackground
 
 
-class SeagullGameScene(IGameScene):
+class SeagullsScene(IGameScene):
 
-    _name: str
     _asset_manager: AssetManager
     _clock: GameClock
     _surface_renderer: SurfaceRenderer
@@ -21,8 +25,10 @@ class SeagullGameScene(IGameScene):
     _game_objects: GameObjectsCollection
     _should_quit: Event
 
-    def __init__(self, name: str) -> None:
-        self._name = name
+    first_should_switch_scene = False
+    second_should_switch_scene = False
+
+    def __init__(self) -> None:
         self._surface_renderer = SurfaceRenderer()
         self._asset_manager = AssetManager(Path("assets"))
 

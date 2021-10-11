@@ -1,5 +1,5 @@
 from seagulls.engine import IGameScene, IProvideGameScenes
-from seagulls.examples import MainMenuScene
+from ._main_menu_scene import MainMenuScene
 
 
 class ExampleSceneManager(IProvideGameScenes):

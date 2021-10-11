@@ -59,7 +59,8 @@ class SeagullsDiContainer(DeclarativeContainer):
     _window_scene = Singleton(
         WindowScene,
         active_scene=_main_menu_scene,
-        next_scene=_space_shooter_scene,
+        first_scene=_space_shooter_scene,
+        second_scene=_space_shooter_scene,
     )
 
     _main_menu_scene_manager = Singleton(

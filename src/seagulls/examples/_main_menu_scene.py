@@ -195,7 +195,9 @@ class MainMenuScene(IGameScene):
     _space_shooter_menu_button: SpaceShooterMenuButton
     _seagulls_menu_button: SeagullsMenuButton
     _should_quit: Event
-    should_switch_scene = False
+
+    first_should_switch_scene = False
+    second_should_switch_scene = False
 
     def __init__(
             self,
@@ -233,8 +235,11 @@ class MainMenuScene(IGameScene):
     def tick(self) -> None:
         self._game_objects.apply(lambda x: x.tick())
         if self._space_shooter_menu_button.should_switch:
-            logger.debug("SWITCHING SCENE")
-            self.should_switch_scene = True
+            logger.debug("SWITCHING SCENE TO SPACE SHOOTER")
+            self.first_should_switch_scene = True
+        if self._seagulls_menu_button.should_switch:
+            logger.debug("SWITCHING SCENE TO SEAGULLS")
+            self.second_should_switch_scene = True
         if self._game_controls.should_quit():
             logger.debug("QUIT EVENT DETECTED")
             self._should_quit.set()

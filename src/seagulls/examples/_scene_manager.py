@@ -1,4 +1,5 @@
 from seagulls.engine import IGameScene, IProvideGameScenes
+
 from ._main_menu_scene import MainMenuScene
 
 

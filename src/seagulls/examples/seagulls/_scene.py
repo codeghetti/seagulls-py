@@ -2,18 +2,19 @@ from pathlib import Path
 from threading import Event
 
 from seagulls.assets import AssetManager
-from seagulls.creatures import Bird
 from seagulls.debug import DebugHud
 from seagulls.engine import (
     GameClock,
     GameControls,
     GameObjectsCollection,
     IGameScene,
-    SurfaceRenderer, Surface
+    Surface,
+    SurfaceRenderer
 )
-from seagulls.wizards import SimpleWizard
 
 from ._background import SeagullsBackground
+from ._bird import Bird
+from ._simple_wizard import SimpleWizard
 
 
 class SeagullsScene(IGameScene):

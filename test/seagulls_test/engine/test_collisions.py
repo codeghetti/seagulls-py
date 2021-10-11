@@ -1,6 +1,6 @@
 import pytest
-from seagulls.engine import CollidableObject
-from seagulls.engine import flag_from_string
+
+from seagulls.engine import CollidableObject, flag_from_string
 
 
 class TestFunctions:

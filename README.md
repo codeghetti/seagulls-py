@@ -1,4 +1,4 @@
-# Seagulls
+# Seagulls.py
 
 ## Development Environment
 These are development environment instructions based on the assumption that you are on an Ubuntu
@@ -85,3 +85,10 @@ $ direnv allow .
 ```
 
 If everything has gone as planned, you can run the `seagulls` command and start editing code.
+
+## Attribution
+
+These are some of the open source projects that helped us develop seagulls.py:
+
+- [Kenney: UI Pack](https://www.kenney.nl/assets/ui-pack)
+- [pygame](https://www.pygame.org/)

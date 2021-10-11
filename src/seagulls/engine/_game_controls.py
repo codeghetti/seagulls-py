@@ -1,20 +1,19 @@
-import logging
 from typing import List
 
 import pygame
 from pygame.event import Event
 
-logger = logging.getLogger(__name__)
+from ._game_object import GameObject
 
 
-class GameControls:
+class GameControls(GameObject):
 
     _events: List[Event]
 
     def __init__(self):
         self._events = []
 
-    def update(self):
+    def tick(self):
         self._events = pygame.event.get()
 
     def should_quit(self) -> bool:
@@ -47,8 +46,23 @@ class GameControls:
 
         return False
 
+    def is_click_initialized(self) -> bool:
+        for event in self._events:
+            if not event.type == pygame.MOUSEBUTTONDOWN:
+                continue
+
+            return pygame.mouse.get_pressed(num_buttons=3)[0]
+
+        return False
+
+    def is_mouse_down(self) -> bool:
+        return pygame.mouse.get_pressed(num_buttons=3)[0]
+
     def _is_key_down_event(self, event: Event, key: int) -> bool:
         return event.type == pygame.KEYDOWN and event.key == key
 
     def _is_key_up_event(self, event: Event, key: int) -> bool:
         return event.type == pygame.KEYUP and event.key == key
+
+    def render(self, surface: pygame.Surface) -> None:
+        pass

@@ -1,6 +1,6 @@
 import logging
-from typing import Tuple
 from dataclasses import dataclass
+from typing import Tuple
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,8 @@
 from pathlib import Path
 
-from seagulls.engine import Surface
 from pygame.image import load
+
+from seagulls.engine import Surface
 
 
 class AssetManager:
@@ -11,7 +12,10 @@ class AssetManager:
         self._assets_path = assets_path
 
     def load_sprite(self, name: str) -> Surface:
-        path = self._assets_path / f"sprites/{name}.png"
+        return self.load_png(f"sprites/{name}")
+
+    def load_png(self, name: str) -> Surface:
+        path = self._assets_path / f"{name}.png"
         loaded_sprite = load(path.resolve())
         if loaded_sprite.get_alpha() is None:
             return loaded_sprite.convert()

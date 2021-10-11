@@ -1,12 +1,12 @@
-import os
 import logging
+import os
 import sys
 from argparse import ArgumentParser
 
 import pygame
 
-from ._framework import CliCommand
 from ._di_container import SeagullsDiContainer
+from ._framework import CliCommand
 
 logger = logging.getLogger(__name__)
 

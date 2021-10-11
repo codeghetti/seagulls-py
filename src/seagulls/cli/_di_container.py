@@ -1,19 +1,25 @@
 from pathlib import Path
 
 from dependency_injector.containers import DeclarativeContainer
-from dependency_injector.providers import Singleton, Dependency
-from seagulls.assets import AssetManager
-from seagulls.attacks import WizardFireballFactory
-from seagulls.engine import GameWindowFactory, GameControls, GameSceneManager, GameClock
-from seagulls.player import PlayerSeagull
-from seagulls.scenes import SimpleScene
-from seagulls.ui import DebugHud
-from seagulls.wizards import SimpleWizardFactory
+from dependency_injector.providers import Dependency, Singleton
 
-from ._example_command import ExampleCommand
-from ._launch_command import LaunchCommand
+from seagulls.assets import AssetManager
+from seagulls.cli._example_command import ExampleCommand
+from seagulls.cli._launch_command import LaunchCommand
+from seagulls.cli._seagulls_command import SeagullsCommand
+from seagulls.engine import GameClock, GameControls, SurfaceRenderer
+from seagulls.examples import (
+    AsyncGameSession,
+    BlockingGameSession,
+    ExampleSceneManager,
+    MainMenuScene,
+    SimpleStarsBackground,
+    WindowScene
+)
+from seagulls.examples.seagulls import SeagullsScene
+from seagulls.examples.space_shooter import ShooterScene
+
 from ._framework import LoggingClient
-from ._seagulls_command import SeagullsCommand
 
 
 class SeagullsDiContainer(DeclarativeContainer):
@@ -25,58 +31,59 @@ class SeagullsDiContainer(DeclarativeContainer):
 
     _game_clock = Singleton(GameClock)
     _game_controls = Singleton(GameControls)
-    _window_factory = Singleton(GameWindowFactory)
     _asset_manager = Singleton(
         AssetManager,
         assets_path=Path("assets"),
     )
+    _surface_renderer = Singleton(SurfaceRenderer)
 
-    _scene_manager = Singleton(GameSceneManager)
-
-    _debug_hud = Singleton(
-        DebugHud,
-        scene_manager=_scene_manager,
-        controls=_game_controls,
-        clock=_game_clock,
-    )
-
-    _fireball_factory = Singleton(
-        WizardFireballFactory,
-        clock=_game_clock,
-        scene_manager=_scene_manager,
+    _main_menu_background = Singleton(
+        SimpleStarsBackground,
         asset_manager=_asset_manager,
     )
+    _main_menu_scene = Singleton(
+        MainMenuScene,
+        surface_renderer=_surface_renderer,
+        asset_manager=_asset_manager,
+        background=_main_menu_background,
+        game_controls=_game_controls,
+    )
 
-    _wizard_factory = Singleton(
-        SimpleWizardFactory,
-        scene_manager=_scene_manager,
-        fireball_factory=_fireball_factory,
-        clock=_game_clock,
+    _space_shooter_scene = Singleton(
+        ShooterScene,
+        surface_renderer=_surface_renderer,
         asset_manager=_asset_manager,
+        background=_main_menu_background,
+        game_controls=_game_controls
     )
-    _player_seagull = Singleton(
-        PlayerSeagull,
-        controls=_game_controls,
-        clock=_game_clock,
-        scene_manager=_scene_manager,
-        asset_manager=_asset_manager,
+    _seagulls_scene = Singleton(
+        SeagullsScene,
     )
-    _simple_scene = Singleton(
-        SimpleScene,
-        player=_player_seagull,
-        asset_manager=_asset_manager,
-        wizard_factory=_wizard_factory,
-        debug_hud=_debug_hud,
+
+    _window_scene = Singleton(
+        WindowScene,
+        active_scene=_main_menu_scene,
+        first_scene=_space_shooter_scene,
+        second_scene=_seagulls_scene,
+    )
+
+    _main_menu_scene_manager = Singleton(
+        ExampleSceneManager,
+        scene=_window_scene,
+    )
+    _game_session = Singleton(
+        AsyncGameSession,
+        scene_manager=_main_menu_scene_manager,
+    )
+    _blocking_game_session = Singleton(
+        BlockingGameSession,
+        scene_manager=_main_menu_scene_manager,
     )
 
     root_command = Singleton(SeagullsCommand)
     launch_command = Singleton(
         LaunchCommand,
-        window_factory=_window_factory,
-        scene=_simple_scene,
-        scene_manager=_scene_manager,
-        clock=_game_clock,
-        controls=_game_controls,
+        game_session=_blocking_game_session,
     )
 
     example_command = Singleton(ExampleCommand)

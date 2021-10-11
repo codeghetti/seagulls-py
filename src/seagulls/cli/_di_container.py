@@ -45,7 +45,6 @@ class SeagullsDiContainer(DeclarativeContainer):
         asset_manager=_asset_manager,
         background=_main_menu_background,
         game_controls=_game_controls,
-        #how to I reference window_scene if it's not created YET!!!! AHHHH
     )
 
     _space_shooter_scene = Singleton(

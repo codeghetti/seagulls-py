@@ -55,9 +55,7 @@ class MenuButton(GameObject):
     _button_height = 49
     _button_width = 190
 
-    _window_scene: WindowScene
-
-    def __init__(self, asset_manager: AssetManager, game_controls: GameControls, window_scene: WindowScene):
+    def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
         self._asset_manager = asset_manager
         self._game_controls = game_controls
 
@@ -89,8 +87,6 @@ class MenuButton(GameObject):
                 logger.debug("CLICKY")
                 self._is_clicked.set()
             if not self._game_controls.is_mouse_down():
-                if self._is_clicked.is_set():
-                    #_active_scene=shooter_scene
                 self._is_clicked.clear()
         else:
             self._is_highlighted.clear()

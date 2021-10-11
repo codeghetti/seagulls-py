@@ -4,12 +4,13 @@ from ._main_menu_scene import (
     MainMenuSceneManager,
     WindowScene
 )
-from ._session import AsyncGameSession
+from ._session import (AsyncGameSession, BlockingGameSession)
 
 __all__ = [
     "MainMenuBackground",
     "MainMenuScene",
     "MainMenuSceneManager",
     "AsyncGameSession",
+    "BlockingGameSession",
     "WindowScene"
 ]

@@ -54,6 +54,7 @@ class MenuButton(GameObject):
 
     _button_height = 49
     _button_width = 190
+    should_switch = False
 
     def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
         self._asset_manager = asset_manager
@@ -87,6 +88,9 @@ class MenuButton(GameObject):
                 logger.debug("CLICKY")
                 self._is_clicked.set()
             if not self._game_controls.is_mouse_down():
+                if self._is_clicked.is_set():
+                    logger.debug("SWITCH")
+                    self.should_switch = True
                 self._is_clicked.clear()
         else:
             self._is_highlighted.clear()
@@ -125,7 +129,9 @@ class MainMenuScene(IGameScene):
     _asset_manager: AssetManager
 
     _game_objects: GameObjectsCollection
+    _menu_button: MenuButton
     _should_quit: Event
+    should_switch_scene = False
 
     def __init__(
             self,
@@ -139,10 +145,10 @@ class MainMenuScene(IGameScene):
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(background)
-        self._game_objects.add(MenuButton(
+        self._menu_button = MenuButton(
             asset_manager=asset_manager,
-            game_controls=game_controls,
-        ))
+            game_controls=game_controls,)
+        self._game_objects.add(self._menu_button)
         self._game_objects.add(self._game_controls)
 
         self._should_quit = Event()
@@ -156,7 +162,9 @@ class MainMenuScene(IGameScene):
 
     def tick(self) -> None:
         self._game_objects.apply(lambda x: x.tick())
-
+        if self._menu_button.should_switch:
+            logger.debug("SWITCHING SCENE")
+            self.should_switch_scene = True
         if self._game_controls.should_quit():
             logger.debug("QUIT EVENT DETECTED")
             self._should_quit.set()
@@ -172,9 +180,11 @@ class MainMenuScene(IGameScene):
 
 class WindowScene(IGameScene):
     _active_scene: IGameScene
+    _next_scene: IGameScene
 
-    def __init__(self, active_scene: IGameScene):
+    def __init__(self, active_scene: IGameScene, next_scene: IGameScene):
         self._active_scene = active_scene
+        self._next_scene = next_scene
 
     def start(self) -> None:
         self._active_scene.start()
@@ -183,6 +193,9 @@ class WindowScene(IGameScene):
         return self._active_scene.should_quit()
 
     def tick(self) -> None:
+        if self._active_scene.should_switch_scene:
+            self._active_scene = self._next_scene
+            self._active_scene.start()
         self._active_scene.tick()
 
 

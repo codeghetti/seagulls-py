@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class IGameScene(ABC):
+    should_switch_scene: False
 
     @abstractmethod
     def start(self) -> None:

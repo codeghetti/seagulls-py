@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class ShooterScene(IGameScene):
 
     _surface_renderer: SurfaceRenderer
@@ -16,6 +17,7 @@ class ShooterScene(IGameScene):
 
     _game_objects: GameObjectsCollection
     _should_quit: Event
+    should_switch_scene = False
 
     def __init__(
             self,

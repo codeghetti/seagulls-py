@@ -13,7 +13,7 @@ from seagulls.examples import (
     MainMenuBackground,
     MainMenuScene,
     MainMenuSceneManager,
-    WindowScene
+    WindowScene, BlockingGameSession
 )
 from seagulls.examples.space_shooter import ShooterScene
 
@@ -68,11 +68,15 @@ class SeagullsDiContainer(DeclarativeContainer):
         AsyncGameSession,
         scene_manager=_main_menu_scene_manager,
     )
+    _blocking_game_session = Singleton(
+        BlockingGameSession,
+        scene_manager=_main_menu_scene_manager,
+    )
 
     root_command = Singleton(SeagullsCommand)
     launch_command = Singleton(
         LaunchCommand,
-        game_session=_game_session,
+        game_session=_blocking_game_session,
     )
 
     example_command = Singleton(ExampleCommand)

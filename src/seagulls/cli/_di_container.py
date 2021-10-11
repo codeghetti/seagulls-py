@@ -10,10 +10,11 @@ from seagulls.cli._seagulls_command import SeagullsCommand
 from seagulls.engine import GameClock, GameControls, SurfaceRenderer
 from seagulls.examples import (
     AsyncGameSession,
-    MainMenuBackground,
+    BlockingGameSession,
+    ExampleSceneManager,
     MainMenuScene,
-    MainMenuSceneManager,
-    WindowScene, BlockingGameSession
+    SimpleStarsBackground,
+    WindowScene
 )
 from seagulls.examples.space_shooter import ShooterScene
 
@@ -36,7 +37,7 @@ class SeagullsDiContainer(DeclarativeContainer):
     _surface_renderer = Singleton(SurfaceRenderer)
 
     _main_menu_background = Singleton(
-        MainMenuBackground,
+        SimpleStarsBackground,
         asset_manager=_asset_manager,
     )
     _main_menu_scene = Singleton(
@@ -62,7 +63,7 @@ class SeagullsDiContainer(DeclarativeContainer):
     )
 
     _main_menu_scene_manager = Singleton(
-        MainMenuSceneManager,
+        ExampleSceneManager,
         scene=_window_scene,
     )
     _game_session = Singleton(

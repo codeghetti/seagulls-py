@@ -13,32 +13,12 @@ from seagulls.engine import (
     GameObject,
     GameObjectsCollection,
     IGameScene,
-    IProvideGameScenes,
     Rect,
     Surface,
     SurfaceRenderer
 )
 
 logger = logging.getLogger(__name__)
-
-
-class MainMenuBackground(GameObject):
-
-    _asset_manager: AssetManager
-
-    def __init__(self, asset_manager: AssetManager):
-        self._asset_manager = asset_manager
-
-    def tick(self) -> None:
-        pass
-
-    def render(self, surface: Surface) -> None:
-        background = self._get_cached_background()
-        surface.blit(background, (0, 0))
-
-    @lru_cache()
-    def _get_cached_background(self) -> Surface:
-        return self._asset_manager.load_sprite("environment/environment-stars").copy()
 
 
 class MenuButton(GameObject):
@@ -54,6 +34,7 @@ class MenuButton(GameObject):
 
     _button_height = 49
     _button_width = 190
+
     should_switch = False
 
     def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
@@ -176,34 +157,3 @@ class MainMenuScene(IGameScene):
         self._game_objects.apply(lambda x: x.render(background))
 
         self._surface_renderer.render(background)
-
-
-class WindowScene(IGameScene):
-    _active_scene: IGameScene
-    _next_scene: IGameScene
-
-    def __init__(self, active_scene: IGameScene, next_scene: IGameScene):
-        self._active_scene = active_scene
-        self._next_scene = next_scene
-
-    def start(self) -> None:
-        self._active_scene.start()
-
-    def should_quit(self) -> bool:
-        return self._active_scene.should_quit()
-
-    def tick(self) -> None:
-        if self._active_scene.should_switch_scene:
-            self._active_scene = self._next_scene
-            self._active_scene.start()
-        self._active_scene.tick()
-
-
-class MainMenuSceneManager(IProvideGameScenes):
-    _scene: MainMenuScene
-
-    def __init__(self, scene: MainMenuScene):
-        self._scene = scene
-
-    def get_scene(self) -> IGameScene:
-        return self._scene

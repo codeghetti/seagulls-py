@@ -1,10 +1,15 @@
+import logging
 from threading import Event
 
 from seagulls.assets import AssetManager
-from seagulls.engine import IGameScene, SurfaceRenderer, GameControls, GameObjectsCollection, \
-    GameObject, Surface
-
-import logging
+from seagulls.engine import (
+    GameControls,
+    GameObject,
+    GameObjectsCollection,
+    IGameScene,
+    Surface,
+    SurfaceRenderer
+)
 
 logger = logging.getLogger(__name__)
 

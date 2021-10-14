@@ -2,8 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class IGameScene(ABC):
-    first_should_switch_scene: False
-    second_should_switch_scene: False
 
     @abstractmethod
     def start(self) -> None:

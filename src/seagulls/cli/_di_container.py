@@ -20,6 +20,7 @@ from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.space_shooter import ShooterScene
 
 from ._framework import LoggingClient
+from ..examples._game_state import GameState
 
 
 class SeagullsDiContainer(DeclarativeContainer):
@@ -28,7 +29,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         LoggingClient,
         verbosity=_logging_verbosity,
     )
-
+    _game_state = Singleton(GameState)
     _game_clock = Singleton(GameClock)
     _game_controls = Singleton(GameControls)
     _asset_manager = Singleton(
@@ -40,13 +41,6 @@ class SeagullsDiContainer(DeclarativeContainer):
     _main_menu_background = Singleton(
         SimpleStarsBackground,
         asset_manager=_asset_manager,
-    )
-    _main_menu_scene = Singleton(
-        MainMenuScene,
-        surface_renderer=_surface_renderer,
-        asset_manager=_asset_manager,
-        background=_main_menu_background,
-        game_controls=_game_controls,
     )
 
     _space_shooter_scene = Singleton(
@@ -60,11 +54,21 @@ class SeagullsDiContainer(DeclarativeContainer):
         SeagullsScene,
     )
 
+    _main_menu_scene = Singleton(
+        MainMenuScene,
+        surface_renderer=_surface_renderer,
+        asset_manager=_asset_manager,
+        background=_main_menu_background,
+        game_controls=_game_controls,
+        game_state=_game_state,
+        space_shooter_scene=_space_shooter_scene,
+        seagulls_scene=_seagulls_scene,
+    )
+
     _window_scene = Singleton(
         WindowScene,
         active_scene=_main_menu_scene,
-        first_scene=_space_shooter_scene,
-        second_scene=_seagulls_scene,
+        game_state=_game_state,
     )
 
     _main_menu_scene_manager = Singleton(

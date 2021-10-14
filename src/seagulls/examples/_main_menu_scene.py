@@ -17,6 +17,7 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
+from seagulls.examples._game_state import GameState
 
 logger = logging.getLogger(__name__)
 
@@ -196,19 +197,25 @@ class MainMenuScene(IGameScene):
     _seagulls_menu_button: SeagullsMenuButton
     _should_quit: Event
 
-    first_should_switch_scene = False
-    second_should_switch_scene = False
+    _game_state: GameState
+    _space_shooter_scene: IGameScene
+    _seagulls_scene: IGameScene
 
     def __init__(
             self,
             surface_renderer: SurfaceRenderer,
             asset_manager: AssetManager,
             background: GameObject,
-            game_controls: GameControls):
+            game_controls: GameControls,
+            game_state: GameState,
+            space_shooter_scene: IGameScene,
+            seagulls_scene: IGameScene):
         self._surface_renderer = surface_renderer
         self._asset_manager = asset_manager
         self._game_controls = game_controls
-
+        self._game_state = game_state
+        self._space_shooter_scene = space_shooter_scene
+        self._seagulls_scene = seagulls_scene
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(background)
         self._space_shooter_menu_button = SpaceShooterMenuButton(
@@ -236,10 +243,12 @@ class MainMenuScene(IGameScene):
         self._game_objects.apply(lambda x: x.tick())
         if self._space_shooter_menu_button.should_switch:
             logger.debug("SWITCHING SCENE TO SPACE SHOOTER")
-            self.first_should_switch_scene = True
+            self._game_state.active_scene = self._space_shooter_scene
+            self._game_state.game_state_changed = True
         if self._seagulls_menu_button.should_switch:
             logger.debug("SWITCHING SCENE TO SEAGULLS")
-            self.second_should_switch_scene = True
+            self._game_state.active_scene = self._seagulls_scene
+            self._game_state.game_state_changed = True
         if self._game_controls.should_quit():
             logger.debug("QUIT EVENT DETECTED")
             self._should_quit.set()

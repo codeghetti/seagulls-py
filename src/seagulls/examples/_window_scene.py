@@ -1,15 +1,14 @@
 from seagulls.engine import IGameScene
+from seagulls.examples._game_state import GameState
 
 
 class WindowScene(IGameScene):
     _active_scene: IGameScene
-    _first_scene: IGameScene
-    _second_scene: IGameScene
+    _game_state: GameState
 
-    def __init__(self, active_scene: IGameScene, first_scene: IGameScene, second_scene: IGameScene):
+    def __init__(self, active_scene: IGameScene, game_state: GameState):
         self._active_scene = active_scene
-        self._first_scene = first_scene
-        self._second_scene = second_scene
+        self._game_state = game_state
 
     def start(self) -> None:
         self._active_scene.start()
@@ -18,10 +17,8 @@ class WindowScene(IGameScene):
         return self._active_scene.should_quit()
 
     def tick(self) -> None:
-        if self._active_scene.first_should_switch_scene:
-            self._active_scene = self._first_scene
-            self._active_scene.start()
-        if self._active_scene.second_should_switch_scene:
-            self._active_scene = self._second_scene
+        if self._game_state.game_state_changed:
+            self._active_scene = self._game_state.active_scene
+            self._game_state.game_state_changed = False
             self._active_scene.start()
         self._active_scene.tick()

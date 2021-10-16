@@ -17,7 +17,7 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
-from seagulls.examples._game_state import GameState
+from ._game_state import GameState
 
 logger = logging.getLogger(__name__)
 
@@ -243,17 +243,19 @@ class MainMenuScene(IGameScene):
         self._game_objects.apply(lambda x: x.tick())
         if self._space_shooter_menu_button.should_switch:
             logger.debug("SWITCHING SCENE TO SPACE SHOOTER")
-            self._game_state.active_scene = self._space_shooter_scene
-            self._game_state.game_state_changed = True
+            self._change_scene(self._space_shooter_scene)
         if self._seagulls_menu_button.should_switch:
             logger.debug("SWITCHING SCENE TO SEAGULLS")
-            self._game_state.active_scene = self._seagulls_scene
-            self._game_state.game_state_changed = True
+            self._change_scene(self._seagulls_scene)
         if self._game_controls.should_quit():
             logger.debug("QUIT EVENT DETECTED")
             self._should_quit.set()
 
         self._render()
+
+    def _change_scene(self, next_scene: IGameScene) -> None:
+        self._game_state.active_scene = next_scene
+        self._game_state.game_state_changed = True
 
     def _render(self) -> None:
         background = Surface((1024, 600))

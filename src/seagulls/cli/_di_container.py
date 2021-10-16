@@ -14,13 +14,13 @@ from seagulls.examples import (
     ExampleSceneManager,
     MainMenuScene,
     SimpleStarsBackground,
-    WindowScene
+    WindowScene,
+    GameState
 )
 from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.space_shooter import ShooterScene
 
 from ._framework import LoggingClient
-from ..examples._game_state import GameState
 
 
 class SeagullsDiContainer(DeclarativeContainer):

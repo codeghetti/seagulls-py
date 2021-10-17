@@ -14,11 +14,13 @@ from seagulls.examples import (
     ExampleSceneManager,
     MainMenuScene,
     SimpleStarsBackground,
+    SimpleRpgBackground,
     WindowScene,
     GameState
 )
 from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.space_shooter import ShooterScene
+from seagulls.examples.rpg import RpgScene
 
 from ._framework import LoggingClient
 
@@ -42,7 +44,10 @@ class SeagullsDiContainer(DeclarativeContainer):
         SimpleStarsBackground,
         asset_manager=_asset_manager,
     )
-
+    _rpg_background = Singleton(
+        SimpleRpgBackground,
+        asset_manager=_asset_manager,
+    )
     _space_shooter_scene = Singleton(
         ShooterScene,
         surface_renderer=_surface_renderer,
@@ -52,6 +57,10 @@ class SeagullsDiContainer(DeclarativeContainer):
     )
     _seagulls_scene = Singleton(
         SeagullsScene,
+    )
+
+    _rpg_scene = Singleton(
+        RpgScene,
     )
 
     _main_menu_scene = Singleton(

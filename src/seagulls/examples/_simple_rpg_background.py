@@ -1,16 +1,65 @@
 from functools import lru_cache
 import random
+from typing import List, Optional, Any, Dict
 
 from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface
 
 
+class Tile():
+    pass
+
+
+class GameBoard():
+    _tiles: Dict[Any, Any]
+
+    def __init__(self):
+        self._tiles = {}
+
+    def get_tile(self, x: int, y: int) -> Optional[Tile]:
+        return self._tiles.get((x, y))
+
+    def set_tile(self, x, y, tile: Tile) -> None:
+        self._tiles[(x, y)] = tile
+
+    def get_neighbors(self, x: int, y: int, size: int) -> List[Tile]:
+        _neighbors = []
+
+        if self.get_tile(x - size, y) is not None:
+            _neighbors.append(self.get_tile(x - size, y))
+
+        if self.get_tile(x + size, y) is not None:
+            _neighbors.append(self.get_tile(x + size, y))
+
+        if self.get_tile(x, y - size) is not None:
+            _neighbors.append(self.get_tile(x, y - size))
+
+        if self.get_tile(x, y + size) is not None:
+            _neighbors.append(self.get_tile(x, y + size))
+
+        if self.get_tile(x + size, y + size) is not None:
+            _neighbors.append(self.get_tile(x + size, y + size))
+
+        if self.get_tile(x - size, y - size) is not None:
+            _neighbors.append(self.get_tile(x - size, y - size))
+
+        if self.get_tile(x - size, y + size) is not None:
+            _neighbors.append(self.get_tile(x - size, y + size))
+
+        if self.get_tile(x + size, y - size) is not None:
+            _neighbors.append(self.get_tile(x + size, y - size))
+
+        return _neighbors
+
+
 class SimpleRpgBackground(GameObject):
 
     _asset_manager: AssetManager
+    _game_board: GameBoard
 
     def __init__(self, asset_manager: AssetManager):
         self._asset_manager = asset_manager
+        self._game_board = GameBoard()
 
     def tick(self) -> None:
         pass
@@ -77,12 +126,22 @@ class SimpleRpgBackground(GameObject):
 
                 else:
                     random_number = random.randint(0, 100)
-                    if random_number < 75:
+                    if random_number < 92:
                         surface.blit(island_grass, (x * 16, y * 16))
-                    elif random_number < 78:
-                        surface.blit(island_red_home, (x * 16, y * 16))
-                    elif random_number < 80:
-                        surface.blit(island_blue_home, (x * 16, y * 16))
+                    elif random_number < 93:
+                        if len(self._game_board.get_neighbors(x * 16, y * 16, 16)) == 0:
+                            surface.blit(island_red_home, (x * 16, y * 16))
+                            self._game_board.set_tile(x * 16, y * 16, Tile())
+                        else:
+                            surface.blit(island_grass, (x * 16, y * 16))
+                    elif random_number < 94:
+                        if len(self._game_board.get_neighbors(x * 16, y * 16, 16)) == 0:
+                            surface.blit(island_blue_home, (x * 16, y * 16))
+                            self._game_board.set_tile(x * 16, y * 16, Tile())
+                        else:
+                            surface.blit(island_grass, (x * 16, y * 16))
                     else:
                         surface.blit(island_tree, (x * 16, y * 16))
         return surface
+
+

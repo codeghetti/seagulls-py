@@ -27,6 +27,7 @@ class RpgScene(IGameScene):
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(background)
+        self._game_objects.add(self._game_controls)
 
         self._should_quit = Event()
 

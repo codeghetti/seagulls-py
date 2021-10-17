@@ -79,6 +79,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         game_state=_game_state,
         space_shooter_scene=_space_shooter_scene,
         seagulls_scene=_seagulls_scene,
+        rpg_scene=_rpg_scene,
     )
 
     _window_scene = Singleton(

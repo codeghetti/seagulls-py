@@ -44,10 +44,12 @@ class SeagullsDiContainer(DeclarativeContainer):
         SimpleStarsBackground,
         asset_manager=_asset_manager,
     )
+
     _rpg_background = Singleton(
         SimpleRpgBackground,
         asset_manager=_asset_manager,
     )
+
     _space_shooter_scene = Singleton(
         ShooterScene,
         surface_renderer=_surface_renderer,
@@ -55,12 +57,17 @@ class SeagullsDiContainer(DeclarativeContainer):
         background=_main_menu_background,
         game_controls=_game_controls
     )
+
     _seagulls_scene = Singleton(
         SeagullsScene,
     )
 
     _rpg_scene = Singleton(
         RpgScene,
+        surface_renderer=_surface_renderer,
+        asset_manager=_asset_manager,
+        background=_rpg_background,
+        game_controls=_game_controls
     )
 
     _main_menu_scene = Singleton(

@@ -2,24 +2,16 @@ import logging
 from threading import Event
 
 from seagulls.assets import AssetManager
-from seagulls.engine import (
-    GameControls,
-    GameObject,
-    GameObjectsCollection,
-    IGameScene,
-    Surface,
-    SurfaceRenderer
-)
+from seagulls.engine import IGameScene, SurfaceRenderer, GameObjectsCollection, GameObject, GameControls, Surface
 
 logger = logging.getLogger(__name__)
 
 
-class ShooterScene(IGameScene):
+class RpgScene(IGameScene):
 
-    _surface_renderer: SurfaceRenderer
+    _surface_render: SurfaceRenderer
     _game_controls: GameControls
     _asset_manager: AssetManager
-
     _game_objects: GameObjectsCollection
     _should_quit: Event
 
@@ -29,7 +21,7 @@ class ShooterScene(IGameScene):
             asset_manager: AssetManager,
             background: GameObject,
             game_controls: GameControls):
-        self._surface_renderer = surface_renderer
+        self._surface_render = surface_renderer
         self._asset_manager = asset_manager
         self._game_controls = game_controls
 
@@ -40,7 +32,7 @@ class ShooterScene(IGameScene):
         self._should_quit = Event()
 
     def start(self) -> None:
-        self._surface_renderer.start()
+        self._surface_render.start()
         self.tick()
 
     def should_quit(self) -> bool:
@@ -59,4 +51,4 @@ class ShooterScene(IGameScene):
         background = Surface((1024, 600))
         self._game_objects.apply(lambda x: x.render(background))
 
-        self._surface_renderer.render(background)
+        self._surface_render.render(background)

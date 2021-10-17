@@ -23,6 +23,9 @@ class ShooterScene(IGameScene):
     _game_objects: GameObjectsCollection
     _should_quit: Event
 
+    first_should_switch_scene = False
+    second_should_switch_scene = False
+
     def __init__(
             self,
             surface_renderer: SurfaceRenderer,

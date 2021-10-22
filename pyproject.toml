@@ -17,17 +17,18 @@ python = "^3.8"
 pygame = "*"
 dependency-injector = "*"
 colorlog = "*"
+PyYAML = "*"
 # These are only needed during development
 tox = { version = "*", optional = true }
 isort = { version = "*", optional = true }
 pytest = { version = "*", optional = true }
 flake8 = { version = "*", optional = true }
 mypy = { version = "*", optional = true }
-trio = "*"
-PyYAML = "*"
+mkdocs = {version = "*", optional = true }
+pdoc = {version = "*", optional = true }
 
 [tool.poetry.extras]
-dev = ["tox", "isort", "pytest", "flake8", "mypy"]
+dev = ["tox", "isort", "pytest", "flake8", "mypy", "mkdocs", "pdoc"]
 
 [tool.poetry.dev-dependencies]
 

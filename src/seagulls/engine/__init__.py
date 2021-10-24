@@ -1,3 +1,4 @@
+"""Core Engine Components"""
 from ._collisions import CollidableObject, flag_from_string
 from ._game_clock import GameClock
 from ._game_controls import GameControls

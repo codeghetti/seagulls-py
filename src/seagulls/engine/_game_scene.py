@@ -2,6 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class IGameScene(ABC):
+    """
+    This class is for X and Y.
+    """
 
     @abstractmethod
     def start(self) -> None:

@@ -1,0 +1,13 @@
+site_name: seagulls-py
+site_dir: .github-pages
+site_url: https://seagulls-py.codeghetti.com
+repo_url: https://github.com/codeghetti/seagulls-py
+edit_uri: blob/main/docs/
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+markdown_extensions:
+  - toc:
+      permalink: true

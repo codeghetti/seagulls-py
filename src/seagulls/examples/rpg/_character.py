@@ -35,76 +35,22 @@ class Character(GameObject):
         self._standing_position = "down"
 
     def tick(self) -> None:
+        self._process_movement()
+        self._ensure_in_bounds()
+
+    def _process_movement(self) -> None:
         self._time += self._clock.get_time()
-
         if self._game_controls.is_left_moving():
-            self._standing_position = "left"
-            if not self._current_state.startswith("walking-left"):
-                self._current_state = "walking-left.1"
-                self._time = 0.0
-            elif self._is_time_to_switch():
-                if self._current_state == "walking-left.1":
-                    self._current_state = "walking-left.2"
-                elif self._current_state == "walking-left.2":
-                    self._current_state = "walking-left.3"
-                elif self._current_state == "walking-left.3":
-                    self._current_state = "walking-left.4"
-                else:
-                    self._current_state = "walking-left.1"
-                self._time = 0.0
-
+            self._walk("left")
             self._velocity = Vector2(-1, 0)
         elif self._game_controls.is_right_moving():
-            self._standing_position = "right"
-            if not self._current_state.startswith("walking-right"):
-                self._current_state = "walking-right.1"
-                self._time = 0.0
-            elif self._is_time_to_switch():
-                logger.info("SWITCHING!")
-                if self._current_state == "walking-right.1":
-                    self._current_state = "walking-right.2"
-                elif self._current_state == "walking-right.2":
-                    self._current_state = "walking-right.3"
-                elif self._current_state == "walking-right.3":
-                    self._current_state = "walking-right.4"
-                else:
-                    self._current_state = "walking-right.1"
-                self._time = 0.0
-
+            self._walk("right")
             self._velocity = Vector2(1, 0)
         elif self._game_controls.is_up_moving():
-            self._standing_position = "up"
-            if not self._current_state.startswith("walking-up"):
-                self._current_state = "walking-up.1"
-                self._time = 0.0
-            elif self._is_time_to_switch():
-                if self._current_state == "walking-up.1":
-                    self._current_state = "walking-up.2"
-                elif self._current_state == "walking-up.2":
-                    self._current_state = "walking-up.3"
-                elif self._current_state == "walking-up.3":
-                    self._current_state = "walking-up.4"
-                else:
-                    self._current_state = "walking-up.1"
-                self._time = 0.0
-
+            self._walk("up")
             self._velocity = Vector2(0, -1)
         elif self._game_controls.is_down_moving():
-            self._standing_position = "down"
-            if not self._current_state.startswith("walking-down"):
-                self._current_state = "walking-down.1"
-                self._time = 0.0
-            elif self._is_time_to_switch():
-                if self._current_state == "walking-down.1":
-                    self._current_state = "walking-down.2"
-                elif self._current_state == "walking-down.2":
-                    self._current_state = "walking-down.3"
-                elif self._current_state == "walking-down.3":
-                    self._current_state = "walking-down.4"
-                else:
-                    self._current_state = "walking-down.1"
-                self._time = 0.0
-
+            self._walk("down")
             self._velocity = Vector2(0, 1)
         else:
             if not self._current_state.startswith("standing"):
@@ -113,24 +59,36 @@ class Character(GameObject):
             self._current_state = f"standing.{self._standing_position}"
             self._velocity = Vector2(0, 0)
 
-        logger.info(f"Time: {self._time}")
-
         delta = self._clock.get_time()
-
         self._position = self._position + (self._velocity * delta / 10)
 
+    def _walk(self, direction: str) -> None:
+        self._standing_position = direction
+
+        if not self._current_state.startswith(f"walking-{direction}"):
+            self._current_state = f"walking-{direction}.1"
+            self._time = 0.0
+        elif self._is_time_to_switch():
+            if self._current_state == f"walking-{direction}.1":
+                self._current_state = f"walking-{direction}.2"
+            elif self._current_state == f"walking-{direction}.2":
+                self._current_state = f"walking-{direction}.3"
+            elif self._current_state == f"walking-{direction}.3":
+                self._current_state = f"walking-{direction}.4"
+            else:
+                self._current_state = f"walking-{direction}.1"
+            self._time = 0.0
+
+    def _ensure_in_bounds(self):
         # TODO: need to check if we are near water
         if self._position.x < 0:
             self._position.x = 0
-
-        if self._position.x > 1024 - 112:
-            self._position.x = 1024 - 112
-
+        if self._position.x > 1024 - 16:
+            self._position.x = 1024 - 16
         if self._position.y < 0:
             self._position.y = 0
-
-        if self._position.y > 600 - 75:
-            self._position.y = 600 - 75
+        if self._position.y > 600 - 16:
+            self._position.y = 600 - 16
 
     def _is_time_to_switch(self) -> bool:
         return self._time > 333

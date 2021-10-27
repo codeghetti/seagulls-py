@@ -2,101 +2,85 @@
 {% block title %}{{ module.modulename }} API Docs{% endblock %}
 {% block style %}{% endblock %}
 {% defaultmacro bases(cls) %}
-    {%- if cls.bases -%}
-        {%- for base in cls.bases -%}
-            - {{ base[:2] | link(text=base[2]) }}
-        {%- endfor -%}
-    {%- endif -%}
+    {% if cls.bases -%}
+        ({% for base in cls.bases %}{{ base[2] | safe }}{% endfor %})
+    {%- endif %}
 {% enddefaultmacro %}
 {% defaultmacro default_value(var) -%}
     {%- if var.default_value_str -%}
-        <span class="default_value">{{ var.default_value_str | escape | linkify }}</span>
+{{ var.default_value_str | escape }}
     {%- endif -%}
 {% enddefaultmacro %}
 {% defaultmacro annotation(var) %}
     {%- if var.annotation_str -%}
-        <span class="annotation">{{ var.annotation_str | escape | linkify }}</span>
+{{ var.annotation_str | escape }}
     {%- endif -%}
 {% enddefaultmacro %}
 {% defaultmacro decorators(doc) %}
     {% for d in doc.decorators if not d.startswith("@_") %}
-        <div class="decorator">{{ d }}</div>
+{{ d }}
     {% endfor %}
 {% enddefaultmacro %}
 {% defaultmacro headerlink(doc) -%}
-    <a class="headerlink" href="#{{ doc.qualname }}">#&nbsp;&nbsp</a>
+[# ](#{{ doc.qualname }}){: #{{ doc.qualname.replace("_", "\_") }} }
 {% enddefaultmacro %}
 {% defaultmacro function(fn) -%}
-    <div class="attr function">{{ headerlink(fn) }}
-        {{ decorators(fn) }}
+{{ decorators(fn) }}
         {% if fn.name == "__init__" %}
-            <span class="name">{{ ".".join(fn.qualname.split(".")[:-1]) }}</span>
+##### {{ ".".join(fn.qualname.split(".")[:-1]) }}
             {#- no space -#}
-            <span class="signature">{{ fn.signature_without_self | escape | linkify }}</span>
+{{ fn.signature_without_self | escape }}:
         {% else %}
-            <span class="def">{{ fn.funcdef }}</span>
-            <span class="name">{{ fn.name }}</span>
+##### {{ fn.funcdef }} {{ fn.name }}
             {#- no space -#}
-            <span class="signature">{{ fn.signature | escape | linkify }}</span>:
+{{ fn.signature | escape }}:
         {% endif %}
-    </div>
 {% enddefaultmacro %}
 {% defaultmacro variable(var) %}
-    <div class="attr variable">{{ headerlink(var) }}
-        <span class="name">{{ var.name }}</span>{{ annotation(var) }}{{ default_value(var) }}
-    </div>
+{{ headerlink(var) }} {{ var.name }} {{ annotation(var) }}{{ default_value(var) }}
 {% enddefaultmacro %}
 {% defaultmacro submodule(mod) %}
-    <div class="attr module">{{ headerlink(mod) }}<span class="name">{{ mod.taken_from | link }}</span></div>
+{{ headerlink(mod) }} {{ mod.taken_from }}
 {% enddefaultmacro %}
 {% defaultmacro class(cls) %}
-    <div class="attr class">
-        {{ headerlink(cls) }}
-        {{ decorators(cls) }}
-        <span class="def">class</span>
-        <span class="name">{{ cls.qualname }}</span>
-        {{- bases(cls) -}}:
-    </div>
+{{ decorators(cls) }}
+#### class `{{ cls.qualname }}` {{ bases(cls) }}:
 {% enddefaultmacro %}
 {% defaultmacro member(doc) %}
     {% if doc.type == "class" %}
-        {{ class(doc) }}
+{{ class(doc) }}
     {% elif doc.type == "function" %}
-        {{ function(doc) }}
+{{- function(doc) }}
     {% elif doc.type == "module" %}
-        {{ submodule(doc) }}
+{{- submodule(doc) }}
     {% else %}
-        {{ variable(doc) }}
+{{- variable(doc) }}
     {% endif %}
     {% if doc.type != "variable" %}
-        {{ view_source(doc) }}
+{{- view_source(doc) }}
     {% endif %}
-    {{ docstring(doc) }}
+{{ docstring(doc) }}
 {% enddefaultmacro %}
 {% defaultmacro docstring(var) %}
     {% if var.docstring %}
-        {{ var.docstring | to_markdown | linkify(namespace=var.qualname) }}
+{{ var.docstring | to_markdown }}
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro nav_members(members) %}
-    <ul class="memberlist">
         {% for m in members if is_public(m) | trim %}
-            <li>
                 {% if m.type == "class" %}
-                    <a class="class" href="#{{ m.qualname }}">{{ m.qualname }}</a>
+- [{{ m.qualname }}]({{ m.qualname }})
                     {% if m.own_members %}
-                        {{ nav_members(m.own_members) | indent(12) }}
+{{ nav_members(m.own_members) | indent(12) }}
                     {% endif %}
                 {% elif m.type == "module" %}
-                    <a class="module" href="#{{ m.name }}">{{ m.name }}</a>
+[{{ m.name }}](#{{ m.name }})
                 {% elif m.name == "__init__" %}
-                    <a class="function" href="#{{ m.qualname }}">{{ m.qualname.split(".")[-2] }}</a>
+[{{ m.qualname.split(".")[-2] }}](#{{ m.qualname }})
                 {% else %}
-                    <a class="{{ m.type }}" href="#{{ m.qualname }}">{{ m.name }}</a>
+[{{ m.name }}](#{{ m.qualname }})
                 {% endif %}
-            </li>
         {% endfor %}
-    </ul>
 {% enddefaultmacro %}
 {% defaultmacro is_public(doc) %}
     {#
@@ -124,88 +108,70 @@
         {% set m = None %}{# workaround for https://github.com/pallets/jinja/issues/1427 #}
         {% set member_html %}
             {% for m in members if is_public(m) | trim %}
-                <dd id="{{ m.qualname }}" class="{{ m.type }}">
-                    {{- m.taken_from | link(text=m.name.replace("__init__",base[1])) -}}
-                </dd>
+- [{{ m.name.replace("__init__",base[1]) | safe }}]({{- m.taken_from -}})
             {% endfor %}
         {% endset %}
         {# we may not have any public members, in which case we don't want to print anything. #}
         {% if member_html %}
-            <div><dt>{{ base | link }}</dt>
-                {{ member_html }}
-            </div>
+{{ base }}
+{{ member_html }}
         {% endif %}
     {% endfor %}
 {% enddefaultmacro %}
 {# fmt: on #}
 {% defaultmacro view_source(doc) %}
     {% if show_source and doc.source %}
-!!! note "View Source"
+??? note "View Source"
     ```python
         {% filter indent(width=8) %}
-        {{ doc.source }}
+        {{ doc.source | safe }}
         {% endfilter %}
     ```
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro module_name() %}
-    ##
-        {%- set parts = module.modulename.split(".") -%}
-        {%- for part in parts -%}
-            {%- set fullname = ".".join(parts[:loop.index]) -%}
-            {%- if fullname in all_modules and fullname != module.modulename -%}
-                [{{ "../" * loop.revindex0 }}{{ part }}]({{ part }})
-            {%- else -%}
-                {{ part }}
-            {%- endif -%}
-            {%- if loop.nextitem -%}
-                .
-            {%- endif -%}
-        {%- endfor -%}
+## {% set parts = module.modulename.split(".") -%}
+    {%- for part in parts -%}
+        {%- set fullname = ".".join(parts[:loop.index]) -%}
+        {%- if fullname in all_modules and fullname != module.modulename -%}
+            [{{ part }}]({{ "../" * loop.revindex0 }}{{ part }})
+        {%- else -%}
+            {{ part }}
+        {%- endif -%}
+        {%- if loop.nextitem -%}
+            .
+        {%- endif -%}
+    {%- endfor -%}
 {% enddefaultmacro %}
 {% block head %}{% endblock %}
 {% block body %}
     {% block nav %}{% endblock %}
         {% block module_info %}
-            {{ module_name() }}
-            {{ docstring(module) }}
-            {{ view_source(module) }}
+{{ module_name() }}
+{{ docstring(module) }}
+{{ view_source(module) }}
             {% block edit_button %}
                 {% if edit_url %}
-                    [{{ edit_url }}](Edit on GitHub)
+[Edit on GitHub]({{ edit_url }})
                 {% endif %}
             {% endblock %}
         {% endblock %}
         {% block module_contents %}
             {% for m in module.flattened_own_members if is_public(m) | trim %}
-                <section id="{{ m.qualname or m.name }}">
-                    {{ member(m) }}
-                    {% if m.type == "class" %}
-                        {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
-                            <div id="{{ m.qualname }}" class="classattr">
-                                {{ member(m) }}
-                            </div>
-                        {% endfor %}
-                        {% set inherited_members = inherited(m) | trim %}
-                        {% if inherited_members %}
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    {{ inherited_members }}
-                                </dl>
-                            </div>
-                        {% endif %}
+### {{ m.qualname or m.name | safe}}
+{{ member(m) }}
+                {% if m.type == "class" %}
+                    {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
+{{ member(m) }}
+                    {% endfor %}
+                    {% set inherited_members = inherited(m) | trim %}
+                    {% if inherited_members %}
+#### Inherited Members
+{{ inherited_members | safe }}
                     {% endif %}
-                </section>
+                {% endif %}
             {% endfor %}
         {% endblock %}
-    </main>
-    {% if mtime %}
-        {% include "livereload.html.jinja2" %}
-    {% endif %}
     {% block search_js %}
-        {% if search and all_modules|length > 1 %}
-            {% include "search.html.jinja2" %}
-        {% endif %}
     {% endblock %}
 {% endblock %}

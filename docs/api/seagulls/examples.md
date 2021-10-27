@@ -1,7 +1,6 @@
-<div>
-                ##[../seagulls](seagulls).examples
-            
-            !!! note "View Source"
+## [seagulls](../seagulls).examples
+
+??? note "View Source"
     ```python
         from ._main_menu_scene import MainMenuScene
         from ._scene_manager import ExampleSceneManager
@@ -12,28 +11,23 @@
         from ._game_state import GameState
 
         __all__ = [
-            &#34;MainMenuScene&#34;,
-            &#34;AsyncGameSession&#34;,
-            &#34;BlockingGameSession&#34;,
-            &#34;ExampleSceneManager&#34;,
-            &#34;SimpleStarsBackground&#34;,
-            &#34;SimpleRpgBackground&#34;,
-            &#34;WindowScene&#34;,
-            &#34;GameState&#34;
+            "MainMenuScene",
+            "AsyncGameSession",
+            "BlockingGameSession",
+            "ExampleSceneManager",
+            "SimpleStarsBackground",
+            "SimpleRpgBackground",
+            "WindowScene",
+            "GameState"
         ]
 
     ```
 
-                <section id="MainMenuScene">
-                                <div class="attr class">
-        <a class="headerlink" href="#MainMenuScene">#&nbsp;&nbsp</a>
+### MainMenuScene
 
-        
-        <span class="def">class</span>
-        <span class="name">MainMenuScene</span>- seagulls.engine._game_scene.IGameScene:
-    </div>
+#### class `MainMenuScene` (seagulls.engine._game_scene.IGameScene):
 
-        !!! note "View Source"
+??? note "View Source"
     ```python
         class MainMenuScene(IGameScene):
 
@@ -94,35 +88,35 @@
 
                 self._should_quit = Event()
 
-            def start(self) -&gt; None:
+            def start(self) -> None:
                 self._surface_renderer.start()
                 self.tick()
 
-            def should_quit(self) -&gt; bool:
+            def should_quit(self) -> bool:
                 return self._should_quit.is_set()
 
-            def tick(self) -&gt; None:
+            def tick(self) -> None:
                 self._game_objects.apply(lambda x: x.tick())
                 if self._space_shooter_menu_button.should_switch:
-                    logger.debug(&#34;SWITCHING SCENE TO SPACE SHOOTER&#34;)
+                    logger.debug("SWITCHING SCENE TO SPACE SHOOTER")
                     self._change_scene(self._space_shooter_scene)
                 if self._seagulls_menu_button.should_switch:
-                    logger.debug(&#34;SWITCHING SCENE TO SEAGULLS&#34;)
+                    logger.debug("SWITCHING SCENE TO SEAGULLS")
                     self._change_scene(self._seagulls_scene)
                 if self._rpg_menu_button.should_switch:
-                    logger.debug(&#34;SWITCHING SCENE TO RPG&#34;)
+                    logger.debug("SWITCHING SCENE TO RPG")
                     self._change_scene(self._rpg_scene)
                 if self._game_controls.should_quit():
-                    logger.debug(&#34;QUIT EVENT DETECTED&#34;)
+                    logger.debug("QUIT EVENT DETECTED")
                     self._should_quit.set()
 
                 self._render()
 
-            def _change_scene(self, next_scene: IGameScene) -&gt; None:
+            def _change_scene(self, next_scene: IGameScene) -> None:
                 self._game_state.active_scene = next_scene
                 self._game_state.game_state_changed = True
 
-            def _render(self) -&gt; None:
+            def _render(self) -> None:
                 background = Surface((1024, 600))
                 self._game_objects.apply(lambda x: x.render(background))
 
@@ -130,26 +124,22 @@
 
     ```
 
-            This class is for X and Y.
+This class is for X and Y.
 
 
-                            <div id="MainMenuScene.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#MainMenuScene.__init__">#&nbsp;&nbsp</a>
 
-        
-            <span class="name">MainMenuScene</span><span class="signature">(
-    surface_renderer: <a href="engine.html#_surface_renderer.SurfaceRenderer">seagulls.engine._surface_renderer.SurfaceRenderer</a>,
-    asset_manager: <a href="assets.html#_manager.AssetManager">seagulls.assets._manager.AssetManager</a>,
-    background: <a href="engine.html#_game_object.GameObject">seagulls.engine._game_object.GameObject</a>,
-    game_controls: <a href="engine.html#_game_controls.GameControls">seagulls.engine._game_controls.GameControls</a>,
-    game_state: <a href="#_game_state.GameState">seagulls.examples._game_state.GameState</a>,
-    space_shooter_scene: <a href="engine.html#_game_scene.IGameScene">seagulls.engine._game_scene.IGameScene</a>,
-    seagulls_scene: <a href="engine.html#_game_scene.IGameScene">seagulls.engine._game_scene.IGameScene</a>,
-    rpg_scene: <a href="engine.html#_game_scene.IGameScene">seagulls.engine._game_scene.IGameScene</a>
-)</span>
-    </div>
+##### MainMenuScene(
+    surface_renderer: seagulls.engine._surface_renderer.SurfaceRenderer,
+    asset_manager: seagulls.assets._manager.AssetManager,
+    background: seagulls.engine._game_object.GameObject,
+    game_controls: seagulls.engine._game_controls.GameControls,
+    game_state: seagulls.examples._game_state.GameState,
+    space_shooter_scene: seagulls.engine._game_scene.IGameScene,
+    seagulls_scene: seagulls.engine._game_scene.IGameScene,
+    rpg_scene: seagulls.engine._game_scene.IGameScene
+):
 
-        !!! note "View Source"
+??? note "View Source"
     ```python
             def __init__(
                     self,
@@ -195,144 +185,115 @@
 
     ```
 
-    
 
-                            </div>
-                            <div id="MainMenuScene.start" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#MainMenuScene.start">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">start</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def start(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def start(self) -&gt; None:
+            def start(self) -> None:
                 self._surface_renderer.start()
                 self.tick()
 
     ```
 
-    
 
-                            </div>
-                            <div id="MainMenuScene.should_quit" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#MainMenuScene.should_quit">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">should_quit</span><span class="signature">(self) -&gt; bool</span>:
-    </div>
 
-        !!! note "View Source"
+##### def should_quit(self) -&gt; bool:
+
+??? note "View Source"
     ```python
-            def should_quit(self) -&gt; bool:
+            def should_quit(self) -> bool:
                 return self._should_quit.is_set()
 
     ```
 
-    
 
-                            </div>
-                            <div id="MainMenuScene.tick" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#MainMenuScene.tick">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">tick</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def tick(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def tick(self) -&gt; None:
+            def tick(self) -> None:
                 self._game_objects.apply(lambda x: x.tick())
                 if self._space_shooter_menu_button.should_switch:
-                    logger.debug(&#34;SWITCHING SCENE TO SPACE SHOOTER&#34;)
+                    logger.debug("SWITCHING SCENE TO SPACE SHOOTER")
                     self._change_scene(self._space_shooter_scene)
                 if self._seagulls_menu_button.should_switch:
-                    logger.debug(&#34;SWITCHING SCENE TO SEAGULLS&#34;)
+                    logger.debug("SWITCHING SCENE TO SEAGULLS")
                     self._change_scene(self._seagulls_scene)
                 if self._rpg_menu_button.should_switch:
-                    logger.debug(&#34;SWITCHING SCENE TO RPG&#34;)
+                    logger.debug("SWITCHING SCENE TO RPG")
                     self._change_scene(self._rpg_scene)
                 if self._game_controls.should_quit():
-                    logger.debug(&#34;QUIT EVENT DETECTED&#34;)
+                    logger.debug("QUIT EVENT DETECTED")
                     self._should_quit.set()
 
                 self._render()
 
     ```
 
-    
 
-                            </div>
-                </section>
-                <section id="AsyncGameSession">
-                                <div class="attr class">
-        <a class="headerlink" href="#AsyncGameSession">#&nbsp;&nbsp</a>
 
-        
-        <span class="def">class</span>
-        <span class="name">AsyncGameSession</span>- seagulls.engine._game_session.IGameSession:
-    </div>
+### AsyncGameSession
 
-        !!! note "View Source"
+#### class `AsyncGameSession` (seagulls.engine._game_session.IGameSession):
+
+??? note "View Source"
     ```python
         class AsyncGameSession(IGameSession):
             _scene_manager: IProvideGameScenes
             _thread: Thread
             _stopped: Event
 
-            def __init__(self, scene_manager: IProvideGameScenes) -&gt; None:
+            def __init__(self, scene_manager: IProvideGameScenes) -> None:
                 self._scene_manager = scene_manager
 
                 self._thread = Thread(target=self._thread_target)
                 self._stopped = Event()
 
-            def start(self) -&gt; None:
-                logger.debug(f&#34;starting game session&#34;)
+            def start(self) -> None:
+                logger.debug(f"starting game session")
                 self._thread.start()
 
-            def wait_for_completion(self) -&gt; None:
-                logger.debug(f&#34;waiting for completion&#34;)
+            def wait_for_completion(self) -> None:
+                logger.debug(f"waiting for completion")
                 while not self._stopped.is_set():
                     time.sleep(0.1)
-                logger.debug(f&#34;done waiting for completion&#34;)
+                logger.debug(f"done waiting for completion")
 
-            def stop(self) -&gt; None:
-                logger.debug(f&#34;stopping game session&#34;)
+            def stop(self) -> None:
+                logger.debug(f"stopping game session")
                 self._stopped.set()
                 self._thread.join()
 
-            def _thread_target(self) -&gt; None:
-                pygame.display.set_caption(&#34;Our Game&#34;)
+            def _thread_target(self) -> None:
+                pygame.display.set_caption("Our Game")
                 scene = self._scene_manager.get_scene()
                 scene.start()
 
                 while not self._stopped.is_set() and not scene.should_quit():
                     scene.tick()
-                logger.debug(&#34;exiting game session&#34;)
+                logger.debug("exiting game session")
                 self._stopped.set()
 
     ```
 
-            Helper class that provides a standard way to create an ABC using
+Helper class that provides a standard way to create an ABC using
 inheritance.
 
 
-                            <div id="AsyncGameSession.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#AsyncGameSession.__init__">#&nbsp;&nbsp</a>
 
-        
-            <span class="name">AsyncGameSession</span><span class="signature">(
-    scene_manager: <a href="engine.html#_game_scene_manager.IProvideGameScenes">seagulls.engine._game_scene_manager.IProvideGameScenes</a>
-)</span>
-    </div>
+##### AsyncGameSession(
+    scene_manager: seagulls.engine._game_scene_manager.IProvideGameScenes
+):
 
-        !!! note "View Source"
+??? note "View Source"
     ```python
-            def __init__(self, scene_manager: IProvideGameScenes) -&gt; None:
+            def __init__(self, scene_manager: IProvideGameScenes) -> None:
                 self._scene_manager = scene_manager
 
                 self._thread = Thread(target=self._thread_target)
@@ -340,200 +301,146 @@ inheritance.
 
     ```
 
-    
 
-                            </div>
-                            <div id="AsyncGameSession.start" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#AsyncGameSession.start">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">start</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def start(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def start(self) -&gt; None:
-                logger.debug(f&#34;starting game session&#34;)
+            def start(self) -> None:
+                logger.debug(f"starting game session")
                 self._thread.start()
 
     ```
 
-    
 
-                            </div>
-                            <div id="AsyncGameSession.wait_for_completion" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#AsyncGameSession.wait_for_completion">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">wait_for_completion</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def wait_for_completion(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def wait_for_completion(self) -&gt; None:
-                logger.debug(f&#34;waiting for completion&#34;)
+            def wait_for_completion(self) -> None:
+                logger.debug(f"waiting for completion")
                 while not self._stopped.is_set():
                     time.sleep(0.1)
-                logger.debug(f&#34;done waiting for completion&#34;)
+                logger.debug(f"done waiting for completion")
 
     ```
 
-    
 
-                            </div>
-                            <div id="AsyncGameSession.stop" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#AsyncGameSession.stop">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">stop</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def stop(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def stop(self) -&gt; None:
-                logger.debug(f&#34;stopping game session&#34;)
+            def stop(self) -> None:
+                logger.debug(f"stopping game session")
                 self._stopped.set()
                 self._thread.join()
 
     ```
 
-    
 
-                            </div>
-                </section>
-                <section id="BlockingGameSession">
-                                <div class="attr class">
-        <a class="headerlink" href="#BlockingGameSession">#&nbsp;&nbsp</a>
 
-        
-        <span class="def">class</span>
-        <span class="name">BlockingGameSession</span>- seagulls.engine._game_session.IGameSession:
-    </div>
+### BlockingGameSession
 
-        !!! note "View Source"
+#### class `BlockingGameSession` (seagulls.engine._game_session.IGameSession):
+
+??? note "View Source"
     ```python
         class BlockingGameSession(IGameSession):
             _scene_manager: IProvideGameScenes
 
-            def __init__(self, scene_manager: IProvideGameScenes) -&gt; None:
+            def __init__(self, scene_manager: IProvideGameScenes) -> None:
                 self._scene_manager = scene_manager
 
-            def start(self) -&gt; None:
-                logger.debug(f&#34;starting game session&#34;)
-                pygame.display.set_caption(&#34;Our Game&#34;)
+            def start(self) -> None:
+                logger.debug(f"starting game session")
+                pygame.display.set_caption("Our Game")
                 scene = self._scene_manager.get_scene()
                 scene.start()
 
                 while not scene.should_quit():
                     scene.tick()
-                logger.debug(&#34;exiting game session&#34;)
+                logger.debug("exiting game session")
 
-            def wait_for_completion(self) -&gt; None:
+            def wait_for_completion(self) -> None:
                 pass
 
-            def stop(self) -&gt; None:
+            def stop(self) -> None:
                 pass
 
     ```
 
-            Helper class that provides a standard way to create an ABC using
+Helper class that provides a standard way to create an ABC using
 inheritance.
 
 
-                            <div id="BlockingGameSession.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#BlockingGameSession.__init__">#&nbsp;&nbsp</a>
 
-        
-            <span class="name">BlockingGameSession</span><span class="signature">(
-    scene_manager: <a href="engine.html#_game_scene_manager.IProvideGameScenes">seagulls.engine._game_scene_manager.IProvideGameScenes</a>
-)</span>
-    </div>
+##### BlockingGameSession(
+    scene_manager: seagulls.engine._game_scene_manager.IProvideGameScenes
+):
 
-        !!! note "View Source"
+??? note "View Source"
     ```python
-            def __init__(self, scene_manager: IProvideGameScenes) -&gt; None:
+            def __init__(self, scene_manager: IProvideGameScenes) -> None:
                 self._scene_manager = scene_manager
 
     ```
 
-    
 
-                            </div>
-                            <div id="BlockingGameSession.start" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#BlockingGameSession.start">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">start</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def start(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def start(self) -&gt; None:
-                logger.debug(f&#34;starting game session&#34;)
-                pygame.display.set_caption(&#34;Our Game&#34;)
+            def start(self) -> None:
+                logger.debug(f"starting game session")
+                pygame.display.set_caption("Our Game")
                 scene = self._scene_manager.get_scene()
                 scene.start()
 
                 while not scene.should_quit():
                     scene.tick()
-                logger.debug(&#34;exiting game session&#34;)
+                logger.debug("exiting game session")
 
     ```
 
-    
 
-                            </div>
-                            <div id="BlockingGameSession.wait_for_completion" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#BlockingGameSession.wait_for_completion">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">wait_for_completion</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def wait_for_completion(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def wait_for_completion(self) -&gt; None:
+            def wait_for_completion(self) -> None:
                 pass
 
     ```
 
-    
 
-                            </div>
-                            <div id="BlockingGameSession.stop" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#BlockingGameSession.stop">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">stop</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def stop(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def stop(self) -&gt; None:
+            def stop(self) -> None:
                 pass
 
     ```
 
-    
 
-                            </div>
-                </section>
-                <section id="ExampleSceneManager">
-                                <div class="attr class">
-        <a class="headerlink" href="#ExampleSceneManager">#&nbsp;&nbsp</a>
 
-        
-        <span class="def">class</span>
-        <span class="name">ExampleSceneManager</span>- seagulls.engine._game_scene_manager.IProvideGameScenes:
-    </div>
+### ExampleSceneManager
 
-        !!! note "View Source"
+#### class `ExampleSceneManager` (seagulls.engine._game_scene_manager.IProvideGameScenes):
+
+??? note "View Source"
     ```python
         class ExampleSceneManager(IProvideGameScenes):
             _scene: MainMenuScene
@@ -541,61 +448,44 @@ inheritance.
             def __init__(self, scene: MainMenuScene):
                 self._scene = scene
 
-            def get_scene(self) -&gt; IGameScene:
+            def get_scene(self) -> IGameScene:
                 return self._scene
 
     ```
 
-            Helper class that provides a standard way to create an ABC using
+Helper class that provides a standard way to create an ABC using
 inheritance.
 
 
-                            <div id="ExampleSceneManager.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#ExampleSceneManager.__init__">#&nbsp;&nbsp</a>
 
-        
-            <span class="name">ExampleSceneManager</span><span class="signature">(scene: <a href="#_main_menu_scene.MainMenuScene">seagulls.examples._main_menu_scene.MainMenuScene</a>)</span>
-    </div>
+##### ExampleSceneManager(scene: seagulls.examples._main_menu_scene.MainMenuScene):
 
-        !!! note "View Source"
+??? note "View Source"
     ```python
             def __init__(self, scene: MainMenuScene):
                 self._scene = scene
 
     ```
 
-    
 
-                            </div>
-                            <div id="ExampleSceneManager.get_scene" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#ExampleSceneManager.get_scene">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">get_scene</span><span class="signature">(self) -&gt; <a href="engine.html#_game_scene.IGameScene">seagulls.engine._game_scene.IGameScene</a></span>:
-    </div>
 
-        !!! note "View Source"
+##### def get_scene(self) -&gt; seagulls.engine._game_scene.IGameScene:
+
+??? note "View Source"
     ```python
-            def get_scene(self) -&gt; IGameScene:
+            def get_scene(self) -> IGameScene:
                 return self._scene
 
     ```
 
-    
 
-                            </div>
-                </section>
-                <section id="SimpleStarsBackground">
-                                <div class="attr class">
-        <a class="headerlink" href="#SimpleStarsBackground">#&nbsp;&nbsp</a>
 
-        
-        <span class="def">class</span>
-        <span class="name">SimpleStarsBackground</span>- seagulls.engine._game_object.GameObject:
-    </div>
+### SimpleStarsBackground
 
-        !!! note "View Source"
+#### class `SimpleStarsBackground` (seagulls.engine._game_object.GameObject):
+
+??? note "View Source"
     ```python
         class SimpleStarsBackground(GameObject):
 
@@ -604,87 +494,64 @@ inheritance.
             def __init__(self, asset_manager: AssetManager):
                 self._asset_manager = asset_manager
 
-            def tick(self) -&gt; None:
+            def tick(self) -> None:
                 pass
 
-            def render(self, surface: Surface) -&gt; None:
+            def render(self, surface: Surface) -> None:
                 background = self._get_cached_background()
                 surface.blit(background, (0, 0))
 
             @lru_cache()
-            def _get_cached_background(self) -&gt; Surface:
-                return self._asset_manager.load_sprite(&#34;environment/environment-stars&#34;).copy()
+            def _get_cached_background(self) -> Surface:
+                return self._asset_manager.load_sprite("environment/environment-stars").copy()
 
     ```
 
-            Interface for anything representing an object in the scene.
+Interface for anything representing an object in the scene.
 
 
-                            <div id="SimpleStarsBackground.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#SimpleStarsBackground.__init__">#&nbsp;&nbsp</a>
 
-        
-            <span class="name">SimpleStarsBackground</span><span class="signature">(asset_manager: <a href="assets.html#_manager.AssetManager">seagulls.assets._manager.AssetManager</a>)</span>
-    </div>
+##### SimpleStarsBackground(asset_manager: seagulls.assets._manager.AssetManager):
 
-        !!! note "View Source"
+??? note "View Source"
     ```python
             def __init__(self, asset_manager: AssetManager):
                 self._asset_manager = asset_manager
 
     ```
 
-    
 
-                            </div>
-                            <div id="SimpleStarsBackground.tick" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#SimpleStarsBackground.tick">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">tick</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def tick(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def tick(self) -&gt; None:
+            def tick(self) -> None:
                 pass
 
     ```
 
-    
 
-                            </div>
-                            <div id="SimpleStarsBackground.render" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#SimpleStarsBackground.render">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">render</span><span class="signature">(self, surface: pygame.Surface) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def render(self, surface: pygame.Surface) -&gt; None:
+
+??? note "View Source"
     ```python
-            def render(self, surface: Surface) -&gt; None:
+            def render(self, surface: Surface) -> None:
                 background = self._get_cached_background()
                 surface.blit(background, (0, 0))
 
     ```
 
-    
 
-                            </div>
-                </section>
-                <section id="SimpleRpgBackground">
-                                <div class="attr class">
-        <a class="headerlink" href="#SimpleRpgBackground">#&nbsp;&nbsp</a>
 
-        
-        <span class="def">class</span>
-        <span class="name">SimpleRpgBackground</span>- seagulls.engine._game_object.GameObject:
-    </div>
+### SimpleRpgBackground
 
-        !!! note "View Source"
+#### class `SimpleRpgBackground` (seagulls.engine._game_object.GameObject):
+
+??? note "View Source"
     ```python
         class SimpleRpgBackground(GameObject):
 
@@ -695,43 +562,43 @@ inheritance.
                 self._asset_manager = asset_manager
                 self._game_board = GameBoard()
 
-            def tick(self) -&gt; None:
+            def tick(self) -> None:
                 pass
 
-            def render(self, surface: Surface) -&gt; None:
+            def render(self, surface: Surface) -> None:
                 background = self._get_cached_background()
                 surface.blit(background, (0, 0))
 
             @lru_cache()
-            def _get_cached_background(self) -&gt; Surface:
+            def _get_cached_background(self) -> Surface:
                 surface = Surface((1024, 600))
 
                 top_left_corner = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-top-left-corner&#34;).copy()
+                    "environment/rpg-environment/island-top-left-corner").copy()
                 top_island_edge = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-top-edge&#34;).copy()
+                    "environment/rpg-environment/island-top-edge").copy()
                 top_right_corner = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-top-right-corner&#34;).copy()
+                    "environment/rpg-environment/island-top-right-corner").copy()
                 island_water = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-water&#34;).copy()
+                    "environment/rpg-environment/island-water").copy()
                 bottom_left_corner = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-bottom-left-corner&#34;).copy()
+                    "environment/rpg-environment/island-bottom-left-corner").copy()
                 bottom_island_edge = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-bottom-edge&#34;).copy()
+                    "environment/rpg-environment/island-bottom-edge").copy()
                 bottom_right_corner = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-bottom-right-corner&#34;).copy()
+                    "environment/rpg-environment/island-bottom-right-corner").copy()
                 island_left_edge = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-left-edge&#34;).copy()
+                    "environment/rpg-environment/island-left-edge").copy()
                 island_right_edge = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-right-edge&#34;).copy()
+                    "environment/rpg-environment/island-right-edge").copy()
                 island_grass = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-grass&#34;).copy()
+                    "environment/rpg-environment/island-grass").copy()
                 island_red_home = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-red-home&#34;).copy()
+                    "environment/rpg-environment/island-red-home").copy()
                 island_blue_home = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-blue-home&#34;).copy()
+                    "environment/rpg-environment/island-blue-home").copy()
                 island_tree = self._asset_manager.load_sprite(
-                    &#34;environment/rpg-environment/island-tree&#34;).copy()
+                    "environment/rpg-environment/island-tree").copy()
 
                 for y in range(int(600 / 16)):
                     for x in range(int(1024 / 16)):
@@ -760,15 +627,15 @@ inheritance.
 
                         else:
                             random_number = random.randint(0, 100)
-                            if random_number &lt; 92:
+                            if random_number < 92:
                                 surface.blit(island_grass, (x * 16, y * 16))
-                            elif random_number &lt; 93:
+                            elif random_number < 93:
                                 if len(self._game_board.get_neighbors(x * 16, y * 16, 16)) == 0:
                                     surface.blit(island_red_home, (x * 16, y * 16))
                                     self._game_board.set_tile(x * 16, y * 16, Tile())
                                 else:
                                     surface.blit(island_grass, (x * 16, y * 16))
-                            elif random_number &lt; 94:
+                            elif random_number < 94:
                                 if len(self._game_board.get_neighbors(x * 16, y * 16, 16)) == 0:
                                     surface.blit(island_blue_home, (x * 16, y * 16))
                                     self._game_board.set_tile(x * 16, y * 16, Tile())
@@ -780,17 +647,13 @@ inheritance.
 
     ```
 
-            Interface for anything representing an object in the scene.
+Interface for anything representing an object in the scene.
 
 
-                            <div id="SimpleRpgBackground.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#SimpleRpgBackground.__init__">#&nbsp;&nbsp</a>
 
-        
-            <span class="name">SimpleRpgBackground</span><span class="signature">(asset_manager: <a href="assets.html#_manager.AssetManager">seagulls.assets._manager.AssetManager</a>)</span>
-    </div>
+##### SimpleRpgBackground(asset_manager: seagulls.assets._manager.AssetManager):
 
-        !!! note "View Source"
+??? note "View Source"
     ```python
             def __init__(self, asset_manager: AssetManager):
                 self._asset_manager = asset_manager
@@ -798,57 +661,38 @@ inheritance.
 
     ```
 
-    
 
-                            </div>
-                            <div id="SimpleRpgBackground.tick" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#SimpleRpgBackground.tick">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">tick</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def tick(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def tick(self) -&gt; None:
+            def tick(self) -> None:
                 pass
 
     ```
 
-    
 
-                            </div>
-                            <div id="SimpleRpgBackground.render" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#SimpleRpgBackground.render">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">render</span><span class="signature">(self, surface: pygame.Surface) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def render(self, surface: pygame.Surface) -&gt; None:
+
+??? note "View Source"
     ```python
-            def render(self, surface: Surface) -&gt; None:
+            def render(self, surface: Surface) -> None:
                 background = self._get_cached_background()
                 surface.blit(background, (0, 0))
 
     ```
 
-    
 
-                            </div>
-                </section>
-                <section id="WindowScene">
-                                <div class="attr class">
-        <a class="headerlink" href="#WindowScene">#&nbsp;&nbsp</a>
 
-        
-        <span class="def">class</span>
-        <span class="name">WindowScene</span>- seagulls.engine._game_scene.IGameScene:
-    </div>
+### WindowScene
 
-        !!! note "View Source"
+#### class `WindowScene` (seagulls.engine._game_scene.IGameScene):
+
+??? note "View Source"
     ```python
         class WindowScene(IGameScene):
             _active_scene: IGameScene
@@ -859,38 +703,34 @@ inheritance.
                 self._game_state = game_state
                 self._game_state.active_scene = active_scene
 
-            def start(self) -&gt; None:
+            def start(self) -> None:
                 self._active_scene.start()
 
-            def should_quit(self) -&gt; bool:
+            def should_quit(self) -> bool:
                 return self._active_scene.should_quit()
 
-            def tick(self) -&gt; None:
+            def tick(self) -> None:
                 if self._game_state.game_state_changed:
                     self._update_scene()
                     self._active_scene.start()
                 self._active_scene.tick()
 
-            def _update_scene(self) -&gt; None:
+            def _update_scene(self) -> None:
                 self._active_scene = self._game_state.active_scene
                 self._game_state.game_state_changed = False
 
     ```
 
-            This class is for X and Y.
+This class is for X and Y.
 
 
-                            <div id="WindowScene.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#WindowScene.__init__">#&nbsp;&nbsp</a>
 
-        
-            <span class="name">WindowScene</span><span class="signature">(
-    active_scene: <a href="engine.html#_game_scene.IGameScene">seagulls.engine._game_scene.IGameScene</a>,
-    game_state: <a href="#_game_state.GameState">seagulls.examples._game_state.GameState</a>
-)</span>
-    </div>
+##### WindowScene(
+    active_scene: seagulls.engine._game_scene.IGameScene,
+    game_state: seagulls.examples._game_state.GameState
+):
 
-        !!! note "View Source"
+??? note "View Source"
     ```python
             def __init__(self, active_scene: IGameScene, game_state: GameState):
                 self._active_scene = active_scene
@@ -899,56 +739,38 @@ inheritance.
 
     ```
 
-    
 
-                            </div>
-                            <div id="WindowScene.start" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#WindowScene.start">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">start</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def start(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def start(self) -&gt; None:
+            def start(self) -> None:
                 self._active_scene.start()
 
     ```
 
-    
 
-                            </div>
-                            <div id="WindowScene.should_quit" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#WindowScene.should_quit">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">should_quit</span><span class="signature">(self) -&gt; bool</span>:
-    </div>
 
-        !!! note "View Source"
+##### def should_quit(self) -&gt; bool:
+
+??? note "View Source"
     ```python
-            def should_quit(self) -&gt; bool:
+            def should_quit(self) -> bool:
                 return self._active_scene.should_quit()
 
     ```
 
-    
 
-                            </div>
-                            <div id="WindowScene.tick" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#WindowScene.tick">#&nbsp;&nbsp</a>
 
-        
-            <span class="def">def</span>
-            <span class="name">tick</span><span class="signature">(self) -&gt; None</span>:
-    </div>
 
-        !!! note "View Source"
+##### def tick(self) -&gt; None:
+
+??? note "View Source"
     ```python
-            def tick(self) -&gt; None:
+            def tick(self) -> None:
                 if self._game_state.game_state_changed:
                     self._update_scene()
                     self._active_scene.start()
@@ -956,20 +778,13 @@ inheritance.
 
     ```
 
-    
 
-                            </div>
-                </section>
-                <section id="GameState">
-                                <div class="attr class">
-        <a class="headerlink" href="#GameState">#&nbsp;&nbsp</a>
 
-        
-        <span class="def">class</span>
-        <span class="name">GameState</span>:
-    </div>
+### GameState
 
-        !!! note "View Source"
+#### class `GameState` :
+
+??? note "View Source"
     ```python
         class GameState:
             active_scene: Optional[IGameScene] = None
@@ -977,204 +792,21 @@ inheritance.
 
     ```
 
-    
-
-                            <div id="GameState.__init__" class="classattr">
-                                        <div class="attr function"><a class="headerlink" href="#GameState.__init__">#&nbsp;&nbsp</a>
-
-        
-            <span class="name">GameState</span><span class="signature">()</span>
-    </div>
-
-        
-    
-
-                            </div>
-                            <div id="GameState.active_scene" class="classattr">
-                                            <div class="attr variable"><a class="headerlink" href="#GameState.active_scene">#&nbsp;&nbsp</a>
-
-        <span class="name">active_scene</span><span class="annotation">: Optional[<a href="engine.html#_game_scene.IGameScene">seagulls.engine._game_scene.IGameScene</a>]</span><span class="default_value"> = None</span>
-    </div>
-
-    
-
-                            </div>
-                            <div id="GameState.game_state_changed" class="classattr">
-                                            <div class="attr variable"><a class="headerlink" href="#GameState.game_state_changed">#&nbsp;&nbsp</a>
-
-        <span class="name">game_state_changed</span><span class="annotation">: bool</span><span class="default_value"> = False</span>
-    </div>
-
-    
-
-                            </div>
-                </section>
-    </main>
-<script>
-    function escapeHTML(html) {
-        return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
-    }
-
-    const originalContent = document.querySelector("main.pdoc");
-    let currentContent = originalContent;
-
-    function setContent(innerHTML) {
-        let elem;
-        if (innerHTML) {
-            elem = document.createElement("main");
-            elem.classList.add("pdoc");
-            elem.innerHTML = innerHTML;
-        } else {
-            elem = originalContent;
-        }
-        if (currentContent !== elem) {
-            currentContent.replaceWith(elem);
-            currentContent = elem;
-        }
-    }
-
-    function getSearchTerm() {
-        return (new URL(window.location)).searchParams.get("search");
-    }
-
-    const searchBox = document.querySelector(".pdoc input[type=search]");
-    searchBox.addEventListener("input", function () {
-        let url = new URL(window.location);
-        if (searchBox.value.trim()) {
-            url.hash = "";
-            url.searchParams.set("search", searchBox.value);
-        } else {
-            url.searchParams.delete("search");
-        }
-        history.replaceState("", "", url.toString());
-        onInput();
-    });
-    window.addEventListener("popstate", onInput);
 
 
-    let search, searchErr;
 
-    async function initialize() {
-        try {
-            search = await new Promise((resolve, reject) => {
-                const script = document.createElement("script");
-                script.type = "text/javascript";
-                script.async = true;
-                script.onload = () => resolve(window.pdocSearch);
-                script.onerror = (e) => reject(e);
-                script.src = "../search.js";
-                document.getElementsByTagName("head")[0].appendChild(script);
-            });
-        } catch (e) {
-            console.error("Cannot fetch pdoc search index");
-            searchErr = "Cannot fetch search index.";
-        }
-        onInput();
+##### GameState():
 
-        document.querySelector("nav.pdoc").addEventListener("click", e => {
-            if (e.target.hash) {
-                searchBox.value = "";
-                searchBox.dispatchEvent(new Event("input"));
-            }
-        });
-    }
 
-    function onInput() {
-        setContent((() => {
-            const term = getSearchTerm();
-            if (!term) {
-                return null
-            }
-            if (searchErr) {
-                return `<h3>Error: ${searchErr}</h3>`
-            }
-            if (!search) {
-                return "<h3>Searching...</h3>"
-            }
 
-            window.scrollTo({top: 0, left: 0, behavior: 'auto'});
 
-            const results = search(term);
+[# ](#GameState.active_scene){: #GameState.active\_scene }
+ active_scene : Optional[seagulls.engine._game_scene.IGameScene] = None
 
-            let html;
-            if (results.length === 0) {
-                html = `No search results for '${escapeHTML(term)}'.`
-            } else {
-                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(term)}'.</h4>`;
-            }
-            for (let result of results.slice(0, 10)) {
-                let doc = result.doc;
-                let url = `../${doc.modulename.replaceAll(".", "/")}.html`;
-                if (doc.qualname) {
-                    url += `#${doc.qualname}`;
-                }
 
-                let heading;
-                switch (result.doc.type) {
-                    case "function":
-                        heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span><span class="signature">(${doc.parameters.join(", ")})</span>`;
-                        break;
-                    case "class":
-                        heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
-                        break;
-                    default:
-                        heading = `<span class="name">${doc.fullname}</span>`;
-                        break;
-                }
-                html += `
-                        <section class="search-result">
-                        <a href="${url}" class="attr ${doc.type}">${heading}</a>
-                        <div class="docstring">${doc.doc}</div>
-                        </section>
-                    `;
 
-            }
-            return html;
-        })());
-    }
+[# ](#GameState.game_state_changed){: #GameState.game\_state\_changed }
+ game_state_changed : bool = False
 
-    if (getSearchTerm()) {
-        initialize();
-        searchBox.value = getSearchTerm();
-        onInput();
-    } else {
-        searchBox.addEventListener("focus", initialize, {once: true});
-    }
 
-    searchBox.addEventListener("keydown", e => {
-        if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
-            let focused = currentContent.querySelector(".search-result.focused");
-            if (!focused) {
-                currentContent.querySelector(".search-result").classList.add("focused");
-            } else if (
-                e.key === "ArrowDown"
-                && focused.nextElementSibling
-                && focused.nextElementSibling.classList.contains("search-result")
-            ) {
-                focused.classList.remove("focused");
-                focused.nextElementSibling.classList.add("focused");
-                focused.nextElementSibling.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "nearest"
-                });
-            } else if (
-                e.key === "ArrowUp"
-                && focused.previousElementSibling
-                && focused.previousElementSibling.classList.contains("search-result")
-            ) {
-                focused.classList.remove("focused");
-                focused.previousElementSibling.classList.add("focused");
-                focused.previousElementSibling.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "nearest"
-                });
-            } else if (
-                e.key === "Enter"
-            ) {
-                focused.querySelector("a").click();
-            }
-        }
-    });
-</script></div>
+

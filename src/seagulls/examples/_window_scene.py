@@ -1,28 +1,24 @@
 from seagulls.engine import IGameScene
-from ._game_state import GameState
+from ._active_scene_client import IProvideActiveScene
 
 
 class WindowScene(IGameScene):
-    _active_scene: IGameScene
-    _game_state: GameState
+    _active_scene_provider: IProvideActiveScene
+    _should_quit: bool
 
-    def __init__(self, active_scene: IGameScene, game_state: GameState):
-        self._active_scene = active_scene
-        self._game_state = game_state
-        self._game_state.active_scene = active_scene
+    def __init__(self, active_scene_provider: IProvideActiveScene):
+        self._active_scene_provider = active_scene_provider
+        self._should_quit = False
 
     def start(self) -> None:
-        self._active_scene.start()
+        self._active_scene_provider.apply(lambda x: x.start())
 
     def should_quit(self) -> bool:
-        return self._active_scene.should_quit()
+        return self._should_quit
 
     def tick(self) -> None:
-        if self._game_state.game_state_changed:
-            self._update_scene()
-            self._active_scene.start()
-        self._active_scene.tick()
+        self._active_scene_provider.apply(lambda x: x.tick())
+        self._active_scene_provider.apply(self._update_quit_flag)
 
-    def _update_scene(self) -> None:
-        self._active_scene = self._game_state.active_scene
-        self._game_state.game_state_changed = False
+    def _update_quit_flag(self, scene: IGameScene) -> None:
+        self._should_quit = scene.should_quit()

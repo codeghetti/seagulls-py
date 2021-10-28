@@ -17,7 +17,7 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
-from ._game_state import GameState
+from seagulls.examples._active_scene_client import ISetActiveScene
 
 logger = logging.getLogger(__name__)
 
@@ -36,11 +36,19 @@ class SpaceShooterMenuButton(GameObject):
     _button_height = 49
     _button_width = 190
 
-    should_switch = False
+    _active_scene_manager: ISetActiveScene
+    _space_shooter_scene: IGameScene
 
-    def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
+    def __init__(
+            self,
+            asset_manager: AssetManager,
+            game_controls: GameControls,
+            active_scene_manager: ISetActiveScene,
+            space_shooter_scene: IGameScene):
         self._asset_manager = asset_manager
         self._game_controls = game_controls
+        self._active_scene_manager = active_scene_manager
+        self._space_shooter_scene = space_shooter_scene
 
         self._is_highlighted = Event()
         self._is_clicked = Event()
@@ -72,7 +80,7 @@ class SpaceShooterMenuButton(GameObject):
             if not self._game_controls.is_mouse_down():
                 if self._is_clicked.is_set():
                     logger.debug("SWITCH")
-                    self.should_switch = True
+                    self._active_scene_manager.set_active_scene(self._space_shooter_scene)
                 self._is_clicked.clear()
         else:
             self._is_highlighted.clear()
@@ -118,11 +126,19 @@ class SeagullsMenuButton(GameObject):
     _button_height = 49
     _button_width = 190
 
-    should_switch = False
+    _active_scene_manager: ISetActiveScene
+    _seagulls_scene: IGameScene
 
-    def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
+    def __init__(
+            self,
+            asset_manager: AssetManager,
+            game_controls: GameControls,
+            active_scene_manager: ISetActiveScene,
+            seagulls_scene: IGameScene):
         self._asset_manager = asset_manager
         self._game_controls = game_controls
+        self._active_scene_manager = active_scene_manager
+        self._seagulls_scene = seagulls_scene
 
         self._is_highlighted = Event()
         self._is_clicked = Event()
@@ -154,7 +170,7 @@ class SeagullsMenuButton(GameObject):
             if not self._game_controls.is_mouse_down():
                 if self._is_clicked.is_set():
                     logger.debug("SWITCH")
-                    self.should_switch = True
+                    self._active_scene_manager.set_active_scene(self._seagulls_scene)
                 self._is_clicked.clear()
         else:
             self._is_highlighted.clear()
@@ -200,11 +216,19 @@ class RpgMenuButton(GameObject):
     _button_height = 49
     _button_width = 190
 
-    should_switch = False
+    _active_scene_manager: ISetActiveScene
+    _rpg_scene: IGameScene
 
-    def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
+    def __init__(
+            self,
+            asset_manager: AssetManager,
+            game_controls: GameControls,
+            active_scene_manager: ISetActiveScene,
+            rpg_scene: IGameScene):
         self._asset_manager = asset_manager
         self._game_controls = game_controls
+        self._active_scene_manager = active_scene_manager
+        self._rpg_scene = rpg_scene
 
         self._is_highlighted = Event()
         self._is_clicked = Event()
@@ -236,7 +260,7 @@ class RpgMenuButton(GameObject):
             if not self._game_controls.is_mouse_down():
                 if self._is_clicked.is_set():
                     logger.debug("SWITCH")
-                    self.should_switch = True
+                    self._active_scene_manager.set_active_scene(self._rpg_scene)
                 self._is_clicked.clear()
         else:
             self._is_highlighted.clear()
@@ -275,15 +299,7 @@ class MainMenuScene(IGameScene):
     _asset_manager: AssetManager
 
     _game_objects: GameObjectsCollection
-    _space_shooter_menu_button: SpaceShooterMenuButton
-    _seagulls_menu_button: SeagullsMenuButton
-    _rpg_menu_button: RpgMenuButton
     _should_quit: Event
-
-    _game_state: GameState
-    _space_shooter_scene: IGameScene
-    _seagulls_scene: IGameScene
-    _rpg_scene: IGameScene
 
     def __init__(
             self,
@@ -291,39 +307,20 @@ class MainMenuScene(IGameScene):
             asset_manager: AssetManager,
             background: GameObject,
             game_controls: GameControls,
-            game_state: GameState,
-            space_shooter_scene: IGameScene,
-            seagulls_scene: IGameScene,
-            rpg_scene: IGameScene,):
+            space_shooter_menu_button: GameObject,
+            seagulls_menu_button: GameObject,
+            rpg_menu_button: GameObject):
 
         self._surface_renderer = surface_renderer
         self._asset_manager = asset_manager
         self._game_controls = game_controls
-        self._game_state = game_state
-
-        self._space_shooter_scene = space_shooter_scene
-        self._seagulls_scene = seagulls_scene
-        self._rpg_scene = rpg_scene
 
         self._game_objects = GameObjectsCollection()
-        self._game_objects.add(background)
-        self._space_shooter_menu_button = SpaceShooterMenuButton(
-            asset_manager=asset_manager,
-            game_controls=game_controls,
-        )
-        self._seagulls_menu_button = SeagullsMenuButton(
-            asset_manager=asset_manager,
-            game_controls=game_controls,
-        )
-        self._rpg_menu_button = RpgMenuButton(
-            asset_manager=asset_manager,
-            game_controls=game_controls,
-        )
-
-        self._game_objects.add(self._space_shooter_menu_button)
-        self._game_objects.add(self._seagulls_menu_button)
-        self._game_objects.add(self._rpg_menu_button)
         self._game_objects.add(self._game_controls)
+        self._game_objects.add(background)
+        self._game_objects.add(space_shooter_menu_button)
+        self._game_objects.add(seagulls_menu_button)
+        self._game_objects.add(rpg_menu_button)
 
         self._should_quit = Event()
 
@@ -336,24 +333,12 @@ class MainMenuScene(IGameScene):
 
     def tick(self) -> None:
         self._game_objects.apply(lambda x: x.tick())
-        if self._space_shooter_menu_button.should_switch:
-            logger.debug("SWITCHING SCENE TO SPACE SHOOTER")
-            self._change_scene(self._space_shooter_scene)
-        if self._seagulls_menu_button.should_switch:
-            logger.debug("SWITCHING SCENE TO SEAGULLS")
-            self._change_scene(self._seagulls_scene)
-        if self._rpg_menu_button.should_switch:
-            logger.debug("SWITCHING SCENE TO RPG")
-            self._change_scene(self._rpg_scene)
+
         if self._game_controls.should_quit():
             logger.debug("QUIT EVENT DETECTED")
             self._should_quit.set()
 
         self._render()
-
-    def _change_scene(self, next_scene: IGameScene) -> None:
-        self._game_state.active_scene = next_scene
-        self._game_state.game_state_changed = True
 
     def _render(self) -> None:
         background = Surface((1024, 600))

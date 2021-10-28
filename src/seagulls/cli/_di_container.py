@@ -19,13 +19,13 @@ from seagulls.examples import (
     SimpleRpgBackground,
     WindowScene,
     ActiveSceneClient,
+    GenericMenuButton,
 )
 from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.space_shooter import ShooterScene, Ship
 from seagulls.examples.rpg import RpgScene, Character
 
 from ._framework import LoggingClient
-from ..examples._main_menu_scene import GenericMenuButton
 
 
 class EmptyScene(IGameScene):

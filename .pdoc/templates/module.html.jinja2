@@ -8,43 +8,54 @@
 {% enddefaultmacro %}
 {% defaultmacro default_value(var) -%}
     {%- if var.default_value_str -%}
-{{ var.default_value_str | escape }}
+{{ var.default_value_str | safe }}
     {%- endif -%}
 {% enddefaultmacro %}
 {% defaultmacro annotation(var) %}
     {%- if var.annotation_str -%}
-{{ var.annotation_str | escape }}
+{{ var.annotation_str | safe }}
     {%- endif -%}
 {% enddefaultmacro %}
 {% defaultmacro decorators(doc) %}
     {% for d in doc.decorators if not d.startswith("@_") %}
 {{ d }}
-    {% endfor %}
+    {% endfor -%}
 {% enddefaultmacro %}
 {% defaultmacro headerlink(doc) -%}
 [# ](#{{ doc.qualname }}){: #{{ doc.qualname.replace("_", "\_") }} }
 {% enddefaultmacro %}
 {% defaultmacro function(fn) -%}
-{{ decorators(fn) }}
         {% if fn.name == "__init__" %}
-##### {{ ".".join(fn.qualname.split(".")[:-1]) }}
+```python
+{{ decorators(fn) -}}
+{{ ".".join(fn.qualname.split(".")[:-1]) }}
             {#- no space -#}
-{{ fn.signature_without_self | escape }}:
+{{ fn.signature_without_self | safe }}:
+```
         {% else %}
-##### {{ fn.funcdef }} {{ fn.name }}
+```python
+{{ decorators(fn) -}}
+{{ fn.funcdef }} {{ fn.name }}
             {#- no space -#}
-{{ fn.signature | escape }}:
+{{ fn.signature | safe }}:
+```
         {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro variable(var) %}
-{{ headerlink(var) }} {{ var.name }} {{ annotation(var) }}{{ default_value(var) }}
+```python
+{{ var.name }} {{ annotation(var) }}{{ default_value(var) }}
+```
 {% enddefaultmacro %}
 {% defaultmacro submodule(mod) %}
-{{ headerlink(mod) }} {{ mod.taken_from }}
+```python
+{{ mod.taken_from }}
+```
 {% enddefaultmacro %}
 {% defaultmacro class(cls) %}
-{{ decorators(cls) }}
-#### class `{{ cls.qualname }}` {{ bases(cls) }}:
+```python
+{{ decorators(cls) -}}
+class `{{ cls.qualname }}` {{ bases(cls) }}:
+```
 {% enddefaultmacro %}
 {% defaultmacro member(doc) %}
     {% if doc.type == "class" %}
@@ -56,10 +67,10 @@
     {% else %}
 {{- variable(doc) }}
     {% endif %}
+{{ docstring(doc) }}
     {% if doc.type != "variable" %}
 {{- view_source(doc) }}
     {% endif %}
-{{ docstring(doc) }}
 {% enddefaultmacro %}
 {% defaultmacro docstring(var) %}
     {% if var.docstring %}

@@ -7,6 +7,7 @@ from seagulls.assets import AssetManager
 from seagulls.cli._example_command import ExampleCommand
 from seagulls.cli._launch_command import LaunchCommand
 from seagulls.cli._seagulls_command import SeagullsCommand
+from seagulls.debug import DebugHud
 from seagulls.engine import GameClock, GameControls, SurfaceRenderer
 from seagulls.examples import (
     AsyncGameSession,
@@ -20,7 +21,7 @@ from seagulls.examples import (
 )
 from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.space_shooter import ShooterScene, Ship
-from seagulls.examples.rpg import RpgScene
+from seagulls.examples.rpg import RpgScene, Character
 
 from ._framework import LoggingClient
 
@@ -31,12 +32,17 @@ class SeagullsDiContainer(DeclarativeContainer):
         LoggingClient,
         verbosity=_logging_verbosity,
     )
+
     _game_state = Singleton(GameState)
     _game_clock = Singleton(GameClock)
     _game_controls = Singleton(GameControls)
     _asset_manager = Singleton(
         AssetManager,
         assets_path=Path("assets"),
+    )
+    _debug_hud = Singleton(
+        DebugHud,
+        game_clock=_game_clock,
     )
     _surface_renderer = Singleton(SurfaceRenderer)
 
@@ -71,11 +77,21 @@ class SeagullsDiContainer(DeclarativeContainer):
         SeagullsScene,
     )
 
+    _rpg_character = Singleton(
+        Character,
+        clock=_game_clock,
+        asset_manager=_asset_manager,
+        game_controls=_game_controls,
+    )
+
     _rpg_scene = Singleton(
         RpgScene,
         surface_renderer=_surface_renderer,
+        debug_hud=_debug_hud,
+        clock=_game_clock,
         asset_manager=_asset_manager,
         background=_rpg_background,
+        character=_rpg_character,
         game_controls=_game_controls
     )
 

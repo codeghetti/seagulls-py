@@ -1,7 +1,5 @@
 from ._main_menu_scene import (
-    SpaceShooterMenuButton,
-    SeagullsMenuButton,
-    RpgMenuButton,
+    GenericMenuButton,
     MainMenuScene
 )
 from ._scene_manager import ExampleSceneManager
@@ -16,9 +14,7 @@ from ._active_scene_client import (
 )
 
 __all__ = [
-    "SpaceShooterMenuButton",
-    "SeagullsMenuButton",
-    "RpgMenuButton",
+    "GenericMenuButton",
     "MainMenuScene",
     "AsyncGameSession",
     "BlockingGameSession",

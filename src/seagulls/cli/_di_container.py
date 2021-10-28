@@ -19,9 +19,7 @@ from seagulls.examples import (
     SimpleRpgBackground,
     WindowScene,
     ActiveSceneClient,
-    SpaceShooterMenuButton,
-    SeagullsMenuButton,
-    RpgMenuButton
+    GenericMenuButton,
 )
 from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.space_shooter import ShooterScene, Ship
@@ -120,27 +118,33 @@ class SeagullsDiContainer(DeclarativeContainer):
     )
 
     _space_shooter_menu_button = Singleton(
-        SpaceShooterMenuButton,
+        GenericMenuButton,
+        scene=_space_shooter_scene,
+        offset=0,
+        button_text="Space Shooter",
         asset_manager=_asset_manager,
         game_controls=_game_controls,
         active_scene_manager=_active_scene_client,
-        space_shooter_scene=_space_shooter_scene,
     )
 
     _seagulls_menu_button = Singleton(
-        SeagullsMenuButton,
+        GenericMenuButton,
+        scene=_seagulls_scene,
+        offset=80,
+        button_text="Seagulls",
         asset_manager=_asset_manager,
         game_controls=_game_controls,
         active_scene_manager=_active_scene_client,
-        seagulls_scene=_seagulls_scene,
     )
 
     _rpg_menu_button = Singleton(
-        RpgMenuButton,
+        GenericMenuButton,
+        scene=_rpg_scene,
+        offset=160,
+        button_text="RPG",
         asset_manager=_asset_manager,
         game_controls=_game_controls,
         active_scene_manager=_active_scene_client,
-        rpg_scene=_rpg_scene,
     )
 
     _main_menu_scene = Singleton(

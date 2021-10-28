@@ -141,7 +141,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         GenericMenuButton,
         scene=_rpg_scene,
         offset=160,
-        button_text="Rpg",
+        button_text="RPG",
         asset_manager=_asset_manager,
         game_controls=_game_controls,
         active_scene_manager=_active_scene_client,

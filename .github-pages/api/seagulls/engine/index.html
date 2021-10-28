@@ -1,0 +1,2273 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="canonical" href="https://seagulls-py.codeghetti.com/api/seagulls/engine/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>Engine - seagulls-py</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#seagullsengine" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+  
+
+<header class="md-header md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="seagulls-py" class="md-header__button md-logo" aria-label="seagulls-py" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            seagulls-py
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Engine
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/codeghetti/seagulls-py/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../" class="md-tabs__link md-tabs__link--active">
+        Api
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="seagulls-py" class="md-nav__button md-logo" aria-label="seagulls-py" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    seagulls-py
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/codeghetti/seagulls-py/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Api
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Api" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Api
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Seagulls
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Seagulls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Seagulls" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Seagulls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assets/" class="md-nav__link">
+        Assets
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        Cli
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../debug/" class="md-nav__link">
+        Debug
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Engine
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Engine
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#seagullsengine" class="md-nav__link">
+    seagulls.engine
+  </a>
+  
+    <nav class="md-nav" aria-label="seagulls.engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flag_from_string" class="md-nav__link">
+    flag_from_string
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collidableobject" class="md-nav__link">
+    CollidableObject
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#igamescene" class="md-nav__link">
+    IGameScene
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iprovidegamescenes" class="md-nav__link">
+    IProvideGameScenes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iprovidegamesessions" class="md-nav__link">
+    IProvideGameSessions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#igamesession" class="md-nav__link">
+    IGameSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#surfacerenderer" class="md-nav__link">
+    SurfaceRenderer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gameclock" class="md-nav__link">
+    GameClock
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gamecontrols" class="md-nav__link">
+    GameControls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gameobject" class="md-nav__link">
+    GameObject
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gameobjectscollection" class="md-nav__link">
+    GameObjectsCollection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gamesettings" class="md-nav__link">
+    GameSettings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rect" class="md-nav__link">
+    Rect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#surface" class="md-nav__link">
+    Surface
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color" class="md-nav__link">
+    Color
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixelarray" class="md-nav__link">
+    PixelArray
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector2" class="md-nav__link">
+    Vector2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector3" class="md-nav__link">
+    Vector3
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        Examples
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../foo/" class="md-nav__link">
+        Foo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2_7" type="checkbox" id="__nav_2_2_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2_7">
+          Foo
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Foo" data-md-level="3">
+        <label class="md-nav__title" for="__nav_2_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Foo
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../foo/test/" class="md-nav__link">
+        Test
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#seagullsengine" class="md-nav__link">
+    seagulls.engine
+  </a>
+  
+    <nav class="md-nav" aria-label="seagulls.engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flag_from_string" class="md-nav__link">
+    flag_from_string
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collidableobject" class="md-nav__link">
+    CollidableObject
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#igamescene" class="md-nav__link">
+    IGameScene
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iprovidegamescenes" class="md-nav__link">
+    IProvideGameScenes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iprovidegamesessions" class="md-nav__link">
+    IProvideGameSessions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#igamesession" class="md-nav__link">
+    IGameSession
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#surfacerenderer" class="md-nav__link">
+    SurfaceRenderer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gameclock" class="md-nav__link">
+    GameClock
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gamecontrols" class="md-nav__link">
+    GameControls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gameobject" class="md-nav__link">
+    GameObject
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gameobjectscollection" class="md-nav__link">
+    GameObjectsCollection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gamesettings" class="md-nav__link">
+    GameSettings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rect" class="md-nav__link">
+    Rect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#surface" class="md-nav__link">
+    Surface
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color" class="md-nav__link">
+    Color
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixelarray" class="md-nav__link">
+    PixelArray
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector2" class="md-nav__link">
+    Vector2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector3" class="md-nav__link">
+    Vector3
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/codeghetti/seagulls-py/blob/main/docs/api/seagulls/engine.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Engine</h1>
+                
+                <h2 id="seagullsengine"><a href="../seagulls">seagulls</a>.engine<a class="headerlink" href="#seagullsengine" title="Permanent link">&para;</a></h2>
+<p>Core Engine Components</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="sd">&quot;&quot;&quot;Core Engine Components&quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">._collisions</span> <span class="kn">import</span> <span class="n">CollidableObject</span><span class="p">,</span> <span class="n">flag_from_string</span>
+    <span class="kn">from</span> <span class="nn">._game_clock</span> <span class="kn">import</span> <span class="n">GameClock</span>
+    <span class="kn">from</span> <span class="nn">._game_controls</span> <span class="kn">import</span> <span class="n">GameControls</span>
+    <span class="kn">from</span> <span class="nn">._game_object</span> <span class="kn">import</span> <span class="n">GameObject</span><span class="p">,</span> <span class="n">GameObjectsCollection</span>
+    <span class="kn">from</span> <span class="nn">._game_scene</span> <span class="kn">import</span> <span class="n">IGameScene</span>
+    <span class="kn">from</span> <span class="nn">._game_scene_manager</span> <span class="kn">import</span> <span class="n">IProvideGameScenes</span>
+    <span class="kn">from</span> <span class="nn">._game_session</span> <span class="kn">import</span> <span class="n">IGameSession</span>
+    <span class="kn">from</span> <span class="nn">._game_session_manager</span> <span class="kn">import</span> <span class="n">IProvideGameSessions</span>
+    <span class="kn">from</span> <span class="nn">._game_settings</span> <span class="kn">import</span> <span class="n">GameSettings</span>
+    <span class="kn">from</span> <span class="nn">._pyagme</span> <span class="kn">import</span> <span class="n">Color</span><span class="p">,</span> <span class="n">PixelArray</span><span class="p">,</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">Surface</span><span class="p">,</span> <span class="n">Vector2</span><span class="p">,</span> <span class="n">Vector3</span>
+    <span class="kn">from</span> <span class="nn">._surface_renderer</span> <span class="kn">import</span> <span class="n">SurfaceRenderer</span>
+
+    <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;flag_from_string&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CollidableObject&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;IGameScene&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;IProvideGameScenes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;IProvideGameSessions&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;IGameSession&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SurfaceRenderer&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GameClock&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GameControls&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GameObject&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GameObjectsCollection&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GameSettings&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Rect&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Surface&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Color&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PixelArray&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Vector2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Vector3&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+</code></pre></div>
+</details>
+<h3 id="flag_from_string">flag_from_string<a class="headerlink" href="#flag_from_string" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">flag_from_string</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">def</span> <span class="nf">flag_from_string</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Value must be a string of 0s and 1s: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<h3 id="collidableobject">CollidableObject<a class="headerlink" href="#collidableobject" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="err">`</span><span class="nc">CollidableObject</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<p>CollidableObject(layer: int, mask: int)</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">CollidableObject</span><span class="p">:</span>
+        <span class="n">layer</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">mask</span><span class="p">:</span> <span class="nb">int</span>
+
+        <span class="k">def</span> <span class="nf">filter_by_mask</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="s2">&quot;CollidableObject&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="s2">&quot;CollidableObject&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_in_mask</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">is_in_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="s2">&quot;CollidableObject&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;targeting items located in mask: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="si">:</span><span class="s2">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;target is located in layer: </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">layer</span><span class="si">:</span><span class="s2">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&amp; result: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">target</span><span class="o">.</span><span class="n">layer</span><span class="si">:</span><span class="s2">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">target</span><span class="o">.</span><span class="n">layer</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(layer=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="si">:</span><span class="s2">b</span><span class="si">}</span><span class="s2">, mask=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="si">:</span><span class="s2">b</span><span class="si">}</span><span class="s2">)&quot;</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="n">CollidableObject</span><span class="p">(</span><span class="n">layer</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">filter_by_mask</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_collisions</span><span class="o">.</span><span class="n">CollidableObject</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_collisions</span><span class="o">.</span><span class="n">CollidableObject</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">filter_by_mask</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="s2">&quot;CollidableObject&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="s2">&quot;CollidableObject&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_in_mask</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_in_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_collisions</span><span class="o">.</span><span class="n">CollidableObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">is_in_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="s2">&quot;CollidableObject&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;targeting items located in mask: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="si">:</span><span class="s2">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;target is located in layer: </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">layer</span><span class="si">:</span><span class="s2">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&amp; result: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">target</span><span class="o">.</span><span class="n">layer</span><span class="si">:</span><span class="s2">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">target</span><span class="o">.</span><span class="n">layer</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</code></pre></div>
+</details>
+<h3 id="igamescene">IGameScene<a class="headerlink" href="#igamescene" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">IGameScene</span><span class="err">`</span> <span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</code></pre></div>
+<p>This class is for X and Y.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">IGameScene</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This class is for X and Y.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="iprovidegamescenes">IProvideGameScenes<a class="headerlink" href="#iprovidegamescenes" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">IProvideGameScenes</span><span class="err">`</span> <span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</code></pre></div>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">IProvideGameScenes</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">get_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IGameScene</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">get_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">get_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IGameScene</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="iprovidegamesessions">IProvideGameSessions<a class="headerlink" href="#iprovidegamesessions" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">IProvideGameSessions</span><span class="err">`</span> <span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</code></pre></div>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">IProvideGameSessions</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">get_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IGameSession</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">get_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_session</span><span class="o">.</span><span class="n">IGameSession</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">get_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IGameSession</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="igamesession">IGameSession<a class="headerlink" href="#igamesession" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">IGameSession</span><span class="err">`</span> <span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</code></pre></div>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">IGameSession</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="surfacerenderer">SurfaceRenderer<a class="headerlink" href="#surfacerenderer" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">SurfaceRenderer</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">SurfaceRenderer</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_surface</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_surface</span><span class="p">()</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+
+        <span class="nd">@lru_cache</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_get_surface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="n">SurfaceRenderer</span><span class="p">():</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_surface</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_surface</span><span class="p">()</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="gameclock">GameClock<a class="headerlink" href="#gameclock" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">GameClock</span><span class="err">`</span> <span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">):</span>
+</code></pre></div>
+<p>Interface for anything representing an object in the scene.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">GameClock</span><span class="p">(</span><span class="n">GameObject</span><span class="p">):</span>
+        <span class="n">_clock</span><span class="p">:</span> <span class="n">Clock</span>
+        <span class="n">_ticks</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">_delta</span><span class="p">:</span> <span class="nb">int</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_clock</span> <span class="o">=</span> <span class="n">Clock</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ticks</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clock</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">def</span> <span class="nf">get_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span>
+
+        <span class="k">def</span> <span class="nf">get_fps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clock</span><span class="o">.</span><span class="n">get_fps</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="n">GameClock</span><span class="p">():</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_clock</span> <span class="o">=</span> <span class="n">Clock</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ticks</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clock</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">get_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_fps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">get_fps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clock</span><span class="o">.</span><span class="n">get_fps</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="gamecontrols">GameControls<a class="headerlink" href="#gamecontrols" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">GameControls</span><span class="err">`</span> <span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">):</span>
+</code></pre></div>
+<p>Interface for anything representing an object in the scene.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">GameControls</span><span class="p">(</span><span class="n">GameObject</span><span class="p">):</span>
+
+        <span class="n">_events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_events</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_events</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_ESCAPE</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">def</span> <span class="nf">should_fire</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_SPACE</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">def</span> <span class="nf">is_left_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_LEFT</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">is_right_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">should_toggle_debug_hud</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_BACKQUOTE</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">def</span> <span class="nf">is_click_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONDOWN</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">(</span><span class="n">num_buttons</span><span class="o">=</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">def</span> <span class="nf">is_mouse_down</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">(</span><span class="n">num_buttons</span><span class="o">=</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">_is_key_down_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">key</span>
+
+        <span class="k">def</span> <span class="nf">_is_key_up_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYUP</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">key</span>
+
+        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="n">GameControls</span><span class="p">():</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_events</span> <span class="o">=</span> <span class="p">[]</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_events</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_ESCAPE</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">should_fire</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">should_fire</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_SPACE</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_left_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">is_left_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_LEFT</span><span class="p">]</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_right_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">is_right_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">]</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">should_toggle_debug_hud</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">should_toggle_debug_hud</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_BACKQUOTE</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_click_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">is_click_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONDOWN</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">(</span><span class="n">num_buttons</span><span class="o">=</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_mouse_down</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">is_mouse_down</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">(</span><span class="n">num_buttons</span><span class="o">=</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="gameobject">GameObject<a class="headerlink" href="#gameobject" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">GameObject</span><span class="err">`</span> <span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</code></pre></div>
+<p>Interface for anything representing an object in the scene.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">GameObject</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Interface for anything representing an object in the scene.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="gameobjectscollection">GameObjectsCollection<a class="headerlink" href="#gameobjectscollection" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">GameObjectsCollection</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<p>Data structure that allows you to keep track of objects in the scene.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">GameObjectsCollection</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Data structure that allows you to keep track of objects in the scene.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">_game_objects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GameObject</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_object</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game_object</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">GameObject</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">game_object</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="p">:</span>
+                <span class="n">func</span><span class="p">(</span><span class="n">game_object</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="n">GameObjectsCollection</span><span class="p">():</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span> <span class="o">=</span> <span class="p">[]</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_object</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_object</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game_object</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">apply</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">GameObject</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">game_object</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="p">:</span>
+                <span class="n">func</span><span class="p">(</span><span class="n">game_object</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<h3 id="gamesettings">GameSettings<a class="headerlink" href="#gamesettings" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">GameSettings</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">GameSettings</span><span class="p">:</span>
+
+        <span class="k">def</span> <span class="nf">get_setting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_yaml</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+        <span class="nd">@lru_cache</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_load_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.config/seagulls.yaml&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span> <span class="ow">or</span> <span class="p">{}</span>
+</code></pre></div>
+</details>
+<div class="highlight"><pre><span></span><code><span class="n">GameSettings</span><span class="p">():</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_setting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">get_setting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_yaml</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<h3 id="rect">Rect<a class="headerlink" href="#rect" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">Rect</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<p>Rect(left, top, width, height) -&gt; Rect
+Rect((left, top), (width, height)) -&gt; Rect
+Rect(object) -&gt; Rect
+pygame object for storing rectangular coordinates</p>
+<div class="highlight"><pre><span></span><code><span class="n">Rect</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>normalize() -&gt; None
+correct negative sizes</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>clip(Rect) -&gt; Rect
+crops a rectangle inside another</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clipline</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>clipline(x1, y1, x2, y2) -&gt; ((cx1, cy1), (cx2, cy2))
+clipline(x1, y1, x2, y2) -&gt; ()
+clipline((x1, y1), (x2, y2)) -&gt; ((cx1, cy1), (cx2, cy2))
+clipline((x1, y1), (x2, y2)) -&gt; ()
+clipline((x1, y1, x2, y2)) -&gt; ((cx1, cy1), (cx2, cy2))
+clipline((x1, y1, x2, y2)) -&gt; ()
+clipline(((x1, y1), (x2, y2))) -&gt; ((cx1, cy1), (cx2, cy2))
+clipline(((x1, y1), (x2, y2))) -&gt; ()
+crops a line inside a rectangle</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clamp</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>clamp(Rect) -&gt; Rect
+moves the rectangle inside another</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">clamp_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>clamp_ip(Rect) -&gt; None
+moves the rectangle inside another, in place</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>copy() -&gt; Rect
+copy the rectangle</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>fit(Rect) -&gt; Rect
+resize and move a rectangle with aspect ratio</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>move(x, y) -&gt; Rect
+moves the rectangle</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>update(left, top, width, height) -&gt; None
+update((left, top), (width, height)) -&gt; None
+update(object) -&gt; None
+sets the position and size of the rectangle</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">inflate</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>inflate(x, y) -&gt; Rect
+grow or shrink the rectangle size</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>union(Rect) -&gt; Rect
+joins two rectangles into one</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">unionall</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>unionall(Rect_sequence) -&gt; Rect
+the union of many rectangles</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">move_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>move_ip(x, y) -&gt; None
+moves the rectangle, in place</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">inflate_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>inflate_ip(x, y) -&gt; None
+grow or shrink the rectangle size, in place</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">union_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>union_ip(Rect) -&gt; None
+joins two rectangles into one, in place</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">unionall_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>unionall_ip(Rect_sequence) -&gt; None
+the union of many rectangles, in place</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">collidepoint</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>collidepoint(x, y) -&gt; bool
+collidepoint((x,y)) -&gt; bool
+test if a point is inside a rectangle</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">colliderect</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>colliderect(Rect) -&gt; bool
+test if two rectangles overlap</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">collidelist</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>collidelist(list) -&gt; index
+test if one rectangle in a list intersects</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">collidelistall</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>collidelistall(list) -&gt; indices
+test if all rectangles in a list intersect</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">collidedict</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>collidedict(dict) -&gt; (key, value)
+collidedict(dict) -&gt; None
+collidedict(dict, use_values=0) -&gt; (key, value)
+collidedict(dict, use_values=0) -&gt; None
+test if one rectangle in a dictionary intersects</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">collidedictall</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>collidedictall(dict) -&gt; [(key, value), ...]
+collidedictall(dict, use_values=0) -&gt; [(key, value), ...]
+test if all rectangles in a dictionary intersect</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>contains(Rect) -&gt; bool
+test if one rectangle is inside another</p>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">y</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">w</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">h</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">width</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">height</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">top</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">left</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">bottom</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">right</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">centerx</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">centery</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">topleft</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">topright</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">bottomleft</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">bottomright</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">midtop</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">midleft</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">midbottom</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">midright</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">size</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">center</span> 
+</code></pre></div>
+<h3 id="surface">Surface<a class="headerlink" href="#surface" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">Surface</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<p>Surface((width, height), flags=0, depth=0, masks=None) -&gt; Surface
+Surface((width, height), flags=0, Surface) -&gt; Surface
+pygame object for representing images</p>
+<div class="highlight"><pre><span></span><code><span class="n">Surface</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_at</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_at((x, y)) -&gt; Color
+get the color value at a single pixel</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_at</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>set_at((x, y), Color) -&gt; None
+set the color value for a single pixel</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_at_mapped</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_at_mapped((x, y)) -&gt; Color
+get the mapped color value at a single pixel</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">map_rgb</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>map_rgb(Color) -&gt; mapped_int
+convert a color into a mapped color value</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">unmap_rgb</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>unmap_rgb(mapped_int) -&gt; Color
+convert a mapped integer color value into a Color</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_palette</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_palette() -&gt; [RGB, RGB, RGB, ...]
+get the color index palette for an 8-bit Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_palette_at</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_palette_at(index) -&gt; RGB
+get the color for a single entry in a palette</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_palette</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>set_palette([RGB, RGB, RGB, ...]) -&gt; None
+set the color palette for an 8-bit Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_palette_at</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>set_palette_at(index, RGB) -&gt; None
+set the color for a single index in an 8-bit Surface palette</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">lock</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>lock() -&gt; None
+lock the Surface memory for pixel access</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">unlock</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>unlock() -&gt; None
+unlock the Surface memory from pixel access</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">mustlock</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>mustlock() -&gt; bool
+test if the Surface requires locking</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_locked</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_locked() -&gt; bool
+test if the Surface is current locked</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_locks</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_locks() -&gt; tuple
+Gets the locks for the Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_colorkey</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>set_colorkey(Color, flags=0) -&gt; None
+set_colorkey(None) -&gt; None
+Set the transparent colorkey</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_colorkey</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_colorkey() -&gt; RGB or None
+Get the current transparent colorkey</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_alpha</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>set_alpha(value, flags=0) -&gt; None
+set_alpha(None) -&gt; None
+set the alpha value for the full Surface image</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_alpha</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_alpha() -&gt; int_value
+get the current Surface transparency value</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_blendmode</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>Return the surface&#39;s SDL 2 blend mode</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>copy() -&gt; Surface
+create a new copy of a Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>convert(Surface=None) -&gt; Surface
+convert(depth, flags=0) -&gt; Surface
+convert(masks, flags=0) -&gt; Surface
+change the pixel format of an image</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">convert_alpha</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>convert_alpha(Surface) -&gt; Surface
+convert_alpha() -&gt; Surface
+change the pixel format of an image including per pixel alphas</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_clip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>set_clip(rect) -&gt; None
+set_clip(None) -&gt; None
+set the current clipping area of the Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_clip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_clip() -&gt; Rect
+get the current clipping area of the Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">fill</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>fill(color, rect=None, special_flags=0) -&gt; Rect
+fill Surface with a solid color</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">blit</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>blit(source, dest, area=None, special_flags=0) -&gt; Rect
+draw one image onto another</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">blits</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>blits(blit_sequence=((source, dest), ...), doreturn=1) -&gt; [Rect, ...] or None
+blits(((source, dest, area), ...)) -&gt; [Rect, ...]
+blits(((source, dest, area, special_flags), ...)) -&gt; [Rect, ...]
+draw many images onto another</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">scroll</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>scroll(dx=0, dy=0) -&gt; None
+Shift the surface image in place</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_flags</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_flags() -&gt; int
+get the additional flags used for the Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_size() -&gt; (width, height)
+get the dimensions of the Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_width</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_width() -&gt; width
+get the width of the Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_height</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_height() -&gt; height
+get the height of the Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_rect</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_rect(**kwargs) -&gt; Rect
+get the rectangular area of the Surface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_pitch</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_pitch() -&gt; int
+get the number of bytes used per Surface row</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_bitsize</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_bitsize() -&gt; int
+get the bit depth of the Surface pixel format</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_bytesize</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_bytesize() -&gt; int
+get the bytes used per Surface pixel</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_masks</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_masks() -&gt; (R, G, B, A)
+the bitmasks needed to convert between a color and a mapped integer</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_shifts</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_shifts() -&gt; (R, G, B, A)
+the bit shifts needed to convert between a color and a mapped integer</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_masks</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>set_masks((r,g,b,a)) -&gt; None
+set the bitmasks needed to convert between a color and a mapped integer</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_shifts</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>set_shifts((r,g,b,a)) -&gt; None
+sets the bit shifts needed to convert between a color and a mapped integer</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_losses</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_losses() -&gt; (R, G, B, A)
+the significant bits used to convert between a color and a mapped integer</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">subsurface</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>subsurface(Rect) -&gt; Surface
+create a new surface that references its parent</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_offset</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_offset() -&gt; (x, y)
+find the position of a child subsurface inside a parent</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_abs_offset</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_abs_offset() -&gt; (x, y)
+find the absolute position of a child subsurface inside its top level parent</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_parent() -&gt; Surface
+find the parent of a subsurface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_abs_parent</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_abs_parent() -&gt; Surface
+find the top level parent of a subsurface</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_bounding_rect</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_bounding_rect(min_alpha = 1) -&gt; Rect
+find the smallest rect containing data</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_view</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_view(&lt;kind&gt;=&#39;2&#39;) -&gt; BufferProxy
+return a buffer view of the Surface&#39;s pixels.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_buffer</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>get_buffer() -&gt; BufferProxy
+acquires a buffer object for the pixels of the Surface.</p>
+<h3 id="color">Color<a class="headerlink" href="#color" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">Color</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<p>Color(r, g, b) -&gt; Color
+Color(r, g, b, a=255) -&gt; Color
+Color(color_value) -&gt; Color
+pygame object for color representations</p>
+<div class="highlight"><pre><span></span><code><span class="n">Color</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>normalize() -&gt; tuple
+Returns the normalized RGBA values of the Color.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">correct_gamma</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>correct_gamma (gamma) -&gt; Color
+Applies a certain gamma value to the Color.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_length</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>set_length(len) -&gt; None
+Set the number of elements in the Color to 1,2,3, or 4.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">lerp</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>lerp(Color, float) -&gt; Color
+returns a linear interpolation to the given Color.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">premul_alpha</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>premul_alpha() -&gt; Color
+returns a Color where the r,g,b components have been multiplied by the alpha.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>update(r, g, b) -&gt; None
+update(r, g, b, a=255) -&gt; None
+update(color_value) -&gt; None
+Sets the elements of the color</p>
+<div class="highlight"><pre><span></span><code><span class="n">r</span> 
+</code></pre></div>
+<p>r -&gt; int
+Gets or sets the red value of the Color.</p>
+<div class="highlight"><pre><span></span><code><span class="n">g</span> 
+</code></pre></div>
+<p>g -&gt; int
+Gets or sets the green value of the Color.</p>
+<div class="highlight"><pre><span></span><code><span class="n">b</span> 
+</code></pre></div>
+<p>b -&gt; int
+Gets or sets the blue value of the Color.</p>
+<div class="highlight"><pre><span></span><code><span class="n">a</span> 
+</code></pre></div>
+<p>a -&gt; int
+Gets or sets the alpha value of the Color.</p>
+<div class="highlight"><pre><span></span><code><span class="n">hsva</span> 
+</code></pre></div>
+<p>hsva -&gt; tuple
+Gets or sets the HSVA representation of the Color.</p>
+<div class="highlight"><pre><span></span><code><span class="n">hsla</span> 
+</code></pre></div>
+<p>hsla -&gt; tuple
+Gets or sets the HSLA representation of the Color.</p>
+<div class="highlight"><pre><span></span><code><span class="n">i1i2i3</span> 
+</code></pre></div>
+<p>i1i2i3 -&gt; tuple
+Gets or sets the I1I2I3 representation of the Color.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cmy</span> 
+</code></pre></div>
+<p>cmy -&gt; tuple
+Gets or sets the CMY representation of the Color.</p>
+<h3 id="pixelarray">PixelArray<a class="headerlink" href="#pixelarray" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">PixelArray</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<p>PixelArray(Surface) -&gt; PixelArray
+pygame object for direct pixel access of surfaces</p>
+<div class="highlight"><pre><span></span><code><span class="n">PixelArray</span><span class="p">():</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>compare(array, distance=0, weights=(0.299, 0.587, 0.114)) -&gt; PixelArray
+Compares the PixelArray with another one.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>extract(color, distance=0, weights=(0.299, 0.587, 0.114)) -&gt; PixelArray
+Extracts the passed color from the PixelArray.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">make_surface</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>make_surface() -&gt; Surface
+Creates a new Surface from the current PixelArray.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>transpose() -&gt; PixelArray
+Closes the PixelArray, and releases Surface lock.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>replace(color, repcolor, distance=0, weights=(0.299, 0.587, 0.114)) -&gt; None
+Replaces the passed color in the PixelArray with another one.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>transpose() -&gt; PixelArray
+Exchanges the x and y axis.</p>
+<div class="highlight"><pre><span></span><code><span class="n">surface</span> 
+</code></pre></div>
+<p>surface -&gt; Surface
+Gets the Surface the PixelArray uses.</p>
+<div class="highlight"><pre><span></span><code><span class="n">itemsize</span> 
+</code></pre></div>
+<p>itemsize -&gt; int
+Returns the byte size of a pixel array item</p>
+<div class="highlight"><pre><span></span><code><span class="n">shape</span> 
+</code></pre></div>
+<p>shape -&gt; tuple of int&#39;s
+Returns the array size.</p>
+<div class="highlight"><pre><span></span><code><span class="n">strides</span> 
+</code></pre></div>
+<p>strides -&gt; tuple of int&#39;s
+Returns byte offsets for each array dimension.</p>
+<div class="highlight"><pre><span></span><code><span class="n">ndim</span> 
+</code></pre></div>
+<p>ndim -&gt; int
+Returns the number of dimensions.</p>
+<h3 id="vector2">Vector2<a class="headerlink" href="#vector2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">Vector2</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<p>Vector2() -&gt; Vector2
+Vector2(int) -&gt; Vector2
+Vector2(float) -&gt; Vector2
+Vector2(Vector2) -&gt; Vector2
+Vector2(x, y) -&gt; Vector2
+Vector2((x, y)) -&gt; Vector2
+a 2-Dimensional Vector</p>
+<div class="highlight"><pre><span></span><code><span class="n">Vector2</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>length() -&gt; float
+returns the Euclidean length of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">length_squared</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>length_squared() -&gt; float
+returns the squared Euclidean length of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">magnitude</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>magnitude() -&gt; float
+returns the Euclidean magnitude of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">magnitude_squared</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>magnitude_squared() -&gt; float
+returns the squared magnitude of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate(angle) -&gt; Vector2
+rotates a vector by a given angle in degrees.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_ip(angle) -&gt; None
+rotates the vector by a given angle in degrees in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_rad(angle) -&gt; Vector2
+rotates a vector by a given angle in radians.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_ip_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_ip_rad(angle) -&gt; None
+rotates the vector by a given angle in radians in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">slerp</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>slerp(Vector2, float) -&gt; Vector2
+returns a spherical interpolation to the given vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">lerp</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>lerp(Vector2, float) -&gt; Vector2
+returns a linear interpolation to the given vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>normalize() -&gt; Vector2
+returns a vector with the same direction but length 1.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normalize_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>normalize_ip() -&gt; None
+normalizes the vector in place so that its length is 1.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_normalized</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>is_normalized() -&gt; Bool
+tests if the vector is normalized i.e. has length == 1.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">cross</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>cross(Vector2) -&gt; Vector2
+calculates the cross- or vector-product</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">dot</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>dot(Vector2) -&gt; float
+calculates the dot- or scalar-product with the other vector</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">angle_to</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>angle_to(Vector2) -&gt; float
+calculates the angle to a given vector in degrees.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>update() -&gt; None
+update(int) -&gt; None
+update(float) -&gt; None
+update(Vector2) -&gt; None
+update(x, y) -&gt; None
+update((x, y)) -&gt; None
+Sets the coordinates of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">scale_to_length</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>scale_to_length(float) -&gt; None
+scales the vector to a given length.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">reflect</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>reflect(Vector2) -&gt; Vector2
+returns a vector reflected of a given normal.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">reflect_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>reflect_ip(Vector2) -&gt; None
+reflect the vector of a given normal in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">distance_to</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>distance_to(Vector2) -&gt; float
+calculates the Euclidean distance to a given vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">distance_squared_to</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>distance_squared_to(Vector2) -&gt; float
+calculates the squared Euclidean distance to a given vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">elementwise</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>elementwise() -&gt; VectorElementwiseProxy
+The next operation will be performed elementwise.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">as_polar</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>as_polar() -&gt; (r, phi)
+returns a tuple with radial distance and azimuthal angle.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">from_polar</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>from_polar((r, phi)) -&gt; None
+Sets x and y from a polar coordinates tuple.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>project(Vector2) -&gt; Vector2
+projects a vector onto another.</p>
+<div class="highlight"><pre><span></span><code><span class="n">epsilon</span> 
+</code></pre></div>
+<p>small value used in comparisons</p>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">y</span> 
+</code></pre></div>
+<h3 id="vector3">Vector3<a class="headerlink" href="#vector3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">Vector3</span><span class="err">`</span> <span class="p">:</span>
+</code></pre></div>
+<p>Vector3() -&gt; Vector3
+Vector3(int) -&gt; Vector3
+Vector3(float) -&gt; Vector3
+Vector3(Vector3) -&gt; Vector3
+Vector3(x, y, z) -&gt; Vector3
+Vector3((x, y, z)) -&gt; Vector3
+a 3-Dimensional Vector</p>
+<div class="highlight"><pre><span></span><code><span class="n">Vector3</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>length() -&gt; float
+returns the Euclidean length of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">length_squared</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>length_squared() -&gt; float
+returns the squared Euclidean length of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">magnitude</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>magnitude() -&gt; float
+returns the Euclidean magnitude of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">magnitude_squared</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>magnitude_squared() -&gt; float
+returns the squared Euclidean magnitude of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate(angle, Vector3) -&gt; Vector3
+rotates a vector by a given angle in degrees.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_ip(angle, Vector3) -&gt; None
+rotates the vector by a given angle in degrees in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_rad(angle, Vector3) -&gt; Vector3
+rotates a vector by a given angle in radians.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_ip_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_ip_rad(angle, Vector3) -&gt; None
+rotates the vector by a given angle in radians in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_x</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_x(angle) -&gt; Vector3
+rotates a vector around the x-axis by the angle in degrees.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_x_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_x_ip(angle) -&gt; None
+rotates the vector around the x-axis by the angle in degrees in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_x_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_x_rad(angle) -&gt; Vector3
+rotates a vector around the x-axis by the angle in radians.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_x_ip_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_x_ip_rad(angle) -&gt; None
+rotates the vector around the x-axis by the angle in radians in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_y</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_y(angle) -&gt; Vector3
+rotates a vector around the y-axis by the angle in degrees.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_y_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_y_ip(angle) -&gt; None
+rotates the vector around the y-axis by the angle in degrees in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_y_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_y_rad(angle) -&gt; Vector3
+rotates a vector around the y-axis by the angle in radians.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_y_ip_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_y_ip_rad(angle) -&gt; None
+rotates the vector around the y-axis by the angle in radians in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_z</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_z(angle) -&gt; Vector3
+rotates a vector around the z-axis by the angle in degrees.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_z_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_z_ip(angle) -&gt; None
+rotates the vector around the z-axis by the angle in degrees in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_z_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_z_rad(angle) -&gt; Vector3
+rotates a vector around the z-axis by the angle in radians.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">rotate_z_ip_rad</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>rotate_z_ip_rad(angle) -&gt; None
+rotates the vector around the z-axis by the angle in radians in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">slerp</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>slerp(Vector3, float) -&gt; Vector3
+returns a spherical interpolation to the given vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">lerp</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>lerp(Vector3, float) -&gt; Vector3
+returns a linear interpolation to the given vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>normalize() -&gt; Vector3
+returns a vector with the same direction but length 1.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">normalize_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>normalize_ip() -&gt; None
+normalizes the vector in place so that its length is 1.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_normalized</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>is_normalized() -&gt; Bool
+tests if the vector is normalized i.e. has length == 1.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">cross</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>cross(Vector3) -&gt; Vector3
+calculates the cross- or vector-product</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">dot</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>dot(Vector3) -&gt; float
+calculates the dot- or scalar-product with the other vector</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">angle_to</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>angle_to(Vector3) -&gt; float
+calculates the angle to a given vector in degrees.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>update() -&gt; None
+update(int) -&gt; None
+update(float) -&gt; None
+update(Vector3) -&gt; None
+update(x, y, z) -&gt; None
+update((x, y, z)) -&gt; None
+Sets the coordinates of the vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">scale_to_length</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>scale_to_length(float) -&gt; None
+scales the vector to a given length.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">reflect</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>reflect(Vector3) -&gt; Vector3
+returns a vector reflected of a given normal.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">reflect_ip</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>reflect_ip(Vector3) -&gt; None
+reflect the vector of a given normal in place.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">distance_to</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>distance_to(Vector3) -&gt; float
+calculates the Euclidean distance to a given vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">distance_squared_to</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>distance_squared_to(Vector3) -&gt; float
+calculates the squared Euclidean distance to a given vector.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">elementwise</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>elementwise() -&gt; VectorElementwiseProxy
+The next operation will be performed elementwise.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">as_spherical</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>as_spherical() -&gt; (r, theta, phi)
+returns a tuple with radial distance, inclination and azimuthal angle.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">from_spherical</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>from_spherical((r, theta, phi)) -&gt; None
+Sets x, y and z from a spherical coordinates 3-tuple.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="n">unknown</span><span class="p">):</span>
+</code></pre></div>
+<p>project(Vector3) -&gt; Vector3
+projects a vector onto another.</p>
+<div class="highlight"><pre><span></span><code><span class="n">epsilon</span> 
+</code></pre></div>
+<p>small value used in comparisons</p>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">y</span> 
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">z</span> 
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../debug/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Debug" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Debug
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../examples/" class="md-footer__link md-footer__link--next" aria-label="Next: Examples" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Examples
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+    
+  </body>
+</html>

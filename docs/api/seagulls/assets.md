@@ -9,8 +9,11 @@
     ```
 
 ### AssetManager
+```python
+class `AssetManager` :
+```
 
-#### class `AssetManager` :
+Provides basic functionality for loading assets from disk.
 
 ??? note "View Source"
     ```python
@@ -36,11 +39,11 @@
 
     ```
 
-Provides basic functionality for loading assets from disk.
 
+```python
+AssetManager(assets_path: pathlib.Path):
+```
 
-
-##### AssetManager(assets_path: pathlib.Path):
 
 ??? note "View Source"
     ```python
@@ -50,9 +53,10 @@ Provides basic functionality for loading assets from disk.
     ```
 
 
+```python
+def load_sprite(self, name: str) -> pygame.Surface:
+```
 
-
-##### def load_sprite(self, name: str) -&gt; pygame.Surface:
 
 ??? note "View Source"
     ```python
@@ -62,9 +66,10 @@ Provides basic functionality for loading assets from disk.
     ```
 
 
+```python
+def load_png(self, name: str) -> pygame.Surface:
+```
 
-
-##### def load_png(self, name: str) -&gt; pygame.Surface:
 
 ??? note "View Source"
     ```python
@@ -77,6 +82,5 @@ Provides basic functionality for loading assets from disk.
                     return loaded_sprite.convert_alpha()
 
     ```
-
 
 

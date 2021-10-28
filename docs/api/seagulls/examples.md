@@ -24,8 +24,11 @@
     ```
 
 ### MainMenuScene
+```python
+class `MainMenuScene` (seagulls.engine._game_scene.IGameScene):
+```
 
-#### class `MainMenuScene` (seagulls.engine._game_scene.IGameScene):
+This class is for X and Y.
 
 ??? note "View Source"
     ```python
@@ -124,11 +127,9 @@
 
     ```
 
-This class is for X and Y.
 
-
-
-##### MainMenuScene(
+```python
+MainMenuScene(
     surface_renderer: seagulls.engine._surface_renderer.SurfaceRenderer,
     asset_manager: seagulls.assets._manager.AssetManager,
     background: seagulls.engine._game_object.GameObject,
@@ -138,6 +139,8 @@ This class is for X and Y.
     seagulls_scene: seagulls.engine._game_scene.IGameScene,
     rpg_scene: seagulls.engine._game_scene.IGameScene
 ):
+```
+
 
 ??? note "View Source"
     ```python
@@ -186,9 +189,10 @@ This class is for X and Y.
     ```
 
 
+```python
+def start(self) -> None:
+```
 
-
-##### def start(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -199,9 +203,10 @@ This class is for X and Y.
     ```
 
 
+```python
+def should_quit(self) -> bool:
+```
 
-
-##### def should_quit(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -211,9 +216,10 @@ This class is for X and Y.
     ```
 
 
+```python
+def tick(self) -> None:
+```
 
-
-##### def tick(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -237,10 +243,13 @@ This class is for X and Y.
     ```
 
 
-
 ### AsyncGameSession
+```python
+class `AsyncGameSession` (seagulls.engine._game_session.IGameSession):
+```
 
-#### class `AsyncGameSession` (seagulls.engine._game_session.IGameSession):
+Helper class that provides a standard way to create an ABC using
+inheritance.
 
 ??? note "View Source"
     ```python
@@ -282,14 +291,13 @@ This class is for X and Y.
 
     ```
 
-Helper class that provides a standard way to create an ABC using
-inheritance.
 
-
-
-##### AsyncGameSession(
+```python
+AsyncGameSession(
     scene_manager: seagulls.engine._game_scene_manager.IProvideGameScenes
 ):
+```
+
 
 ??? note "View Source"
     ```python
@@ -302,9 +310,10 @@ inheritance.
     ```
 
 
+```python
+def start(self) -> None:
+```
 
-
-##### def start(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -315,9 +324,10 @@ inheritance.
     ```
 
 
+```python
+def wait_for_completion(self) -> None:
+```
 
-
-##### def wait_for_completion(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -330,9 +340,10 @@ inheritance.
     ```
 
 
+```python
+def stop(self) -> None:
+```
 
-
-##### def stop(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -344,10 +355,13 @@ inheritance.
     ```
 
 
-
 ### BlockingGameSession
+```python
+class `BlockingGameSession` (seagulls.engine._game_session.IGameSession):
+```
 
-#### class `BlockingGameSession` (seagulls.engine._game_session.IGameSession):
+Helper class that provides a standard way to create an ABC using
+inheritance.
 
 ??? note "View Source"
     ```python
@@ -375,14 +389,13 @@ inheritance.
 
     ```
 
-Helper class that provides a standard way to create an ABC using
-inheritance.
 
-
-
-##### BlockingGameSession(
+```python
+BlockingGameSession(
     scene_manager: seagulls.engine._game_scene_manager.IProvideGameScenes
 ):
+```
+
 
 ??? note "View Source"
     ```python
@@ -392,9 +405,10 @@ inheritance.
     ```
 
 
+```python
+def start(self) -> None:
+```
 
-
-##### def start(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -411,9 +425,10 @@ inheritance.
     ```
 
 
+```python
+def wait_for_completion(self) -> None:
+```
 
-
-##### def wait_for_completion(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -423,9 +438,10 @@ inheritance.
     ```
 
 
+```python
+def stop(self) -> None:
+```
 
-
-##### def stop(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -435,10 +451,13 @@ inheritance.
     ```
 
 
-
 ### ExampleSceneManager
+```python
+class `ExampleSceneManager` (seagulls.engine._game_scene_manager.IProvideGameScenes):
+```
 
-#### class `ExampleSceneManager` (seagulls.engine._game_scene_manager.IProvideGameScenes):
+Helper class that provides a standard way to create an ABC using
+inheritance.
 
 ??? note "View Source"
     ```python
@@ -453,12 +472,11 @@ inheritance.
 
     ```
 
-Helper class that provides a standard way to create an ABC using
-inheritance.
 
+```python
+ExampleSceneManager(scene: seagulls.examples._main_menu_scene.MainMenuScene):
+```
 
-
-##### ExampleSceneManager(scene: seagulls.examples._main_menu_scene.MainMenuScene):
 
 ??? note "View Source"
     ```python
@@ -468,9 +486,10 @@ inheritance.
     ```
 
 
+```python
+def get_scene(self) -> seagulls.engine._game_scene.IGameScene:
+```
 
-
-##### def get_scene(self) -&gt; seagulls.engine._game_scene.IGameScene:
 
 ??? note "View Source"
     ```python
@@ -480,10 +499,12 @@ inheritance.
     ```
 
 
-
 ### SimpleStarsBackground
+```python
+class `SimpleStarsBackground` (seagulls.engine._game_object.GameObject):
+```
 
-#### class `SimpleStarsBackground` (seagulls.engine._game_object.GameObject):
+Interface for anything representing an object in the scene.
 
 ??? note "View Source"
     ```python
@@ -507,11 +528,11 @@ inheritance.
 
     ```
 
-Interface for anything representing an object in the scene.
 
+```python
+SimpleStarsBackground(asset_manager: seagulls.assets._manager.AssetManager):
+```
 
-
-##### SimpleStarsBackground(asset_manager: seagulls.assets._manager.AssetManager):
 
 ??? note "View Source"
     ```python
@@ -521,9 +542,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def tick(self) -> None:
+```
 
-
-##### def tick(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -533,9 +555,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def render(self, surface: pygame.Surface) -> None:
+```
 
-
-##### def render(self, surface: pygame.Surface) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -546,10 +569,12 @@ Interface for anything representing an object in the scene.
     ```
 
 
-
 ### SimpleRpgBackground
+```python
+class `SimpleRpgBackground` (seagulls.engine._game_object.GameObject):
+```
 
-#### class `SimpleRpgBackground` (seagulls.engine._game_object.GameObject):
+Interface for anything representing an object in the scene.
 
 ??? note "View Source"
     ```python
@@ -647,11 +672,11 @@ Interface for anything representing an object in the scene.
 
     ```
 
-Interface for anything representing an object in the scene.
 
+```python
+SimpleRpgBackground(asset_manager: seagulls.assets._manager.AssetManager):
+```
 
-
-##### SimpleRpgBackground(asset_manager: seagulls.assets._manager.AssetManager):
 
 ??? note "View Source"
     ```python
@@ -662,9 +687,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def tick(self) -> None:
+```
 
-
-##### def tick(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -674,9 +700,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def render(self, surface: pygame.Surface) -> None:
+```
 
-
-##### def render(self, surface: pygame.Surface) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -687,10 +714,12 @@ Interface for anything representing an object in the scene.
     ```
 
 
-
 ### WindowScene
+```python
+class `WindowScene` (seagulls.engine._game_scene.IGameScene):
+```
 
-#### class `WindowScene` (seagulls.engine._game_scene.IGameScene):
+This class is for X and Y.
 
 ??? note "View Source"
     ```python
@@ -721,14 +750,14 @@ Interface for anything representing an object in the scene.
 
     ```
 
-This class is for X and Y.
 
-
-
-##### WindowScene(
+```python
+WindowScene(
     active_scene: seagulls.engine._game_scene.IGameScene,
     game_state: seagulls.examples._game_state.GameState
 ):
+```
+
 
 ??? note "View Source"
     ```python
@@ -740,9 +769,10 @@ This class is for X and Y.
     ```
 
 
+```python
+def start(self) -> None:
+```
 
-
-##### def start(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -752,9 +782,10 @@ This class is for X and Y.
     ```
 
 
+```python
+def should_quit(self) -> bool:
+```
 
-
-##### def should_quit(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -764,9 +795,10 @@ This class is for X and Y.
     ```
 
 
+```python
+def tick(self) -> None:
+```
 
-
-##### def tick(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -779,10 +811,11 @@ This class is for X and Y.
     ```
 
 
-
 ### GameState
+```python
+class `GameState` :
+```
 
-#### class `GameState` :
 
 ??? note "View Source"
     ```python
@@ -793,20 +826,22 @@ This class is for X and Y.
     ```
 
 
-
-
-##### GameState():
-
-
-
-
-[# ](#GameState.active_scene){: #GameState.active\_scene }
- active_scene : Optional[seagulls.engine._game_scene.IGameScene] = None
+```python
+GameState():
+```
 
 
 
-[# ](#GameState.game_state_changed){: #GameState.game\_state\_changed }
- game_state_changed : bool = False
+
+```python
+active_scene : Optional[seagulls.engine._game_scene.IGameScene] = None
+```
+
+
+
+```python
+game_state_changed : bool = False
+```
 
 
 

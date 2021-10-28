@@ -13,8 +13,10 @@
     ```
 
 ### main
+```python
+def main():
+```
 
-##### def main():
 
 ??? note "View Source"
     ```python
@@ -69,10 +71,11 @@
     ```
 
 
-
 ### cli_next
+```python
+def cli_next():
+```
 
-##### def cli_next():
 
 ??? note "View Source"
     ```python
@@ -125,6 +128,5 @@
             # matched_cmd.execute(vars(args))
 
     ```
-
 
 

@@ -40,8 +40,10 @@ Core Engine Components
     ```
 
 ### flag_from_string
+```python
+def flag_from_string(value: str) -> int:
+```
 
-##### def flag_from_string(value: str) -&gt; int:
 
 ??? note "View Source"
     ```python
@@ -54,11 +56,13 @@ Core Engine Components
     ```
 
 
-
 ### CollidableObject
+```python
 @dataclass(frozen=True)
+class `CollidableObject` :
+```
 
-#### class `CollidableObject` :
+CollidableObject(layer: int, mask: int)
 
 ??? note "View Source"
     ```python
@@ -87,20 +91,21 @@ Core Engine Components
 
     ```
 
-CollidableObject(layer: int, mask: int)
 
-
-
-##### CollidableObject(layer: int, mask: int):
-
+```python
+CollidableObject(layer: int, mask: int):
+```
 
 
 
 
-##### def filter_by_mask(
+```python
+def filter_by_mask(
     self,
     targets: Tuple[seagulls.engine._collisions.CollidableObject, ...]
-) -&gt; Tuple[seagulls.engine._collisions.CollidableObject, ...]:
+) -> Tuple[seagulls.engine._collisions.CollidableObject, ...]:
+```
+
 
 ??? note "View Source"
     ```python
@@ -116,9 +121,10 @@ CollidableObject(layer: int, mask: int)
     ```
 
 
+```python
+def is_in_mask(self, target: seagulls.engine._collisions.CollidableObject) -> bool:
+```
 
-
-##### def is_in_mask(self, target: seagulls.engine._collisions.CollidableObject) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -131,10 +137,12 @@ CollidableObject(layer: int, mask: int)
     ```
 
 
-
 ### IGameScene
+```python
+class `IGameScene` (abc.ABC):
+```
 
-#### class `IGameScene` (abc.ABC):
+This class is for X and Y.
 
 ??? note "View Source"
     ```python
@@ -157,12 +165,12 @@ CollidableObject(layer: int, mask: int)
 
     ```
 
-This class is for X and Y.
 
-
+```python
 @abstractmethod
+def start(self) -> None:
+```
 
-##### def start(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -173,10 +181,11 @@ This class is for X and Y.
     ```
 
 
-
+```python
 @abstractmethod
+def should_quit(self) -> bool:
+```
 
-##### def should_quit(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -187,10 +196,11 @@ This class is for X and Y.
     ```
 
 
-
+```python
 @abstractmethod
+def tick(self) -> None:
+```
 
-##### def tick(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -201,10 +211,13 @@ This class is for X and Y.
     ```
 
 
-
 ### IProvideGameScenes
+```python
+class `IProvideGameScenes` (abc.ABC):
+```
 
-#### class `IProvideGameScenes` (abc.ABC):
+Helper class that provides a standard way to create an ABC using
+inheritance.
 
 ??? note "View Source"
     ```python
@@ -216,13 +229,12 @@ This class is for X and Y.
 
     ```
 
-Helper class that provides a standard way to create an ABC using
-inheritance.
 
-
+```python
 @abstractmethod
+def get_scene(self) -> seagulls.engine._game_scene.IGameScene:
+```
 
-##### def get_scene(self) -&gt; seagulls.engine._game_scene.IGameScene:
 
 ??? note "View Source"
     ```python
@@ -233,10 +245,13 @@ inheritance.
     ```
 
 
-
 ### IProvideGameSessions
+```python
+class `IProvideGameSessions` (abc.ABC):
+```
 
-#### class `IProvideGameSessions` (abc.ABC):
+Helper class that provides a standard way to create an ABC using
+inheritance.
 
 ??? note "View Source"
     ```python
@@ -248,13 +263,12 @@ inheritance.
 
     ```
 
-Helper class that provides a standard way to create an ABC using
-inheritance.
 
-
+```python
 @abstractmethod
+def get_session(self, scene: str) -> seagulls.engine._game_session.IGameSession:
+```
 
-##### def get_session(self, scene: str) -&gt; seagulls.engine._game_session.IGameSession:
 
 ??? note "View Source"
     ```python
@@ -265,10 +279,13 @@ inheritance.
     ```
 
 
-
 ### IGameSession
+```python
+class `IGameSession` (abc.ABC):
+```
 
-#### class `IGameSession` (abc.ABC):
+Helper class that provides a standard way to create an ABC using
+inheritance.
 
 ??? note "View Source"
     ```python
@@ -288,13 +305,12 @@ inheritance.
 
     ```
 
-Helper class that provides a standard way to create an ABC using
-inheritance.
 
-
+```python
 @abstractmethod
+def start(self) -> None:
+```
 
-##### def start(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -305,10 +321,11 @@ inheritance.
     ```
 
 
-
+```python
 @abstractmethod
+def wait_for_completion(self) -> None:
+```
 
-##### def wait_for_completion(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -319,10 +336,11 @@ inheritance.
     ```
 
 
-
+```python
 @abstractmethod
+def stop(self) -> None:
+```
 
-##### def stop(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -333,10 +351,11 @@ inheritance.
     ```
 
 
-
 ### SurfaceRenderer
+```python
+class `SurfaceRenderer` :
+```
 
-#### class `SurfaceRenderer` :
 
 ??? note "View Source"
     ```python
@@ -355,15 +374,17 @@ inheritance.
     ```
 
 
+```python
+SurfaceRenderer():
+```
 
 
-##### SurfaceRenderer():
 
 
+```python
+def start(self) -> None:
+```
 
-
-
-##### def start(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -373,9 +394,10 @@ inheritance.
     ```
 
 
+```python
+def render(self, surface: pygame.Surface) -> None:
+```
 
-
-##### def render(self, surface: pygame.Surface) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -386,10 +408,12 @@ inheritance.
     ```
 
 
-
 ### GameClock
+```python
+class `GameClock` (seagulls.engine._game_object.GameObject):
+```
 
-#### class `GameClock` (seagulls.engine._game_object.GameObject):
+Interface for anything representing an object in the scene.
 
 ??? note "View Source"
     ```python
@@ -417,11 +441,11 @@ inheritance.
 
     ```
 
-Interface for anything representing an object in the scene.
 
+```python
+GameClock():
+```
 
-
-##### GameClock():
 
 ??? note "View Source"
     ```python
@@ -433,9 +457,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def tick(self) -> None:
+```
 
-
-##### def tick(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -445,9 +470,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def render(self, surface: pygame.Surface) -> None:
+```
 
-
-##### def render(self, surface: pygame.Surface) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -457,9 +483,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def get_time(self) -> int:
+```
 
-
-##### def get_time(self) -&gt; int:
 
 ??? note "View Source"
     ```python
@@ -469,9 +496,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def get_fps(self) -> float:
+```
 
-
-##### def get_fps(self) -&gt; float:
 
 ??? note "View Source"
     ```python
@@ -481,10 +509,12 @@ Interface for anything representing an object in the scene.
     ```
 
 
-
 ### GameControls
+```python
+class `GameControls` (seagulls.engine._game_object.GameObject):
+```
 
-#### class `GameControls` (seagulls.engine._game_object.GameObject):
+Interface for anything representing an object in the scene.
 
 ??? note "View Source"
     ```python
@@ -551,11 +581,11 @@ Interface for anything representing an object in the scene.
 
     ```
 
-Interface for anything representing an object in the scene.
 
+```python
+GameControls():
+```
 
-
-##### GameControls():
 
 ??? note "View Source"
     ```python
@@ -565,9 +595,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def tick(self):
+```
 
-
-##### def tick(self):
 
 ??? note "View Source"
     ```python
@@ -577,9 +608,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def should_quit(self) -> bool:
+```
 
-
-##### def should_quit(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -596,9 +628,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def should_fire(self) -> bool:
+```
 
-
-##### def should_fire(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -612,9 +645,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def is_left_moving(self) -> bool:
+```
 
-
-##### def is_left_moving(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -624,9 +658,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def is_right_moving(self) -> bool:
+```
 
-
-##### def is_right_moving(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -636,9 +671,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def should_toggle_debug_hud(self) -> bool:
+```
 
-
-##### def should_toggle_debug_hud(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -652,9 +688,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def is_click_initialized(self) -> bool:
+```
 
-
-##### def is_click_initialized(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -670,9 +707,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def is_mouse_down(self) -> bool:
+```
 
-
-##### def is_mouse_down(self) -&gt; bool:
 
 ??? note "View Source"
     ```python
@@ -682,9 +720,10 @@ Interface for anything representing an object in the scene.
     ```
 
 
+```python
+def render(self, surface: pygame.Surface) -> None:
+```
 
-
-##### def render(self, surface: pygame.Surface) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -694,10 +733,12 @@ Interface for anything representing an object in the scene.
     ```
 
 
-
 ### GameObject
+```python
+class `GameObject` (abc.ABC):
+```
 
-#### class `GameObject` (abc.ABC):
+Interface for anything representing an object in the scene.
 
 ??? note "View Source"
     ```python
@@ -716,12 +757,12 @@ Interface for anything representing an object in the scene.
 
     ```
 
-Interface for anything representing an object in the scene.
 
-
+```python
 @abstractmethod
+def tick(self) -> None:
+```
 
-##### def tick(self) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -732,10 +773,11 @@ Interface for anything representing an object in the scene.
     ```
 
 
-
+```python
 @abstractmethod
+def render(self, surface: pygame.Surface) -> None:
+```
 
-##### def render(self, surface: pygame.Surface) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -746,10 +788,12 @@ Interface for anything representing an object in the scene.
     ```
 
 
-
 ### GameObjectsCollection
+```python
+class `GameObjectsCollection` :
+```
 
-#### class `GameObjectsCollection` :
+Data structure that allows you to keep track of objects in the scene.
 
 ??? note "View Source"
     ```python
@@ -772,11 +816,11 @@ Interface for anything representing an object in the scene.
 
     ```
 
-Data structure that allows you to keep track of objects in the scene.
 
+```python
+GameObjectsCollection():
+```
 
-
-##### GameObjectsCollection():
 
 ??? note "View Source"
     ```python
@@ -786,9 +830,10 @@ Data structure that allows you to keep track of objects in the scene.
     ```
 
 
+```python
+def add(self, game_object: seagulls.engine._game_object.GameObject) -> None:
+```
 
-
-##### def add(self, game_object: seagulls.engine._game_object.GameObject) -&gt; None:
 
 ??? note "View Source"
     ```python
@@ -798,12 +843,13 @@ Data structure that allows you to keep track of objects in the scene.
     ```
 
 
-
-
-##### def apply(
+```python
+def apply(
     self,
     func: Callable[[seagulls.engine._game_object.GameObject], NoneType]
-) -&gt; None:
+) -> None:
+```
+
 
 ??? note "View Source"
     ```python
@@ -814,10 +860,11 @@ Data structure that allows you to keep track of objects in the scene.
     ```
 
 
-
 ### GameSettings
+```python
+class `GameSettings` :
+```
 
-#### class `GameSettings` :
 
 ??? note "View Source"
     ```python
@@ -838,15 +885,17 @@ Data structure that allows you to keep track of objects in the scene.
     ```
 
 
+```python
+GameSettings():
+```
 
 
-##### GameSettings():
 
 
+```python
+def get_setting(self, name, default=None) -> Any:
+```
 
-
-
-##### def get_setting(self, name, default=None) -&gt; Any:
 
 ??? note "View Source"
     ```python
@@ -857,11 +906,10 @@ Data structure that allows you to keep track of objects in the scene.
     ```
 
 
-
 ### Rect
-
-#### class `Rect` :
-
+```python
+class `Rect` :
+```
 
 Rect(left, top, width, height) -&gt; Rect
 Rect((left, top), (width, height)) -&gt; Rect
@@ -870,30 +918,34 @@ pygame object for storing rectangular coordinates
 
 
 
-##### Rect(*args, **kwargs):
+```python
+Rect(*args, **kwargs):
+```
 
 
 
 
-
-##### def normalize(unknown):
-
+```python
+def normalize(unknown):
+```
 
 normalize() -&gt; None
 correct negative sizes
 
 
 
-##### def clip(unknown):
-
+```python
+def clip(unknown):
+```
 
 clip(Rect) -&gt; Rect
 crops a rectangle inside another
 
 
 
-##### def clipline(unknown):
-
+```python
+def clipline(unknown):
+```
 
 clipline(x1, y1, x2, y2) -&gt; ((cx1, cy1), (cx2, cy2))
 clipline(x1, y1, x2, y2) -&gt; ()
@@ -907,48 +959,54 @@ crops a line inside a rectangle
 
 
 
-##### def clamp(unknown):
-
+```python
+def clamp(unknown):
+```
 
 clamp(Rect) -&gt; Rect
 moves the rectangle inside another
 
 
 
-##### def clamp_ip(unknown):
-
+```python
+def clamp_ip(unknown):
+```
 
 clamp_ip(Rect) -&gt; None
 moves the rectangle inside another, in place
 
 
 
-##### def copy(unknown):
-
+```python
+def copy(unknown):
+```
 
 copy() -&gt; Rect
 copy the rectangle
 
 
 
-##### def fit(unknown):
-
+```python
+def fit(unknown):
+```
 
 fit(Rect) -&gt; Rect
 resize and move a rectangle with aspect ratio
 
 
 
-##### def move(unknown):
-
+```python
+def move(unknown):
+```
 
 move(x, y) -&gt; Rect
 moves the rectangle
 
 
 
-##### def update(unknown):
-
+```python
+def update(unknown):
+```
 
 update(left, top, width, height) -&gt; None
 update((left, top), (width, height)) -&gt; None
@@ -957,64 +1015,72 @@ sets the position and size of the rectangle
 
 
 
-##### def inflate(unknown):
-
+```python
+def inflate(unknown):
+```
 
 inflate(x, y) -&gt; Rect
 grow or shrink the rectangle size
 
 
 
-##### def union(unknown):
-
+```python
+def union(unknown):
+```
 
 union(Rect) -&gt; Rect
 joins two rectangles into one
 
 
 
-##### def unionall(unknown):
-
+```python
+def unionall(unknown):
+```
 
 unionall(Rect_sequence) -&gt; Rect
 the union of many rectangles
 
 
 
-##### def move_ip(unknown):
-
+```python
+def move_ip(unknown):
+```
 
 move_ip(x, y) -&gt; None
 moves the rectangle, in place
 
 
 
-##### def inflate_ip(unknown):
-
+```python
+def inflate_ip(unknown):
+```
 
 inflate_ip(x, y) -&gt; None
 grow or shrink the rectangle size, in place
 
 
 
-##### def union_ip(unknown):
-
+```python
+def union_ip(unknown):
+```
 
 union_ip(Rect) -&gt; None
 joins two rectangles into one, in place
 
 
 
-##### def unionall_ip(unknown):
-
+```python
+def unionall_ip(unknown):
+```
 
 unionall_ip(Rect_sequence) -&gt; None
 the union of many rectangles, in place
 
 
 
-##### def collidepoint(unknown):
-
+```python
+def collidepoint(unknown):
+```
 
 collidepoint(x, y) -&gt; bool
 collidepoint((x,y)) -&gt; bool
@@ -1022,32 +1088,36 @@ test if a point is inside a rectangle
 
 
 
-##### def colliderect(unknown):
-
+```python
+def colliderect(unknown):
+```
 
 colliderect(Rect) -&gt; bool
 test if two rectangles overlap
 
 
 
-##### def collidelist(unknown):
-
+```python
+def collidelist(unknown):
+```
 
 collidelist(list) -&gt; index
 test if one rectangle in a list intersects
 
 
 
-##### def collidelistall(unknown):
-
+```python
+def collidelistall(unknown):
+```
 
 collidelistall(list) -&gt; indices
 test if all rectangles in a list intersect
 
 
 
-##### def collidedict(unknown):
-
+```python
+def collidedict(unknown):
+```
 
 collidedict(dict) -&gt; (key, value)
 collidedict(dict) -&gt; None
@@ -1057,8 +1127,9 @@ test if one rectangle in a dictionary intersects
 
 
 
-##### def collidedictall(unknown):
-
+```python
+def collidedictall(unknown):
+```
 
 collidedictall(dict) -&gt; [(key, value), ...]
 collidedictall(dict, use_values=0) -&gt; [(key, value), ...]
@@ -1066,127 +1137,151 @@ test if all rectangles in a dictionary intersect
 
 
 
-##### def contains(unknown):
-
+```python
+def contains(unknown):
+```
 
 contains(Rect) -&gt; bool
 test if one rectangle is inside another
 
 
-[# ](#Rect.x){: #Rect.x }
- x 
+
+```python
+x 
+```
 
 
 
-[# ](#Rect.y){: #Rect.y }
- y 
+```python
+y 
+```
 
 
 
-[# ](#Rect.w){: #Rect.w }
- w 
+```python
+w 
+```
 
 
 
-[# ](#Rect.h){: #Rect.h }
- h 
+```python
+h 
+```
 
 
 
-[# ](#Rect.width){: #Rect.width }
- width 
+```python
+width 
+```
 
 
 
-[# ](#Rect.height){: #Rect.height }
- height 
+```python
+height 
+```
 
 
 
-[# ](#Rect.top){: #Rect.top }
- top 
+```python
+top 
+```
 
 
 
-[# ](#Rect.left){: #Rect.left }
- left 
+```python
+left 
+```
 
 
 
-[# ](#Rect.bottom){: #Rect.bottom }
- bottom 
+```python
+bottom 
+```
 
 
 
-[# ](#Rect.right){: #Rect.right }
- right 
+```python
+right 
+```
 
 
 
-[# ](#Rect.centerx){: #Rect.centerx }
- centerx 
+```python
+centerx 
+```
 
 
 
-[# ](#Rect.centery){: #Rect.centery }
- centery 
+```python
+centery 
+```
 
 
 
-[# ](#Rect.topleft){: #Rect.topleft }
- topleft 
+```python
+topleft 
+```
 
 
 
-[# ](#Rect.topright){: #Rect.topright }
- topright 
+```python
+topright 
+```
 
 
 
-[# ](#Rect.bottomleft){: #Rect.bottomleft }
- bottomleft 
+```python
+bottomleft 
+```
 
 
 
-[# ](#Rect.bottomright){: #Rect.bottomright }
- bottomright 
+```python
+bottomright 
+```
 
 
 
-[# ](#Rect.midtop){: #Rect.midtop }
- midtop 
+```python
+midtop 
+```
 
 
 
-[# ](#Rect.midleft){: #Rect.midleft }
- midleft 
+```python
+midleft 
+```
 
 
 
-[# ](#Rect.midbottom){: #Rect.midbottom }
- midbottom 
+```python
+midbottom 
+```
 
 
 
-[# ](#Rect.midright){: #Rect.midright }
- midright 
+```python
+midright 
+```
 
 
 
-[# ](#Rect.size){: #Rect.size }
- size 
+```python
+size 
+```
 
 
 
-[# ](#Rect.center){: #Rect.center }
- center 
+```python
+center 
+```
 
 
 
 ### Surface
-
-#### class `Surface` :
-
+```python
+class `Surface` :
+```
 
 Surface((width, height), flags=0, depth=0, masks=None) -&gt; Surface
 Surface((width, height), flags=0, Surface) -&gt; Surface
@@ -1194,126 +1289,142 @@ pygame object for representing images
 
 
 
-##### Surface(*args, **kwargs):
+```python
+Surface(*args, **kwargs):
+```
 
 
 
 
-
-##### def get_at(unknown):
-
+```python
+def get_at(unknown):
+```
 
 get_at((x, y)) -&gt; Color
 get the color value at a single pixel
 
 
 
-##### def set_at(unknown):
-
+```python
+def set_at(unknown):
+```
 
 set_at((x, y), Color) -&gt; None
 set the color value for a single pixel
 
 
 
-##### def get_at_mapped(unknown):
-
+```python
+def get_at_mapped(unknown):
+```
 
 get_at_mapped((x, y)) -&gt; Color
 get the mapped color value at a single pixel
 
 
 
-##### def map_rgb(unknown):
-
+```python
+def map_rgb(unknown):
+```
 
 map_rgb(Color) -&gt; mapped_int
 convert a color into a mapped color value
 
 
 
-##### def unmap_rgb(unknown):
-
+```python
+def unmap_rgb(unknown):
+```
 
 unmap_rgb(mapped_int) -&gt; Color
 convert a mapped integer color value into a Color
 
 
 
-##### def get_palette(unknown):
-
+```python
+def get_palette(unknown):
+```
 
 get_palette() -&gt; [RGB, RGB, RGB, ...]
 get the color index palette for an 8-bit Surface
 
 
 
-##### def get_palette_at(unknown):
-
+```python
+def get_palette_at(unknown):
+```
 
 get_palette_at(index) -&gt; RGB
 get the color for a single entry in a palette
 
 
 
-##### def set_palette(unknown):
-
+```python
+def set_palette(unknown):
+```
 
 set_palette([RGB, RGB, RGB, ...]) -&gt; None
 set the color palette for an 8-bit Surface
 
 
 
-##### def set_palette_at(unknown):
-
+```python
+def set_palette_at(unknown):
+```
 
 set_palette_at(index, RGB) -&gt; None
 set the color for a single index in an 8-bit Surface palette
 
 
 
-##### def lock(unknown):
-
+```python
+def lock(unknown):
+```
 
 lock() -&gt; None
 lock the Surface memory for pixel access
 
 
 
-##### def unlock(unknown):
-
+```python
+def unlock(unknown):
+```
 
 unlock() -&gt; None
 unlock the Surface memory from pixel access
 
 
 
-##### def mustlock(unknown):
-
+```python
+def mustlock(unknown):
+```
 
 mustlock() -&gt; bool
 test if the Surface requires locking
 
 
 
-##### def get_locked(unknown):
-
+```python
+def get_locked(unknown):
+```
 
 get_locked() -&gt; bool
 test if the Surface is current locked
 
 
 
-##### def get_locks(unknown):
-
+```python
+def get_locks(unknown):
+```
 
 get_locks() -&gt; tuple
 Gets the locks for the Surface
 
 
 
-##### def set_colorkey(unknown):
-
+```python
+def set_colorkey(unknown):
+```
 
 set_colorkey(Color, flags=0) -&gt; None
 set_colorkey(None) -&gt; None
@@ -1321,16 +1432,18 @@ Set the transparent colorkey
 
 
 
-##### def get_colorkey(unknown):
-
+```python
+def get_colorkey(unknown):
+```
 
 get_colorkey() -&gt; RGB or None
 Get the current transparent colorkey
 
 
 
-##### def set_alpha(unknown):
-
+```python
+def set_alpha(unknown):
+```
 
 set_alpha(value, flags=0) -&gt; None
 set_alpha(None) -&gt; None
@@ -1338,31 +1451,35 @@ set the alpha value for the full Surface image
 
 
 
-##### def get_alpha(unknown):
-
+```python
+def get_alpha(unknown):
+```
 
 get_alpha() -&gt; int_value
 get the current Surface transparency value
 
 
 
-##### def get_blendmode(unknown):
-
+```python
+def get_blendmode(unknown):
+```
 
 Return the surface&#39;s SDL 2 blend mode
 
 
 
-##### def copy(unknown):
-
+```python
+def copy(unknown):
+```
 
 copy() -&gt; Surface
 create a new copy of a Surface
 
 
 
-##### def convert(unknown):
-
+```python
+def convert(unknown):
+```
 
 convert(Surface=None) -&gt; Surface
 convert(depth, flags=0) -&gt; Surface
@@ -1371,8 +1488,9 @@ change the pixel format of an image
 
 
 
-##### def convert_alpha(unknown):
-
+```python
+def convert_alpha(unknown):
+```
 
 convert_alpha(Surface) -&gt; Surface
 convert_alpha() -&gt; Surface
@@ -1380,8 +1498,9 @@ change the pixel format of an image including per pixel alphas
 
 
 
-##### def set_clip(unknown):
-
+```python
+def set_clip(unknown):
+```
 
 set_clip(rect) -&gt; None
 set_clip(None) -&gt; None
@@ -1389,32 +1508,36 @@ set the current clipping area of the Surface
 
 
 
-##### def get_clip(unknown):
-
+```python
+def get_clip(unknown):
+```
 
 get_clip() -&gt; Rect
 get the current clipping area of the Surface
 
 
 
-##### def fill(unknown):
-
+```python
+def fill(unknown):
+```
 
 fill(color, rect=None, special_flags=0) -&gt; Rect
 fill Surface with a solid color
 
 
 
-##### def blit(unknown):
-
+```python
+def blit(unknown):
+```
 
 blit(source, dest, area=None, special_flags=0) -&gt; Rect
 draw one image onto another
 
 
 
-##### def blits(unknown):
-
+```python
+def blits(unknown):
+```
 
 blits(blit_sequence=((source, dest), ...), doreturn=1) -&gt; [Rect, ...] or None
 blits(((source, dest, area), ...)) -&gt; [Rect, ...]
@@ -1423,185 +1546,208 @@ draw many images onto another
 
 
 
-##### def scroll(unknown):
-
+```python
+def scroll(unknown):
+```
 
 scroll(dx=0, dy=0) -&gt; None
 Shift the surface image in place
 
 
 
-##### def get_flags(unknown):
-
+```python
+def get_flags(unknown):
+```
 
 get_flags() -&gt; int
 get the additional flags used for the Surface
 
 
 
-##### def get_size(unknown):
-
+```python
+def get_size(unknown):
+```
 
 get_size() -&gt; (width, height)
 get the dimensions of the Surface
 
 
 
-##### def get_width(unknown):
-
+```python
+def get_width(unknown):
+```
 
 get_width() -&gt; width
 get the width of the Surface
 
 
 
-##### def get_height(unknown):
-
+```python
+def get_height(unknown):
+```
 
 get_height() -&gt; height
 get the height of the Surface
 
 
 
-##### def get_rect(unknown):
-
+```python
+def get_rect(unknown):
+```
 
 get_rect(**kwargs) -&gt; Rect
 get the rectangular area of the Surface
 
 
 
-##### def get_pitch(unknown):
-
+```python
+def get_pitch(unknown):
+```
 
 get_pitch() -&gt; int
 get the number of bytes used per Surface row
 
 
 
-##### def get_bitsize(unknown):
-
+```python
+def get_bitsize(unknown):
+```
 
 get_bitsize() -&gt; int
 get the bit depth of the Surface pixel format
 
 
 
-##### def get_bytesize(unknown):
-
+```python
+def get_bytesize(unknown):
+```
 
 get_bytesize() -&gt; int
 get the bytes used per Surface pixel
 
 
 
-##### def get_masks(unknown):
-
+```python
+def get_masks(unknown):
+```
 
 get_masks() -&gt; (R, G, B, A)
 the bitmasks needed to convert between a color and a mapped integer
 
 
 
-##### def get_shifts(unknown):
-
+```python
+def get_shifts(unknown):
+```
 
 get_shifts() -&gt; (R, G, B, A)
 the bit shifts needed to convert between a color and a mapped integer
 
 
 
-##### def set_masks(unknown):
-
+```python
+def set_masks(unknown):
+```
 
 set_masks((r,g,b,a)) -&gt; None
 set the bitmasks needed to convert between a color and a mapped integer
 
 
 
-##### def set_shifts(unknown):
-
+```python
+def set_shifts(unknown):
+```
 
 set_shifts((r,g,b,a)) -&gt; None
 sets the bit shifts needed to convert between a color and a mapped integer
 
 
 
-##### def get_losses(unknown):
-
+```python
+def get_losses(unknown):
+```
 
 get_losses() -&gt; (R, G, B, A)
 the significant bits used to convert between a color and a mapped integer
 
 
 
-##### def subsurface(unknown):
-
+```python
+def subsurface(unknown):
+```
 
 subsurface(Rect) -&gt; Surface
 create a new surface that references its parent
 
 
 
-##### def get_offset(unknown):
-
+```python
+def get_offset(unknown):
+```
 
 get_offset() -&gt; (x, y)
 find the position of a child subsurface inside a parent
 
 
 
-##### def get_abs_offset(unknown):
-
+```python
+def get_abs_offset(unknown):
+```
 
 get_abs_offset() -&gt; (x, y)
 find the absolute position of a child subsurface inside its top level parent
 
 
 
-##### def get_parent(unknown):
-
+```python
+def get_parent(unknown):
+```
 
 get_parent() -&gt; Surface
 find the parent of a subsurface
 
 
 
-##### def get_abs_parent(unknown):
-
+```python
+def get_abs_parent(unknown):
+```
 
 get_abs_parent() -&gt; Surface
 find the top level parent of a subsurface
 
 
 
-##### def get_bounding_rect(unknown):
-
+```python
+def get_bounding_rect(unknown):
+```
 
 get_bounding_rect(min_alpha = 1) -&gt; Rect
 find the smallest rect containing data
 
 
 
-##### def get_view(unknown):
-
+```python
+def get_view(unknown):
+```
 
 get_view(&lt;kind&gt;=&#39;2&#39;) -&gt; BufferProxy
 return a buffer view of the Surface&#39;s pixels.
 
 
 
-##### def get_buffer(unknown):
-
+```python
+def get_buffer(unknown):
+```
 
 get_buffer() -&gt; BufferProxy
 acquires a buffer object for the pixels of the Surface.
 
 
+
 ### Color
-
-#### class `Color` :
-
+```python
+class `Color` :
+```
 
 Color(r, g, b) -&gt; Color
 Color(r, g, b, a=255) -&gt; Color
@@ -1610,54 +1756,61 @@ pygame object for color representations
 
 
 
-##### Color(*args, **kwargs):
+```python
+Color(*args, **kwargs):
+```
 
 
 
 
-
-##### def normalize(unknown):
-
+```python
+def normalize(unknown):
+```
 
 normalize() -&gt; tuple
 Returns the normalized RGBA values of the Color.
 
 
 
-##### def correct_gamma(unknown):
-
+```python
+def correct_gamma(unknown):
+```
 
 correct_gamma (gamma) -&gt; Color
 Applies a certain gamma value to the Color.
 
 
 
-##### def set_length(unknown):
-
+```python
+def set_length(unknown):
+```
 
 set_length(len) -&gt; None
 Set the number of elements in the Color to 1,2,3, or 4.
 
 
 
-##### def lerp(unknown):
-
+```python
+def lerp(unknown):
+```
 
 lerp(Color, float) -&gt; Color
 returns a linear interpolation to the given Color.
 
 
 
-##### def premul_alpha(unknown):
-
+```python
+def premul_alpha(unknown):
+```
 
 premul_alpha() -&gt; Color
 returns a Color where the r,g,b components have been multiplied by the alpha.
 
 
 
-##### def update(unknown):
-
+```python
+def update(unknown):
+```
 
 update(r, g, b) -&gt; None
 update(r, g, b, a=255) -&gt; None
@@ -1665,164 +1818,186 @@ update(color_value) -&gt; None
 Sets the elements of the color
 
 
-[# ](#Color.r){: #Color.r }
- r 
+
+```python
+r 
+```
 
 r -&gt; int
 Gets or sets the red value of the Color.
 
 
-[# ](#Color.g){: #Color.g }
- g 
+```python
+g 
+```
 
 g -&gt; int
 Gets or sets the green value of the Color.
 
 
-[# ](#Color.b){: #Color.b }
- b 
+```python
+b 
+```
 
 b -&gt; int
 Gets or sets the blue value of the Color.
 
 
-[# ](#Color.a){: #Color.a }
- a 
+```python
+a 
+```
 
 a -&gt; int
 Gets or sets the alpha value of the Color.
 
 
-[# ](#Color.hsva){: #Color.hsva }
- hsva 
+```python
+hsva 
+```
 
 hsva -&gt; tuple
 Gets or sets the HSVA representation of the Color.
 
 
-[# ](#Color.hsla){: #Color.hsla }
- hsla 
+```python
+hsla 
+```
 
 hsla -&gt; tuple
 Gets or sets the HSLA representation of the Color.
 
 
-[# ](#Color.i1i2i3){: #Color.i1i2i3 }
- i1i2i3 
+```python
+i1i2i3 
+```
 
 i1i2i3 -&gt; tuple
 Gets or sets the I1I2I3 representation of the Color.
 
 
-[# ](#Color.cmy){: #Color.cmy }
- cmy 
+```python
+cmy 
+```
 
 cmy -&gt; tuple
 Gets or sets the CMY representation of the Color.
 
 
 ### PixelArray
-
-#### class `PixelArray` :
-
+```python
+class `PixelArray` :
+```
 
 PixelArray(Surface) -&gt; PixelArray
 pygame object for direct pixel access of surfaces
 
 
 
-##### PixelArray():
+```python
+PixelArray():
+```
 
 
 
 
-
-##### def compare(unknown):
-
+```python
+def compare(unknown):
+```
 
 compare(array, distance=0, weights=(0.299, 0.587, 0.114)) -&gt; PixelArray
 Compares the PixelArray with another one.
 
 
 
-##### def extract(unknown):
-
+```python
+def extract(unknown):
+```
 
 extract(color, distance=0, weights=(0.299, 0.587, 0.114)) -&gt; PixelArray
 Extracts the passed color from the PixelArray.
 
 
 
-##### def make_surface(unknown):
-
+```python
+def make_surface(unknown):
+```
 
 make_surface() -&gt; Surface
 Creates a new Surface from the current PixelArray.
 
 
 
-##### def close(unknown):
-
+```python
+def close(unknown):
+```
 
 transpose() -&gt; PixelArray
 Closes the PixelArray, and releases Surface lock.
 
 
 
-##### def replace(unknown):
-
+```python
+def replace(unknown):
+```
 
 replace(color, repcolor, distance=0, weights=(0.299, 0.587, 0.114)) -&gt; None
 Replaces the passed color in the PixelArray with another one.
 
 
 
-##### def transpose(unknown):
-
+```python
+def transpose(unknown):
+```
 
 transpose() -&gt; PixelArray
 Exchanges the x and y axis.
 
 
-[# ](#PixelArray.surface){: #PixelArray.surface }
- surface 
+
+```python
+surface 
+```
 
 surface -&gt; Surface
 Gets the Surface the PixelArray uses.
 
 
-[# ](#PixelArray.itemsize){: #PixelArray.itemsize }
- itemsize 
+```python
+itemsize 
+```
 
 itemsize -&gt; int
 Returns the byte size of a pixel array item
 
 
-[# ](#PixelArray.shape){: #PixelArray.shape }
- shape 
+```python
+shape 
+```
 
 shape -&gt; tuple of int&#39;s
 Returns the array size.
 
 
-[# ](#PixelArray.strides){: #PixelArray.strides }
- strides 
+```python
+strides 
+```
 
 strides -&gt; tuple of int&#39;s
 Returns byte offsets for each array dimension.
 
 
-[# ](#PixelArray.ndim){: #PixelArray.ndim }
- ndim 
+```python
+ndim 
+```
 
 ndim -&gt; int
 Returns the number of dimensions.
 
 
 ### Vector2
-
-#### class `Vector2` :
-
+```python
+class `Vector2` :
+```
 
 Vector2() -&gt; Vector2
 Vector2(int) -&gt; Vector2
@@ -1834,142 +2009,160 @@ a 2-Dimensional Vector
 
 
 
-##### Vector2(*args, **kwargs):
+```python
+Vector2(*args, **kwargs):
+```
 
 
 
 
-
-##### def length(unknown):
-
+```python
+def length(unknown):
+```
 
 length() -&gt; float
 returns the Euclidean length of the vector.
 
 
 
-##### def length_squared(unknown):
-
+```python
+def length_squared(unknown):
+```
 
 length_squared() -&gt; float
 returns the squared Euclidean length of the vector.
 
 
 
-##### def magnitude(unknown):
-
+```python
+def magnitude(unknown):
+```
 
 magnitude() -&gt; float
 returns the Euclidean magnitude of the vector.
 
 
 
-##### def magnitude_squared(unknown):
-
+```python
+def magnitude_squared(unknown):
+```
 
 magnitude_squared() -&gt; float
 returns the squared magnitude of the vector.
 
 
 
-##### def rotate(unknown):
-
+```python
+def rotate(unknown):
+```
 
 rotate(angle) -&gt; Vector2
 rotates a vector by a given angle in degrees.
 
 
 
-##### def rotate_ip(unknown):
-
+```python
+def rotate_ip(unknown):
+```
 
 rotate_ip(angle) -&gt; None
 rotates the vector by a given angle in degrees in place.
 
 
 
-##### def rotate_rad(unknown):
-
+```python
+def rotate_rad(unknown):
+```
 
 rotate_rad(angle) -&gt; Vector2
 rotates a vector by a given angle in radians.
 
 
 
-##### def rotate_ip_rad(unknown):
-
+```python
+def rotate_ip_rad(unknown):
+```
 
 rotate_ip_rad(angle) -&gt; None
 rotates the vector by a given angle in radians in place.
 
 
 
-##### def slerp(unknown):
-
+```python
+def slerp(unknown):
+```
 
 slerp(Vector2, float) -&gt; Vector2
 returns a spherical interpolation to the given vector.
 
 
 
-##### def lerp(unknown):
-
+```python
+def lerp(unknown):
+```
 
 lerp(Vector2, float) -&gt; Vector2
 returns a linear interpolation to the given vector.
 
 
 
-##### def normalize(unknown):
-
+```python
+def normalize(unknown):
+```
 
 normalize() -&gt; Vector2
 returns a vector with the same direction but length 1.
 
 
 
-##### def normalize_ip(unknown):
-
+```python
+def normalize_ip(unknown):
+```
 
 normalize_ip() -&gt; None
 normalizes the vector in place so that its length is 1.
 
 
 
-##### def is_normalized(unknown):
-
+```python
+def is_normalized(unknown):
+```
 
 is_normalized() -&gt; Bool
 tests if the vector is normalized i.e. has length == 1.
 
 
 
-##### def cross(unknown):
-
+```python
+def cross(unknown):
+```
 
 cross(Vector2) -&gt; Vector2
 calculates the cross- or vector-product
 
 
 
-##### def dot(unknown):
-
+```python
+def dot(unknown):
+```
 
 dot(Vector2) -&gt; float
 calculates the dot- or scalar-product with the other vector
 
 
 
-##### def angle_to(unknown):
-
+```python
+def angle_to(unknown):
+```
 
 angle_to(Vector2) -&gt; float
 calculates the angle to a given vector in degrees.
 
 
 
-##### def update(unknown):
-
+```python
+def update(unknown):
+```
 
 update() -&gt; None
 update(int) -&gt; None
@@ -1981,97 +2174,110 @@ Sets the coordinates of the vector.
 
 
 
-##### def scale_to_length(unknown):
-
+```python
+def scale_to_length(unknown):
+```
 
 scale_to_length(float) -&gt; None
 scales the vector to a given length.
 
 
 
-##### def reflect(unknown):
-
+```python
+def reflect(unknown):
+```
 
 reflect(Vector2) -&gt; Vector2
 returns a vector reflected of a given normal.
 
 
 
-##### def reflect_ip(unknown):
-
+```python
+def reflect_ip(unknown):
+```
 
 reflect_ip(Vector2) -&gt; None
 reflect the vector of a given normal in place.
 
 
 
-##### def distance_to(unknown):
-
+```python
+def distance_to(unknown):
+```
 
 distance_to(Vector2) -&gt; float
 calculates the Euclidean distance to a given vector.
 
 
 
-##### def distance_squared_to(unknown):
-
+```python
+def distance_squared_to(unknown):
+```
 
 distance_squared_to(Vector2) -&gt; float
 calculates the squared Euclidean distance to a given vector.
 
 
 
-##### def elementwise(unknown):
-
+```python
+def elementwise(unknown):
+```
 
 elementwise() -&gt; VectorElementwiseProxy
 The next operation will be performed elementwise.
 
 
 
-##### def as_polar(unknown):
-
+```python
+def as_polar(unknown):
+```
 
 as_polar() -&gt; (r, phi)
 returns a tuple with radial distance and azimuthal angle.
 
 
 
-##### def from_polar(unknown):
-
+```python
+def from_polar(unknown):
+```
 
 from_polar((r, phi)) -&gt; None
 Sets x and y from a polar coordinates tuple.
 
 
 
-##### def project(unknown):
-
+```python
+def project(unknown):
+```
 
 project(Vector2) -&gt; Vector2
 projects a vector onto another.
 
 
-[# ](#Vector2.epsilon){: #Vector2.epsilon }
- epsilon 
+
+```python
+epsilon 
+```
 
 small value used in comparisons
 
 
-[# ](#Vector2.x){: #Vector2.x }
- x 
+```python
+x 
+```
 
 
 
-[# ](#Vector2.y){: #Vector2.y }
- y 
+```python
+y 
+```
 
 
 
 ### Vector3
-
-#### class `Vector3` :
-
+```python
+class `Vector3` :
+```
 
 Vector3() -&gt; Vector3
 Vector3(int) -&gt; Vector3
@@ -2083,238 +2289,268 @@ a 3-Dimensional Vector
 
 
 
-##### Vector3(*args, **kwargs):
+```python
+Vector3(*args, **kwargs):
+```
 
 
 
 
-
-##### def length(unknown):
-
+```python
+def length(unknown):
+```
 
 length() -&gt; float
 returns the Euclidean length of the vector.
 
 
 
-##### def length_squared(unknown):
-
+```python
+def length_squared(unknown):
+```
 
 length_squared() -&gt; float
 returns the squared Euclidean length of the vector.
 
 
 
-##### def magnitude(unknown):
-
+```python
+def magnitude(unknown):
+```
 
 magnitude() -&gt; float
 returns the Euclidean magnitude of the vector.
 
 
 
-##### def magnitude_squared(unknown):
-
+```python
+def magnitude_squared(unknown):
+```
 
 magnitude_squared() -&gt; float
 returns the squared Euclidean magnitude of the vector.
 
 
 
-##### def rotate(unknown):
-
+```python
+def rotate(unknown):
+```
 
 rotate(angle, Vector3) -&gt; Vector3
 rotates a vector by a given angle in degrees.
 
 
 
-##### def rotate_ip(unknown):
-
+```python
+def rotate_ip(unknown):
+```
 
 rotate_ip(angle, Vector3) -&gt; None
 rotates the vector by a given angle in degrees in place.
 
 
 
-##### def rotate_rad(unknown):
-
+```python
+def rotate_rad(unknown):
+```
 
 rotate_rad(angle, Vector3) -&gt; Vector3
 rotates a vector by a given angle in radians.
 
 
 
-##### def rotate_ip_rad(unknown):
-
+```python
+def rotate_ip_rad(unknown):
+```
 
 rotate_ip_rad(angle, Vector3) -&gt; None
 rotates the vector by a given angle in radians in place.
 
 
 
-##### def rotate_x(unknown):
-
+```python
+def rotate_x(unknown):
+```
 
 rotate_x(angle) -&gt; Vector3
 rotates a vector around the x-axis by the angle in degrees.
 
 
 
-##### def rotate_x_ip(unknown):
-
+```python
+def rotate_x_ip(unknown):
+```
 
 rotate_x_ip(angle) -&gt; None
 rotates the vector around the x-axis by the angle in degrees in place.
 
 
 
-##### def rotate_x_rad(unknown):
-
+```python
+def rotate_x_rad(unknown):
+```
 
 rotate_x_rad(angle) -&gt; Vector3
 rotates a vector around the x-axis by the angle in radians.
 
 
 
-##### def rotate_x_ip_rad(unknown):
-
+```python
+def rotate_x_ip_rad(unknown):
+```
 
 rotate_x_ip_rad(angle) -&gt; None
 rotates the vector around the x-axis by the angle in radians in place.
 
 
 
-##### def rotate_y(unknown):
-
+```python
+def rotate_y(unknown):
+```
 
 rotate_y(angle) -&gt; Vector3
 rotates a vector around the y-axis by the angle in degrees.
 
 
 
-##### def rotate_y_ip(unknown):
-
+```python
+def rotate_y_ip(unknown):
+```
 
 rotate_y_ip(angle) -&gt; None
 rotates the vector around the y-axis by the angle in degrees in place.
 
 
 
-##### def rotate_y_rad(unknown):
-
+```python
+def rotate_y_rad(unknown):
+```
 
 rotate_y_rad(angle) -&gt; Vector3
 rotates a vector around the y-axis by the angle in radians.
 
 
 
-##### def rotate_y_ip_rad(unknown):
-
+```python
+def rotate_y_ip_rad(unknown):
+```
 
 rotate_y_ip_rad(angle) -&gt; None
 rotates the vector around the y-axis by the angle in radians in place.
 
 
 
-##### def rotate_z(unknown):
-
+```python
+def rotate_z(unknown):
+```
 
 rotate_z(angle) -&gt; Vector3
 rotates a vector around the z-axis by the angle in degrees.
 
 
 
-##### def rotate_z_ip(unknown):
-
+```python
+def rotate_z_ip(unknown):
+```
 
 rotate_z_ip(angle) -&gt; None
 rotates the vector around the z-axis by the angle in degrees in place.
 
 
 
-##### def rotate_z_rad(unknown):
-
+```python
+def rotate_z_rad(unknown):
+```
 
 rotate_z_rad(angle) -&gt; Vector3
 rotates a vector around the z-axis by the angle in radians.
 
 
 
-##### def rotate_z_ip_rad(unknown):
-
+```python
+def rotate_z_ip_rad(unknown):
+```
 
 rotate_z_ip_rad(angle) -&gt; None
 rotates the vector around the z-axis by the angle in radians in place.
 
 
 
-##### def slerp(unknown):
-
+```python
+def slerp(unknown):
+```
 
 slerp(Vector3, float) -&gt; Vector3
 returns a spherical interpolation to the given vector.
 
 
 
-##### def lerp(unknown):
-
+```python
+def lerp(unknown):
+```
 
 lerp(Vector3, float) -&gt; Vector3
 returns a linear interpolation to the given vector.
 
 
 
-##### def normalize(unknown):
-
+```python
+def normalize(unknown):
+```
 
 normalize() -&gt; Vector3
 returns a vector with the same direction but length 1.
 
 
 
-##### def normalize_ip(unknown):
-
+```python
+def normalize_ip(unknown):
+```
 
 normalize_ip() -&gt; None
 normalizes the vector in place so that its length is 1.
 
 
 
-##### def is_normalized(unknown):
-
+```python
+def is_normalized(unknown):
+```
 
 is_normalized() -&gt; Bool
 tests if the vector is normalized i.e. has length == 1.
 
 
 
-##### def cross(unknown):
-
+```python
+def cross(unknown):
+```
 
 cross(Vector3) -&gt; Vector3
 calculates the cross- or vector-product
 
 
 
-##### def dot(unknown):
-
+```python
+def dot(unknown):
+```
 
 dot(Vector3) -&gt; float
 calculates the dot- or scalar-product with the other vector
 
 
 
-##### def angle_to(unknown):
-
+```python
+def angle_to(unknown):
+```
 
 angle_to(Vector3) -&gt; float
 calculates the angle to a given vector in degrees.
 
 
 
-##### def update(unknown):
-
+```python
+def update(unknown):
+```
 
 update() -&gt; None
 update(int) -&gt; None
@@ -2326,95 +2562,109 @@ Sets the coordinates of the vector.
 
 
 
-##### def scale_to_length(unknown):
-
+```python
+def scale_to_length(unknown):
+```
 
 scale_to_length(float) -&gt; None
 scales the vector to a given length.
 
 
 
-##### def reflect(unknown):
-
+```python
+def reflect(unknown):
+```
 
 reflect(Vector3) -&gt; Vector3
 returns a vector reflected of a given normal.
 
 
 
-##### def reflect_ip(unknown):
-
+```python
+def reflect_ip(unknown):
+```
 
 reflect_ip(Vector3) -&gt; None
 reflect the vector of a given normal in place.
 
 
 
-##### def distance_to(unknown):
-
+```python
+def distance_to(unknown):
+```
 
 distance_to(Vector3) -&gt; float
 calculates the Euclidean distance to a given vector.
 
 
 
-##### def distance_squared_to(unknown):
-
+```python
+def distance_squared_to(unknown):
+```
 
 distance_squared_to(Vector3) -&gt; float
 calculates the squared Euclidean distance to a given vector.
 
 
 
-##### def elementwise(unknown):
-
+```python
+def elementwise(unknown):
+```
 
 elementwise() -&gt; VectorElementwiseProxy
 The next operation will be performed elementwise.
 
 
 
-##### def as_spherical(unknown):
-
+```python
+def as_spherical(unknown):
+```
 
 as_spherical() -&gt; (r, theta, phi)
 returns a tuple with radial distance, inclination and azimuthal angle.
 
 
 
-##### def from_spherical(unknown):
-
+```python
+def from_spherical(unknown):
+```
 
 from_spherical((r, theta, phi)) -&gt; None
 Sets x, y and z from a spherical coordinates 3-tuple.
 
 
 
-##### def project(unknown):
-
+```python
+def project(unknown):
+```
 
 project(Vector3) -&gt; Vector3
 projects a vector onto another.
 
 
-[# ](#Vector3.epsilon){: #Vector3.epsilon }
- epsilon 
+
+```python
+epsilon 
+```
 
 small value used in comparisons
 
 
-[# ](#Vector3.x){: #Vector3.x }
- x 
+```python
+x 
+```
 
 
 
-[# ](#Vector3.y){: #Vector3.y }
- y 
+```python
+y 
+```
 
 
 
-[# ](#Vector3.z){: #Vector3.z }
- z 
+```python
+z 
+```
 
 
 

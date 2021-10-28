@@ -6,10 +6,10 @@ pdoc \
   --docformat google \
   --output-directory docs/api seagulls
 
-# Rename all *.html files to *.md
-mv docs/api/seagulls.html docs/api/seagulls.md
-for f in docs/api/**/*.html; do
-    mv -- "$f" "${f%.html}.md"
-done
 # Delete the pdoc home page because it's pretty broken for now
 rm docs/api/index.html
+rm docs/api/search.js
+# Rename all *.html files to *.md
+find docs/api -name "*.html" -exec rename -v 's/\.html$/\.md/i' {} \;
+
+mkdocs build

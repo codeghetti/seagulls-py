@@ -15,8 +15,11 @@ Debug Tooling.
     ```
 
 ### DebugHud
+```python
+class `DebugHud` (seagulls.engine._game_object.GameObject):
+```
 
-#### class `DebugHud` (seagulls.engine._game_object.GameObject):
+UI Component to display FPS and other debug information during gameplay.
 
 ??? note "View Source"
     ```python
@@ -62,11 +65,12 @@ Debug Tooling.
 
     ```
 
-UI Component to display FPS and other debug information during gameplay.
 
+```python
+DebugHud(game_clock: seagulls.engine._game_clock.GameClock):
+```
 
-
-##### DebugHud(game_clock: seagulls.engine._game_clock.GameClock):
+Initializes a Debug Hud where `game_clock` controls how we measure time.
 
 ??? note "View Source"
     ```python
@@ -82,11 +86,12 @@ UI Component to display FPS and other debug information during gameplay.
 
     ```
 
-Initializes a Debug Hud where `game_clock` controls how we measure time.
 
+```python
+def tick(self) -> None:
+```
 
-
-##### def tick(self) -&gt; None:
+Does nothing because Debug Huds do not need to perform any logic on tick().
 
 ??? note "View Source"
     ```python
@@ -98,11 +103,12 @@ Initializes a Debug Hud where `game_clock` controls how we measure time.
 
     ```
 
-Does nothing because Debug Huds do not need to perform any logic on tick().
 
+```python
+def render(self, surface: pygame.Surface) -> None:
+```
 
-
-##### def render(self, surface: pygame.Surface) -&gt; None:
+Renders the debug information onto the passed in Surface object.
 
 ??? note "View Source"
     ```python
@@ -125,4 +131,4 @@ Does nothing because Debug Huds do not need to perform any logic on tick().
 
     ```
 
-Renders the debug information onto the passed in Surface object.
+

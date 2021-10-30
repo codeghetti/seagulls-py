@@ -74,7 +74,7 @@ This is the comment for the module.
 ## some_variable
 
 ```python
-some_variable  = 10
+some_variable = 10
 ```
 
 Just commenting about `some_variable`.
@@ -200,7 +200,7 @@ This is the documentation for `SomeClass.__init__()`.
 ### some_property
 
 ```python
-some_property : str
+some_property: str
 ```
 
 Documentation for `SomeClass.some_property`.

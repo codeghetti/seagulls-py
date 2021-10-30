@@ -900,7 +900,7 @@ GameState():
 ### active_scene
 
 ```python
-active_scene : Optional[seagulls.engine._game_scene.IGameScene] = None
+active_scene: Optional[seagulls.engine._game_scene.IGameScene] = None
 ```
 
 
@@ -908,7 +908,7 @@ active_scene : Optional[seagulls.engine._game_scene.IGameScene] = None
 ### game_state_changed
 
 ```python
-game_state_changed : bool = False
+game_state_changed: bool = False
 ```
 
 

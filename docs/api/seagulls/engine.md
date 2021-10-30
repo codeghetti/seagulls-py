@@ -1288,7 +1288,7 @@ test if one rectangle is inside another
 ### x
 
 ```python
-x 
+x
 ```
 
 
@@ -1296,7 +1296,7 @@ x
 ### y
 
 ```python
-y 
+y
 ```
 
 
@@ -1304,7 +1304,7 @@ y
 ### w
 
 ```python
-w 
+w
 ```
 
 
@@ -1312,7 +1312,7 @@ w
 ### h
 
 ```python
-h 
+h
 ```
 
 
@@ -1320,7 +1320,7 @@ h
 ### width
 
 ```python
-width 
+width
 ```
 
 
@@ -1328,7 +1328,7 @@ width
 ### height
 
 ```python
-height 
+height
 ```
 
 
@@ -1336,7 +1336,7 @@ height
 ### top
 
 ```python
-top 
+top
 ```
 
 
@@ -1344,7 +1344,7 @@ top
 ### left
 
 ```python
-left 
+left
 ```
 
 
@@ -1352,7 +1352,7 @@ left
 ### bottom
 
 ```python
-bottom 
+bottom
 ```
 
 
@@ -1360,7 +1360,7 @@ bottom
 ### right
 
 ```python
-right 
+right
 ```
 
 
@@ -1368,7 +1368,7 @@ right
 ### centerx
 
 ```python
-centerx 
+centerx
 ```
 
 
@@ -1376,7 +1376,7 @@ centerx
 ### centery
 
 ```python
-centery 
+centery
 ```
 
 
@@ -1384,7 +1384,7 @@ centery
 ### topleft
 
 ```python
-topleft 
+topleft
 ```
 
 
@@ -1392,7 +1392,7 @@ topleft
 ### topright
 
 ```python
-topright 
+topright
 ```
 
 
@@ -1400,7 +1400,7 @@ topright
 ### bottomleft
 
 ```python
-bottomleft 
+bottomleft
 ```
 
 
@@ -1408,7 +1408,7 @@ bottomleft
 ### bottomright
 
 ```python
-bottomright 
+bottomright
 ```
 
 
@@ -1416,7 +1416,7 @@ bottomright
 ### midtop
 
 ```python
-midtop 
+midtop
 ```
 
 
@@ -1424,7 +1424,7 @@ midtop
 ### midleft
 
 ```python
-midleft 
+midleft
 ```
 
 
@@ -1432,7 +1432,7 @@ midleft
 ### midbottom
 
 ```python
-midbottom 
+midbottom
 ```
 
 
@@ -1440,7 +1440,7 @@ midbottom
 ### midright
 
 ```python
-midright 
+midright
 ```
 
 
@@ -1448,7 +1448,7 @@ midright
 ### size
 
 ```python
-size 
+size
 ```
 
 
@@ -1456,7 +1456,7 @@ size
 ### center
 
 ```python
-center 
+center
 ```
 
 
@@ -2121,7 +2121,7 @@ Sets the elements of the color
 ### r
 
 ```python
-r 
+r
 ```
 
 r -&gt; int
@@ -2131,7 +2131,7 @@ Gets or sets the red value of the Color.
 ### g
 
 ```python
-g 
+g
 ```
 
 g -&gt; int
@@ -2141,7 +2141,7 @@ Gets or sets the green value of the Color.
 ### b
 
 ```python
-b 
+b
 ```
 
 b -&gt; int
@@ -2151,7 +2151,7 @@ Gets or sets the blue value of the Color.
 ### a
 
 ```python
-a 
+a
 ```
 
 a -&gt; int
@@ -2161,7 +2161,7 @@ Gets or sets the alpha value of the Color.
 ### hsva
 
 ```python
-hsva 
+hsva
 ```
 
 hsva -&gt; tuple
@@ -2171,7 +2171,7 @@ Gets or sets the HSVA representation of the Color.
 ### hsla
 
 ```python
-hsla 
+hsla
 ```
 
 hsla -&gt; tuple
@@ -2181,7 +2181,7 @@ Gets or sets the HSLA representation of the Color.
 ### i1i2i3
 
 ```python
-i1i2i3 
+i1i2i3
 ```
 
 i1i2i3 -&gt; tuple
@@ -2191,7 +2191,7 @@ Gets or sets the I1I2I3 representation of the Color.
 ### cmy
 
 ```python
-cmy 
+cmy
 ```
 
 cmy -&gt; tuple
@@ -2287,7 +2287,7 @@ Exchanges the x and y axis.
 ### surface
 
 ```python
-surface 
+surface
 ```
 
 surface -&gt; Surface
@@ -2297,7 +2297,7 @@ Gets the Surface the PixelArray uses.
 ### itemsize
 
 ```python
-itemsize 
+itemsize
 ```
 
 itemsize -&gt; int
@@ -2307,7 +2307,7 @@ Returns the byte size of a pixel array item
 ### shape
 
 ```python
-shape 
+shape
 ```
 
 shape -&gt; tuple of int&#39;s
@@ -2317,7 +2317,7 @@ Returns the array size.
 ### strides
 
 ```python
-strides 
+strides
 ```
 
 strides -&gt; tuple of int&#39;s
@@ -2327,7 +2327,7 @@ Returns byte offsets for each array dimension.
 ### ndim
 
 ```python
-ndim 
+ndim
 ```
 
 ndim -&gt; int
@@ -2653,7 +2653,7 @@ projects a vector onto another.
 ### epsilon
 
 ```python
-epsilon 
+epsilon
 ```
 
 small value used in comparisons
@@ -2662,7 +2662,7 @@ small value used in comparisons
 ### x
 
 ```python
-x 
+x
 ```
 
 
@@ -2670,7 +2670,7 @@ x
 ### y
 
 ```python
-y 
+y
 ```
 
 
@@ -3126,7 +3126,7 @@ projects a vector onto another.
 ### epsilon
 
 ```python
-epsilon 
+epsilon
 ```
 
 small value used in comparisons
@@ -3135,7 +3135,7 @@ small value used in comparisons
 ### x
 
 ```python
-x 
+x
 ```
 
 
@@ -3143,7 +3143,7 @@ x
 ### y
 
 ```python
-y 
+y
 ```
 
 
@@ -3151,7 +3151,7 @@ y
 ### z
 
 ```python
-z 
+z
 ```
 
 

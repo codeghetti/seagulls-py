@@ -16,7 +16,7 @@
     
     
       
-        <title>Assets - seagulls-py</title>
+        <title>API Docs: seagulls.assets - seagulls-py</title>
       
     
     
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Assets
+              API Docs: seagulls.assets
             
           </span>
         </div>
@@ -295,7 +295,7 @@
   
     <li class="md-nav__item">
       <a href="../" class="md-nav__link">
-        Seagulls
+        API Docs: seagulls
       </a>
     </li>
   
@@ -342,20 +342,24 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Assets
+          API Docs: seagulls.assets
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Assets
+        API Docs: seagulls.assets
       </a>
       
         
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
+  
+    
   
   
     <label class="md-nav__title" for="__toc">
@@ -365,16 +369,30 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#seagullsassets" class="md-nav__link">
-    seagulls.assets
+  <a href="#assetmanager" class="md-nav__link">
+    AssetManager
   </a>
   
-    <nav class="md-nav" aria-label="seagulls.assets">
+    <nav class="md-nav" aria-label="AssetManager">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#assetmanager" class="md-nav__link">
-    AssetManager
+  <a href="#__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_sprite" class="md-nav__link">
+    load_sprite()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_png" class="md-nav__link">
+    load_png()
   </a>
   
 </li>
@@ -400,7 +418,7 @@
   
     <li class="md-nav__item">
       <a href="../cli/" class="md-nav__link">
-        Cli
+        API Docs: seagulls.cli
       </a>
     </li>
   
@@ -414,7 +432,7 @@
   
     <li class="md-nav__item">
       <a href="../debug/" class="md-nav__link">
-        Debug
+        API Docs: seagulls.debug
       </a>
     </li>
   
@@ -428,7 +446,7 @@
   
     <li class="md-nav__item">
       <a href="../engine/" class="md-nav__link">
-        Engine
+        API Docs: seagulls.engine
       </a>
     </li>
   
@@ -442,7 +460,7 @@
   
     <li class="md-nav__item">
       <a href="../examples/" class="md-nav__link">
-        Examples
+        API Docs: seagulls.examples
       </a>
     </li>
   
@@ -456,7 +474,7 @@
   
     <li class="md-nav__item">
       <a href="../foo/" class="md-nav__link">
-        Foo
+        API Docs: seagulls.foo
       </a>
     </li>
   
@@ -496,7 +514,7 @@
   
     <li class="md-nav__item">
       <a href="../foo/test/" class="md-nav__link">
-        Test
+        API Docs: seagulls.foo.test
       </a>
     </li>
   
@@ -539,6 +557,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -547,16 +567,30 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#seagullsassets" class="md-nav__link">
-    seagulls.assets
+  <a href="#assetmanager" class="md-nav__link">
+    AssetManager
   </a>
   
-    <nav class="md-nav" aria-label="seagulls.assets">
+    <nav class="md-nav" aria-label="AssetManager">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#assetmanager" class="md-nav__link">
-    AssetManager
+  <a href="#__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_sprite" class="md-nav__link">
+    load_sprite()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load_png" class="md-nav__link">
+    load_png()
   </a>
   
 </li>
@@ -583,16 +617,14 @@
                   </a>
                 
                 
-                  <h1>Assets</h1>
-                
-                <h2 id="seagullsassets"><a href="../seagulls">seagulls</a>.assets<a class="headerlink" href="#seagullsassets" title="Permanent link">&para;</a></h2>
+                <h1 id="seagullsassets"><a href="../seagulls">seagulls</a>.assets<a class="headerlink" href="#seagullsassets" title="Permanent link">&para;</a></h1>
 <details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="kn">from</span> <span class="nn">._manager</span> <span class="kn">import</span> <span class="n">AssetManager</span>
 
     <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AssetManager&quot;</span><span class="p">]</span>
 </code></pre></div>
 </details>
-<h3 id="assetmanager">AssetManager<a class="headerlink" href="#assetmanager" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="err">`</span><span class="nc">AssetManager</span><span class="err">`</span> <span class="p">:</span>
+<h2 id="assetmanager">AssetManager<a class="headerlink" href="#assetmanager" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">AssetManager</span><span class="p">:</span>
 </code></pre></div>
 <p>Provides basic functionality for loading assets from disk.</p>
 <details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">AssetManager</span><span class="p">:</span>
@@ -616,18 +648,21 @@
                 <span class="k">return</span> <span class="n">loaded_sprite</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
 </code></pre></div>
 </details>
+<h3 id="__init__">__init__()<a class="headerlink" href="#__init__" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">AssetManager</span><span class="p">(</span><span class="n">assets_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
 </code></pre></div>
 <details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assets_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_assets_path</span> <span class="o">=</span> <span class="n">assets_path</span>
 </code></pre></div>
 </details>
+<h3 id="load_sprite">load_sprite()<a class="headerlink" href="#load_sprite" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load_sprite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">:</span>
 </code></pre></div>
 <details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">load_sprite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_png</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sprites/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 </details>
+<h3 id="load_png">load_png()<a class="headerlink" href="#load_png" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load_png</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">:</span>
 </code></pre></div>
 <details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">load_png</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
@@ -639,6 +674,8 @@
                 <span class="k">return</span> <span class="n">loaded_sprite</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
 </code></pre></div>
 </details>
+                
+                  
                 
               
               
@@ -658,7 +695,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Seagulls" rel="prev">
+        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: API Docs: seagulls" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -667,20 +704,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Seagulls
+              API Docs: seagulls
             </div>
           </div>
         </a>
       
       
         
-        <a href="../cli/" class="md-footer__link md-footer__link--next" aria-label="Next: Cli" rel="next">
+        <a href="../cli/" class="md-footer__link md-footer__link--next" aria-label="Next: API Docs: seagulls.cli" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Cli
+              API Docs: seagulls.cli
             </div>
           </div>
           <div class="md-footer__button md-icon">

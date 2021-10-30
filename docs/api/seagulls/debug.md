@@ -1,4 +1,10 @@
-## [seagulls](../seagulls).debug
+---
+title: "API Docs: seagulls.debug"
+---
+
+
+# [seagulls](../seagulls).debug
+
 Debug Tooling.
 
 ??? note "View Source"
@@ -14,9 +20,10 @@ Debug Tooling.
 
     ```
 
-### DebugHud
+## DebugHud
+
 ```python
-class `DebugHud` (seagulls.engine._game_object.GameObject):
+class DebugHud(seagulls.engine._game_object.GameObject):
 ```
 
 UI Component to display FPS and other debug information during gameplay.
@@ -66,6 +73,8 @@ UI Component to display FPS and other debug information during gameplay.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 DebugHud(game_clock: seagulls.engine._game_clock.GameClock):
 ```
@@ -87,6 +96,8 @@ Initializes a Debug Hud where `game_clock` controls how we measure time.
     ```
 
 
+### tick()
+
 ```python
 def tick(self) -> None:
 ```
@@ -103,6 +114,8 @@ Does nothing because Debug Huds do not need to perform any logic on tick().
 
     ```
 
+
+### render()
 
 ```python
 def render(self, surface: pygame.Surface) -> None:

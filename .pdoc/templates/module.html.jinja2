@@ -1,6 +1,8 @@
-{% extends "default/module.html.jinja2" %}
-{% block title %}{{ module.modulename }} API Docs{% endblock %}
-{% block style %}{% endblock %}
+---
+{% block title %}title: "API Docs: {{ module.modulename }}"{% endblock %}
+
+---
+
 {% defaultmacro bases(cls) %}
     {% if cls.bases -%}
         ({% for base in cls.bases %}{{ base[2] | safe }}{% endfor %})
@@ -24,57 +26,69 @@
 {% defaultmacro headerlink(doc) -%}
 [# ](#{{ doc.qualname }}){: #{{ doc.qualname.replace("_", "\_") }} }
 {% enddefaultmacro %}
-{% defaultmacro function(fn) -%}
-        {% if fn.name == "__init__" %}
+{% defaultmacro function(fn, nesting_lvl) -%}
+    {% set nesting_header = "#" * nesting_lvl %}
+    {% if fn.name == "__init__" %}
+##{{ nesting_header }} \_\_init\_\_()
+
 ```python
 {{ decorators(fn) -}}
 {{ ".".join(fn.qualname.split(".")[:-1]) }}
             {#- no space -#}
 {{ fn.signature_without_self | safe }}:
 ```
-        {% else %}
+    {% else %}
+##{{ nesting_header }} {{ fn.name }}()
+
 ```python
 {{ decorators(fn) -}}
 {{ fn.funcdef }} {{ fn.name }}
             {#- no space -#}
 {{ fn.signature | safe }}:
 ```
-        {% endif %}
+    {% endif %}
 {% enddefaultmacro %}
-{% defaultmacro variable(var) %}
+{% defaultmacro variable(var, nesting_lvl) %}
+{% set nesting_header = "#" * nesting_lvl %}
+##{{ nesting_header }} {{ var.name }}
+
 ```python
 {{ var.name }} {{ annotation(var) }}{{ default_value(var) }}
 ```
 {% enddefaultmacro %}
-{% defaultmacro submodule(mod) %}
+{% defaultmacro submodule(mod, nesting_lvl) %}
 ```python
 {{ mod.taken_from }}
 ```
 {% enddefaultmacro %}
-{% defaultmacro class(cls) %}
+{% defaultmacro class(cls, nesting_lvl) %}
+{% set nesting_header = "#" * nesting_lvl %}
+##{{ nesting_header }} {{ cls.qualname }}
+
 ```python
 {{ decorators(cls) -}}
-class `{{ cls.qualname }}` {{ bases(cls) }}:
+class {{ cls.qualname }}{{- bases(cls) }}:
 ```
 {% enddefaultmacro %}
-{% defaultmacro member(doc) %}
+{% defaultmacro member(doc, nesting_lvl) %}
     {% if doc.type == "class" %}
-{{ class(doc) }}
+{{ class(doc, nesting_lvl) }}
     {% elif doc.type == "function" %}
-{{- function(doc) }}
+{{- function(doc, nesting_lvl) }}
     {% elif doc.type == "module" %}
-{{- submodule(doc) }}
+{{- submodule(doc, nesting_lvl) }}
     {% else %}
-{{- variable(doc) }}
+{{- variable(doc, nesting_lvl) }}
     {% endif %}
-{{ docstring(doc) }}
+{{ docstring(doc, nesting_lvl) }}
     {% if doc.type != "variable" %}
 {{- view_source(doc) }}
     {% endif %}
 {% enddefaultmacro %}
-{% defaultmacro docstring(var) %}
+{% defaultmacro docstring(var, nesting_lvl) %}
     {% if var.docstring %}
-{{ var.docstring | to_markdown }}
+    {% set nesting_header = "#" * nesting_lvl %}
+{{ (var.docstring | to_markdown).replace("######", "###" + nesting_header) }}
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro nav_members(members) %}
@@ -141,7 +155,8 @@ class `{{ cls.qualname }}` {{ bases(cls) }}:
     {% endif %}
 {% enddefaultmacro %}
 {% defaultmacro module_name() %}
-## {% set parts = module.modulename.split(".") -%}
+
+# {% set parts = module.modulename.split(".") %}
     {%- for part in parts -%}
         {%- set fullname = ".".join(parts[:loop.index]) -%}
         {%- if fullname in all_modules and fullname != module.modulename -%}
@@ -152,14 +167,15 @@ class `{{ cls.qualname }}` {{ bases(cls) }}:
         {%- if loop.nextitem -%}
             .
         {%- endif -%}
-    {%- endfor -%}
+    {%- endfor %}
+
 {% enddefaultmacro %}
 {% block head %}{% endblock %}
 {% block body %}
     {% block nav %}{% endblock %}
         {% block module_info %}
 {{ module_name() }}
-{{ docstring(module) }}
+{{ docstring(module, 0) }}
 {{ view_source(module) }}
             {% block edit_button %}
                 {% if edit_url %}
@@ -169,15 +185,14 @@ class `{{ cls.qualname }}` {{ bases(cls) }}:
         {% endblock %}
         {% block module_contents %}
             {% for m in module.flattened_own_members if is_public(m) | trim %}
-### {{ m.qualname or m.name | safe}}
-{{ member(m) }}
+{{ member(m, 0) }}
                 {% if m.type == "class" %}
                     {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
-{{ member(m) }}
+{{ member(m, 1) }}
                     {% endfor %}
                     {% set inherited_members = inherited(m) | trim %}
                     {% if inherited_members %}
-#### Inherited Members
+### Inherited Members
 {{ inherited_members | safe }}
                     {% endif %}
                 {% endif %}

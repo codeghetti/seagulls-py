@@ -1,4 +1,10 @@
-## [seagulls](../seagulls).engine
+---
+title: "API Docs: seagulls.engine"
+---
+
+
+# [seagulls](../seagulls).engine
+
 Core Engine Components
 
 ??? note "View Source"
@@ -39,7 +45,8 @@ Core Engine Components
 
     ```
 
-### flag_from_string
+## flag_from_string()
+
 ```python
 def flag_from_string(value: str) -> int:
 ```
@@ -56,10 +63,11 @@ def flag_from_string(value: str) -> int:
     ```
 
 
-### CollidableObject
+## CollidableObject
+
 ```python
 @dataclass(frozen=True)
-class `CollidableObject` :
+class CollidableObject:
 ```
 
 CollidableObject(layer: int, mask: int)
@@ -92,12 +100,16 @@ CollidableObject(layer: int, mask: int)
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 CollidableObject(layer: int, mask: int):
 ```
 
 
 
+
+### filter_by_mask()
 
 ```python
 def filter_by_mask(
@@ -121,6 +133,8 @@ def filter_by_mask(
     ```
 
 
+### is_in_mask()
+
 ```python
 def is_in_mask(self, target: seagulls.engine._collisions.CollidableObject) -> bool:
 ```
@@ -137,9 +151,10 @@ def is_in_mask(self, target: seagulls.engine._collisions.CollidableObject) -> bo
     ```
 
 
-### IGameScene
+## IGameScene
+
 ```python
-class `IGameScene` (abc.ABC):
+class IGameScene(abc.ABC):
 ```
 
 This class is for X and Y.
@@ -166,6 +181,8 @@ This class is for X and Y.
     ```
 
 
+### start()
+
 ```python
 @abstractmethod
 def start(self) -> None:
@@ -180,6 +197,8 @@ def start(self) -> None:
 
     ```
 
+
+### should_quit()
 
 ```python
 @abstractmethod
@@ -196,6 +215,8 @@ def should_quit(self) -> bool:
     ```
 
 
+### tick()
+
 ```python
 @abstractmethod
 def tick(self) -> None:
@@ -211,9 +232,10 @@ def tick(self) -> None:
     ```
 
 
-### IProvideGameScenes
+## IProvideGameScenes
+
 ```python
-class `IProvideGameScenes` (abc.ABC):
+class IProvideGameScenes(abc.ABC):
 ```
 
 Helper class that provides a standard way to create an ABC using
@@ -230,6 +252,8 @@ inheritance.
     ```
 
 
+### get_scene()
+
 ```python
 @abstractmethod
 def get_scene(self) -> seagulls.engine._game_scene.IGameScene:
@@ -245,9 +269,10 @@ def get_scene(self) -> seagulls.engine._game_scene.IGameScene:
     ```
 
 
-### IProvideGameSessions
+## IProvideGameSessions
+
 ```python
-class `IProvideGameSessions` (abc.ABC):
+class IProvideGameSessions(abc.ABC):
 ```
 
 Helper class that provides a standard way to create an ABC using
@@ -264,6 +289,8 @@ inheritance.
     ```
 
 
+### get_session()
+
 ```python
 @abstractmethod
 def get_session(self, scene: str) -> seagulls.engine._game_session.IGameSession:
@@ -279,9 +306,10 @@ def get_session(self, scene: str) -> seagulls.engine._game_session.IGameSession:
     ```
 
 
-### IGameSession
+## IGameSession
+
 ```python
-class `IGameSession` (abc.ABC):
+class IGameSession(abc.ABC):
 ```
 
 Helper class that provides a standard way to create an ABC using
@@ -306,6 +334,8 @@ inheritance.
     ```
 
 
+### start()
+
 ```python
 @abstractmethod
 def start(self) -> None:
@@ -320,6 +350,8 @@ def start(self) -> None:
 
     ```
 
+
+### wait_for_completion()
 
 ```python
 @abstractmethod
@@ -336,6 +368,8 @@ def wait_for_completion(self) -> None:
     ```
 
 
+### stop()
+
 ```python
 @abstractmethod
 def stop(self) -> None:
@@ -351,9 +385,10 @@ def stop(self) -> None:
     ```
 
 
-### SurfaceRenderer
+## SurfaceRenderer
+
 ```python
-class `SurfaceRenderer` :
+class SurfaceRenderer:
 ```
 
 
@@ -374,12 +409,16 @@ class `SurfaceRenderer` :
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 SurfaceRenderer():
 ```
 
 
 
+
+### start()
 
 ```python
 def start(self) -> None:
@@ -393,6 +432,8 @@ def start(self) -> None:
 
     ```
 
+
+### render()
 
 ```python
 def render(self, surface: pygame.Surface) -> None:
@@ -408,9 +449,10 @@ def render(self, surface: pygame.Surface) -> None:
     ```
 
 
-### GameClock
+## GameClock
+
 ```python
-class `GameClock` (seagulls.engine._game_object.GameObject):
+class GameClock(seagulls.engine._game_object.GameObject):
 ```
 
 Interface for anything representing an object in the scene.
@@ -442,6 +484,8 @@ Interface for anything representing an object in the scene.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 GameClock():
 ```
@@ -457,6 +501,8 @@ GameClock():
     ```
 
 
+### tick()
+
 ```python
 def tick(self) -> None:
 ```
@@ -469,6 +515,8 @@ def tick(self) -> None:
 
     ```
 
+
+### render()
 
 ```python
 def render(self, surface: pygame.Surface) -> None:
@@ -483,6 +531,8 @@ def render(self, surface: pygame.Surface) -> None:
     ```
 
 
+### get_time()
+
 ```python
 def get_time(self) -> int:
 ```
@@ -495,6 +545,8 @@ def get_time(self) -> int:
 
     ```
 
+
+### get_fps()
 
 ```python
 def get_fps(self) -> float:
@@ -509,9 +561,10 @@ def get_fps(self) -> float:
     ```
 
 
-### GameControls
+## GameControls
+
 ```python
-class `GameControls` (seagulls.engine._game_object.GameObject):
+class GameControls(seagulls.engine._game_object.GameObject):
 ```
 
 Interface for anything representing an object in the scene.
@@ -582,6 +635,8 @@ Interface for anything representing an object in the scene.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 GameControls():
 ```
@@ -595,6 +650,8 @@ GameControls():
     ```
 
 
+### tick()
+
 ```python
 def tick(self):
 ```
@@ -607,6 +664,8 @@ def tick(self):
 
     ```
 
+
+### should_quit()
 
 ```python
 def should_quit(self) -> bool:
@@ -628,6 +687,8 @@ def should_quit(self) -> bool:
     ```
 
 
+### should_fire()
+
 ```python
 def should_fire(self) -> bool:
 ```
@@ -645,6 +706,8 @@ def should_fire(self) -> bool:
     ```
 
 
+### is_left_moving()
+
 ```python
 def is_left_moving(self) -> bool:
 ```
@@ -658,6 +721,8 @@ def is_left_moving(self) -> bool:
     ```
 
 
+### is_right_moving()
+
 ```python
 def is_right_moving(self) -> bool:
 ```
@@ -670,6 +735,8 @@ def is_right_moving(self) -> bool:
 
     ```
 
+
+### should_toggle_debug_hud()
 
 ```python
 def should_toggle_debug_hud(self) -> bool:
@@ -687,6 +754,8 @@ def should_toggle_debug_hud(self) -> bool:
 
     ```
 
+
+### is_click_initialized()
 
 ```python
 def is_click_initialized(self) -> bool:
@@ -707,6 +776,8 @@ def is_click_initialized(self) -> bool:
     ```
 
 
+### is_mouse_down()
+
 ```python
 def is_mouse_down(self) -> bool:
 ```
@@ -719,6 +790,8 @@ def is_mouse_down(self) -> bool:
 
     ```
 
+
+### render()
 
 ```python
 def render(self, surface: pygame.Surface) -> None:
@@ -733,9 +806,10 @@ def render(self, surface: pygame.Surface) -> None:
     ```
 
 
-### GameObject
+## GameObject
+
 ```python
-class `GameObject` (abc.ABC):
+class GameObject(abc.ABC):
 ```
 
 Interface for anything representing an object in the scene.
@@ -758,6 +832,8 @@ Interface for anything representing an object in the scene.
     ```
 
 
+### tick()
+
 ```python
 @abstractmethod
 def tick(self) -> None:
@@ -772,6 +848,8 @@ def tick(self) -> None:
 
     ```
 
+
+### render()
 
 ```python
 @abstractmethod
@@ -788,9 +866,10 @@ def render(self, surface: pygame.Surface) -> None:
     ```
 
 
-### GameObjectsCollection
+## GameObjectsCollection
+
 ```python
-class `GameObjectsCollection` :
+class GameObjectsCollection:
 ```
 
 Data structure that allows you to keep track of objects in the scene.
@@ -817,6 +896,8 @@ Data structure that allows you to keep track of objects in the scene.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 GameObjectsCollection():
 ```
@@ -830,6 +911,8 @@ GameObjectsCollection():
     ```
 
 
+### add()
+
 ```python
 def add(self, game_object: seagulls.engine._game_object.GameObject) -> None:
 ```
@@ -842,6 +925,8 @@ def add(self, game_object: seagulls.engine._game_object.GameObject) -> None:
 
     ```
 
+
+### apply()
 
 ```python
 def apply(
@@ -860,9 +945,10 @@ def apply(
     ```
 
 
-### GameSettings
+## GameSettings
+
 ```python
-class `GameSettings` :
+class GameSettings:
 ```
 
 
@@ -885,12 +971,16 @@ class `GameSettings` :
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 GameSettings():
 ```
 
 
 
+
+### get_setting()
 
 ```python
 def get_setting(self, name, default=None) -> Any:
@@ -906,9 +996,10 @@ def get_setting(self, name, default=None) -> Any:
     ```
 
 
-### Rect
+## Rect
+
 ```python
-class `Rect` :
+class Rect:
 ```
 
 Rect(left, top, width, height) -&gt; Rect
@@ -918,12 +1009,16 @@ pygame object for storing rectangular coordinates
 
 
 
+### \_\_init\_\_()
+
 ```python
 Rect(*args, **kwargs):
 ```
 
 
 
+
+### normalize()
 
 ```python
 def normalize(unknown):
@@ -934,6 +1029,8 @@ correct negative sizes
 
 
 
+### clip()
+
 ```python
 def clip(unknown):
 ```
@@ -942,6 +1039,8 @@ clip(Rect) -&gt; Rect
 crops a rectangle inside another
 
 
+
+### clipline()
 
 ```python
 def clipline(unknown):
@@ -959,6 +1058,8 @@ crops a line inside a rectangle
 
 
 
+### clamp()
+
 ```python
 def clamp(unknown):
 ```
@@ -967,6 +1068,8 @@ clamp(Rect) -&gt; Rect
 moves the rectangle inside another
 
 
+
+### clamp_ip()
 
 ```python
 def clamp_ip(unknown):
@@ -977,6 +1080,8 @@ moves the rectangle inside another, in place
 
 
 
+### copy()
+
 ```python
 def copy(unknown):
 ```
@@ -985,6 +1090,8 @@ copy() -&gt; Rect
 copy the rectangle
 
 
+
+### fit()
 
 ```python
 def fit(unknown):
@@ -995,6 +1102,8 @@ resize and move a rectangle with aspect ratio
 
 
 
+### move()
+
 ```python
 def move(unknown):
 ```
@@ -1003,6 +1112,8 @@ move(x, y) -&gt; Rect
 moves the rectangle
 
 
+
+### update()
 
 ```python
 def update(unknown):
@@ -1015,6 +1126,8 @@ sets the position and size of the rectangle
 
 
 
+### inflate()
+
 ```python
 def inflate(unknown):
 ```
@@ -1023,6 +1136,8 @@ inflate(x, y) -&gt; Rect
 grow or shrink the rectangle size
 
 
+
+### union()
 
 ```python
 def union(unknown):
@@ -1033,6 +1148,8 @@ joins two rectangles into one
 
 
 
+### unionall()
+
 ```python
 def unionall(unknown):
 ```
@@ -1041,6 +1158,8 @@ unionall(Rect_sequence) -&gt; Rect
 the union of many rectangles
 
 
+
+### move_ip()
 
 ```python
 def move_ip(unknown):
@@ -1051,6 +1170,8 @@ moves the rectangle, in place
 
 
 
+### inflate_ip()
+
 ```python
 def inflate_ip(unknown):
 ```
@@ -1059,6 +1180,8 @@ inflate_ip(x, y) -&gt; None
 grow or shrink the rectangle size, in place
 
 
+
+### union_ip()
 
 ```python
 def union_ip(unknown):
@@ -1069,6 +1192,8 @@ joins two rectangles into one, in place
 
 
 
+### unionall_ip()
+
 ```python
 def unionall_ip(unknown):
 ```
@@ -1077,6 +1202,8 @@ unionall_ip(Rect_sequence) -&gt; None
 the union of many rectangles, in place
 
 
+
+### collidepoint()
 
 ```python
 def collidepoint(unknown):
@@ -1088,6 +1215,8 @@ test if a point is inside a rectangle
 
 
 
+### colliderect()
+
 ```python
 def colliderect(unknown):
 ```
@@ -1096,6 +1225,8 @@ colliderect(Rect) -&gt; bool
 test if two rectangles overlap
 
 
+
+### collidelist()
 
 ```python
 def collidelist(unknown):
@@ -1106,6 +1237,8 @@ test if one rectangle in a list intersects
 
 
 
+### collidelistall()
+
 ```python
 def collidelistall(unknown):
 ```
@@ -1114,6 +1247,8 @@ collidelistall(list) -&gt; indices
 test if all rectangles in a list intersect
 
 
+
+### collidedict()
 
 ```python
 def collidedict(unknown):
@@ -1127,6 +1262,8 @@ test if one rectangle in a dictionary intersects
 
 
 
+### collidedictall()
+
 ```python
 def collidedictall(unknown):
 ```
@@ -1137,6 +1274,8 @@ test if all rectangles in a dictionary intersect
 
 
 
+### contains()
+
 ```python
 def contains(unknown):
 ```
@@ -1146,11 +1285,15 @@ test if one rectangle is inside another
 
 
 
+### x
+
 ```python
 x 
 ```
 
 
+
+### y
 
 ```python
 y 
@@ -1158,11 +1301,15 @@ y
 
 
 
+### w
+
 ```python
 w 
 ```
 
 
+
+### h
 
 ```python
 h 
@@ -1170,11 +1317,15 @@ h
 
 
 
+### width
+
 ```python
 width 
 ```
 
 
+
+### height
 
 ```python
 height 
@@ -1182,11 +1333,15 @@ height
 
 
 
+### top
+
 ```python
 top 
 ```
 
 
+
+### left
 
 ```python
 left 
@@ -1194,11 +1349,15 @@ left
 
 
 
+### bottom
+
 ```python
 bottom 
 ```
 
 
+
+### right
 
 ```python
 right 
@@ -1206,11 +1365,15 @@ right
 
 
 
+### centerx
+
 ```python
 centerx 
 ```
 
 
+
+### centery
 
 ```python
 centery 
@@ -1218,11 +1381,15 @@ centery
 
 
 
+### topleft
+
 ```python
 topleft 
 ```
 
 
+
+### topright
 
 ```python
 topright 
@@ -1230,11 +1397,15 @@ topright
 
 
 
+### bottomleft
+
 ```python
 bottomleft 
 ```
 
 
+
+### bottomright
 
 ```python
 bottomright 
@@ -1242,11 +1413,15 @@ bottomright
 
 
 
+### midtop
+
 ```python
 midtop 
 ```
 
 
+
+### midleft
 
 ```python
 midleft 
@@ -1254,11 +1429,15 @@ midleft
 
 
 
+### midbottom
+
 ```python
 midbottom 
 ```
 
 
+
+### midright
 
 ```python
 midright 
@@ -1266,11 +1445,15 @@ midright
 
 
 
+### size
+
 ```python
 size 
 ```
 
 
+
+### center
 
 ```python
 center 
@@ -1278,9 +1461,10 @@ center
 
 
 
-### Surface
+## Surface
+
 ```python
-class `Surface` :
+class Surface:
 ```
 
 Surface((width, height), flags=0, depth=0, masks=None) -&gt; Surface
@@ -1289,12 +1473,16 @@ pygame object for representing images
 
 
 
+### \_\_init\_\_()
+
 ```python
 Surface(*args, **kwargs):
 ```
 
 
 
+
+### get_at()
 
 ```python
 def get_at(unknown):
@@ -1305,6 +1493,8 @@ get the color value at a single pixel
 
 
 
+### set_at()
+
 ```python
 def set_at(unknown):
 ```
@@ -1313,6 +1503,8 @@ set_at((x, y), Color) -&gt; None
 set the color value for a single pixel
 
 
+
+### get_at_mapped()
 
 ```python
 def get_at_mapped(unknown):
@@ -1323,6 +1515,8 @@ get the mapped color value at a single pixel
 
 
 
+### map_rgb()
+
 ```python
 def map_rgb(unknown):
 ```
@@ -1331,6 +1525,8 @@ map_rgb(Color) -&gt; mapped_int
 convert a color into a mapped color value
 
 
+
+### unmap_rgb()
 
 ```python
 def unmap_rgb(unknown):
@@ -1341,6 +1537,8 @@ convert a mapped integer color value into a Color
 
 
 
+### get_palette()
+
 ```python
 def get_palette(unknown):
 ```
@@ -1349,6 +1547,8 @@ get_palette() -&gt; [RGB, RGB, RGB, ...]
 get the color index palette for an 8-bit Surface
 
 
+
+### get_palette_at()
 
 ```python
 def get_palette_at(unknown):
@@ -1359,6 +1559,8 @@ get the color for a single entry in a palette
 
 
 
+### set_palette()
+
 ```python
 def set_palette(unknown):
 ```
@@ -1367,6 +1569,8 @@ set_palette([RGB, RGB, RGB, ...]) -&gt; None
 set the color palette for an 8-bit Surface
 
 
+
+### set_palette_at()
 
 ```python
 def set_palette_at(unknown):
@@ -1377,6 +1581,8 @@ set the color for a single index in an 8-bit Surface palette
 
 
 
+### lock()
+
 ```python
 def lock(unknown):
 ```
@@ -1385,6 +1591,8 @@ lock() -&gt; None
 lock the Surface memory for pixel access
 
 
+
+### unlock()
 
 ```python
 def unlock(unknown):
@@ -1395,6 +1603,8 @@ unlock the Surface memory from pixel access
 
 
 
+### mustlock()
+
 ```python
 def mustlock(unknown):
 ```
@@ -1403,6 +1613,8 @@ mustlock() -&gt; bool
 test if the Surface requires locking
 
 
+
+### get_locked()
 
 ```python
 def get_locked(unknown):
@@ -1413,6 +1625,8 @@ test if the Surface is current locked
 
 
 
+### get_locks()
+
 ```python
 def get_locks(unknown):
 ```
@@ -1421,6 +1635,8 @@ get_locks() -&gt; tuple
 Gets the locks for the Surface
 
 
+
+### set_colorkey()
 
 ```python
 def set_colorkey(unknown):
@@ -1432,6 +1648,8 @@ Set the transparent colorkey
 
 
 
+### get_colorkey()
+
 ```python
 def get_colorkey(unknown):
 ```
@@ -1440,6 +1658,8 @@ get_colorkey() -&gt; RGB or None
 Get the current transparent colorkey
 
 
+
+### set_alpha()
 
 ```python
 def set_alpha(unknown):
@@ -1451,6 +1671,8 @@ set the alpha value for the full Surface image
 
 
 
+### get_alpha()
+
 ```python
 def get_alpha(unknown):
 ```
@@ -1460,6 +1682,8 @@ get the current Surface transparency value
 
 
 
+### get_blendmode()
+
 ```python
 def get_blendmode(unknown):
 ```
@@ -1467,6 +1691,8 @@ def get_blendmode(unknown):
 Return the surface&#39;s SDL 2 blend mode
 
 
+
+### copy()
 
 ```python
 def copy(unknown):
@@ -1476,6 +1702,8 @@ copy() -&gt; Surface
 create a new copy of a Surface
 
 
+
+### convert()
 
 ```python
 def convert(unknown):
@@ -1488,6 +1716,8 @@ change the pixel format of an image
 
 
 
+### convert_alpha()
+
 ```python
 def convert_alpha(unknown):
 ```
@@ -1497,6 +1727,8 @@ convert_alpha() -&gt; Surface
 change the pixel format of an image including per pixel alphas
 
 
+
+### set_clip()
 
 ```python
 def set_clip(unknown):
@@ -1508,6 +1740,8 @@ set the current clipping area of the Surface
 
 
 
+### get_clip()
+
 ```python
 def get_clip(unknown):
 ```
@@ -1516,6 +1750,8 @@ get_clip() -&gt; Rect
 get the current clipping area of the Surface
 
 
+
+### fill()
 
 ```python
 def fill(unknown):
@@ -1526,6 +1762,8 @@ fill Surface with a solid color
 
 
 
+### blit()
+
 ```python
 def blit(unknown):
 ```
@@ -1534,6 +1772,8 @@ blit(source, dest, area=None, special_flags=0) -&gt; Rect
 draw one image onto another
 
 
+
+### blits()
 
 ```python
 def blits(unknown):
@@ -1546,6 +1786,8 @@ draw many images onto another
 
 
 
+### scroll()
+
 ```python
 def scroll(unknown):
 ```
@@ -1554,6 +1796,8 @@ scroll(dx=0, dy=0) -&gt; None
 Shift the surface image in place
 
 
+
+### get_flags()
 
 ```python
 def get_flags(unknown):
@@ -1564,6 +1808,8 @@ get the additional flags used for the Surface
 
 
 
+### get_size()
+
 ```python
 def get_size(unknown):
 ```
@@ -1572,6 +1818,8 @@ get_size() -&gt; (width, height)
 get the dimensions of the Surface
 
 
+
+### get_width()
 
 ```python
 def get_width(unknown):
@@ -1582,6 +1830,8 @@ get the width of the Surface
 
 
 
+### get_height()
+
 ```python
 def get_height(unknown):
 ```
@@ -1590,6 +1840,8 @@ get_height() -&gt; height
 get the height of the Surface
 
 
+
+### get_rect()
 
 ```python
 def get_rect(unknown):
@@ -1600,6 +1852,8 @@ get the rectangular area of the Surface
 
 
 
+### get_pitch()
+
 ```python
 def get_pitch(unknown):
 ```
@@ -1608,6 +1862,8 @@ get_pitch() -&gt; int
 get the number of bytes used per Surface row
 
 
+
+### get_bitsize()
 
 ```python
 def get_bitsize(unknown):
@@ -1618,6 +1874,8 @@ get the bit depth of the Surface pixel format
 
 
 
+### get_bytesize()
+
 ```python
 def get_bytesize(unknown):
 ```
@@ -1626,6 +1884,8 @@ get_bytesize() -&gt; int
 get the bytes used per Surface pixel
 
 
+
+### get_masks()
 
 ```python
 def get_masks(unknown):
@@ -1636,6 +1896,8 @@ the bitmasks needed to convert between a color and a mapped integer
 
 
 
+### get_shifts()
+
 ```python
 def get_shifts(unknown):
 ```
@@ -1644,6 +1906,8 @@ get_shifts() -&gt; (R, G, B, A)
 the bit shifts needed to convert between a color and a mapped integer
 
 
+
+### set_masks()
 
 ```python
 def set_masks(unknown):
@@ -1654,6 +1918,8 @@ set the bitmasks needed to convert between a color and a mapped integer
 
 
 
+### set_shifts()
+
 ```python
 def set_shifts(unknown):
 ```
@@ -1662,6 +1928,8 @@ set_shifts((r,g,b,a)) -&gt; None
 sets the bit shifts needed to convert between a color and a mapped integer
 
 
+
+### get_losses()
 
 ```python
 def get_losses(unknown):
@@ -1672,6 +1940,8 @@ the significant bits used to convert between a color and a mapped integer
 
 
 
+### subsurface()
+
 ```python
 def subsurface(unknown):
 ```
@@ -1680,6 +1950,8 @@ subsurface(Rect) -&gt; Surface
 create a new surface that references its parent
 
 
+
+### get_offset()
 
 ```python
 def get_offset(unknown):
@@ -1690,6 +1962,8 @@ find the position of a child subsurface inside a parent
 
 
 
+### get_abs_offset()
+
 ```python
 def get_abs_offset(unknown):
 ```
@@ -1698,6 +1972,8 @@ get_abs_offset() -&gt; (x, y)
 find the absolute position of a child subsurface inside its top level parent
 
 
+
+### get_parent()
 
 ```python
 def get_parent(unknown):
@@ -1708,6 +1984,8 @@ find the parent of a subsurface
 
 
 
+### get_abs_parent()
+
 ```python
 def get_abs_parent(unknown):
 ```
@@ -1716,6 +1994,8 @@ get_abs_parent() -&gt; Surface
 find the top level parent of a subsurface
 
 
+
+### get_bounding_rect()
 
 ```python
 def get_bounding_rect(unknown):
@@ -1726,6 +2006,8 @@ find the smallest rect containing data
 
 
 
+### get_view()
+
 ```python
 def get_view(unknown):
 ```
@@ -1734,6 +2016,8 @@ get_view(&lt;kind&gt;=&#39;2&#39;) -&gt; BufferProxy
 return a buffer view of the Surface&#39;s pixels.
 
 
+
+### get_buffer()
 
 ```python
 def get_buffer(unknown):
@@ -1744,9 +2028,10 @@ acquires a buffer object for the pixels of the Surface.
 
 
 
-### Color
+## Color
+
 ```python
-class `Color` :
+class Color:
 ```
 
 Color(r, g, b) -&gt; Color
@@ -1756,12 +2041,16 @@ pygame object for color representations
 
 
 
+### \_\_init\_\_()
+
 ```python
 Color(*args, **kwargs):
 ```
 
 
 
+
+### normalize()
 
 ```python
 def normalize(unknown):
@@ -1772,6 +2061,8 @@ Returns the normalized RGBA values of the Color.
 
 
 
+### correct_gamma()
+
 ```python
 def correct_gamma(unknown):
 ```
@@ -1780,6 +2071,8 @@ correct_gamma (gamma) -&gt; Color
 Applies a certain gamma value to the Color.
 
 
+
+### set_length()
 
 ```python
 def set_length(unknown):
@@ -1790,6 +2083,8 @@ Set the number of elements in the Color to 1,2,3, or 4.
 
 
 
+### lerp()
+
 ```python
 def lerp(unknown):
 ```
@@ -1799,6 +2094,8 @@ returns a linear interpolation to the given Color.
 
 
 
+### premul_alpha()
+
 ```python
 def premul_alpha(unknown):
 ```
@@ -1807,6 +2104,8 @@ premul_alpha() -&gt; Color
 returns a Color where the r,g,b components have been multiplied by the alpha.
 
 
+
+### update()
 
 ```python
 def update(unknown):
@@ -1819,6 +2118,8 @@ Sets the elements of the color
 
 
 
+### r
+
 ```python
 r 
 ```
@@ -1826,6 +2127,8 @@ r
 r -&gt; int
 Gets or sets the red value of the Color.
 
+
+### g
 
 ```python
 g 
@@ -1835,6 +2138,8 @@ g -&gt; int
 Gets or sets the green value of the Color.
 
 
+### b
+
 ```python
 b 
 ```
@@ -1842,6 +2147,8 @@ b
 b -&gt; int
 Gets or sets the blue value of the Color.
 
+
+### a
 
 ```python
 a 
@@ -1851,6 +2158,8 @@ a -&gt; int
 Gets or sets the alpha value of the Color.
 
 
+### hsva
+
 ```python
 hsva 
 ```
@@ -1858,6 +2167,8 @@ hsva
 hsva -&gt; tuple
 Gets or sets the HSVA representation of the Color.
 
+
+### hsla
 
 ```python
 hsla 
@@ -1867,6 +2178,8 @@ hsla -&gt; tuple
 Gets or sets the HSLA representation of the Color.
 
 
+### i1i2i3
+
 ```python
 i1i2i3 
 ```
@@ -1874,6 +2187,8 @@ i1i2i3
 i1i2i3 -&gt; tuple
 Gets or sets the I1I2I3 representation of the Color.
 
+
+### cmy
 
 ```python
 cmy 
@@ -1883,9 +2198,10 @@ cmy -&gt; tuple
 Gets or sets the CMY representation of the Color.
 
 
-### PixelArray
+## PixelArray
+
 ```python
-class `PixelArray` :
+class PixelArray:
 ```
 
 PixelArray(Surface) -&gt; PixelArray
@@ -1893,12 +2209,16 @@ pygame object for direct pixel access of surfaces
 
 
 
+### \_\_init\_\_()
+
 ```python
 PixelArray():
 ```
 
 
 
+
+### compare()
 
 ```python
 def compare(unknown):
@@ -1909,6 +2229,8 @@ Compares the PixelArray with another one.
 
 
 
+### extract()
+
 ```python
 def extract(unknown):
 ```
@@ -1917,6 +2239,8 @@ extract(color, distance=0, weights=(0.299, 0.587, 0.114)) -&gt; PixelArray
 Extracts the passed color from the PixelArray.
 
 
+
+### make_surface()
 
 ```python
 def make_surface(unknown):
@@ -1927,6 +2251,8 @@ Creates a new Surface from the current PixelArray.
 
 
 
+### close()
+
 ```python
 def close(unknown):
 ```
@@ -1935,6 +2261,8 @@ transpose() -&gt; PixelArray
 Closes the PixelArray, and releases Surface lock.
 
 
+
+### replace()
 
 ```python
 def replace(unknown):
@@ -1945,6 +2273,8 @@ Replaces the passed color in the PixelArray with another one.
 
 
 
+### transpose()
+
 ```python
 def transpose(unknown):
 ```
@@ -1954,6 +2284,8 @@ Exchanges the x and y axis.
 
 
 
+### surface
+
 ```python
 surface 
 ```
@@ -1961,6 +2293,8 @@ surface
 surface -&gt; Surface
 Gets the Surface the PixelArray uses.
 
+
+### itemsize
 
 ```python
 itemsize 
@@ -1970,6 +2304,8 @@ itemsize -&gt; int
 Returns the byte size of a pixel array item
 
 
+### shape
+
 ```python
 shape 
 ```
@@ -1977,6 +2313,8 @@ shape
 shape -&gt; tuple of int&#39;s
 Returns the array size.
 
+
+### strides
 
 ```python
 strides 
@@ -1986,6 +2324,8 @@ strides -&gt; tuple of int&#39;s
 Returns byte offsets for each array dimension.
 
 
+### ndim
+
 ```python
 ndim 
 ```
@@ -1994,9 +2334,10 @@ ndim -&gt; int
 Returns the number of dimensions.
 
 
-### Vector2
+## Vector2
+
 ```python
-class `Vector2` :
+class Vector2:
 ```
 
 Vector2() -&gt; Vector2
@@ -2009,12 +2350,16 @@ a 2-Dimensional Vector
 
 
 
+### \_\_init\_\_()
+
 ```python
 Vector2(*args, **kwargs):
 ```
 
 
 
+
+### length()
 
 ```python
 def length(unknown):
@@ -2025,6 +2370,8 @@ returns the Euclidean length of the vector.
 
 
 
+### length_squared()
+
 ```python
 def length_squared(unknown):
 ```
@@ -2033,6 +2380,8 @@ length_squared() -&gt; float
 returns the squared Euclidean length of the vector.
 
 
+
+### magnitude()
 
 ```python
 def magnitude(unknown):
@@ -2043,6 +2392,8 @@ returns the Euclidean magnitude of the vector.
 
 
 
+### magnitude_squared()
+
 ```python
 def magnitude_squared(unknown):
 ```
@@ -2051,6 +2402,8 @@ magnitude_squared() -&gt; float
 returns the squared magnitude of the vector.
 
 
+
+### rotate()
 
 ```python
 def rotate(unknown):
@@ -2061,6 +2414,8 @@ rotates a vector by a given angle in degrees.
 
 
 
+### rotate_ip()
+
 ```python
 def rotate_ip(unknown):
 ```
@@ -2069,6 +2424,8 @@ rotate_ip(angle) -&gt; None
 rotates the vector by a given angle in degrees in place.
 
 
+
+### rotate_rad()
 
 ```python
 def rotate_rad(unknown):
@@ -2079,6 +2436,8 @@ rotates a vector by a given angle in radians.
 
 
 
+### rotate_ip_rad()
+
 ```python
 def rotate_ip_rad(unknown):
 ```
@@ -2087,6 +2446,8 @@ rotate_ip_rad(angle) -&gt; None
 rotates the vector by a given angle in radians in place.
 
 
+
+### slerp()
 
 ```python
 def slerp(unknown):
@@ -2097,6 +2458,8 @@ returns a spherical interpolation to the given vector.
 
 
 
+### lerp()
+
 ```python
 def lerp(unknown):
 ```
@@ -2105,6 +2468,8 @@ lerp(Vector2, float) -&gt; Vector2
 returns a linear interpolation to the given vector.
 
 
+
+### normalize()
 
 ```python
 def normalize(unknown):
@@ -2115,6 +2480,8 @@ returns a vector with the same direction but length 1.
 
 
 
+### normalize_ip()
+
 ```python
 def normalize_ip(unknown):
 ```
@@ -2123,6 +2490,8 @@ normalize_ip() -&gt; None
 normalizes the vector in place so that its length is 1.
 
 
+
+### is_normalized()
 
 ```python
 def is_normalized(unknown):
@@ -2133,6 +2502,8 @@ tests if the vector is normalized i.e. has length == 1.
 
 
 
+### cross()
+
 ```python
 def cross(unknown):
 ```
@@ -2141,6 +2512,8 @@ cross(Vector2) -&gt; Vector2
 calculates the cross- or vector-product
 
 
+
+### dot()
 
 ```python
 def dot(unknown):
@@ -2151,6 +2524,8 @@ calculates the dot- or scalar-product with the other vector
 
 
 
+### angle_to()
+
 ```python
 def angle_to(unknown):
 ```
@@ -2159,6 +2534,8 @@ angle_to(Vector2) -&gt; float
 calculates the angle to a given vector in degrees.
 
 
+
+### update()
 
 ```python
 def update(unknown):
@@ -2174,6 +2551,8 @@ Sets the coordinates of the vector.
 
 
 
+### scale_to_length()
+
 ```python
 def scale_to_length(unknown):
 ```
@@ -2182,6 +2561,8 @@ scale_to_length(float) -&gt; None
 scales the vector to a given length.
 
 
+
+### reflect()
 
 ```python
 def reflect(unknown):
@@ -2192,6 +2573,8 @@ returns a vector reflected of a given normal.
 
 
 
+### reflect_ip()
+
 ```python
 def reflect_ip(unknown):
 ```
@@ -2200,6 +2583,8 @@ reflect_ip(Vector2) -&gt; None
 reflect the vector of a given normal in place.
 
 
+
+### distance_to()
 
 ```python
 def distance_to(unknown):
@@ -2210,6 +2595,8 @@ calculates the Euclidean distance to a given vector.
 
 
 
+### distance_squared_to()
+
 ```python
 def distance_squared_to(unknown):
 ```
@@ -2218,6 +2605,8 @@ distance_squared_to(Vector2) -&gt; float
 calculates the squared Euclidean distance to a given vector.
 
 
+
+### elementwise()
 
 ```python
 def elementwise(unknown):
@@ -2228,6 +2617,8 @@ The next operation will be performed elementwise.
 
 
 
+### as_polar()
+
 ```python
 def as_polar(unknown):
 ```
@@ -2236,6 +2627,8 @@ as_polar() -&gt; (r, phi)
 returns a tuple with radial distance and azimuthal angle.
 
 
+
+### from_polar()
 
 ```python
 def from_polar(unknown):
@@ -2246,6 +2639,8 @@ Sets x and y from a polar coordinates tuple.
 
 
 
+### project()
+
 ```python
 def project(unknown):
 ```
@@ -2255,6 +2650,8 @@ projects a vector onto another.
 
 
 
+### epsilon
+
 ```python
 epsilon 
 ```
@@ -2262,11 +2659,15 @@ epsilon
 small value used in comparisons
 
 
+### x
+
 ```python
 x 
 ```
 
 
+
+### y
 
 ```python
 y 
@@ -2274,9 +2675,10 @@ y
 
 
 
-### Vector3
+## Vector3
+
 ```python
-class `Vector3` :
+class Vector3:
 ```
 
 Vector3() -&gt; Vector3
@@ -2289,12 +2691,16 @@ a 3-Dimensional Vector
 
 
 
+### \_\_init\_\_()
+
 ```python
 Vector3(*args, **kwargs):
 ```
 
 
 
+
+### length()
 
 ```python
 def length(unknown):
@@ -2305,6 +2711,8 @@ returns the Euclidean length of the vector.
 
 
 
+### length_squared()
+
 ```python
 def length_squared(unknown):
 ```
@@ -2313,6 +2721,8 @@ length_squared() -&gt; float
 returns the squared Euclidean length of the vector.
 
 
+
+### magnitude()
 
 ```python
 def magnitude(unknown):
@@ -2323,6 +2733,8 @@ returns the Euclidean magnitude of the vector.
 
 
 
+### magnitude_squared()
+
 ```python
 def magnitude_squared(unknown):
 ```
@@ -2331,6 +2743,8 @@ magnitude_squared() -&gt; float
 returns the squared Euclidean magnitude of the vector.
 
 
+
+### rotate()
 
 ```python
 def rotate(unknown):
@@ -2341,6 +2755,8 @@ rotates a vector by a given angle in degrees.
 
 
 
+### rotate_ip()
+
 ```python
 def rotate_ip(unknown):
 ```
@@ -2349,6 +2765,8 @@ rotate_ip(angle, Vector3) -&gt; None
 rotates the vector by a given angle in degrees in place.
 
 
+
+### rotate_rad()
 
 ```python
 def rotate_rad(unknown):
@@ -2359,6 +2777,8 @@ rotates a vector by a given angle in radians.
 
 
 
+### rotate_ip_rad()
+
 ```python
 def rotate_ip_rad(unknown):
 ```
@@ -2367,6 +2787,8 @@ rotate_ip_rad(angle, Vector3) -&gt; None
 rotates the vector by a given angle in radians in place.
 
 
+
+### rotate_x()
 
 ```python
 def rotate_x(unknown):
@@ -2377,6 +2799,8 @@ rotates a vector around the x-axis by the angle in degrees.
 
 
 
+### rotate_x_ip()
+
 ```python
 def rotate_x_ip(unknown):
 ```
@@ -2385,6 +2809,8 @@ rotate_x_ip(angle) -&gt; None
 rotates the vector around the x-axis by the angle in degrees in place.
 
 
+
+### rotate_x_rad()
 
 ```python
 def rotate_x_rad(unknown):
@@ -2395,6 +2821,8 @@ rotates a vector around the x-axis by the angle in radians.
 
 
 
+### rotate_x_ip_rad()
+
 ```python
 def rotate_x_ip_rad(unknown):
 ```
@@ -2403,6 +2831,8 @@ rotate_x_ip_rad(angle) -&gt; None
 rotates the vector around the x-axis by the angle in radians in place.
 
 
+
+### rotate_y()
 
 ```python
 def rotate_y(unknown):
@@ -2413,6 +2843,8 @@ rotates a vector around the y-axis by the angle in degrees.
 
 
 
+### rotate_y_ip()
+
 ```python
 def rotate_y_ip(unknown):
 ```
@@ -2421,6 +2853,8 @@ rotate_y_ip(angle) -&gt; None
 rotates the vector around the y-axis by the angle in degrees in place.
 
 
+
+### rotate_y_rad()
 
 ```python
 def rotate_y_rad(unknown):
@@ -2431,6 +2865,8 @@ rotates a vector around the y-axis by the angle in radians.
 
 
 
+### rotate_y_ip_rad()
+
 ```python
 def rotate_y_ip_rad(unknown):
 ```
@@ -2439,6 +2875,8 @@ rotate_y_ip_rad(angle) -&gt; None
 rotates the vector around the y-axis by the angle in radians in place.
 
 
+
+### rotate_z()
 
 ```python
 def rotate_z(unknown):
@@ -2449,6 +2887,8 @@ rotates a vector around the z-axis by the angle in degrees.
 
 
 
+### rotate_z_ip()
+
 ```python
 def rotate_z_ip(unknown):
 ```
@@ -2457,6 +2897,8 @@ rotate_z_ip(angle) -&gt; None
 rotates the vector around the z-axis by the angle in degrees in place.
 
 
+
+### rotate_z_rad()
 
 ```python
 def rotate_z_rad(unknown):
@@ -2467,6 +2909,8 @@ rotates a vector around the z-axis by the angle in radians.
 
 
 
+### rotate_z_ip_rad()
+
 ```python
 def rotate_z_ip_rad(unknown):
 ```
@@ -2475,6 +2919,8 @@ rotate_z_ip_rad(angle) -&gt; None
 rotates the vector around the z-axis by the angle in radians in place.
 
 
+
+### slerp()
 
 ```python
 def slerp(unknown):
@@ -2485,6 +2931,8 @@ returns a spherical interpolation to the given vector.
 
 
 
+### lerp()
+
 ```python
 def lerp(unknown):
 ```
@@ -2493,6 +2941,8 @@ lerp(Vector3, float) -&gt; Vector3
 returns a linear interpolation to the given vector.
 
 
+
+### normalize()
 
 ```python
 def normalize(unknown):
@@ -2503,6 +2953,8 @@ returns a vector with the same direction but length 1.
 
 
 
+### normalize_ip()
+
 ```python
 def normalize_ip(unknown):
 ```
@@ -2511,6 +2963,8 @@ normalize_ip() -&gt; None
 normalizes the vector in place so that its length is 1.
 
 
+
+### is_normalized()
 
 ```python
 def is_normalized(unknown):
@@ -2521,6 +2975,8 @@ tests if the vector is normalized i.e. has length == 1.
 
 
 
+### cross()
+
 ```python
 def cross(unknown):
 ```
@@ -2529,6 +2985,8 @@ cross(Vector3) -&gt; Vector3
 calculates the cross- or vector-product
 
 
+
+### dot()
 
 ```python
 def dot(unknown):
@@ -2539,6 +2997,8 @@ calculates the dot- or scalar-product with the other vector
 
 
 
+### angle_to()
+
 ```python
 def angle_to(unknown):
 ```
@@ -2547,6 +3007,8 @@ angle_to(Vector3) -&gt; float
 calculates the angle to a given vector in degrees.
 
 
+
+### update()
 
 ```python
 def update(unknown):
@@ -2562,6 +3024,8 @@ Sets the coordinates of the vector.
 
 
 
+### scale_to_length()
+
 ```python
 def scale_to_length(unknown):
 ```
@@ -2570,6 +3034,8 @@ scale_to_length(float) -&gt; None
 scales the vector to a given length.
 
 
+
+### reflect()
 
 ```python
 def reflect(unknown):
@@ -2580,6 +3046,8 @@ returns a vector reflected of a given normal.
 
 
 
+### reflect_ip()
+
 ```python
 def reflect_ip(unknown):
 ```
@@ -2588,6 +3056,8 @@ reflect_ip(Vector3) -&gt; None
 reflect the vector of a given normal in place.
 
 
+
+### distance_to()
 
 ```python
 def distance_to(unknown):
@@ -2598,6 +3068,8 @@ calculates the Euclidean distance to a given vector.
 
 
 
+### distance_squared_to()
+
 ```python
 def distance_squared_to(unknown):
 ```
@@ -2606,6 +3078,8 @@ distance_squared_to(Vector3) -&gt; float
 calculates the squared Euclidean distance to a given vector.
 
 
+
+### elementwise()
 
 ```python
 def elementwise(unknown):
@@ -2616,6 +3090,8 @@ The next operation will be performed elementwise.
 
 
 
+### as_spherical()
+
 ```python
 def as_spherical(unknown):
 ```
@@ -2624,6 +3100,8 @@ as_spherical() -&gt; (r, theta, phi)
 returns a tuple with radial distance, inclination and azimuthal angle.
 
 
+
+### from_spherical()
 
 ```python
 def from_spherical(unknown):
@@ -2634,6 +3112,8 @@ Sets x, y and z from a spherical coordinates 3-tuple.
 
 
 
+### project()
+
 ```python
 def project(unknown):
 ```
@@ -2643,6 +3123,8 @@ projects a vector onto another.
 
 
 
+### epsilon
+
 ```python
 epsilon 
 ```
@@ -2650,17 +3132,23 @@ epsilon
 small value used in comparisons
 
 
+### x
+
 ```python
 x 
 ```
 
 
 
+### y
+
 ```python
 y 
 ```
 
 
+
+### z
 
 ```python
 z 

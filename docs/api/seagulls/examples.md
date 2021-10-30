@@ -1,4 +1,10 @@
-## [seagulls](../seagulls).examples
+---
+title: "API Docs: seagulls.examples"
+---
+
+
+# [seagulls](../seagulls).examples
+
 
 ??? note "View Source"
     ```python
@@ -23,9 +29,10 @@
 
     ```
 
-### MainMenuScene
+## MainMenuScene
+
 ```python
-class `MainMenuScene` (seagulls.engine._game_scene.IGameScene):
+class MainMenuScene(seagulls.engine._game_scene.IGameScene):
 ```
 
 This class is for X and Y.
@@ -128,6 +135,8 @@ This class is for X and Y.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 MainMenuScene(
     surface_renderer: seagulls.engine._surface_renderer.SurfaceRenderer,
@@ -189,6 +198,8 @@ MainMenuScene(
     ```
 
 
+### start()
+
 ```python
 def start(self) -> None:
 ```
@@ -203,6 +214,8 @@ def start(self) -> None:
     ```
 
 
+### should_quit()
+
 ```python
 def should_quit(self) -> bool:
 ```
@@ -215,6 +228,8 @@ def should_quit(self) -> bool:
 
     ```
 
+
+### tick()
 
 ```python
 def tick(self) -> None:
@@ -243,9 +258,10 @@ def tick(self) -> None:
     ```
 
 
-### AsyncGameSession
+## AsyncGameSession
+
 ```python
-class `AsyncGameSession` (seagulls.engine._game_session.IGameSession):
+class AsyncGameSession(seagulls.engine._game_session.IGameSession):
 ```
 
 Helper class that provides a standard way to create an ABC using
@@ -292,6 +308,8 @@ inheritance.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 AsyncGameSession(
     scene_manager: seagulls.engine._game_scene_manager.IProvideGameScenes
@@ -310,6 +328,8 @@ AsyncGameSession(
     ```
 
 
+### start()
+
 ```python
 def start(self) -> None:
 ```
@@ -323,6 +343,8 @@ def start(self) -> None:
 
     ```
 
+
+### wait_for_completion()
 
 ```python
 def wait_for_completion(self) -> None:
@@ -340,6 +362,8 @@ def wait_for_completion(self) -> None:
     ```
 
 
+### stop()
+
 ```python
 def stop(self) -> None:
 ```
@@ -355,9 +379,10 @@ def stop(self) -> None:
     ```
 
 
-### BlockingGameSession
+## BlockingGameSession
+
 ```python
-class `BlockingGameSession` (seagulls.engine._game_session.IGameSession):
+class BlockingGameSession(seagulls.engine._game_session.IGameSession):
 ```
 
 Helper class that provides a standard way to create an ABC using
@@ -390,6 +415,8 @@ inheritance.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 BlockingGameSession(
     scene_manager: seagulls.engine._game_scene_manager.IProvideGameScenes
@@ -404,6 +431,8 @@ BlockingGameSession(
 
     ```
 
+
+### start()
 
 ```python
 def start(self) -> None:
@@ -425,6 +454,8 @@ def start(self) -> None:
     ```
 
 
+### wait_for_completion()
+
 ```python
 def wait_for_completion(self) -> None:
 ```
@@ -437,6 +468,8 @@ def wait_for_completion(self) -> None:
 
     ```
 
+
+### stop()
 
 ```python
 def stop(self) -> None:
@@ -451,9 +484,10 @@ def stop(self) -> None:
     ```
 
 
-### ExampleSceneManager
+## ExampleSceneManager
+
 ```python
-class `ExampleSceneManager` (seagulls.engine._game_scene_manager.IProvideGameScenes):
+class ExampleSceneManager(seagulls.engine._game_scene_manager.IProvideGameScenes):
 ```
 
 Helper class that provides a standard way to create an ABC using
@@ -473,6 +507,8 @@ inheritance.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 ExampleSceneManager(scene: seagulls.examples._main_menu_scene.MainMenuScene):
 ```
@@ -485,6 +521,8 @@ ExampleSceneManager(scene: seagulls.examples._main_menu_scene.MainMenuScene):
 
     ```
 
+
+### get_scene()
 
 ```python
 def get_scene(self) -> seagulls.engine._game_scene.IGameScene:
@@ -499,9 +537,10 @@ def get_scene(self) -> seagulls.engine._game_scene.IGameScene:
     ```
 
 
-### SimpleStarsBackground
+## SimpleStarsBackground
+
 ```python
-class `SimpleStarsBackground` (seagulls.engine._game_object.GameObject):
+class SimpleStarsBackground(seagulls.engine._game_object.GameObject):
 ```
 
 Interface for anything representing an object in the scene.
@@ -529,6 +568,8 @@ Interface for anything representing an object in the scene.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 SimpleStarsBackground(asset_manager: seagulls.assets._manager.AssetManager):
 ```
@@ -542,6 +583,8 @@ SimpleStarsBackground(asset_manager: seagulls.assets._manager.AssetManager):
     ```
 
 
+### tick()
+
 ```python
 def tick(self) -> None:
 ```
@@ -554,6 +597,8 @@ def tick(self) -> None:
 
     ```
 
+
+### render()
 
 ```python
 def render(self, surface: pygame.Surface) -> None:
@@ -569,9 +614,10 @@ def render(self, surface: pygame.Surface) -> None:
     ```
 
 
-### SimpleRpgBackground
+## SimpleRpgBackground
+
 ```python
-class `SimpleRpgBackground` (seagulls.engine._game_object.GameObject):
+class SimpleRpgBackground(seagulls.engine._game_object.GameObject):
 ```
 
 Interface for anything representing an object in the scene.
@@ -673,6 +719,8 @@ Interface for anything representing an object in the scene.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 SimpleRpgBackground(asset_manager: seagulls.assets._manager.AssetManager):
 ```
@@ -687,6 +735,8 @@ SimpleRpgBackground(asset_manager: seagulls.assets._manager.AssetManager):
     ```
 
 
+### tick()
+
 ```python
 def tick(self) -> None:
 ```
@@ -699,6 +749,8 @@ def tick(self) -> None:
 
     ```
 
+
+### render()
 
 ```python
 def render(self, surface: pygame.Surface) -> None:
@@ -714,9 +766,10 @@ def render(self, surface: pygame.Surface) -> None:
     ```
 
 
-### WindowScene
+## WindowScene
+
 ```python
-class `WindowScene` (seagulls.engine._game_scene.IGameScene):
+class WindowScene(seagulls.engine._game_scene.IGameScene):
 ```
 
 This class is for X and Y.
@@ -751,6 +804,8 @@ This class is for X and Y.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 WindowScene(
     active_scene: seagulls.engine._game_scene.IGameScene,
@@ -769,6 +824,8 @@ WindowScene(
     ```
 
 
+### start()
+
 ```python
 def start(self) -> None:
 ```
@@ -782,6 +839,8 @@ def start(self) -> None:
     ```
 
 
+### should_quit()
+
 ```python
 def should_quit(self) -> bool:
 ```
@@ -794,6 +853,8 @@ def should_quit(self) -> bool:
 
     ```
 
+
+### tick()
 
 ```python
 def tick(self) -> None:
@@ -811,9 +872,10 @@ def tick(self) -> None:
     ```
 
 
-### GameState
+## GameState
+
 ```python
-class `GameState` :
+class GameState:
 ```
 
 
@@ -826,6 +888,8 @@ class `GameState` :
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 GameState():
 ```
@@ -833,11 +897,15 @@ GameState():
 
 
 
+### active_scene
+
 ```python
 active_scene : Optional[seagulls.engine._game_scene.IGameScene] = None
 ```
 
 
+
+### game_state_changed
 
 ```python
 game_state_changed : bool = False

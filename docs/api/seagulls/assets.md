@@ -1,4 +1,10 @@
-## [seagulls](../seagulls).assets
+---
+title: "API Docs: seagulls.assets"
+---
+
+
+# [seagulls](../seagulls).assets
+
 
 ??? note "View Source"
     ```python
@@ -8,9 +14,10 @@
 
     ```
 
-### AssetManager
+## AssetManager
+
 ```python
-class `AssetManager` :
+class AssetManager:
 ```
 
 Provides basic functionality for loading assets from disk.
@@ -40,6 +47,8 @@ Provides basic functionality for loading assets from disk.
     ```
 
 
+### \_\_init\_\_()
+
 ```python
 AssetManager(assets_path: pathlib.Path):
 ```
@@ -53,6 +62,8 @@ AssetManager(assets_path: pathlib.Path):
     ```
 
 
+### load_sprite()
+
 ```python
 def load_sprite(self, name: str) -> pygame.Surface:
 ```
@@ -65,6 +76,8 @@ def load_sprite(self, name: str) -> pygame.Surface:
 
     ```
 
+
+### load_png()
 
 ```python
 def load_png(self, name: str) -> pygame.Surface:

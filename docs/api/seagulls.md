@@ -1,4 +1,10 @@
-## seagulls
+---
+title: "API Docs: seagulls"
+---
+
+
+# seagulls
+
 The Seagulls Game Engine.
 
 ??? note "View Source"

@@ -1,4 +1,10 @@
-## [seagulls](../../seagulls).[foo](../foo).test
+---
+title: "API Docs: seagulls.foo.test"
+---
+
+
+# [seagulls](../../seagulls).[foo](../foo).test
+
 This is the comment for the module.
 
 ??? note "View Source"
@@ -60,9 +66,13 @@ This is the comment for the module.
                 """
                 pass
 
+            def undocumented_method(self, foo: int, bar: int) -> int:
+                return 5
+
     ```
 
-### some_variable
+## some_variable
+
 ```python
 some_variable  = 10
 ```
@@ -70,7 +80,8 @@ some_variable  = 10
 Just commenting about `some_variable`.
 
 
-### some_function
+## some_function()
+
 ```python
 def some_function(arg1: str, arg2: int) -> Optional[str]:
 ```
@@ -82,13 +93,13 @@ Some more text. Some more text. Some more text. Some more text. Some more text. 
 Some more text. Some more text. Some more text. Some more text. Some more text. Some more text.
 
 
-###### Args
+### Args
  - **arg1:**  docs for `some_function()` arg arg1.
  - **arg2:**  docs for `some_function()` arg arg2.
 
 
 
-###### Returns
+### Returns
 &gt; docs for `some_function()` return value
 
 
@@ -114,9 +125,10 @@ Some more text. Some more text. Some more text. Some more text. Some more text. 
     ```
 
 
-### SomeClass
+## SomeClass
+
 ```python
-class `SomeClass` (builtins.str):
+class SomeClass(builtins.str):
 ```
 
 Documentation for `SomeClass`.
@@ -150,8 +162,13 @@ Documentation for `SomeClass`.
                 """
                 pass
 
+            def undocumented_method(self, foo: int, bar: int) -> int:
+                return 5
+
     ```
 
+
+### \_\_init\_\_()
 
 ```python
 SomeClass(arg1: str):
@@ -160,7 +177,7 @@ SomeClass(arg1: str):
 This is the documentation for `SomeClass.__init__()`.
 
 
-###### Args
+#### Args
  - **arg1:**  The docs for arg1 arg in `SomeClass.__init__()`.
 
 
@@ -180,12 +197,16 @@ This is the documentation for `SomeClass.__init__()`.
     ```
 
 
+### some_property
+
 ```python
 some_property : str
 ```
 
 Documentation for `SomeClass.some_property`.
 
+
+### some_method()
 
 ```python
 @lru_cache()
@@ -206,7 +227,22 @@ This is the documentation for `SomeClass.some_method()`.
     ```
 
 
-#### Inherited Members
+### undocumented_method()
+
+```python
+def undocumented_method(self, foo: int, bar: int) -> int:
+```
+
+
+??? note "View Source"
+    ```python
+            def undocumented_method(self, foo: int, bar: int) -> int:
+                return 5
+
+    ```
+
+
+### Inherited Members
 (&#39;builtins&#39;, &#39;str&#39;)
 - [encode]((&#39;builtins&#39;, &#39;str.encode&#39;))
 - [replace]((&#39;builtins&#39;, &#39;str.replace&#39;))

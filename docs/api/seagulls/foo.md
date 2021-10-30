@@ -1,3 +1,9 @@
-## [seagulls](../seagulls).foo
+---
+title: "API Docs: seagulls.foo"
+---
+
+
+# [seagulls](../seagulls).foo
+
 
 

@@ -1,4 +1,10 @@
-## [seagulls](../seagulls).cli
+---
+title: "API Docs: seagulls.cli"
+---
+
+
+# [seagulls](../seagulls).cli
+
 
 ??? note "View Source"
     ```python
@@ -12,7 +18,8 @@
 
     ```
 
-### main
+## main()
+
 ```python
 def main():
 ```
@@ -71,7 +78,8 @@ def main():
     ```
 
 
-### cli_next
+## cli_next()
+
 ```python
 def cli_next():
 ```

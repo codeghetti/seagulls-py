@@ -54,3 +54,6 @@ class SomeClass(str):
         This is the documentation for `SomeClass.some_method()`.
         """
         pass
+
+    def undocumented_method(self, foo: int, bar: int) -> int:
+        return 5

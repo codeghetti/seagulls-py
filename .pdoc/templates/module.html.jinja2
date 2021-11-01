@@ -57,9 +57,28 @@
 ```
 {% enddefaultmacro %}
 {% defaultmacro submodule(mod, nesting_lvl) %}
-```python
-{{ mod.taken_from }}
-```
+{% set nesting_header = "#" * nesting_lvl %}
+## Sumbodule: {{ nesting_header }} {{ mod.name }}
+
+**taken from:** `{{ mod.taken_from[0] }}`
+
+{{ docstring(mod, 0) }}
+
+{% for m in mod.flattened_own_members if is_public(m) | trim %}
+{{ member(m, nesting_lvl) }}
+    {% if m.type == "class" %}
+        {% for m in m.own_members if m.type != "class" and is_public(m) | trim %}
+{{ member(m, 1 + nesting_lvl) }}
+        {% endfor %}
+        {% set inherited_members = inherited(m) | trim %}
+        {% if inherited_members %}
+###{{ "#" * nesting_lvl }} Inherited Members
+
+{{ inherited_members | safe }}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
 {% enddefaultmacro %}
 {% defaultmacro class(cls, nesting_lvl) %}
 {% set nesting_header = "#" * nesting_lvl %}
@@ -131,15 +150,20 @@ class {{ cls.qualname }}{{- bases(cls) }}:
 {% defaultmacro inherited(cls) %}
     {% for base, members in cls.inherited_members.items() %}
         {% set m = None %}{# workaround for https://github.com/pallets/jinja/issues/1427 #}
-        {% set member_html %}
+        {% set member_output %}
             {% for m in members if is_public(m) | trim %}
-- [{{ m.name.replace("__init__",base[1]) | safe }}]({{- m.taken_from -}})
+                {% if m.type == "function" %}
+- `#!python {{ m.name.replace("__init__",base[1]) | safe }}{{ m.signature_without_self | safe }}`
+                {% else %}
+- `#!python {{ m.name }}{{ annotation(m) }}{{ default_value(m) }}`
+                {% endif %}
             {% endfor %}
         {% endset %}
         {# we may not have any public members, in which case we don't want to print anything. #}
-        {% if member_html %}
-{{ base }}
-{{ member_html }}
+        {% if member_output %}
+**taken from:** {{ base[0] }}:{{ base[1] }}
+
+{{ member_output }}
         {% endif %}
     {% endfor %}
 {% enddefaultmacro %}
@@ -193,6 +217,7 @@ class {{ cls.qualname }}{{- bases(cls) }}:
                     {% set inherited_members = inherited(m) | trim %}
                     {% if inherited_members %}
 ### Inherited Members
+
 {{ inherited_members | safe }}
                     {% endif %}
                 {% endif %}

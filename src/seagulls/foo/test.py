@@ -4,6 +4,8 @@ This is the comment for the module.
 from functools import lru_cache
 from typing import Optional
 
+from seagulls.foo.test_base import AnotherBaseClass
+
 some_variable = 10
 """
 Just commenting about `some_variable`.
@@ -28,7 +30,7 @@ def some_function(arg1: str, arg2: int) -> Optional[str]:
     return "my value"
 
 
-class SomeClass(str):
+class SomeClass(AnotherBaseClass):
     """
     Documentation for `SomeClass`.
     """

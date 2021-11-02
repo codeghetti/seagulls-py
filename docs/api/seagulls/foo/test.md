@@ -170,7 +170,7 @@ Documentation for `SomeClass`.
     ```
 
 
-### \_\_init\_\_()
+### SomeClass()
 
 ```python
 SomeClass(arg1: str):

@@ -135,7 +135,7 @@ This class is for X and Y.
     ```
 
 
-### \_\_init\_\_()
+### MainMenuScene()
 
 ```python
 MainMenuScene(
@@ -308,7 +308,7 @@ inheritance.
     ```
 
 
-### \_\_init\_\_()
+### AsyncGameSession()
 
 ```python
 AsyncGameSession(
@@ -415,7 +415,7 @@ inheritance.
     ```
 
 
-### \_\_init\_\_()
+### BlockingGameSession()
 
 ```python
 BlockingGameSession(
@@ -507,7 +507,7 @@ inheritance.
     ```
 
 
-### \_\_init\_\_()
+### ExampleSceneManager()
 
 ```python
 ExampleSceneManager(scene: seagulls.examples._main_menu_scene.MainMenuScene):
@@ -568,7 +568,7 @@ Interface for anything representing an object in the scene.
     ```
 
 
-### \_\_init\_\_()
+### SimpleStarsBackground()
 
 ```python
 SimpleStarsBackground(asset_manager: seagulls.assets._manager.AssetManager):
@@ -719,7 +719,7 @@ Interface for anything representing an object in the scene.
     ```
 
 
-### \_\_init\_\_()
+### SimpleRpgBackground()
 
 ```python
 SimpleRpgBackground(asset_manager: seagulls.assets._manager.AssetManager):
@@ -804,7 +804,7 @@ This class is for X and Y.
     ```
 
 
-### \_\_init\_\_()
+### WindowScene()
 
 ```python
 WindowScene(
@@ -888,7 +888,7 @@ class GameState:
     ```
 
 
-### \_\_init\_\_()
+### GameState()
 
 ```python
 GameState():

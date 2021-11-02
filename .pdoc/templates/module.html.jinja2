@@ -29,7 +29,7 @@
 {% defaultmacro function(fn, nesting_lvl) -%}
     {% set nesting_header = "#" * nesting_lvl %}
     {% if fn.name == "__init__" %}
-##{{ nesting_header }} \_\_init\_\_()
+##{{ nesting_header }} {{ ".".join(fn.qualname.split(".")[:-1]) }}()
 
 ```python
 {{ decorators(fn) -}}

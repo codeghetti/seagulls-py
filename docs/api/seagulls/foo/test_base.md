@@ -102,7 +102,7 @@ Documentation for `SomeBaseClass`.
     ```
 
 
-### \_\_init\_\_()
+### SomeBaseClass()
 
 ```python
 SomeBaseClass(arg1: str):

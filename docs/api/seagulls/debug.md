@@ -73,7 +73,7 @@ UI Component to display FPS and other debug information during gameplay.
     ```
 
 
-### \_\_init\_\_()
+### DebugHud()
 
 ```python
 DebugHud(game_clock: seagulls.engine._game_clock.GameClock):

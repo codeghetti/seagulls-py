@@ -50,7 +50,7 @@ Blah Blah, SomeFooBar.
     ```
 
 
-### \_\_init\_\_()
+### bar.SomeFooBar()
 
 ```python
 bar.SomeFooBar():

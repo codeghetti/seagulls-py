@@ -47,7 +47,7 @@ Provides basic functionality for loading assets from disk.
     ```
 
 
-### \_\_init\_\_()
+### AssetManager()
 
 ```python
 AssetManager(assets_path: pathlib.Path):

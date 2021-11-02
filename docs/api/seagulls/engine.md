@@ -100,7 +100,7 @@ CollidableObject(layer: int, mask: int)
     ```
 
 
-### \_\_init\_\_()
+### CollidableObject()
 
 ```python
 CollidableObject(layer: int, mask: int):
@@ -409,7 +409,7 @@ class SurfaceRenderer:
     ```
 
 
-### \_\_init\_\_()
+### SurfaceRenderer()
 
 ```python
 SurfaceRenderer():
@@ -484,7 +484,7 @@ Interface for anything representing an object in the scene.
     ```
 
 
-### \_\_init\_\_()
+### GameClock()
 
 ```python
 GameClock():
@@ -635,7 +635,7 @@ Interface for anything representing an object in the scene.
     ```
 
 
-### \_\_init\_\_()
+### GameControls()
 
 ```python
 GameControls():
@@ -896,7 +896,7 @@ Data structure that allows you to keep track of objects in the scene.
     ```
 
 
-### \_\_init\_\_()
+### GameObjectsCollection()
 
 ```python
 GameObjectsCollection():
@@ -971,7 +971,7 @@ class GameSettings:
     ```
 
 
-### \_\_init\_\_()
+### GameSettings()
 
 ```python
 GameSettings():
@@ -1009,7 +1009,7 @@ pygame object for storing rectangular coordinates
 
 
 
-### \_\_init\_\_()
+### Rect()
 
 ```python
 Rect(*args, **kwargs):
@@ -1473,7 +1473,7 @@ pygame object for representing images
 
 
 
-### \_\_init\_\_()
+### Surface()
 
 ```python
 Surface(*args, **kwargs):
@@ -2041,7 +2041,7 @@ pygame object for color representations
 
 
 
-### \_\_init\_\_()
+### Color()
 
 ```python
 Color(*args, **kwargs):
@@ -2209,7 +2209,7 @@ pygame object for direct pixel access of surfaces
 
 
 
-### \_\_init\_\_()
+### PixelArray()
 
 ```python
 PixelArray():
@@ -2350,7 +2350,7 @@ a 2-Dimensional Vector
 
 
 
-### \_\_init\_\_()
+### Vector2()
 
 ```python
 Vector2(*args, **kwargs):
@@ -2691,7 +2691,7 @@ a 3-Dimensional Vector
 
 
 
-### \_\_init\_\_()
+### Vector3()
 
 ```python
 Vector3(*args, **kwargs):

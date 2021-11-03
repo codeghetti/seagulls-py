@@ -1,5 +1,5 @@
 ---
-title: "API Docs: seagulls.engine"
+title: "seagulls.engine"
 ---
 
 

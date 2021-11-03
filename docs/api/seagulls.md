@@ -1,5 +1,5 @@
 ---
-title: "API Docs: seagulls"
+title: "seagulls"
 ---
 
 

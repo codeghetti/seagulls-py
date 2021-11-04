@@ -5,6 +5,9 @@ from ._pyagme import Surface
 
 
 class GameObject(ABC):
+    """
+    Interface for anything representing an object in the scene.
+    """
 
     @abstractmethod
     def tick(self) -> None:
@@ -16,6 +19,10 @@ class GameObject(ABC):
 
 
 class GameObjectsCollection:
+    """
+    Data structure that allows you to keep track of objects in the scene.
+    """
+
     _game_objects: List[GameObject]
 
     def __init__(self) -> None:

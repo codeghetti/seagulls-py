@@ -1,0 +1,2187 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="canonical" href="https://seagulls-py.codeghetti.com/api/seagulls/examples/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>seagulls.examples - seagulls-py</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#seagullsexamples" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+  
+
+<header class="md-header md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="seagulls-py" class="md-header__button md-logo" aria-label="seagulls-py" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            seagulls-py
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              seagulls.examples
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/codeghetti/seagulls-py/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../" class="md-tabs__link md-tabs__link--active">
+        Api
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="seagulls-py" class="md-nav__button md-logo" aria-label="seagulls-py" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    seagulls-py
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/codeghetti/seagulls-py/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Api
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Api" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Api
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        seagulls
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Seagulls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Seagulls" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Seagulls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assets/" class="md-nav__link">
+        seagulls.assets
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        seagulls.cli
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../debug/" class="md-nav__link">
+        seagulls.debug
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine/" class="md-nav__link">
+        seagulls.engine
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          seagulls.examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        seagulls.examples
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#genericmenubutton" class="md-nav__link">
+    GenericMenuButton
+  </a>
+  
+    <nav class="md-nav" aria-label="GenericMenuButton">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#genericmenubutton_1" class="md-nav__link">
+    GenericMenuButton()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#render" class="md-nav__link">
+    render()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mainmenuscene" class="md-nav__link">
+    MainMenuScene
+  </a>
+  
+    <nav class="md-nav" aria-label="MainMenuScene">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mainmenuscene_1" class="md-nav__link">
+    MainMenuScene()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#should_quit" class="md-nav__link">
+    should_quit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick_1" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#asyncgamesession" class="md-nav__link">
+    AsyncGameSession
+  </a>
+  
+    <nav class="md-nav" aria-label="AsyncGameSession">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#asyncgamesession_1" class="md-nav__link">
+    AsyncGameSession()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_1" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wait_for_completion" class="md-nav__link">
+    wait_for_completion()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop" class="md-nav__link">
+    stop()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#blockinggamesession" class="md-nav__link">
+    BlockingGameSession
+  </a>
+  
+    <nav class="md-nav" aria-label="BlockingGameSession">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#blockinggamesession_1" class="md-nav__link">
+    BlockingGameSession()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_2" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wait_for_completion_1" class="md-nav__link">
+    wait_for_completion()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop_1" class="md-nav__link">
+    stop()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examplescenemanager" class="md-nav__link">
+    ExampleSceneManager
+  </a>
+  
+    <nav class="md-nav" aria-label="ExampleSceneManager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examplescenemanager_1" class="md-nav__link">
+    ExampleSceneManager()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_scene" class="md-nav__link">
+    get_scene()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplestarsbackground" class="md-nav__link">
+    SimpleStarsBackground
+  </a>
+  
+    <nav class="md-nav" aria-label="SimpleStarsBackground">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplestarsbackground_1" class="md-nav__link">
+    SimpleStarsBackground()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick_2" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#render_1" class="md-nav__link">
+    render()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplerpgbackground" class="md-nav__link">
+    SimpleRpgBackground
+  </a>
+  
+    <nav class="md-nav" aria-label="SimpleRpgBackground">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplerpgbackground_1" class="md-nav__link">
+    SimpleRpgBackground()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick_3" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#render_2" class="md-nav__link">
+    render()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#windowscene" class="md-nav__link">
+    WindowScene
+  </a>
+  
+    <nav class="md-nav" aria-label="WindowScene">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windowscene_1" class="md-nav__link">
+    WindowScene()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_3" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#should_quit_1" class="md-nav__link">
+    should_quit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick_4" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iprovideactivescene" class="md-nav__link">
+    IProvideActiveScene
+  </a>
+  
+    <nav class="md-nav" aria-label="IProvideActiveScene">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apply" class="md-nav__link">
+    apply()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#isetactivescene" class="md-nav__link">
+    ISetActiveScene
+  </a>
+  
+    <nav class="md-nav" aria-label="ISetActiveScene">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set_active_scene" class="md-nav__link">
+    set_active_scene()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#activesceneclient" class="md-nav__link">
+    ActiveSceneClient
+  </a>
+  
+    <nav class="md-nav" aria-label="ActiveSceneClient">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#activesceneclient_1" class="md-nav__link">
+    ActiveSceneClient()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apply_1" class="md-nav__link">
+    apply()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set_active_scene_1" class="md-nav__link">
+    set_active_scene()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../foo/" class="md-nav__link">
+        seagulls.foo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2_7" type="checkbox" id="__nav_2_2_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2_7">
+          Foo
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Foo" data-md-level="3">
+        <label class="md-nav__title" for="__nav_2_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Foo
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../foo/another/" class="md-nav__link">
+        seagulls.foo.another
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../foo/test/" class="md-nav__link">
+        seagulls.foo.test
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../foo/test_base/" class="md-nav__link">
+        seagulls.foo.test_base
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#genericmenubutton" class="md-nav__link">
+    GenericMenuButton
+  </a>
+  
+    <nav class="md-nav" aria-label="GenericMenuButton">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#genericmenubutton_1" class="md-nav__link">
+    GenericMenuButton()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#render" class="md-nav__link">
+    render()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mainmenuscene" class="md-nav__link">
+    MainMenuScene
+  </a>
+  
+    <nav class="md-nav" aria-label="MainMenuScene">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mainmenuscene_1" class="md-nav__link">
+    MainMenuScene()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#should_quit" class="md-nav__link">
+    should_quit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick_1" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#asyncgamesession" class="md-nav__link">
+    AsyncGameSession
+  </a>
+  
+    <nav class="md-nav" aria-label="AsyncGameSession">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#asyncgamesession_1" class="md-nav__link">
+    AsyncGameSession()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_1" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wait_for_completion" class="md-nav__link">
+    wait_for_completion()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop" class="md-nav__link">
+    stop()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#blockinggamesession" class="md-nav__link">
+    BlockingGameSession
+  </a>
+  
+    <nav class="md-nav" aria-label="BlockingGameSession">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#blockinggamesession_1" class="md-nav__link">
+    BlockingGameSession()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_2" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wait_for_completion_1" class="md-nav__link">
+    wait_for_completion()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop_1" class="md-nav__link">
+    stop()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examplescenemanager" class="md-nav__link">
+    ExampleSceneManager
+  </a>
+  
+    <nav class="md-nav" aria-label="ExampleSceneManager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examplescenemanager_1" class="md-nav__link">
+    ExampleSceneManager()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_scene" class="md-nav__link">
+    get_scene()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplestarsbackground" class="md-nav__link">
+    SimpleStarsBackground
+  </a>
+  
+    <nav class="md-nav" aria-label="SimpleStarsBackground">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplestarsbackground_1" class="md-nav__link">
+    SimpleStarsBackground()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick_2" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#render_1" class="md-nav__link">
+    render()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simplerpgbackground" class="md-nav__link">
+    SimpleRpgBackground
+  </a>
+  
+    <nav class="md-nav" aria-label="SimpleRpgBackground">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simplerpgbackground_1" class="md-nav__link">
+    SimpleRpgBackground()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick_3" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#render_2" class="md-nav__link">
+    render()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#windowscene" class="md-nav__link">
+    WindowScene
+  </a>
+  
+    <nav class="md-nav" aria-label="WindowScene">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windowscene_1" class="md-nav__link">
+    WindowScene()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_3" class="md-nav__link">
+    start()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#should_quit_1" class="md-nav__link">
+    should_quit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick_4" class="md-nav__link">
+    tick()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iprovideactivescene" class="md-nav__link">
+    IProvideActiveScene
+  </a>
+  
+    <nav class="md-nav" aria-label="IProvideActiveScene">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apply" class="md-nav__link">
+    apply()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#isetactivescene" class="md-nav__link">
+    ISetActiveScene
+  </a>
+  
+    <nav class="md-nav" aria-label="ISetActiveScene">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set_active_scene" class="md-nav__link">
+    set_active_scene()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#activesceneclient" class="md-nav__link">
+    ActiveSceneClient
+  </a>
+  
+    <nav class="md-nav" aria-label="ActiveSceneClient">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#activesceneclient_1" class="md-nav__link">
+    ActiveSceneClient()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apply_1" class="md-nav__link">
+    apply()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set_active_scene_1" class="md-nav__link">
+    set_active_scene()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/codeghetti/seagulls-py/blob/main/docs/api/seagulls/examples.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="seagullsexamples"><a href="../seagulls">seagulls</a>.examples<a class="headerlink" href="#seagullsexamples" title="Permanent link">&para;</a></h1>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="kn">from</span> <span class="nn">._main_menu_scene</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">GenericMenuButton</span><span class="p">,</span>
+        <span class="n">MainMenuScene</span>
+    <span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">._scene_manager</span> <span class="kn">import</span> <span class="n">ExampleSceneManager</span>
+    <span class="kn">from</span> <span class="nn">._session</span> <span class="kn">import</span> <span class="n">AsyncGameSession</span><span class="p">,</span> <span class="n">BlockingGameSession</span>
+    <span class="kn">from</span> <span class="nn">._simple_stars_background</span> <span class="kn">import</span> <span class="n">SimpleStarsBackground</span>
+    <span class="kn">from</span> <span class="nn">._simple_rpg_background</span> <span class="kn">import</span> <span class="n">SimpleRpgBackground</span>
+    <span class="kn">from</span> <span class="nn">._window_scene</span> <span class="kn">import</span> <span class="n">WindowScene</span>
+    <span class="kn">from</span> <span class="nn">._active_scene_client</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">IProvideActiveScene</span><span class="p">,</span>
+        <span class="n">ISetActiveScene</span><span class="p">,</span>
+        <span class="n">ActiveSceneClient</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;GenericMenuButton&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MainMenuScene&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;AsyncGameSession&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;BlockingGameSession&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ExampleSceneManager&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SimpleStarsBackground&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SimpleRpgBackground&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;WindowScene&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;IProvideActiveScene&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ISetActiveScene&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ActiveSceneClient&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+</code></pre></div>
+</details>
+<h2 id="genericmenubutton">GenericMenuButton<a class="headerlink" href="#genericmenubutton" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">GenericMenuButton</span><span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">):</span>
+</code></pre></div>
+<p>Interface for anything representing an object in the scene.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">GenericMenuButton</span><span class="p">(</span><span class="n">GameObject</span><span class="p">):</span>
+
+        <span class="n">_scene</span><span class="p">:</span> <span class="n">IGameScene</span>
+        <span class="n">_offset</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">_button_text</span><span class="p">:</span> <span class="nb">str</span>
+
+        <span class="n">_asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span>
+        <span class="n">_game_controls</span><span class="p">:</span> <span class="n">GameControls</span>
+        <span class="n">_is_highlighted</span><span class="p">:</span> <span class="n">Event</span>
+        <span class="n">_is_clicked</span><span class="p">:</span> <span class="n">Event</span>
+
+        <span class="n">_window_height</span> <span class="o">=</span> <span class="mi">768</span>
+        <span class="n">_window_width</span> <span class="o">=</span> <span class="mi">1024</span>
+
+        <span class="n">_button_height</span> <span class="o">=</span> <span class="mi">49</span>
+        <span class="n">_button_width</span> <span class="o">=</span> <span class="mi">190</span>
+
+        <span class="n">_active_scene_manager</span><span class="p">:</span> <span class="n">ISetActiveScene</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">scene</span><span class="p">:</span> <span class="n">IGameScene</span><span class="p">,</span>
+                <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                <span class="n">button_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span><span class="p">,</span>
+                <span class="n">game_controls</span><span class="p">:</span> <span class="n">GameControls</span><span class="p">,</span>
+                <span class="n">active_scene_manager</span><span class="p">:</span> <span class="n">ISetActiveScene</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span> <span class="o">=</span> <span class="n">scene</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="n">offset</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_button_text</span> <span class="o">=</span> <span class="n">button_text</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span> <span class="o">=</span> <span class="n">asset_manager</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span> <span class="o">=</span> <span class="n">game_controls</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_manager</span> <span class="o">=</span> <span class="n">active_scene_manager</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_highlighted</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_clicked</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;assets/fonts/kenvector-future.ttf&quot;</span><span class="p">),</span> <span class="mi">14</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_detect_state</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">button</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_background</span><span class="p">()</span>
+
+            <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_button_text</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">70</span><span class="p">))</span>
+            <span class="n">text_height</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
+            <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">button</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span> <span class="o">-</span> <span class="n">text_height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+            <span class="n">button</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">padding</span><span class="p">))</span>
+
+            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_position</span><span class="p">())</span>
+
+        <span class="k">def</span> <span class="nf">_detect_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rect</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_position</span><span class="p">(),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_button_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_button_height</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">rect</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">get_pos</span><span class="p">()):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_is_highlighted</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+                <span class="n">click</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span><span class="o">.</span><span class="n">is_click_initialized</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">click</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;CLICKY&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_is_clicked</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span><span class="o">.</span><span class="n">is_mouse_down</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_clicked</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;SWITCH&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_manager</span><span class="o">.</span><span class="n">set_active_scene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scene</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_is_clicked</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_is_highlighted</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_is_clicked</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">_get_background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_background_map</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_state_name</span><span class="p">()]</span>
+
+        <span class="nd">@lru_cache</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_get_background_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Surface</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s2">&quot;normal&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_png</span><span class="p">(</span><span class="s2">&quot;ui/blue.button00&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+                <span class="s2">&quot;hover&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_png</span><span class="p">(</span><span class="s2">&quot;ui/green.button00&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+                <span class="s2">&quot;click&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_png</span><span class="p">(</span><span class="s2">&quot;ui/green.button01&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">_get_state_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_highlighted</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="k">return</span> <span class="s2">&quot;click&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_clicked</span><span class="o">.</span><span class="n">is_set</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;hover&quot;</span>
+
+            <span class="k">return</span> <span class="s2">&quot;normal&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_get_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_window_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_button_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_window_height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_button_height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_clicked</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="n">top</span> <span class="o">+=</span> <span class="mi">5</span>
+
+            <span class="k">return</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span>
+</code></pre></div>
+</details>
+<h3 id="genericmenubutton_1">GenericMenuButton()<a class="headerlink" href="#genericmenubutton_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">GenericMenuButton</span><span class="p">(</span>
+    <span class="n">scene</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">,</span>
+    <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">button_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">asset_manager</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">AssetManager</span><span class="p">,</span>
+    <span class="n">game_controls</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_controls</span><span class="o">.</span><span class="n">GameControls</span><span class="p">,</span>
+    <span class="n">active_scene_manager</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">_active_scene_client</span><span class="o">.</span><span class="n">ISetActiveScene</span>
+<span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">scene</span><span class="p">:</span> <span class="n">IGameScene</span><span class="p">,</span>
+                <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                <span class="n">button_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span><span class="p">,</span>
+                <span class="n">game_controls</span><span class="p">:</span> <span class="n">GameControls</span><span class="p">,</span>
+                <span class="n">active_scene_manager</span><span class="p">:</span> <span class="n">ISetActiveScene</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span> <span class="o">=</span> <span class="n">scene</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="n">offset</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_button_text</span> <span class="o">=</span> <span class="n">button_text</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span> <span class="o">=</span> <span class="n">asset_manager</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span> <span class="o">=</span> <span class="n">game_controls</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_manager</span> <span class="o">=</span> <span class="n">active_scene_manager</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_highlighted</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_clicked</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;assets/fonts/kenvector-future.ttf&quot;</span><span class="p">),</span> <span class="mi">14</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<h3 id="tick">tick()<a class="headerlink" href="#tick" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_detect_state</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="render">render()<a class="headerlink" href="#render" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">button</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_background</span><span class="p">()</span>
+
+            <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_button_text</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">70</span><span class="p">))</span>
+            <span class="n">text_height</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
+            <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">button</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span> <span class="o">-</span> <span class="n">text_height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+            <span class="n">button</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">padding</span><span class="p">))</span>
+
+            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">button</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_position</span><span class="p">())</span>
+</code></pre></div>
+</details>
+<h2 id="mainmenuscene">MainMenuScene<a class="headerlink" href="#mainmenuscene" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MainMenuScene</span><span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">):</span>
+</code></pre></div>
+<p>This class is for X and Y.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">MainMenuScene</span><span class="p">(</span><span class="n">IGameScene</span><span class="p">):</span>
+
+        <span class="n">_surface_renderer</span><span class="p">:</span> <span class="n">SurfaceRenderer</span>
+        <span class="n">_game_controls</span><span class="p">:</span> <span class="n">GameControls</span>
+        <span class="n">_asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span>
+
+        <span class="n">_game_objects</span><span class="p">:</span> <span class="n">GameObjectsCollection</span>
+        <span class="n">_should_quit</span><span class="p">:</span> <span class="n">Event</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">surface_renderer</span><span class="p">:</span> <span class="n">SurfaceRenderer</span><span class="p">,</span>
+                <span class="n">asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span><span class="p">,</span>
+                <span class="n">background</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">,</span>
+                <span class="n">game_controls</span><span class="p">:</span> <span class="n">GameControls</span><span class="p">,</span>
+                <span class="n">space_shooter_menu_button</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">,</span>
+                <span class="n">seagulls_menu_button</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">,</span>
+                <span class="n">rpg_menu_button</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_surface_renderer</span> <span class="o">=</span> <span class="n">surface_renderer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span> <span class="o">=</span> <span class="n">asset_manager</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span> <span class="o">=</span> <span class="n">game_controls</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span> <span class="o">=</span> <span class="n">GameObjectsCollection</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">background</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">space_shooter_menu_button</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">seagulls_menu_button</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rpg_menu_button</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_surface_renderer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span><span class="o">.</span><span class="n">is_set</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">tick</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span><span class="o">.</span><span class="n">should_quit</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;QUIT EVENT DETECTED&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">_render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">background</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">background</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_surface_renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">background</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<h3 id="mainmenuscene_1">MainMenuScene()<a class="headerlink" href="#mainmenuscene_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">MainMenuScene</span><span class="p">(</span>
+    <span class="n">surface_renderer</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_surface_renderer</span><span class="o">.</span><span class="n">SurfaceRenderer</span><span class="p">,</span>
+    <span class="n">asset_manager</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">AssetManager</span><span class="p">,</span>
+    <span class="n">background</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">,</span>
+    <span class="n">game_controls</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_controls</span><span class="o">.</span><span class="n">GameControls</span><span class="p">,</span>
+    <span class="n">space_shooter_menu_button</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">,</span>
+    <span class="n">seagulls_menu_button</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">,</span>
+    <span class="n">rpg_menu_button</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span>
+<span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">surface_renderer</span><span class="p">:</span> <span class="n">SurfaceRenderer</span><span class="p">,</span>
+                <span class="n">asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span><span class="p">,</span>
+                <span class="n">background</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">,</span>
+                <span class="n">game_controls</span><span class="p">:</span> <span class="n">GameControls</span><span class="p">,</span>
+                <span class="n">space_shooter_menu_button</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">,</span>
+                <span class="n">seagulls_menu_button</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">,</span>
+                <span class="n">rpg_menu_button</span><span class="p">:</span> <span class="n">GameObject</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_surface_renderer</span> <span class="o">=</span> <span class="n">surface_renderer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span> <span class="o">=</span> <span class="n">asset_manager</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span> <span class="o">=</span> <span class="n">game_controls</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span> <span class="o">=</span> <span class="n">GameObjectsCollection</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">background</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">space_shooter_menu_button</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">seagulls_menu_button</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rpg_menu_button</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="start">start()<a class="headerlink" href="#start" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_surface_renderer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="should_quit">should_quit()<a class="headerlink" href="#should_quit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span><span class="o">.</span><span class="n">is_set</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="tick_1">tick()<a class="headerlink" href="#tick_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_objects</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">tick</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_game_controls</span><span class="o">.</span><span class="n">should_quit</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;QUIT EVENT DETECTED&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h2 id="asyncgamesession">AsyncGameSession<a class="headerlink" href="#asyncgamesession" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">AsyncGameSession</span><span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_session</span><span class="o">.</span><span class="n">IGameSession</span><span class="p">):</span>
+</code></pre></div>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">AsyncGameSession</span><span class="p">(</span><span class="n">IGameSession</span><span class="p">):</span>
+        <span class="n">_scene_manager</span><span class="p">:</span> <span class="n">IProvideGameScenes</span>
+        <span class="n">_thread</span><span class="p">:</span> <span class="n">Thread</span>
+        <span class="n">_stopped</span><span class="p">:</span> <span class="n">Event</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene_manager</span><span class="p">:</span> <span class="n">IProvideGameScenes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene_manager</span> <span class="o">=</span> <span class="n">scene_manager</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_thread_target</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stopped</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;starting game session&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;waiting for completion&quot;</span><span class="p">)</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stopped</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;done waiting for completion&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;stopping game session&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stopped</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">_thread_target</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Our Game&quot;</span><span class="p">)</span>
+            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene_manager</span><span class="o">.</span><span class="n">get_scene</span><span class="p">()</span>
+            <span class="n">scene</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+            <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stopped</span><span class="o">.</span><span class="n">is_set</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">scene</span><span class="o">.</span><span class="n">should_quit</span><span class="p">():</span>
+                <span class="n">scene</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;exiting game session&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stopped</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="asyncgamesession_1">AsyncGameSession()<a class="headerlink" href="#asyncgamesession_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">AsyncGameSession</span><span class="p">(</span>
+    <span class="n">scene_manager</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene_manager</span><span class="o">.</span><span class="n">IProvideGameScenes</span>
+<span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene_manager</span><span class="p">:</span> <span class="n">IProvideGameScenes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene_manager</span> <span class="o">=</span> <span class="n">scene_manager</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_thread_target</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stopped</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="start_1">start()<a class="headerlink" href="#start_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;starting game session&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="wait_for_completion">wait_for_completion()<a class="headerlink" href="#wait_for_completion" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;waiting for completion&quot;</span><span class="p">)</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stopped</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;done waiting for completion&quot;</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<h3 id="stop">stop()<a class="headerlink" href="#stop" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;stopping game session&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stopped</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h2 id="blockinggamesession">BlockingGameSession<a class="headerlink" href="#blockinggamesession" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">BlockingGameSession</span><span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_session</span><span class="o">.</span><span class="n">IGameSession</span><span class="p">):</span>
+</code></pre></div>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">BlockingGameSession</span><span class="p">(</span><span class="n">IGameSession</span><span class="p">):</span>
+        <span class="n">_scene_manager</span><span class="p">:</span> <span class="n">IProvideGameScenes</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene_manager</span><span class="p">:</span> <span class="n">IProvideGameScenes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene_manager</span> <span class="o">=</span> <span class="n">scene_manager</span>
+
+        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;starting game session&quot;</span><span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Our Game&quot;</span><span class="p">)</span>
+            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene_manager</span><span class="o">.</span><span class="n">get_scene</span><span class="p">()</span>
+            <span class="n">scene</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">scene</span><span class="o">.</span><span class="n">should_quit</span><span class="p">():</span>
+                <span class="n">scene</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;exiting game session&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="blockinggamesession_1">BlockingGameSession()<a class="headerlink" href="#blockinggamesession_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">BlockingGameSession</span><span class="p">(</span>
+    <span class="n">scene_manager</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene_manager</span><span class="o">.</span><span class="n">IProvideGameScenes</span>
+<span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene_manager</span><span class="p">:</span> <span class="n">IProvideGameScenes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene_manager</span> <span class="o">=</span> <span class="n">scene_manager</span>
+</code></pre></div>
+</details>
+<h3 id="start_2">start()<a class="headerlink" href="#start_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;starting game session&quot;</span><span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Our Game&quot;</span><span class="p">)</span>
+            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene_manager</span><span class="o">.</span><span class="n">get_scene</span><span class="p">()</span>
+            <span class="n">scene</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">scene</span><span class="o">.</span><span class="n">should_quit</span><span class="p">():</span>
+                <span class="n">scene</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;exiting game session&quot;</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<h3 id="wait_for_completion_1">wait_for_completion()<a class="headerlink" href="#wait_for_completion_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">wait_for_completion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="stop_1">stop()<a class="headerlink" href="#stop_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h2 id="examplescenemanager">ExampleSceneManager<a class="headerlink" href="#examplescenemanager" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ExampleSceneManager</span><span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene_manager</span><span class="o">.</span><span class="n">IProvideGameScenes</span><span class="p">):</span>
+</code></pre></div>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">ExampleSceneManager</span><span class="p">(</span><span class="n">IProvideGameScenes</span><span class="p">):</span>
+        <span class="n">_scene</span><span class="p">:</span> <span class="n">MainMenuScene</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">MainMenuScene</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span> <span class="o">=</span> <span class="n">scene</span>
+
+        <span class="k">def</span> <span class="nf">get_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IGameScene</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span>
+</code></pre></div>
+</details>
+<h3 id="examplescenemanager_1">ExampleSceneManager()<a class="headerlink" href="#examplescenemanager_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">ExampleSceneManager</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">_main_menu_scene</span><span class="o">.</span><span class="n">MainMenuScene</span><span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">MainMenuScene</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span> <span class="o">=</span> <span class="n">scene</span>
+</code></pre></div>
+</details>
+<h3 id="get_scene">get_scene()<a class="headerlink" href="#get_scene" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">get_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IGameScene</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span>
+</code></pre></div>
+</details>
+<h2 id="simplestarsbackground">SimpleStarsBackground<a class="headerlink" href="#simplestarsbackground" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">SimpleStarsBackground</span><span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">):</span>
+</code></pre></div>
+<p>Interface for anything representing an object in the scene.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">SimpleStarsBackground</span><span class="p">(</span><span class="n">GameObject</span><span class="p">):</span>
+
+        <span class="n">_asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span> <span class="o">=</span> <span class="n">asset_manager</span>
+
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">background</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cached_background</span><span class="p">()</span>
+            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="nd">@lru_cache</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_get_cached_background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span><span class="s2">&quot;environment/environment-stars&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="simplestarsbackground_1">SimpleStarsBackground()<a class="headerlink" href="#simplestarsbackground_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">SimpleStarsBackground</span><span class="p">(</span><span class="n">asset_manager</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">AssetManager</span><span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span> <span class="o">=</span> <span class="n">asset_manager</span>
+</code></pre></div>
+</details>
+<h3 id="tick_2">tick()<a class="headerlink" href="#tick_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="render_1">render()<a class="headerlink" href="#render_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">background</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cached_background</span><span class="p">()</span>
+            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</code></pre></div>
+</details>
+<h2 id="simplerpgbackground">SimpleRpgBackground<a class="headerlink" href="#simplerpgbackground" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">SimpleRpgBackground</span><span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_object</span><span class="o">.</span><span class="n">GameObject</span><span class="p">):</span>
+</code></pre></div>
+<p>Interface for anything representing an object in the scene.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">SimpleRpgBackground</span><span class="p">(</span><span class="n">GameObject</span><span class="p">):</span>
+
+        <span class="n">_asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span>
+        <span class="n">_game_board</span><span class="p">:</span> <span class="n">GameBoard</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span> <span class="o">=</span> <span class="n">asset_manager</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_board</span> <span class="o">=</span> <span class="n">GameBoard</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">background</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cached_background</span><span class="p">()</span>
+            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="nd">@lru_cache</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">_get_cached_background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
+            <span class="n">surface</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+
+            <span class="n">top_left_corner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-top-left-corner&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">top_island_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-top-edge&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">top_right_corner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-top-right-corner&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">island_water</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-water&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">bottom_left_corner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-bottom-left-corner&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">bottom_island_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-bottom-edge&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">bottom_right_corner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-bottom-right-corner&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">island_left_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-left-edge&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">island_right_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-right-edge&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">island_grass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-grass&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">island_red_home</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-red-home&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">island_blue_home</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-blue-home&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">island_tree</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span><span class="o">.</span><span class="n">load_sprite</span><span class="p">(</span>
+                <span class="s2">&quot;environment/rpg-environment/island-tree&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">600</span> <span class="o">/</span> <span class="mi">16</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">1024</span> <span class="o">/</span> <span class="mi">16</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                        <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">63</span><span class="p">:</span>
+                            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">top_right_corner</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">top_island_edge</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                    <span class="k">elif</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">35</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">bottom_left_corner</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                        <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">63</span><span class="p">:</span>
+                            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">bottom_right_corner</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">bottom_island_edge</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                    <span class="k">elif</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">36</span><span class="p">:</span>
+                        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">island_water</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+
+                    <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">island_left_edge</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+
+                    <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">63</span><span class="p">:</span>
+                        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">island_right_edge</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">random_number</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">random_number</span> <span class="o">&lt;</span> <span class="mi">92</span><span class="p">:</span>
+                            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">island_grass</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                        <span class="k">elif</span> <span class="n">random_number</span> <span class="o">&lt;</span> <span class="mi">93</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_game_board</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">island_red_home</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_game_board</span><span class="o">.</span><span class="n">set_tile</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">Tile</span><span class="p">())</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">island_grass</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                        <span class="k">elif</span> <span class="n">random_number</span> <span class="o">&lt;</span> <span class="mi">94</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_game_board</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">island_blue_home</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_game_board</span><span class="o">.</span><span class="n">set_tile</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">Tile</span><span class="p">())</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">island_grass</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">island_tree</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">16</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">surface</span>
+</code></pre></div>
+</details>
+<h3 id="simplerpgbackground_1">SimpleRpgBackground()<a class="headerlink" href="#simplerpgbackground_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">SimpleRpgBackground</span><span class="p">(</span><span class="n">asset_manager</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">AssetManager</span><span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_manager</span><span class="p">:</span> <span class="n">AssetManager</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_asset_manager</span> <span class="o">=</span> <span class="n">asset_manager</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_board</span> <span class="o">=</span> <span class="n">GameBoard</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="tick_3">tick()<a class="headerlink" href="#tick_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="render_2">render()<a class="headerlink" href="#render_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">background</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cached_background</span><span class="p">()</span>
+            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</code></pre></div>
+</details>
+<h2 id="windowscene">WindowScene<a class="headerlink" href="#windowscene" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">WindowScene</span><span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">):</span>
+</code></pre></div>
+<p>This class is for X and Y.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">WindowScene</span><span class="p">(</span><span class="n">IGameScene</span><span class="p">):</span>
+        <span class="n">_active_scene_provider</span><span class="p">:</span> <span class="n">IProvideActiveScene</span>
+        <span class="n">_should_quit</span><span class="p">:</span> <span class="nb">bool</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">active_scene_provider</span><span class="p">:</span> <span class="n">IProvideActiveScene</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_provider</span> <span class="o">=</span> <span class="n">active_scene_provider</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_provider</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">())</span>
+
+        <span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span>
+
+        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_provider</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">tick</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_provider</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_quit_flag</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_update_quit_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">IGameScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">should_quit</span><span class="p">()</span>
+</code></pre></div>
+</details>
+<h3 id="windowscene_1">WindowScene()<a class="headerlink" href="#windowscene_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">WindowScene</span><span class="p">(</span>
+    <span class="n">active_scene_provider</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">_active_scene_client</span><span class="o">.</span><span class="n">IProvideActiveScene</span>
+<span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">active_scene_provider</span><span class="p">:</span> <span class="n">IProvideActiveScene</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_provider</span> <span class="o">=</span> <span class="n">active_scene_provider</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+</details>
+<h3 id="start_3">start()<a class="headerlink" href="#start_3" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_provider</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">())</span>
+</code></pre></div>
+</details>
+<h3 id="should_quit_1">should_quit()<a class="headerlink" href="#should_quit_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">should_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_quit</span>
+</code></pre></div>
+</details>
+<h3 id="tick_4">tick()<a class="headerlink" href="#tick_4" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_provider</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">tick</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene_provider</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_quit_flag</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<h2 id="iprovideactivescene">IProvideActiveScene<a class="headerlink" href="#iprovideactivescene" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">IProvideActiveScene</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</code></pre></div>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">IProvideActiveScene</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">IGameScene</span><span class="p">],</span> <span class="kc">None</span><span class="p">]):</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="apply">apply()<a class="headerlink" href="#apply" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">apply</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span>
+<span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">IGameScene</span><span class="p">],</span> <span class="kc">None</span><span class="p">]):</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h2 id="isetactivescene">ISetActiveScene<a class="headerlink" href="#isetactivescene" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ISetActiveScene</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+</code></pre></div>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">ISetActiveScene</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+
+        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">set_active_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">IGameScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h3 id="set_active_scene">set_active_scene()<a class="headerlink" href="#set_active_scene" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">set_active_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="nd">@abstractmethod</span>
+        <span class="k">def</span> <span class="nf">set_active_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">IGameScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+</code></pre></div>
+</details>
+<h2 id="activesceneclient">ActiveSceneClient<a class="headerlink" href="#activesceneclient" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ActiveSceneClient</span><span class="p">(</span><span class="n">seagulls</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">_active_scene_client</span><span class="o">.</span><span class="n">IProvideActiveSceneseagulls</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">_active_scene_client</span><span class="o">.</span><span class="n">ISetActiveScene</span><span class="p">):</span>
+</code></pre></div>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>    <span class="k">class</span> <span class="nc">ActiveSceneClient</span><span class="p">(</span><span class="n">IProvideActiveScene</span><span class="p">,</span> <span class="n">ISetActiveScene</span><span class="p">):</span>
+
+        <span class="n">_active_scene</span><span class="p">:</span> <span class="n">IGameScene</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">IGameScene</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene</span> <span class="o">=</span> <span class="n">scene</span>
+
+        <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">IGameScene</span><span class="p">],</span> <span class="kc">None</span><span class="p">]):</span>
+            <span class="n">callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_scene</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">set_active_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">IGameScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene</span> <span class="o">=</span> <span class="n">scene</span>
+</code></pre></div>
+</details>
+<h3 id="activesceneclient_1">ActiveSceneClient()<a class="headerlink" href="#activesceneclient_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">ActiveSceneClient</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">IGameScene</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene</span> <span class="o">=</span> <span class="n">scene</span>
+</code></pre></div>
+</details>
+<h3 id="apply_1">apply()<a class="headerlink" href="#apply_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">apply</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">],</span> <span class="n">NoneType</span><span class="p">]</span>
+<span class="p">):</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">IGameScene</span><span class="p">],</span> <span class="kc">None</span><span class="p">]):</span>
+            <span class="n">callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_scene</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<h3 id="set_active_scene_1">set_active_scene()<a class="headerlink" href="#set_active_scene_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_active_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">seagulls</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">_game_scene</span><span class="o">.</span><span class="n">IGameScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">set_active_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">IGameScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_scene</span> <span class="o">=</span> <span class="n">scene</span>
+</code></pre></div>
+</details>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../engine/" class="md-footer__link md-footer__link--prev" aria-label="Previous: seagulls.engine" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              seagulls.engine
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../foo/" class="md-footer__link md-footer__link--next" aria-label="Next: seagulls.foo" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              seagulls.foo
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+    
+  </body>
+</html>

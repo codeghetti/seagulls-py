@@ -6,6 +6,9 @@ from seagulls.engine import Surface
 
 
 class AssetManager:
+
+    """Provides basic functionality for loading assets from disk."""
+
     _assets_path: Path
 
     def __init__(self, assets_path: Path):

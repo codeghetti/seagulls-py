@@ -1,4 +1,4 @@
-# Seagulls.py
+# seagulls-py
 
 ## Development Environment
 These are development environment instructions based on the assumption that you are on an Ubuntu
@@ -7,7 +7,7 @@ machine.
 Python development environments are complete chaos. Do what ever you want but these steps below will
 absolutely work.
 
-## Direnv
+### Direnv
 [direnv]: <https://direnv.net>
 We use [direnv] to automatically define some environment variables and to activate the virtualenv
 when you access the code's directory in your terminal. On most Ubuntu versions, you can install it

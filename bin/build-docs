@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+rm -rf docs/api/*
+pdoc \
+  --template-directory .pdoc/templates \
+  --docformat google \
+  --output-directory docs/api seagulls
+
+# Delete the pdoc home page because it's pretty broken for now
+rm docs/api/index.html
+rm docs/api/search.js
+# Rename all *.html files to *.md
+find docs/api -name "*.html" -exec rename -v 's/\.html$/\.md/i' {} \;
+
+mkdocs build

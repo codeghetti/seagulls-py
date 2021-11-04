@@ -1,3 +1,6 @@
+"""
+This module contains classes for rendering a Debug Hud in game scenes.
+"""
 import logging
 from pathlib import Path
 
@@ -16,6 +19,9 @@ class DebugHud(GameObject):
     _game_clock: GameClock
 
     def __init__(self, game_clock: GameClock):
+        """
+        Initializes a Debug Hud where `game_clock` controls how we measure time.
+        """
         self._game_clock = game_clock
         self._background = Surface((1024, 20))
         self._background.fill((100, 100, 100))
@@ -23,9 +29,15 @@ class DebugHud(GameObject):
         self._font = Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 14)
 
     def tick(self) -> None:
+        """
+        Does nothing because Debug Huds do not need to perform any logic on tick().
+        """
         pass
 
     def render(self, surface: Surface) -> None:
+        """
+        Renders the debug information onto the passed in Surface object.
+        """
         fps = str(int(self._game_clock.get_fps())).rjust(3, " ")
         time = self._game_clock.get_time()
         img = self._font.render(

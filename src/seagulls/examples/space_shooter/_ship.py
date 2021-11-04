@@ -1,11 +1,42 @@
 import logging
 import math
 from functools import lru_cache
+from typing import List
 
 from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface, GameControls, Vector2, GameClock
 
 logger = logging.getLogger(__name__)
+
+
+class Laser(GameObject):
+    _clock: GameClock
+    _asset_manager: AssetManager
+    _position: Vector2
+    _velocity: Vector2
+
+    def __init__(
+            self,
+            clock: GameClock,
+            asset_manager: AssetManager,
+            ship_position: Vector2):
+        self._clock = clock
+        self._asset_manager = asset_manager
+        self._position = Vector2(ship_position.x + 52, ship_position.y - 57)
+        self._velocity = Vector2(0, 8)
+
+    def tick(self) -> None:
+        delta = self._clock.get_time()
+
+        self._position = self._position - (self._velocity * delta / 10)
+
+    def render(self, surface: Surface) -> None:
+        laser_sprite = self._get_cached_laser()
+        surface.blit(laser_sprite, self._position)
+
+    @lru_cache()
+    def _get_cached_laser(self) -> Surface:
+        return self._asset_manager.load_sprite("space-shooter/laser-red").copy()
 
 
 class Ship(GameObject):
@@ -15,6 +46,7 @@ class Ship(GameObject):
     _position: Vector2
     _velocity: Vector2
     _max_velocity: float
+    _lasers: List[GameObject]
 
     def __init__(
             self,
@@ -27,6 +59,7 @@ class Ship(GameObject):
         self._position = Vector2(400, 303)
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
+        self._lasers = []
 
     def tick(self) -> None:
         if self._game_controls.is_left_moving():
@@ -46,6 +79,9 @@ class Ship(GameObject):
         else:
             self._velocity.y = 0.0
 
+        if self._game_controls.should_fire():
+            self._lasers.append(Laser(self._clock, self._asset_manager, self._position))
+
         delta = self._clock.get_time()
 
         self._position = self._position + (self._velocity * delta / 10)
@@ -62,10 +98,16 @@ class Ship(GameObject):
         if self._position.y > 600 - 75:
             self._position.y = 600 - 75
 
+        for laser in self._lasers:
+            laser.tick()
+
     def render(self, surface: Surface) -> None:
-        background = self._get_cached_background()
-        surface.blit(background, self._position)
+        ship_sprite = self._get_cached_ship()
+        surface.blit(ship_sprite, self._position)
+
+        for laser in self._lasers:
+            laser.render(surface)
 
     @lru_cache()
-    def _get_cached_background(self) -> Surface:
+    def _get_cached_ship(self) -> Surface:
         return self._asset_manager.load_sprite("space-shooter/ship-orange").copy()

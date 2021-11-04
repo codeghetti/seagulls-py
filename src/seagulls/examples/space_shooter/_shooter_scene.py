@@ -8,7 +8,7 @@ from seagulls.engine import (
     GameObjectsCollection,
     IGameScene,
     Surface,
-    SurfaceRenderer
+    SurfaceRenderer, GameClock
 )
 
 logger = logging.getLogger(__name__)
@@ -25,16 +25,20 @@ class ShooterScene(IGameScene):
 
     def __init__(
             self,
+            clock: GameClock,
             surface_renderer: SurfaceRenderer,
             asset_manager: AssetManager,
             background: GameObject,
+            ship: GameObject,
             game_controls: GameControls):
         self._surface_renderer = surface_renderer
         self._asset_manager = asset_manager
         self._game_controls = game_controls
 
         self._game_objects = GameObjectsCollection()
+        self._game_objects.add(clock)
         self._game_objects.add(background)
+        self._game_objects.add(ship)
         self._game_objects.add(self._game_controls)
 
         self._should_quit = Event()

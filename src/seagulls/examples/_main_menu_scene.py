@@ -17,16 +17,19 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
-from ._game_state import GameState
+from seagulls.examples._active_scene_client import ISetActiveScene
 
 logger = logging.getLogger(__name__)
 
 
-class SpaceShooterMenuButton(GameObject):
+class GenericMenuButton(GameObject):
+
+    _scene: IGameScene
+    _offset: int
+    _button_text: str
 
     _asset_manager: AssetManager
     _game_controls: GameControls
-
     _is_highlighted: Event
     _is_clicked: Event
 
@@ -36,11 +39,22 @@ class SpaceShooterMenuButton(GameObject):
     _button_height = 49
     _button_width = 190
 
-    should_switch = False
+    _active_scene_manager: ISetActiveScene
 
-    def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
+    def __init__(
+            self,
+            scene: IGameScene,
+            offset: int,
+            button_text: str,
+            asset_manager: AssetManager,
+            game_controls: GameControls,
+            active_scene_manager: ISetActiveScene):
+        self._scene = scene
+        self._offset = offset
+        self._button_text = button_text
         self._asset_manager = asset_manager
         self._game_controls = game_controls
+        self._active_scene_manager = active_scene_manager
 
         self._is_highlighted = Event()
         self._is_clicked = Event()
@@ -53,7 +67,7 @@ class SpaceShooterMenuButton(GameObject):
     def render(self, surface: Surface) -> None:
         button = self._get_background()
 
-        text = self._font.render("Space Shooter", True, (90, 90, 70))
+        text = self._font.render(self._button_text, True, (90, 90, 70))
         text_height = text.get_height()
         padding = (button.get_height() - text_height) / 2
 
@@ -72,7 +86,7 @@ class SpaceShooterMenuButton(GameObject):
             if not self._game_controls.is_mouse_down():
                 if self._is_clicked.is_set():
                     logger.debug("SWITCH")
-                    self.should_switch = True
+                    self._active_scene_manager.set_active_scene(self._scene)
                 self._is_clicked.clear()
         else:
             self._is_highlighted.clear()
@@ -97,171 +111,7 @@ class SpaceShooterMenuButton(GameObject):
 
     def _get_position(self) -> Tuple[int, int]:
         left = int((self._window_width / 2) - self._button_width / 2)
-        top = int((self._window_height / 2) - self._button_height / 2)
-        if self._is_clicked.is_set():
-            top += 5
-
-        return left, top
-
-
-class SeagullsMenuButton(GameObject):
-
-    _asset_manager: AssetManager
-    _game_controls: GameControls
-
-    _is_highlighted: Event
-    _is_clicked: Event
-
-    _window_height = 768
-    _window_width = 1024
-
-    _button_height = 49
-    _button_width = 190
-
-    should_switch = False
-
-    def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
-        self._asset_manager = asset_manager
-        self._game_controls = game_controls
-
-        self._is_highlighted = Event()
-        self._is_clicked = Event()
-
-        self._font = Font(Path("assets/fonts/kenvector-future.ttf"), 14)
-
-    def tick(self) -> None:
-        self._detect_state()
-
-    def render(self, surface: Surface) -> None:
-        button = self._get_background()
-
-        text = self._font.render("Seagulls", True, (90, 90, 70))
-        text_height = text.get_height()
-        padding = (button.get_height() - text_height) / 2
-
-        button.blit(text, (10, padding))
-
-        surface.blit(button, self._get_position())
-
-    def _detect_state(self) -> None:
-        rect = Rect(self._get_position(), (self._button_width, self._button_height))
-        if rect.collidepoint(pygame.mouse.get_pos()):
-            self._is_highlighted.set()
-            click = self._game_controls.is_click_initialized()
-            if click:
-                logger.debug("CLICKY")
-                self._is_clicked.set()
-            if not self._game_controls.is_mouse_down():
-                if self._is_clicked.is_set():
-                    logger.debug("SWITCH")
-                    self.should_switch = True
-                self._is_clicked.clear()
-        else:
-            self._is_highlighted.clear()
-            self._is_clicked.clear()
-
-    def _get_background(self) -> Surface:
-        return self._get_background_map()[self._get_state_name()]
-
-    @lru_cache()
-    def _get_background_map(self) -> Dict[str, Surface]:
-        return {
-            "normal": self._asset_manager.load_png("ui/blue.button00").copy(),
-            "hover": self._asset_manager.load_png("ui/green.button00").copy(),
-            "click": self._asset_manager.load_png("ui/green.button01").copy(),
-        }
-
-    def _get_state_name(self) -> str:
-        if self._is_highlighted.is_set():
-            return "click" if self._is_clicked.is_set() else "hover"
-
-        return "normal"
-
-    def _get_position(self) -> Tuple[int, int]:
-        left = int((self._window_width / 2) - self._button_width / 2)
-        top = int((self._window_height / 2) - self._button_height / 2) + 80
-        if self._is_clicked.is_set():
-            top += 5
-
-        return left, top
-
-
-class RpgMenuButton(GameObject):
-
-    _asset_manager: AssetManager
-    _game_controls: GameControls
-
-    _is_highlighted: Event
-    _is_clicked: Event
-
-    _window_height = 768
-    _window_width = 1024
-
-    _button_height = 49
-    _button_width = 190
-
-    should_switch = False
-
-    def __init__(self, asset_manager: AssetManager, game_controls: GameControls):
-        self._asset_manager = asset_manager
-        self._game_controls = game_controls
-
-        self._is_highlighted = Event()
-        self._is_clicked = Event()
-
-        self._font = Font(Path("assets/fonts/kenvector-future.ttf"), 14)
-
-    def tick(self) -> None:
-        self._detect_state()
-
-    def render(self, surface: Surface) -> None:
-        button = self._get_background()
-
-        text = self._font.render("RPG", True, (90, 90, 70))
-        text_height = text.get_height()
-        padding = (button.get_height() - text_height) / 2
-
-        button.blit(text, (10, padding))
-
-        surface.blit(button, self._get_position())
-
-    def _detect_state(self) -> None:
-        rect = Rect(self._get_position(), (self._button_width, self._button_height))
-        if rect.collidepoint(pygame.mouse.get_pos()):
-            self._is_highlighted.set()
-            click = self._game_controls.is_click_initialized()
-            if click:
-                logger.debug("CLICKY")
-                self._is_clicked.set()
-            if not self._game_controls.is_mouse_down():
-                if self._is_clicked.is_set():
-                    logger.debug("SWITCH")
-                    self.should_switch = True
-                self._is_clicked.clear()
-        else:
-            self._is_highlighted.clear()
-            self._is_clicked.clear()
-
-    def _get_background(self) -> Surface:
-        return self._get_background_map()[self._get_state_name()]
-
-    @lru_cache()
-    def _get_background_map(self) -> Dict[str, Surface]:
-        return {
-            "normal": self._asset_manager.load_png("ui/blue.button00").copy(),
-            "hover": self._asset_manager.load_png("ui/green.button00").copy(),
-            "click": self._asset_manager.load_png("ui/green.button01").copy(),
-        }
-
-    def _get_state_name(self) -> str:
-        if self._is_highlighted.is_set():
-            return "click" if self._is_clicked.is_set() else "hover"
-
-        return "normal"
-
-    def _get_position(self) -> Tuple[int, int]:
-        left = int((self._window_width / 2) - self._button_width / 2)
-        top = int((self._window_height / 2) - self._button_height / 2) + 160
+        top = int((self._window_height / 2) - self._button_height / 2) + self._offset
         if self._is_clicked.is_set():
             top += 5
 
@@ -275,15 +125,7 @@ class MainMenuScene(IGameScene):
     _asset_manager: AssetManager
 
     _game_objects: GameObjectsCollection
-    _space_shooter_menu_button: SpaceShooterMenuButton
-    _seagulls_menu_button: SeagullsMenuButton
-    _rpg_menu_button: RpgMenuButton
     _should_quit: Event
-
-    _game_state: GameState
-    _space_shooter_scene: IGameScene
-    _seagulls_scene: IGameScene
-    _rpg_scene: IGameScene
 
     def __init__(
             self,
@@ -291,39 +133,20 @@ class MainMenuScene(IGameScene):
             asset_manager: AssetManager,
             background: GameObject,
             game_controls: GameControls,
-            game_state: GameState,
-            space_shooter_scene: IGameScene,
-            seagulls_scene: IGameScene,
-            rpg_scene: IGameScene,):
+            space_shooter_menu_button: GameObject,
+            seagulls_menu_button: GameObject,
+            rpg_menu_button: GameObject):
 
         self._surface_renderer = surface_renderer
         self._asset_manager = asset_manager
         self._game_controls = game_controls
-        self._game_state = game_state
-
-        self._space_shooter_scene = space_shooter_scene
-        self._seagulls_scene = seagulls_scene
-        self._rpg_scene = rpg_scene
 
         self._game_objects = GameObjectsCollection()
-        self._game_objects.add(background)
-        self._space_shooter_menu_button = SpaceShooterMenuButton(
-            asset_manager=asset_manager,
-            game_controls=game_controls,
-        )
-        self._seagulls_menu_button = SeagullsMenuButton(
-            asset_manager=asset_manager,
-            game_controls=game_controls,
-        )
-        self._rpg_menu_button = RpgMenuButton(
-            asset_manager=asset_manager,
-            game_controls=game_controls,
-        )
-
-        self._game_objects.add(self._space_shooter_menu_button)
-        self._game_objects.add(self._seagulls_menu_button)
-        self._game_objects.add(self._rpg_menu_button)
         self._game_objects.add(self._game_controls)
+        self._game_objects.add(background)
+        self._game_objects.add(space_shooter_menu_button)
+        self._game_objects.add(seagulls_menu_button)
+        self._game_objects.add(rpg_menu_button)
 
         self._should_quit = Event()
 
@@ -336,24 +159,12 @@ class MainMenuScene(IGameScene):
 
     def tick(self) -> None:
         self._game_objects.apply(lambda x: x.tick())
-        if self._space_shooter_menu_button.should_switch:
-            logger.debug("SWITCHING SCENE TO SPACE SHOOTER")
-            self._change_scene(self._space_shooter_scene)
-        if self._seagulls_menu_button.should_switch:
-            logger.debug("SWITCHING SCENE TO SEAGULLS")
-            self._change_scene(self._seagulls_scene)
-        if self._rpg_menu_button.should_switch:
-            logger.debug("SWITCHING SCENE TO RPG")
-            self._change_scene(self._rpg_scene)
+
         if self._game_controls.should_quit():
             logger.debug("QUIT EVENT DETECTED")
             self._should_quit.set()
 
         self._render()
-
-    def _change_scene(self, next_scene: IGameScene) -> None:
-        self._game_state.active_scene = next_scene
-        self._game_state.game_state_changed = True
 
     def _render(self) -> None:
         background = Surface((1024, 600))

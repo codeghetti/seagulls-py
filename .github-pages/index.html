@@ -16,7 +16,7 @@
     
     
       
-        <title>seagulls-py</title>
+        <title>Home - seagulls-py</title>
       
     
     
@@ -63,7 +63,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#home" class="md-skip">
+        <a href="#seagulls-py" class="md-skip">
           Skip to content
         </a>
       
@@ -260,9 +260,73 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Home
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         Home
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#development-environment" class="md-nav__link">
+    Development Environment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#direnv" class="md-nav__link">
+    Direnv
+  </a>
+  
+    <nav class="md-nav" aria-label="Direnv">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pyenv" class="md-nav__link">
+    Pyenv
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poetry" class="md-nav__link">
+    Poetry
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attribution" class="md-nav__link">
+    Attribution
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -527,6 +591,55 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#development-environment" class="md-nav__link">
+    Development Environment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#direnv" class="md-nav__link">
+    Direnv
+  </a>
+  
+    <nav class="md-nav" aria-label="Direnv">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pyenv" class="md-nav__link">
+    Pyenv
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poetry" class="md-nav__link">
+    Poetry
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attribution" class="md-nav__link">
+    Attribution
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -542,8 +655,72 @@
                   </a>
                 
                 
-                <h1 id="home">Home<a class="headerlink" href="#home" title="Permanent link">&para;</a></h1>
-<p>Coming Soon!</p>
+                <h1 id="seagulls-py">seagulls-py<a class="headerlink" href="#seagulls-py" title="Permanent link">&para;</a></h1>
+<h2 id="development-environment">Development Environment<a class="headerlink" href="#development-environment" title="Permanent link">&para;</a></h2>
+<p>These are development environment instructions based on the assumption that you are on an Ubuntu
+machine.</p>
+<p>Python development environments are complete chaos. Do what ever you want but these steps below will
+absolutely work.</p>
+<h2 id="direnv">Direnv<a class="headerlink" href="#direnv" title="Permanent link">&para;</a></h2>
+<p>We use <a href="https://direnv.net">direnv</a> to automatically define some environment variables and to activate the virtualenv
+when you access the code's directory in your terminal. On most Ubuntu versions, you can install it
+by running <code>sudo apt install direnv</code> and adding the below line to your <code>~/.bashrc</code> file:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">eval</span> <span class="s2">&quot;</span><span class="k">$(</span>direnv hook bash<span class="k">)</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Then, add this snippet to <code>~/.config/direnv/direnvrc</code> in order to add <code>poetry</code> support to <code>direnv</code>:
+<div class="highlight"><pre><span></span><code>layout_poetry<span class="o">()</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">[[</span> ! -f pyproject.toml <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    log_error <span class="s1">&#39;No pyproject.toml found. Use `poetry new` or `poetry init` to create one first.&#39;</span>
+    <span class="nb">exit</span> <span class="m">2</span>
+  <span class="k">fi</span>
+
+  <span class="c1"># create venv if it doesn&#39;t exist</span>
+  poetry run <span class="nb">true</span>
+
+  <span class="nb">export</span> <span class="nv">VIRTUAL_ENV</span><span class="o">=</span><span class="k">$(</span>poetry env info --path<span class="k">)</span>
+  <span class="nb">export</span> <span class="nv">POETRY_ACTIVE</span><span class="o">=</span><span class="m">1</span>
+  PATH_add <span class="s2">&quot;</span><span class="nv">$VIRTUAL_ENV</span><span class="s2">/bin&quot;</span>
+<span class="o">}</span>
+</code></pre></div></p>
+<h3 id="pyenv">Pyenv<a class="headerlink" href="#pyenv" title="Permanent link">&para;</a></h3>
+<p>Use <a href="https://github.com/pyenv/pyenv" title="Pyenv">pyenv</a> to manage multiple versions of python and to decouple your development
+environments from any system python installations. You can use the <a href="https://github.com/pyenv/pyenv-installer" title="Pyenv Installer">pyenv-installer</a> if you're
+comfortable piping scripts into bash from their site!</p>
+<p>Make sure you install the [prerequisites] before installing <code>pyenv</code> and any <code>python</code> version.</p>
+<div class="highlight"><pre><span></span><code>$ curl https://pyenv.run <span class="p">|</span> bash
+</code></pre></div>
+<p>Then make sure to have these in your <code>.bashrc</code> file:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.pyenv/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+<span class="nb">eval</span> <span class="s2">&quot;</span><span class="k">$(</span>pyenv init -<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nb">eval</span> <span class="s2">&quot;</span><span class="k">$(</span>pyenv virtualenv-init -<span class="k">)</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Reload your terminal session, install <code>python 2.9.2</code>, and set it as your default global python:
+<div class="highlight"><pre><span></span><code>$ pyenv install <span class="m">3</span>.9.2
+$ pyenv global <span class="m">3</span>.9.2
+</code></pre></div></p>
+<p>You can make which your new python is being used by running <code>pyenv versions</code> and <code>python --version</code>.</p>
+<h3 id="poetry">Poetry<a class="headerlink" href="#poetry" title="Permanent link">&para;</a></h3>
+<p>We use <a href="https://python-poetry.org" title="Poetry">poetry</a> to manage our python packages because it's shiny, new, and all the cool kids are
+doing it. We use <a href="https://pipxproject.github.io/pipx/" title="pipx">pipx</a> to install <code>poetry</code> because it works for most folks. Make sure to run these
+commands from the <code>python 3.9.2</code> installation we created above.</p>
+<div class="highlight"><pre><span></span><code>$ pip install pipx
+$ pipx install poetry
+</code></pre></div>
+<p>Now you can finally clone this repo, change into the code's directory, and initialize your env:
+<div class="highlight"><pre><span></span><code>$ git clone git@github.com:owl-games/seagulls-py.git
+$ <span class="nb">cd</span> seagulls-py
+$ poetry install
+$ direnv allow .
+</code></pre></div></p>
+<p>If everything has gone as planned, you can run the <code>seagulls</code> command and start editing code.</p>
+<h2 id="attribution">Attribution<a class="headerlink" href="#attribution" title="Permanent link">&para;</a></h2>
+<p>These are some of the open source projects that helped us develop seagulls.py:</p>
+<ul>
+<li><a href="https://www.kenney.nl/assets/ui-pack">Kenney: UI Pack</a></li>
+<li><a href="https://www.pygame.org/">pygame</a></li>
+</ul>
+                
+                  
                 
               
               

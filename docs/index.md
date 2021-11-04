@@ -11,7 +11,7 @@ machine.
 Python development environments are complete chaos. Do what ever you want but these steps below will
 absolutely work.
 
-## Direnv
+### Direnv
 [direnv]: <https://direnv.net>
 We use [direnv] to automatically define some environment variables and to activate the virtualenv
 when you access the code's directory in your terminal. On most Ubuntu versions, you can install it
@@ -60,7 +60,7 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 ```
 
-Reload your terminal session, install `python 2.9.2`, and set it as your default global python:
+Reload your terminal session, install `python 3.9.2`, and set it as your default global python:
 ```bash
 $ pyenv install 3.9.2
 $ pyenv global 3.9.2
@@ -89,6 +89,34 @@ $ direnv allow .
 ```
 
 If everything has gone as planned, you can run the `seagulls` command and start editing code.
+
+### Windows Setup Instructions: How they differ from Linux
+[Pyenv for Windows]: <https://pyenv-win.github.io/pyenv-win/> "Pyenv for windows"
+Direnv is not usable at this time for Windows.
+
+Link to install [Pyenv for Windows]
+
+If you receive an error mentioning running scripts is disabled on the system when trying to run pyenv, 
+run in PowerShell as admin:
+```bash
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+```
+To install Poetry for Windows, run in PowerShell:
+```bash
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py 
+-UseBasicParsing).Content | python - 
+```
+
+If you run into the error below installing Poetry for Windows, disable python.exe and python3.exe in the
+'App Execution Alias' page.
+```bash
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from 
+Settings > Manage App Execution Aliases.
+```
+To substitute the direnv allow . command in Linux, run:
+```commandline
+poetry shell
+```
 
 ## Attribution
 

@@ -692,6 +692,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#is_up_moving" class="md-nav__link">
+    is_up_moving()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_down_moving" class="md-nav__link">
+    is_down_moving()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#should_toggle_debug_hud" class="md-nav__link">
     should_toggle_debug_hud()
   </a>
@@ -2694,6 +2708,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#is_up_moving" class="md-nav__link">
+    is_up_moving()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_down_moving" class="md-nav__link">
+    is_down_moving()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#should_toggle_debug_hud" class="md-nav__link">
     should_toggle_debug_hud()
   </a>
@@ -4659,6 +4687,12 @@ inheritance.</p>
         <span class="k">def</span> <span class="nf">is_right_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">]</span>
 
+        <span class="k">def</span> <span class="nf">is_up_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_UP</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">is_down_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_DOWN</span><span class="p">]</span>
+
         <span class="k">def</span> <span class="nf">should_toggle_debug_hud</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_key_down_event</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_BACKQUOTE</span><span class="p">):</span>
@@ -4739,6 +4773,20 @@ inheritance.</p>
 </code></pre></div>
 <details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">is_right_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">]</span>
+</code></pre></div>
+</details>
+<h3 id="is_up_moving">is_up_moving()<a class="headerlink" href="#is_up_moving" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_up_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">is_up_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_UP</span><span class="p">]</span>
+</code></pre></div>
+</details>
+<h3 id="is_down_moving">is_down_moving()<a class="headerlink" href="#is_down_moving" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_down_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</code></pre></div>
+<details class="note"><summary>View Source</summary><div class="highlight"><pre><span></span><code>        <span class="k">def</span> <span class="nf">is_down_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()[</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_DOWN</span><span class="p">]</span>
 </code></pre></div>
 </details>
 <h3 id="should_toggle_debug_hud">should_toggle_debug_hud()<a class="headerlink" href="#should_toggle_debug_hud" title="Permanent link">&para;</a></h3>

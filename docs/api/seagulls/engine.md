@@ -604,6 +604,12 @@ Interface for anything representing an object in the scene.
             def is_right_moving(self) -> bool:
                 return pygame.key.get_pressed()[pygame.K_RIGHT]
 
+            def is_up_moving(self) -> bool:
+                return pygame.key.get_pressed()[pygame.K_UP]
+
+            def is_down_moving(self) -> bool:
+                return pygame.key.get_pressed()[pygame.K_DOWN]
+
             def should_toggle_debug_hud(self) -> bool:
                 for event in self._events:
                     if self._is_key_down_event(event, pygame.K_BACKQUOTE):
@@ -732,6 +738,36 @@ def is_right_moving(self) -> bool:
     ```python
             def is_right_moving(self) -> bool:
                 return pygame.key.get_pressed()[pygame.K_RIGHT]
+
+    ```
+
+
+### is_up_moving()
+
+```python
+def is_up_moving(self) -> bool:
+```
+
+
+??? note "View Source"
+    ```python
+            def is_up_moving(self) -> bool:
+                return pygame.key.get_pressed()[pygame.K_UP]
+
+    ```
+
+
+### is_down_moving()
+
+```python
+def is_down_moving(self) -> bool:
+```
+
+
+??? note "View Source"
+    ```python
+            def is_down_moving(self) -> bool:
+                return pygame.key.get_pressed()[pygame.K_DOWN]
 
     ```
 

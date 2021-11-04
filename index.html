@@ -288,15 +288,15 @@
     Development Environment
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="Development Environment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#direnv" class="md-nav__link">
     Direnv
   </a>
   
-    <nav class="md-nav" aria-label="Direnv">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#pyenv" class="md-nav__link">
@@ -308,6 +308,13 @@
           <li class="md-nav__item">
   <a href="#poetry" class="md-nav__link">
     Poetry
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows-setup-instructions-how-they-differ-from-linux" class="md-nav__link">
+    Windows Setup Instructions: How they differ from Linux
   </a>
   
 </li>
@@ -602,15 +609,15 @@
     Development Environment
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="Development Environment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#direnv" class="md-nav__link">
     Direnv
   </a>
   
-    <nav class="md-nav" aria-label="Direnv">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#pyenv" class="md-nav__link">
@@ -622,6 +629,13 @@
           <li class="md-nav__item">
   <a href="#poetry" class="md-nav__link">
     Poetry
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows-setup-instructions-how-they-differ-from-linux" class="md-nav__link">
+    Windows Setup Instructions: How they differ from Linux
   </a>
   
 </li>
@@ -661,7 +675,7 @@
 machine.</p>
 <p>Python development environments are complete chaos. Do what ever you want but these steps below will
 absolutely work.</p>
-<h2 id="direnv">Direnv<a class="headerlink" href="#direnv" title="Permanent link">&para;</a></h2>
+<h3 id="direnv">Direnv<a class="headerlink" href="#direnv" title="Permanent link">&para;</a></h3>
 <p>We use <a href="https://direnv.net">direnv</a> to automatically define some environment variables and to activate the virtualenv
 when you access the code's directory in your terminal. On most Ubuntu versions, you can install it
 by running <code>sudo apt install direnv</code> and adding the below line to your <code>~/.bashrc</code> file:</p>
@@ -694,7 +708,7 @@ comfortable piping scripts into bash from their site!</p>
 <span class="nb">eval</span> <span class="s2">&quot;</span><span class="k">$(</span>pyenv init -<span class="k">)</span><span class="s2">&quot;</span>
 <span class="nb">eval</span> <span class="s2">&quot;</span><span class="k">$(</span>pyenv virtualenv-init -<span class="k">)</span><span class="s2">&quot;</span>
 </code></pre></div>
-<p>Reload your terminal session, install <code>python 2.9.2</code>, and set it as your default global python:
+<p>Reload your terminal session, install <code>python 3.9.2</code>, and set it as your default global python:
 <div class="highlight"><pre><span></span><code>$ pyenv install <span class="m">3</span>.9.2
 $ pyenv global <span class="m">3</span>.9.2
 </code></pre></div></p>
@@ -713,6 +727,25 @@ $ poetry install
 $ direnv allow .
 </code></pre></div></p>
 <p>If everything has gone as planned, you can run the <code>seagulls</code> command and start editing code.</p>
+<h3 id="windows-setup-instructions-how-they-differ-from-linux">Windows Setup Instructions: How they differ from Linux<a class="headerlink" href="#windows-setup-instructions-how-they-differ-from-linux" title="Permanent link">&para;</a></h3>
+<p>Direnv is not usable at this time for Windows.</p>
+<p>Link to install <a href="https://pyenv-win.github.io/pyenv-win/" title="Pyenv for windows">Pyenv for Windows</a></p>
+<p>If you receive an error mentioning running scripts is disabled on the system when trying to run pyenv, 
+run in PowerShell as admin:
+<div class="highlight"><pre><span></span><code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+</code></pre></div>
+To install Poetry for Windows, run in PowerShell:
+<div class="highlight"><pre><span></span><code>Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py 
+-UseBasicParsing<span class="o">)</span>.Content <span class="p">|</span> python - 
+</code></pre></div></p>
+<p>If you run into the error below installing Poetry for Windows, disable python.exe and python3.exe in the
+'App Execution Alias' page.
+<div class="highlight"><pre><span></span><code>Python was not found<span class="p">;</span> run without arguments to install from the Microsoft Store, or disable this shortcut from 
+Settings &gt; Manage App Execution Aliases.
+</code></pre></div>
+To substitute the direnv allow . command in Linux, run:
+<div class="highlight"><pre><span></span><code>poetry shell
+</code></pre></div></p>
 <h2 id="attribution">Attribution<a class="headerlink" href="#attribution" title="Permanent link">&para;</a></h2>
 <p>These are some of the open source projects that helped us develop seagulls.py:</p>
 <ul>

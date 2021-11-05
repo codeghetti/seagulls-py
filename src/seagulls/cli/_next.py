@@ -38,7 +38,8 @@ class CliClient:
         self._command_locator = command_locator
 
     def execute(self, args: Tuple[str, ...]) -> None:
-        command = self._command_locator.find_command(args)
+        pass
+        # command = self._command_locator.find_command(args)
         # command.execute()
 
 

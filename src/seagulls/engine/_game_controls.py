@@ -3,8 +3,7 @@ from typing import List
 import pygame
 from pygame.event import Event
 
-from seagulls.engine import Surface
-
+from ._pyagme import Surface
 from ._game_object import GameObject
 
 

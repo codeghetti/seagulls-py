@@ -1,5 +1,6 @@
 name: Seagulls CI
 on:
+  push: {}
   pull_request:
     branches: [ $default-branch ]
 jobs:

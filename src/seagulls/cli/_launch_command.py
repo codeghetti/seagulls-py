@@ -2,7 +2,7 @@ import logging
 from argparse import ArgumentParser
 from typing import Any, Dict
 
-from seagulls.engine import IGameSession, IGameScene
+from seagulls.engine import IGameScene, IGameSession
 from seagulls.examples import ISetActiveScene
 
 from ._framework import CliCommand

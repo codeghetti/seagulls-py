@@ -1,6 +1,6 @@
-from functools import lru_cache
 import random
-from typing import List, Optional, Any, Dict
+from functools import lru_cache
+from typing import Any, Dict, List, Optional
 
 from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface

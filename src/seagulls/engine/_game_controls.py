@@ -1,6 +1,7 @@
 from typing import List
 
 import pygame
+from seagulls.engine import Surface
 from pygame.event import Event
 
 from ._game_object import GameObject
@@ -70,5 +71,5 @@ class GameControls(GameObject):
     def _is_key_up_event(self, event: Event, key: int) -> bool:
         return event.type == pygame.KEYUP and event.key == key
 
-    def render(self, surface: pygame.Surface) -> None:
+    def render(self, surface: Surface) -> None:
         pass

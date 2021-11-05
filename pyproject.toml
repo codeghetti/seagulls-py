@@ -28,9 +28,10 @@ pdoc = {version = "*", optional = true }
 mkdocs = {version = "*", optional = true }
 mkdocs-material = {version = "*", optional = true }
 mkdocs-awesome-pages-plugin = {version = "*", optional = true }
+types-PyYAML = {version = "*", optional = true}
 
 [tool.poetry.extras]
-dev = ["tox", "isort", "pytest", "flake8", "mypy", "pdoc", "mkdocs", "mkdocs-material", "mkdocs-awesome-pages-plugin"]
+dev = ["tox", "isort", "pytest", "flake8", "mypy", "pdoc", "mkdocs", "mkdocs-material", "mkdocs-awesome-pages-plugin", "types-PyYAML"]
 
 [tool.poetry.dev-dependencies]
 

@@ -38,7 +38,7 @@ class Laser(GameObject):
 
     @lru_cache()
     def _get_cached_laser(self) -> Surface:
-        return self._asset_manager.load_sprite("/space-shooter/laser-red").copy()
+        return self._asset_manager.load_sprite("space-shooter/laser-red").copy()
 
 
 class Ship(GameObject):

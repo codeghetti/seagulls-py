@@ -3,6 +3,8 @@ import math
 from functools import lru_cache
 from typing import List
 
+from pygame import mixer
+
 from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface, GameControls, Vector2, GameClock
 
@@ -36,7 +38,7 @@ class Laser(GameObject):
 
     @lru_cache()
     def _get_cached_laser(self) -> Surface:
-        return self._asset_manager.load_sprite("space-shooter/laser-red").copy()
+        return self._asset_manager.load_sprite("/space-shooter/laser-red").copy()
 
 
 class Ship(GameObject):
@@ -47,6 +49,9 @@ class Ship(GameObject):
     _velocity: Vector2
     _max_velocity: float
     _lasers: List[GameObject]
+
+    mixer.init()
+    _laser_sound = mixer.Sound("assets/sounds/laser-sound.ogg")
 
     def __init__(
             self,
@@ -81,6 +86,7 @@ class Ship(GameObject):
 
         if self._game_controls.should_fire():
             self._lasers.append(Laser(self._clock, self._asset_manager, self._position))
+            self._laser_sound.play()
 
         delta = self._clock.get_time()
 

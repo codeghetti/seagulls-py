@@ -24,3 +24,4 @@ class AssetManager:
             return loaded_sprite.convert()
         else:
             return loaded_sprite.convert_alpha()
+

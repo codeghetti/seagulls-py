@@ -1,11 +1,12 @@
 import logging
 import os
-from abc import ABC
-from typing import Generic, Tuple, TypeVar
+import re
+from abc import ABC, abstractmethod
+from typing import Generic, Tuple, TypeVar, Dict
 
 import pygame
 
-from ._di_container import SeagullsDiContainer
+from seagulls.cli._di_container import SeagullsDiContainer
 
 logger = logging.getLogger(__name__)
 T = TypeVar('T')
@@ -41,6 +42,53 @@ class CliClient:
         pass
         # command = self._command_locator.find_command(args)
         # command.execute()
+
+
+class IExecuteCommands(ABC):
+
+    @abstractmethod
+    def execute(self) -> None:
+        pass
+
+
+class IRegisterCliCommands(ABC):
+
+    @abstractmethod
+    def register_command(self, path: Tuple[str, ...], command: IExecuteCommands) -> None:
+        pass
+
+
+class CliCommandsRegistry(IRegisterCliCommands):
+    _entries: Dict[Tuple[str, ...], IExecuteCommands]
+
+    def register_command(self, path: Tuple[str, ...], command: IExecuteCommands) -> None:
+        self._validate_path(path)
+
+        if path in self._entries:
+            raise RuntimeError(f"Path already reserved: {path}")
+
+        self._entries[path] = command
+
+    def _validate_path(self, path: Tuple[str, ...]) -> None:
+        for item in path:
+            # all lowercase letters, numbers, and dashes but cannot start or end with a dash
+            if re.match("^[a-z0-9][a-z0-9-]+[a-z0-9]$", item):
+                raise RuntimeError(f"Invalid CLI Command Part: {item}")
+
+            if "--" in item:
+                # no consecutive dashes allowed, either
+                raise RuntimeError(f"Invalid CLI Command Part: {item}")
+
+
+class ExampleCommand(IExecuteCommands):
+    def execute(self) -> None:
+        print("EXECUTED")
+
+
+if __name__ == "__main__":
+    registry = CliCommandsRegistry()
+    registry.register_command(("example",), ExampleCommand())
+
 
 
 def cli_next():

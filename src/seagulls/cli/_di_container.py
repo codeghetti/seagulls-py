@@ -25,9 +25,10 @@ from seagulls.examples import (
     SimpleStarsBackground,
     WindowScene
 )
-from seagulls.examples.rpg import Character, RpgScene
+
 from seagulls.examples.seagulls import SeagullsScene
-from seagulls.examples.space_shooter import Ship, ShooterScene
+from seagulls.examples.rpg import RpgScene, Character
+from seagulls.examples.space_shooter import Ship, ShooterScene, AsteroidField
 
 from ._framework import LoggingClient
 
@@ -80,6 +81,12 @@ class SeagullsDiContainer(DeclarativeContainer):
         game_controls=_game_controls,
     )
 
+    _asteroid_field = Singleton(
+        AsteroidField,
+        clock=_game_clock,
+        asset_manager=_asset_manager,
+    )
+
     _space_shooter_scene = Singleton(
         ShooterScene,
         clock=_game_clock,
@@ -87,6 +94,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         asset_manager=_asset_manager,
         background=_main_menu_background,
         ship=_ship,
+        asteroid_field=_asteroid_field,
         game_controls=_game_controls
     )
 

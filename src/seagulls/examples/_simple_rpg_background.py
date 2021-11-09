@@ -1,6 +1,6 @@
-from functools import lru_cache
 import random
-from typing import List, Optional, Any, Dict
+from functools import lru_cache
+from typing import Any, Dict, List, Optional
 
 from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface
@@ -23,33 +23,33 @@ class GameBoard():
         self._tiles[(x, y)] = tile
 
     def get_neighbors(self, x: int, y: int, size: int) -> List[Tile]:
-        _neighbors = []
+        neighbors = []
 
         if self.get_tile(x - size, y) is not None:
-            _neighbors.append(self.get_tile(x - size, y))
+            neighbors.append(self.get_tile(x - size, y))
 
         if self.get_tile(x + size, y) is not None:
-            _neighbors.append(self.get_tile(x + size, y))
+            neighbors.append(self.get_tile(x + size, y))
 
         if self.get_tile(x, y - size) is not None:
-            _neighbors.append(self.get_tile(x, y - size))
+            neighbors.append(self.get_tile(x, y - size))
 
         if self.get_tile(x, y + size) is not None:
-            _neighbors.append(self.get_tile(x, y + size))
+            neighbors.append(self.get_tile(x, y + size))
 
         if self.get_tile(x + size, y + size) is not None:
-            _neighbors.append(self.get_tile(x + size, y + size))
+            neighbors.append(self.get_tile(x + size, y + size))
 
         if self.get_tile(x - size, y - size) is not None:
-            _neighbors.append(self.get_tile(x - size, y - size))
+            neighbors.append(self.get_tile(x - size, y - size))
 
         if self.get_tile(x - size, y + size) is not None:
-            _neighbors.append(self.get_tile(x - size, y + size))
+            neighbors.append(self.get_tile(x - size, y + size))
 
         if self.get_tile(x + size, y - size) is not None:
-            _neighbors.append(self.get_tile(x + size, y - size))
+            neighbors.append(self.get_tile(x + size, y - size))
 
-        return _neighbors
+        return [n for n in neighbors if n]
 
 
 class SimpleRpgBackground(GameObject):
@@ -143,5 +143,3 @@ class SimpleRpgBackground(GameObject):
                     else:
                         surface.blit(island_tree, (x * 16, y * 16))
         return surface
-
-

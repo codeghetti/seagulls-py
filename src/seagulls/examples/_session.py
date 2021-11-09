@@ -21,17 +21,17 @@ class AsyncGameSession(IGameSession):
         self._stopped = Event()
 
     def start(self) -> None:
-        logger.debug(f"starting game session")
+        logger.debug("starting game session")
         self._thread.start()
 
     def wait_for_completion(self) -> None:
-        logger.debug(f"waiting for completion")
+        logger.debug("waiting for completion")
         while not self._stopped.is_set():
             time.sleep(0.1)
-        logger.debug(f"done waiting for completion")
+        logger.debug("done waiting for completion")
 
     def stop(self) -> None:
-        logger.debug(f"stopping game session")
+        logger.debug("stopping game session")
         self._stopped.set()
         self._thread.join()
 
@@ -53,7 +53,7 @@ class BlockingGameSession(IGameSession):
         self._scene_manager = scene_manager
 
     def start(self) -> None:
-        logger.debug(f"starting game session")
+        logger.debug("starting game session")
         pygame.display.set_caption("Our Game")
         scene = self._scene_manager.get_scene()
         scene.start()

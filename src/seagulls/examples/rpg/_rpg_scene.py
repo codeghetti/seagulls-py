@@ -2,8 +2,15 @@ import logging
 from threading import Event
 
 from seagulls.assets import AssetManager
-from seagulls.engine import IGameScene, SurfaceRenderer, GameObjectsCollection, GameObject, \
-    GameControls, Surface, GameClock
+from seagulls.engine import (
+    GameClock,
+    GameControls,
+    GameObject,
+    GameObjectsCollection,
+    IGameScene,
+    Surface,
+    SurfaceRenderer
+)
 
 logger = logging.getLogger(__name__)
 

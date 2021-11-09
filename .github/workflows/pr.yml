@@ -1,0 +1,23 @@
+name: Seagulls CI
+on:
+  push: {}
+  pull_request:
+    branches: [ $default-branch ]
+jobs:
+  tox:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.2"
+      - name: Install Poetry
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pipx
+          pipx install poetry
+          poetry install --extras dev
+      - name: Run Tox
+        run: poetry run tox

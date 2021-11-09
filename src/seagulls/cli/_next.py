@@ -38,8 +38,9 @@ class CliClient:
         self._command_locator = command_locator
 
     def execute(self, args: Tuple[str, ...]) -> None:
-        command = self._command_locator.find_command(args)
-        command.execute()
+        pass
+        # command = self._command_locator.find_command(args)
+        # command.execute()
 
 
 def cli_next():
@@ -54,7 +55,7 @@ def cli_next():
     logging_client = di_container.logging_client()
     logging_client.configure_logging()
 
-    root_command = di_container.root_command()
+    # root_command = di_container.root_command()
 
     # # Build the CLI Command Interface
     # parser = ArgumentParser(

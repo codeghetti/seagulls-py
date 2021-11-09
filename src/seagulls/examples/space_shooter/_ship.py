@@ -6,7 +6,13 @@ from typing import List
 from pygame import mixer
 
 from seagulls.assets import AssetManager
-from seagulls.engine import GameObject, Surface, GameControls, Vector2, GameClock
+from seagulls.engine import (
+    GameClock,
+    GameControls,
+    GameObject,
+    Surface,
+    Vector2
+)
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +71,8 @@ class Ship(GameObject):
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
         self._lasers = []
+        mixer.init()
+        self._laser_sound = mixer.Sound("assets/sounds/laser-sound.ogg")
 
     def tick(self) -> None:
         if self._game_controls.is_left_moving():

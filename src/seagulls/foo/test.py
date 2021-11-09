@@ -47,7 +47,7 @@ class SomeClass(AnotherBaseClass):
         Args:
             arg1: The docs for arg1 arg in `SomeClass.__init__()`.
         """
-        super().__init__()
+        super().__init__(arg1)
         pass
 
     @lru_cache()

@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Dependency, Singleton
 
@@ -9,21 +8,27 @@ from seagulls.cli._example_command import ExampleCommand
 from seagulls.cli._launch_command import LaunchCommand
 from seagulls.cli._seagulls_command import SeagullsCommand
 from seagulls.debug import DebugHud
-from seagulls.engine import GameClock, GameControls, SurfaceRenderer, IGameScene
+from seagulls.engine import (
+    GameClock,
+    GameControls,
+    IGameScene,
+    SurfaceRenderer
+)
 from seagulls.examples import (
+    ActiveSceneClient,
     AsyncGameSession,
     BlockingGameSession,
     ExampleSceneManager,
-    MainMenuScene,
-    SimpleStarsBackground,
-    SimpleRpgBackground,
-    WindowScene,
-    ActiveSceneClient,
     GenericMenuButton,
+    MainMenuScene,
+    SimpleRpgBackground,
+    SimpleStarsBackground,
+    WindowScene
 )
+
 from seagulls.examples.seagulls import SeagullsScene
-from seagulls.examples.space_shooter import ShooterScene, Ship, AsteroidField
 from seagulls.examples.rpg import RpgScene, Character
+from seagulls.examples.space_shooter import Ship, ShooterScene, AsteroidField
 
 from ._framework import LoggingClient
 

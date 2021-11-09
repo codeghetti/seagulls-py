@@ -72,13 +72,10 @@ class AsteroidField(GameObject):
         for rock in self._rocks:
             rock.render(surface)
 
-    def _new_rock_position_y(self, rock_position: Vector2) -> int:
+    def _new_rock_position_y(self, rock_position: Vector2) -> float:
         random_number = random.randint(-70, 70)
         if rock_position.y + random_number < 0:
             random_number = random.randint(0, 70)
             return rock_position.y + random_number
         else:
             return rock_position.y+random_number
-
-
-

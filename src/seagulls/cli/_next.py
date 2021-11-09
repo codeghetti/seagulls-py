@@ -48,8 +48,36 @@ class IRegisterCliCommands(ABC):
 
 
 @dataclass(frozen=True)
+class CommandRequestItem:
+    path: Tuple[str, ...]
+    command: IExecuteCommands
+
+    def trim_prefix(self, args: Tuple[str, ...]) -> Tuple[str, ...]:
+        current = list(args)
+        for y in self.path:
+            current = current[current.index(y):]
+
+        return tuple(current)
+
+    def trim_suffix(self, args: Tuple[str, ...], next_path: Tuple[str, ...]) -> Tuple[str, ...]:
+        parts = next_path
+        parts = parts[len(parts) - 1:]
+        next_current = list(args)
+        print(f"not last: {self}")
+        print(f"adjusting current with additional: {parts}")
+        for y in parts:
+            next_current = next_current[next_current.index(y):]
+            print(f"additional y: {y}")
+            print(f"current: {args}")
+        print(f"NEXT CURRENT: {next_current}")
+        adjusted_current = args[:-1 * len(next_current)]
+        print(f"adjusted current: {adjusted_current}")
+        return adjusted_current
+
+
+@dataclass(frozen=True)
 class CommandRequest:
-    chain: Tuple[Tuple[Tuple[str, ...], IExecuteCommands], ...]
+    chain: Tuple[CommandRequestItem, ...]
 
 
 class IBuildCommandRequests(ABC):
@@ -111,39 +139,21 @@ class CliClient(IBuildCommandRequests):
         print(f"request: {request}")
         print("")
         for x in range(len(request.chain)):
-            item = request.chain[x]
-            subset = []
-            current = list(args)
+            item: CommandRequestItem = request.chain[x]
+            current = list(item.trim_prefix(args))
             print(f"finding current for item: {item}")
-
-            # finding the subset of args that starts with the last element of `item[0]` (the tuple)
-            for y in item[0]:
-                current = current[current.index(y):]
-                print(f"y: {y}")
 
             # on the last command, this is the args used
             print(f"current: {current}")
 
             if x == len(request.chain) - 1:
                 print(f"last: {item}")
-                item[1].execute(tuple(current))
+                item.command.execute(tuple(current))
             else:
                 # but otherwise, args stops at the beginning of the args for the next command
-                next_item = request.chain[x+1]
-                parts = next_item[0]
-                parts = parts[len(parts) - 1:]
-                next_current = current.copy()
-                print(f"not last: {item}")
-                print(f"adjusting current with additional: {parts}")
-                print(f"adjusting current with additional next_item: {next_item}")
-                for y in parts:
-                    next_current = next_current[next_current.index(y):]
-                    print(f"additional y: {y}")
-                    print(f"current: {current}")
-                print(f"NEXT CURRENT: {next_current}")
-                adjusted_current = current[:-1 * len(next_current)]
-                print(f"adjusted current: {adjusted_current}")
-                item[1].execute(tuple(adjusted_current))
+                next_item: CommandRequestItem = request.chain[x+1]
+                adjusted_current = item.trim_suffix(tuple(current), next_item.path)
+                item.command.execute(tuple(adjusted_current))
 
             print("")
 
@@ -151,7 +161,7 @@ class CliClient(IBuildCommandRequests):
         # command.execute()
 
     def build_command_request(self, args: Tuple[str, ...]) -> CommandRequest:
-        result: List[Tuple[Tuple[str, ...], IExecuteCommands]] = []
+        result: List[CommandRequestItem] = []
         matching_path = []
         for arg in args:
             if not re.match("^[a-z0-9][a-z0-9-]+[a-z0-9]$", arg):
@@ -168,7 +178,7 @@ class CliClient(IBuildCommandRequests):
             print(f"testing: {subset}")
             if subset in mapping:
                 print(f"match: {subset}: {mapping[subset]}")
-                result.append((subset, mapping[subset]))
+                result.append(CommandRequestItem(path=subset, command=mapping[subset]))
 
         return CommandRequest(chain=tuple(result))
             #

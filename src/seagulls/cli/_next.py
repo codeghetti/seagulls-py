@@ -4,7 +4,7 @@ import re
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Generic, Tuple, TypeVar, Dict, List
+from typing import Dict, Generic, List, Tuple, TypeVar
 
 import pygame
 
@@ -181,11 +181,6 @@ class CliClient(IBuildCommandRequests):
                 result.append(CommandRequestItem(path=subset, command=mapping[subset]))
 
         return CommandRequest(chain=tuple(result))
-            #
-            # for path, command in self._registry.get_dict().items():
-            #     # index = len(result)
-            #
-            #     print(path, command)
 
 
 if __name__ == "__main__":

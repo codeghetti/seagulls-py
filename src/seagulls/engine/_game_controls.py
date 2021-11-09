@@ -3,8 +3,8 @@ from typing import List
 import pygame
 from pygame.event import Event
 
-from ._pyagme import Surface
 from ._game_object import GameObject
+from ._pyagme import Surface
 
 
 class GameControls(GameObject):

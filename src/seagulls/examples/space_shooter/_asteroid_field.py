@@ -10,27 +10,27 @@ from seagulls.assets import AssetManager
 class SpaceRocks(GameObject):
     _asset_manager: AssetManager
     _rock_size: int
-    _rock_position: Vector2
+    _position: Vector2
 
     def __init__(
             self,
             asset_manager: AssetManager,
             rock_size: int,
-            rock_position: Vector2):
+            position: Vector2):
         self._asset_manager = asset_manager
         self._rock_size = rock_size
-        self._rock_position = rock_position
+        self._position = position
 
     def tick(self):
         pass
 
     def render(self, surface: Surface) -> None:
         if self._rock_size == 0:
-            surface.blit(self._get_cached_rock_small(), self._rock_position)
+            surface.blit(self._get_cached_rock_small(), self._position)
         elif self._rock_size == 1:
-            surface.blit(self._get_cached_rock_med(), self._rock_position)
+            surface.blit(self._get_cached_rock_med(), self._position)
         else:
-            surface.blit(self._get_cached_rock_large(), self._rock_position)
+            surface.blit(self._get_cached_rock_large(), self._position)
 
     @lru_cache()
     def _get_cached_rock_small(self) -> Surface:

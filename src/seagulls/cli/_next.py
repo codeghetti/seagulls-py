@@ -1,8 +1,10 @@
 import logging
 import os
 import re
+import sys
 from abc import ABC, abstractmethod
-from typing import Generic, Tuple, TypeVar, Dict
+from dataclasses import dataclass
+from typing import Generic, Tuple, TypeVar, Dict, List
 
 import pygame
 
@@ -31,23 +33,10 @@ class CliCommandLocator:
         return FooCliCommand()
 
 
-class CliClient:
-
-    _command_locator: CliCommandLocator
-
-    def __init__(self, command_locator: CliCommandLocator):
-        self._command_locator = command_locator
-
-    def execute(self, args: Tuple[str, ...]) -> None:
-        pass
-        # command = self._command_locator.find_command(args)
-        # command.execute()
-
-
 class IExecuteCommands(ABC):
 
     @abstractmethod
-    def execute(self) -> None:
+    def execute(self, args: Tuple[str, ...]) -> None:
         pass
 
 
@@ -58,8 +47,26 @@ class IRegisterCliCommands(ABC):
         pass
 
 
+@dataclass(frozen=True)
+class CommandRequest:
+    chain: Tuple[Tuple[Tuple[str, ...], IExecuteCommands], ...]
+
+
+class IBuildCommandRequests(ABC):
+
+    @abstractmethod
+    def build_command_request(self, args: Tuple[str, ...]) -> CommandRequest:
+        pass
+
+
 class CliCommandsRegistry(IRegisterCliCommands):
     _entries: Dict[Tuple[str, ...], IExecuteCommands]
+
+    def __init__(self):
+        self._entries = {}
+
+    def get_dict(self) -> Dict[Tuple[str, ...], IExecuteCommands]:
+        return self._entries
 
     def register_command(self, path: Tuple[str, ...], command: IExecuteCommands) -> None:
         self._validate_path(path)
@@ -72,7 +79,7 @@ class CliCommandsRegistry(IRegisterCliCommands):
     def _validate_path(self, path: Tuple[str, ...]) -> None:
         for item in path:
             # all lowercase letters, numbers, and dashes but cannot start or end with a dash
-            if re.match("^[a-z0-9][a-z0-9-]+[a-z0-9]$", item):
+            if not re.match("^[a-z0-9][a-z0-9-]+[a-z0-9]$", item):
                 raise RuntimeError(f"Invalid CLI Command Part: {item}")
 
             if "--" in item:
@@ -81,14 +88,112 @@ class CliCommandsRegistry(IRegisterCliCommands):
 
 
 class ExampleCommand(IExecuteCommands):
-    def execute(self) -> None:
-        print("EXECUTED")
+
+    _with_route: Tuple[str, ...]
+
+    def __init__(self, with_route: Tuple[str, ...]):
+        self._with_route = with_route
+
+    def execute(self, args: Tuple[str, ...]) -> None:
+        print(f"EXECUTED: {args}")
+        print(f"WITH ROUTE: {self._with_route}")
+
+
+class CliClient(IBuildCommandRequests):
+
+    _registry: CliCommandsRegistry
+
+    def __init__(self, registry: CliCommandsRegistry):
+        self._registry = registry
+
+    def execute(self, args: Tuple[str, ...]) -> None:
+        request = self.build_command_request(args)
+        print(f"request: {request}")
+        print("")
+        for x in range(len(request.chain)):
+            item = request.chain[x]
+            subset = []
+            current = list(args)
+            print(f"finding current for item: {item}")
+
+            # finding the subset of args that starts with the last element of `item[0]` (the tuple)
+            for y in item[0]:
+                current = current[current.index(y):]
+                print(f"y: {y}")
+
+            # on the last command, this is the args used
+            print(f"current: {current}")
+
+            if x == len(request.chain) - 1:
+                print(f"last: {item}")
+                item[1].execute(tuple(current))
+            else:
+                # but otherwise, args stops at the beginning of the args for the next command
+                next_item = request.chain[x+1]
+                parts = next_item[0]
+                parts = parts[len(parts) - 1:]
+                next_current = current.copy()
+                print(f"not last: {item}")
+                print(f"adjusting current with additional: {parts}")
+                print(f"adjusting current with additional next_item: {next_item}")
+                for y in parts:
+                    next_current = next_current[next_current.index(y):]
+                    print(f"additional y: {y}")
+                    print(f"current: {current}")
+                print(f"NEXT CURRENT: {next_current}")
+                adjusted_current = current[:-1 * len(next_current)]
+                print(f"adjusted current: {adjusted_current}")
+                item[1].execute(tuple(adjusted_current))
+
+            print("")
+
+        # command = self._command_locator.find_command(args)
+        # command.execute()
+
+    def build_command_request(self, args: Tuple[str, ...]) -> CommandRequest:
+        result: List[Tuple[Tuple[str, ...], IExecuteCommands]] = []
+        matching_path = []
+        for arg in args:
+            if not re.match("^[a-z0-9][a-z0-9-]+[a-z0-9]$", arg):
+                continue
+
+            matching_path.append(arg)
+
+        mapping = self._registry.get_dict()
+        print(f"mapping: {mapping}")
+
+        for x in range(len(matching_path) + 1):
+            index = x - len(matching_path)
+            subset = tuple(matching_path[:index] if index else matching_path)
+            print(f"testing: {subset}")
+            if subset in mapping:
+                print(f"match: {subset}: {mapping[subset]}")
+                result.append((subset, mapping[subset]))
+
+        return CommandRequest(chain=tuple(result))
+            #
+            # for path, command in self._registry.get_dict().items():
+            #     # index = len(result)
+            #
+            #     print(path, command)
 
 
 if __name__ == "__main__":
-    registry = CliCommandsRegistry()
-    registry.register_command(("example",), ExampleCommand())
+    registry_client = CliCommandsRegistry()
+    registry_client.register_command(
+        ("example",), ExampleCommand(("example",)))
 
+    registry_client.register_command(
+        ("example", "one"), ExampleCommand(("example", "one")))
+
+    registry_client.register_command(
+        ("example", "one", "two", "bar"), ExampleCommand(("example", "one", "two", "bar")))
+
+    registry_client.register_command(
+        ("example", "foobar"), ExampleCommand(("example", "foobar")))
+
+    client = CliClient(registry_client)
+    client.execute(tuple(sys.argv[1:]))
 
 
 def cli_next():

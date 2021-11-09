@@ -56,9 +56,6 @@ class Ship(GameObject):
     _max_velocity: float
     _lasers: List[GameObject]
 
-    mixer.init()
-    _laser_sound = mixer.Sound("assets/sounds/laser-sound.ogg")
-
     def __init__(
             self,
             clock: GameClock,

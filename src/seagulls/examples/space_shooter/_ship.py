@@ -46,6 +46,12 @@ class Laser(GameObject):
     def _get_cached_laser(self) -> Surface:
         return self._asset_manager.load_sprite("space-shooter/laser-red").copy()
 
+    def get_laser_position_x(self) -> float:
+        return self._position.x
+
+    def get_laser_position_y(self) -> float:
+        return self._position.y
+
 
 class Ship(GameObject):
     _clock: GameClock
@@ -54,7 +60,7 @@ class Ship(GameObject):
     _position: Vector2
     _velocity: Vector2
     _max_velocity: float
-    lasers: List[Laser]
+    _lasers: List[Laser]
 
     def __init__(
             self,
@@ -67,7 +73,7 @@ class Ship(GameObject):
         self._position = Vector2(400, 303)
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
-        self.lasers = []
+        self._lasers = []
         mixer.init()
         self._laser_sound = mixer.Sound("assets/sounds/laser-sound.ogg")
 
@@ -90,7 +96,7 @@ class Ship(GameObject):
             self._velocity.y = 0.0
 
         if self._game_controls.should_fire():
-            self.lasers.append(Laser(self._clock, self._asset_manager, self._position))
+            self._lasers.append(Laser(self._clock, self._asset_manager, self._position))
             self._laser_sound.play()
 
         delta = self._clock.get_time()
@@ -109,16 +115,25 @@ class Ship(GameObject):
         if self._position.y > 600 - 75:
             self._position.y = 600 - 75
 
-        for laser in self.lasers:
+        for laser in self._lasers:
             laser.tick()
 
     def render(self, surface: Surface) -> None:
         ship_sprite = self._get_cached_ship()
         surface.blit(ship_sprite, self._position)
 
-        for laser in self.lasers:
+        for laser in self._lasers:
             laser.render(surface)
 
     @lru_cache()
     def _get_cached_ship(self) -> Surface:
         return self._asset_manager.load_sprite("space-shooter/ship-orange").copy()
+
+    def get_number_of_lasers(self) -> int:
+        return len(self._lasers)
+
+    def get_laser_position_x(self, laser_number: int) -> float:
+        return self._lasers[laser_number].get_laser_position_x()
+
+    def get_laser_position_y(self, laser_number: int) -> float:
+        return self._lasers[laser_number].get_laser_position_y()

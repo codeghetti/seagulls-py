@@ -18,26 +18,26 @@ class SpaceCollisions(GameObject):
         self._asteroid_field = asteroid_field
 
     def tick(self) -> None:
-        remove_lasers = []
-        remove_rocks = []
+        _remove_lasers = []
+        _remove_rocks = []
 
-        for laser in range(len(self._ship.lasers)):
-            for asteroid in range(len(self._asteroid_field.rocks)):
-                if self._asteroid_field.rocks[asteroid]._position.x <= \
-                        self._ship.lasers[laser]._position.x <= \
-                        self._asteroid_field.rocks[asteroid]._position.x + \
-                        self._asteroid_field.rocks[asteroid]._rock_size[0]:
-                    if self._asteroid_field.rocks[asteroid]._position.y <= \
-                            self._ship.lasers[laser]._position.y <= \
-                            self._asteroid_field.rocks[asteroid]._position.y + \
-                            self._asteroid_field.rocks[asteroid]._rock_size[1]:
-                        remove_lasers.append(laser)
-                        remove_rocks.append(asteroid)
-        for laser in remove_lasers:
-            self._ship.lasers.pop(laser)
+        for laser in range(self._ship.get_number_of_lasers()):
+            for asteroid in range(self._asteroid_field.get_asteroid_field_size()):
+                if self._asteroid_field.get_rock_position_x(asteroid) <= \
+                        self._ship.get_laser_position_x(laser) <= \
+                        self._asteroid_field.get_rock_position_x(asteroid) + \
+                        self._asteroid_field.get_rock_size_x(asteroid):
+                    if self._asteroid_field.get_rock_position_y(asteroid) <= \
+                            self._ship.get_laser_position_y(laser) <= \
+                            self._asteroid_field.get_rock_position_y(asteroid) + \
+                            self._asteroid_field.get_rock_size_y(asteroid):
+                        _remove_lasers.append(laser)
+                        _remove_rocks.append(asteroid)
+        for laser in _remove_lasers:
+            self._ship._lasers.pop(laser)
 
-        for asteroid in remove_rocks:
-            self._asteroid_field.rocks.pop(asteroid)
+        for asteroid in _remove_rocks:
+            self._asteroid_field._rocks.pop(asteroid)
 
     def render(self, surface: Surface) -> None:
         pass

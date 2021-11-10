@@ -44,12 +44,24 @@ class SpaceRocks(GameObject):
     def _get_cached_rock_large(self) -> Surface:
         return self._asset_manager.load_sprite("space-shooter/rock-large").copy()
 
+    def get_rock_size_x(self) -> int:
+        return self._rock_size[0]
+
+    def get_rock_size_y(self) -> int:
+        return self._rock_size[1]
+
+    def get_rock_position_x(self) -> float:
+        return self._position.x
+
+    def get_rock_position_y(self) -> float:
+        return self._position.y
+
 
 class AsteroidField(GameObject):
     _clock: GameClock
     _asset_manager: AssetManager
     _next_rock_position: Vector2
-    rocks: List[SpaceRocks]
+    _rocks: List[SpaceRocks]
 
     def __init__(
             self,
@@ -58,27 +70,42 @@ class AsteroidField(GameObject):
         self._clock = clock
         self._asset_manager = asset_manager
         self._next_rock_position = Vector2(50, 30)
-        self.rocks = []
+        self._rocks = []
 
     def tick(self) -> None:
-        if len(self.rocks) < 7:
+        if len(self._rocks) < 7:
             rock_size = random.randint(0, 2)
             if rock_size == 0:
-                self.rocks.append(
+                self._rocks.append(
                     SpaceRocks(self._asset_manager, (28, 28), self._next_rock_position))
             elif rock_size == 1:
-                self.rocks.append(
+                self._rocks.append(
                     SpaceRocks(self._asset_manager, (45, 40), self._next_rock_position))
             elif rock_size == 2:
-                self.rocks.append(
+                self._rocks.append(
                     SpaceRocks(self._asset_manager, (120, 98), self._next_rock_position))
             self._next_rock_position = Vector2(
                 self._next_rock_position.x + 140,
                 self._new_rock_position_y(self._next_rock_position))
 
     def render(self, surface: Surface) -> None:
-        for rock in self.rocks:
+        for rock in self._rocks:
             rock.render(surface)
+
+    def get_asteroid_field_size(self) -> int:
+        return len(self._rocks)
+
+    def get_rock_size_x(self, rock_number: int) -> int:
+        return self._rocks[rock_number].get_rock_size_x()
+
+    def get_rock_size_y(self, rock_number: int) -> int:
+        return self._rocks[rock_number].get_rock_size_y()
+
+    def get_rock_position_x(self, rock_number: int) -> float:
+        return self._rocks[rock_number].get_rock_position_x()
+
+    def get_rock_position_y(self, rock_number: int) -> float:
+        return self._rocks[rock_number].get_rock_position_y()
 
     def _new_rock_position_y(self, rock_position: Vector2) -> float:
         random_number = random.randint(-70, 70)

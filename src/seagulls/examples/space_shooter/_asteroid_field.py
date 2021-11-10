@@ -64,11 +64,14 @@ class AsteroidField(GameObject):
         if len(self.rocks) < 7:
             rock_size = random.randint(0, 2)
             if rock_size == 0:
-                self.rocks.append(SpaceRocks(self._asset_manager, (28, 28), self._next_rock_position))
+                self.rocks.append(
+                    SpaceRocks(self._asset_manager, (28, 28), self._next_rock_position))
             elif rock_size == 1:
-                self.rocks.append(SpaceRocks(self._asset_manager, (45, 40), self._next_rock_position))
+                self.rocks.append(
+                    SpaceRocks(self._asset_manager, (45, 40), self._next_rock_position))
             elif rock_size == 2:
-                self.rocks.append(SpaceRocks(self._asset_manager, (120, 98), self._next_rock_position))
+                self.rocks.append(
+                    SpaceRocks(self._asset_manager, (120, 98), self._next_rock_position))
             self._next_rock_position = Vector2(
                 self._next_rock_position.x + 140,
                 self._new_rock_position_y(self._next_rock_position))

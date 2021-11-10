@@ -49,7 +49,7 @@ class AsteroidField(GameObject):
     _clock: GameClock
     _asset_manager: AssetManager
     _next_rock_position: Vector2
-    _rocks: List[GameObject]
+    rocks: List[SpaceRocks]
 
     def __init__(
             self,
@@ -58,18 +58,18 @@ class AsteroidField(GameObject):
         self._clock = clock
         self._asset_manager = asset_manager
         self._next_rock_position = Vector2(50, 30)
-        self._rocks = []
+        self.rocks = []
 
     def tick(self) -> None:
-        if len(self._rocks) < 7:
+        if len(self.rocks) < 7:
             rock_size = random.randint(0, 2)
-            self._rocks.append(SpaceRocks(self._asset_manager, rock_size, self._next_rock_position))
+            self.rocks.append(SpaceRocks(self._asset_manager, rock_size, self._next_rock_position))
             self._next_rock_position = Vector2(
                 self._next_rock_position.x + 140,
                 self._new_rock_position_y(self._next_rock_position))
 
     def render(self, surface: Surface) -> None:
-        for rock in self._rocks:
+        for rock in self.rocks:
             rock.render(surface)
 
     def _new_rock_position_y(self, rock_position: Vector2) -> float:

@@ -25,11 +25,12 @@ class SpaceCollisions(GameObject):
             for asteroid in range(len(self._asteroid_field.rocks)):
                 if self._asteroid_field.rocks[asteroid]._position.x <= \
                         self._ship.lasers[laser]._position.x <= \
-                        self._asteroid_field.rocks[asteroid]._position.x + 120:
+                        self._asteroid_field.rocks[asteroid]._position.x + \
+                        self._asteroid_field.rocks[asteroid]._rock_size[0]:
                     if self._asteroid_field.rocks[asteroid]._position.y <= \
                             self._ship.lasers[laser]._position.y <= \
-                            self._asteroid_field.rocks[asteroid]._position.y + 120:
-                        logger.info("COLLIDE")
+                            self._asteroid_field.rocks[asteroid]._position.y + \
+                            self._asteroid_field.rocks[asteroid]._rock_size[1]:
                         remove_lasers.append(laser)
                         remove_rocks.append(asteroid)
         for laser in remove_lasers:

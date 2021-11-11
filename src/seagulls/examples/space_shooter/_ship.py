@@ -137,3 +137,6 @@ class Ship(GameObject):
 
     def get_laser_position_y(self, laser_number: int) -> float:
         return self._lasers[laser_number].get_laser_position_y()
+
+    def remove_laser(self, laser_number: int):
+        self._lasers.pop(laser_number)

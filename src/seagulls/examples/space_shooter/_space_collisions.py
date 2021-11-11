@@ -22,22 +22,29 @@ class SpaceCollisions(GameObject):
         _remove_rocks = []
 
         for laser in range(self._ship.get_number_of_lasers()):
-            for asteroid in range(self._asteroid_field.get_asteroid_field_size()):
-                if self._asteroid_field.get_rock_position_x(asteroid) <= \
-                        self._ship.get_laser_position_x(laser) <= \
-                        self._asteroid_field.get_rock_position_x(asteroid) + \
-                        self._asteroid_field.get_rock_size_x(asteroid):
-                    if self._asteroid_field.get_rock_position_y(asteroid) <= \
-                            self._ship.get_laser_position_y(laser) <= \
-                            self._asteroid_field.get_rock_position_y(asteroid) + \
-                            self._asteroid_field.get_rock_size_y(asteroid):
+            for rock in range(self._asteroid_field.get_asteroid_field_size()):
+                if self._laser_rock_collision_check_x(laser, rock):
+                    if self._laser_rock_collision_check_y(laser, rock):
                         _remove_lasers.append(laser)
-                        _remove_rocks.append(asteroid)
-        for laser in _remove_lasers:
-            self._ship._lasers.pop(laser)
+                        _remove_rocks.append(rock)
 
-        for asteroid in _remove_rocks:
-            self._asteroid_field._rocks.pop(asteroid)
+        for laser in _remove_lasers:
+            self._ship.remove_laser(laser)
+
+        for rock in _remove_rocks:
+            self._asteroid_field.remove_rock(rock)
 
     def render(self, surface: Surface) -> None:
         pass
+
+    def _laser_rock_collision_check_x(self, laser_number: int, rock_number: int) -> bool:
+        return self._asteroid_field.get_rock_position_x(rock_number) <= \
+                        self._ship.get_laser_position_x(laser_number) <= \
+                        self._asteroid_field.get_rock_position_x(rock_number) + \
+                        self._asteroid_field.get_rock_size_x(rock_number)
+
+    def _laser_rock_collision_check_y(self, laser_number: int, rock_number: int) -> bool:
+        return self._asteroid_field.get_rock_position_y(rock_number) <= \
+                            self._ship.get_laser_position_y(laser_number) <= \
+                            self._asteroid_field.get_rock_position_y(rock_number) + \
+                            self._asteroid_field.get_rock_size_y(rock_number)

@@ -61,7 +61,7 @@ class AsteroidField(GameObject):
     _clock: GameClock
     _asset_manager: AssetManager
     _next_rock_position: Vector2
-    _rocks: List[SpaceRocks]
+    _asteroid_field: List[SpaceRocks]
 
     def __init__(
             self,
@@ -70,42 +70,45 @@ class AsteroidField(GameObject):
         self._clock = clock
         self._asset_manager = asset_manager
         self._next_rock_position = Vector2(50, 30)
-        self._rocks = []
+        self._asteroid_field = []
 
     def tick(self) -> None:
-        if len(self._rocks) < 7:
+        if len(self._asteroid_field) < 7:
             rock_size = random.randint(0, 2)
             if rock_size == 0:
-                self._rocks.append(
+                self._asteroid_field.append(
                     SpaceRocks(self._asset_manager, (28, 28), self._next_rock_position))
             elif rock_size == 1:
-                self._rocks.append(
+                self._asteroid_field.append(
                     SpaceRocks(self._asset_manager, (45, 40), self._next_rock_position))
             elif rock_size == 2:
-                self._rocks.append(
+                self._asteroid_field.append(
                     SpaceRocks(self._asset_manager, (120, 98), self._next_rock_position))
             self._next_rock_position = Vector2(
                 self._next_rock_position.x + 140,
                 self._new_rock_position_y(self._next_rock_position))
 
     def render(self, surface: Surface) -> None:
-        for rock in self._rocks:
+        for rock in self._asteroid_field:
             rock.render(surface)
 
     def get_asteroid_field_size(self) -> int:
-        return len(self._rocks)
+        return len(self._asteroid_field)
 
     def get_rock_size_x(self, rock_number: int) -> int:
-        return self._rocks[rock_number].get_rock_size_x()
+        return self._asteroid_field[rock_number].get_rock_size_x()
 
     def get_rock_size_y(self, rock_number: int) -> int:
-        return self._rocks[rock_number].get_rock_size_y()
+        return self._asteroid_field[rock_number].get_rock_size_y()
 
     def get_rock_position_x(self, rock_number: int) -> float:
-        return self._rocks[rock_number].get_rock_position_x()
+        return self._asteroid_field[rock_number].get_rock_position_x()
 
     def get_rock_position_y(self, rock_number: int) -> float:
-        return self._rocks[rock_number].get_rock_position_y()
+        return self._asteroid_field[rock_number].get_rock_position_y()
+
+    def remove_rock(self, rock_number:int) -> None:
+        self._asteroid_field.pop(rock_number)
 
     def _new_rock_position_y(self, rock_position: Vector2) -> float:
         random_number = random.randint(-70, 70)

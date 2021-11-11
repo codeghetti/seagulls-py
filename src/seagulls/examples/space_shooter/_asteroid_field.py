@@ -107,7 +107,7 @@ class AsteroidField(GameObject):
     def get_rock_position_y(self, rock_number: int) -> float:
         return self._asteroid_field[rock_number].get_rock_position_y()
 
-    def remove_rock(self, rock_number:int) -> None:
+    def remove_rock(self, rock_number: int) -> None:
         self._asteroid_field.pop(rock_number)
 
     def _new_rock_position_y(self, rock_position: Vector2) -> float:

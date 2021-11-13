@@ -80,6 +80,13 @@ class CommandRequest:
     chain: Tuple[CommandRequestItem, ...]
 
 
+class CliCommandArgs:
+    _args: Tuple[str, ...]
+
+    def __init__(self, args: Tuple[str, ...]):
+        self._args = args
+
+
 class IBuildCommandRequests(ABC):
 
     @abstractmethod

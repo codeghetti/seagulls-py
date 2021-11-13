@@ -32,6 +32,7 @@ class ShooterScene(IGameScene):
             background: GameObject,
             ship: GameObject,
             asteroid_field: GameObject,
+            space_collisions: GameObject,
             game_controls: GameControls):
         self._surface_renderer = surface_renderer
         self._asset_manager = asset_manager
@@ -42,6 +43,7 @@ class ShooterScene(IGameScene):
         self._game_objects.add(background)
         self._game_objects.add(ship)
         self._game_objects.add(asteroid_field)
+        self._game_objects.add(space_collisions)
         self._game_objects.add(self._game_controls)
 
         self._should_quit = Event()

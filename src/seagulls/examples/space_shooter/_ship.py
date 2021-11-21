@@ -140,3 +140,6 @@ class Ship(GameObject):
 
     def remove_laser(self, laser_number: int):
         self._lasers.pop(laser_number)
+
+    def get_ship_position(self) -> Vector2:
+        return self._position

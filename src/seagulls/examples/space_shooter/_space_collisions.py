@@ -1,4 +1,7 @@
 import logging
+from pathlib import Path
+
+from pygame.font import Font
 
 from seagulls.engine import GameObject, Surface
 from seagulls.examples.space_shooter import Ship, AsteroidField
@@ -9,6 +12,7 @@ logger = logging.getLogger(__name__)
 class SpaceCollisions(GameObject):
     _ship: Ship
     _asteroid_field: AsteroidField
+    _collision_count: int
 
     def __init__(
             self,
@@ -16,6 +20,8 @@ class SpaceCollisions(GameObject):
             asteroid_field: AsteroidField):
         self._ship = ship
         self._asteroid_field = asteroid_field
+        self._collision_count = 0
+        self._font = Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 18)
 
     def tick(self) -> None:
         _remove_lasers = []
@@ -27,6 +33,7 @@ class SpaceCollisions(GameObject):
                     if self._laser_rock_collision_check_y(laser, rock):
                         _remove_lasers.append(laser)
                         _remove_rocks.append(rock)
+                        self._collision_count += 1
 
         for laser in _remove_lasers:
             self._ship.remove_laser(laser)
@@ -35,7 +42,12 @@ class SpaceCollisions(GameObject):
             self._asteroid_field.remove_rock(rock)
 
     def render(self, surface: Surface) -> None:
-        pass
+        img = self._font.render(
+            f"Score: {self._collision_count}",
+            True,
+            "red", "black"
+        )
+        surface.blit(img, (920, 570))
 
     def _laser_rock_collision_check_x(self, laser_number: int, rock_number: int) -> bool:
         return self._asteroid_field.get_rock_position_x(rock_number) <= \

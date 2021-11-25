@@ -33,9 +33,12 @@ class SpaceCollisions(GameObject):
 
         for rock in range(self._asteroid_field.get_asteroid_field_size()):
             if self._ship_rock_collision_check(rock):
-                mixer.Sound("assets/sounds/game-over.ogg").play()
-                self._remove_all_rocks()
-                self._is_game_over = True
+                self._end_game()
+                return
+
+        for rock in range(self._asteroid_field.get_asteroid_field_size()):
+            if self._asteroid_field.get_rock_position_y(rock) > 600:
+                self._end_game()
                 return
 
         for laser in range(self._ship.get_number_of_lasers()):
@@ -51,6 +54,12 @@ class SpaceCollisions(GameObject):
 
         for rock in _remove_rocks:
             self._asteroid_field.remove_rock(rock)
+
+    def _end_game(self):
+        mixer.Sound("assets/sounds/game-over.ogg").play()
+        self._asteroid_field.set_game_over()
+        self._remove_all_rocks()
+        self._is_game_over = True
 
     def render(self, surface: Surface) -> None:
         img = self._font.render(

@@ -1,3 +1,4 @@
+import logging
 from functools import lru_cache
 
 import random
@@ -6,23 +7,31 @@ from typing import List, Tuple
 from seagulls.engine import GameObject, Surface, GameClock, Vector2
 from seagulls.assets import AssetManager
 
+logger = logging.getLogger(__name__)
+
 
 class SpaceRocks(GameObject):
+    _clock: GameClock
     _asset_manager: AssetManager
     _rock_size: Tuple
     _position: Vector2
+    _velocity: Vector2
 
     def __init__(
             self,
+            clock: GameClock,
             asset_manager: AssetManager,
             rock_size: Tuple,
             position: Vector2):
+        self._clock = clock
         self._asset_manager = asset_manager
         self._rock_size = rock_size
         self._position = position
+        self._velocity = self._set_velocity(rock_size)
 
     def tick(self):
-        pass
+        delta = self._clock.get_time()
+        self._position = self._position + (self._velocity * delta / 200)
 
     def render(self, surface: Surface) -> None:
         if self._rock_size[0] == 28:
@@ -56,12 +65,21 @@ class SpaceRocks(GameObject):
     def get_rock_position_y(self) -> float:
         return self._position.y
 
+    def _set_velocity(self, rock_size: Tuple) -> Vector2:
+        if rock_size == (28, 28):
+            return Vector2(0, 4)
+        elif rock_size == (45, 40):
+            return Vector2(0, 10)
+        else:
+            return Vector2(0, 16)
+
 
 class AsteroidField(GameObject):
     _clock: GameClock
     _asset_manager: AssetManager
     _next_rock_position: Vector2
     _asteroid_field: List[SpaceRocks]
+    _is_game_over: bool
 
     def __init__(
             self,
@@ -70,27 +88,50 @@ class AsteroidField(GameObject):
         self._clock = clock
         self._asset_manager = asset_manager
         self._next_rock_position = Vector2(50, 30)
-        self._asteroid_field = []
+        self._asteroid_field = self._spawn_seven_rocks()
+        self._is_game_over = False
 
     def tick(self) -> None:
-        if len(self._asteroid_field) < 7:
-            rock_size = random.randint(0, 2)
-            if rock_size == 0:
-                self._asteroid_field.append(
-                    SpaceRocks(self._asset_manager, (28, 28), self._next_rock_position))
-            elif rock_size == 1:
-                self._asteroid_field.append(
-                    SpaceRocks(self._asset_manager, (45, 40), self._next_rock_position))
-            elif rock_size == 2:
-                self._asteroid_field.append(
-                    SpaceRocks(self._asset_manager, (120, 98), self._next_rock_position))
-            self._next_rock_position = Vector2(
-                self._next_rock_position.x + 140,
-                self._new_rock_position_y(self._next_rock_position))
+        for rock in self._asteroid_field:
+            rock.tick()
+
+        if self._is_game_over:
+            return
 
     def render(self, surface: Surface) -> None:
         for rock in self._asteroid_field:
             rock.render(surface)
+
+    def _spawn_seven_rocks(self) -> List[SpaceRocks]:
+        _result = []
+        for x in range(7):
+            rock_size = random.randint(0, 2)
+            if rock_size == 0:
+                _result.append(
+                    SpaceRocks(
+                        self._clock,
+                        self._asset_manager,
+                        (28, 28),
+                        self._next_rock_position))
+            elif rock_size == 1:
+                _result.append(
+                    SpaceRocks(
+                        self._clock,
+                        self._asset_manager,
+                        (45, 40),
+                        self._next_rock_position))
+            elif rock_size == 2:
+                _result.append(
+                    SpaceRocks(
+                        self._clock,
+                        self._asset_manager,
+                        (120, 98),
+                        self._next_rock_position))
+            self._next_rock_position = Vector2(
+                self._next_rock_position.x + 140,
+                self._new_rock_position_y(self._next_rock_position))
+
+        return _result
 
     def get_asteroid_field_size(self) -> int:
         return len(self._asteroid_field)
@@ -117,3 +158,6 @@ class AsteroidField(GameObject):
             return rock_position.y + random_number
         else:
             return rock_position.y+random_number
+
+    def set_game_over(self) -> None:
+        self._is_game_over = True

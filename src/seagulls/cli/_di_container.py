@@ -31,6 +31,8 @@ from seagulls.examples.rpg import RpgScene, Character
 from seagulls.examples.space_shooter import Ship, ShooterScene, AsteroidField, SpaceCollisions
 
 from ._framework import LoggingClient
+from ..examples.space_shooter._ship import LaserFactory, Gun
+from ..examples.space_shooter import CollidablesCollection
 
 
 class EmptyScene(IGameScene):
@@ -74,16 +76,35 @@ class SeagullsDiContainer(DeclarativeContainer):
         asset_manager=_asset_manager,
     )
 
+    _rock_collidables = Singleton(
+        CollidablesCollection,
+    )
+
+    _laser_factory = Singleton(
+        LaserFactory,
+        clock=_game_clock,
+        collidables=_rock_collidables,
+        asset_manager=_asset_manager,
+    )
+
+    _gun = Singleton(
+        Gun,
+        laser_factory=_laser_factory,
+    )
+
     _ship = Singleton(
         Ship,
         clock=_game_clock,
+        collidables=_rock_collidables,
         asset_manager=_asset_manager,
+        gun=_gun,
         game_controls=_game_controls,
     )
 
     _asteroid_field = Singleton(
         AsteroidField,
         clock=_game_clock,
+        collidables=_rock_collidables,
         asset_manager=_asset_manager,
     )
 
@@ -101,7 +122,6 @@ class SeagullsDiContainer(DeclarativeContainer):
         background=_main_menu_background,
         ship=_ship,
         asteroid_field=_asteroid_field,
-        space_collisions=_space_collisions,
         game_controls=_game_controls
     )
 

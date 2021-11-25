@@ -9,8 +9,9 @@ from seagulls.engine import (
     GameObjectsCollection,
     IGameScene,
     Surface,
-    SurfaceRenderer
+    SurfaceRenderer,
 )
+from seagulls.examples.space_shooter import AsteroidField
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,8 @@ class ShooterScene(IGameScene):
     _game_objects: GameObjectsCollection
     _should_quit: Event
 
+    _asteroid_field: AsteroidField
+
     def __init__(
             self,
             clock: GameClock,
@@ -31,8 +34,7 @@ class ShooterScene(IGameScene):
             asset_manager: AssetManager,
             background: GameObject,
             ship: GameObject,
-            asteroid_field: GameObject,
-            space_collisions: GameObject,
+            asteroid_field: AsteroidField,
             game_controls: GameControls):
         self._surface_renderer = surface_renderer
         self._asset_manager = asset_manager
@@ -43,13 +45,14 @@ class ShooterScene(IGameScene):
         self._game_objects.add(background)
         self._game_objects.add(ship)
         self._game_objects.add(asteroid_field)
-        self._game_objects.add(space_collisions)
         self._game_objects.add(self._game_controls)
 
+        self._asteroid_field = asteroid_field
         self._should_quit = Event()
 
     def start(self) -> None:
         self._surface_renderer.start()
+        self._asteroid_field.spawn_asteroids(7)
         self.tick()
 
     def should_quit(self) -> bool:

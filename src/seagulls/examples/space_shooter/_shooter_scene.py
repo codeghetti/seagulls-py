@@ -165,6 +165,41 @@ class GameOverOverlay(GameObject):
         surface.blit(img, (380, 260))
 
 
+class ScoreTracker:
+
+    def __init__(self):
+        self._score = 0
+
+    def add_point(self) -> None:
+        self._score += 1
+
+    def get_score(self) -> int:
+        return self._score
+
+
+class ScoreOverlay(GameObject):
+
+    _font: Font
+
+    def __init__(
+            self,
+            score_tracker: ScoreTracker):
+
+        self._font = Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 18)
+        self._score_tracker = score_tracker
+
+    def tick(self) -> None:
+        pass
+
+    def render(self, surface: Surface) -> None:
+        img = self._font.render(
+            f"Score: {self._score_tracker.get_score()}",
+            True,
+            "red", "black"
+        )
+        surface.blit(img, (920, 570))
+
+
 class ToggleableGameObject(GameObject):
     _game_object: GameObject
     _active: bool
@@ -208,6 +243,7 @@ class ShooterScene(IGameScene):
             ship: Ship,
             asteroid_field: AsteroidField,
             space_collisions: GameObject,
+            score_overlay: ScoreOverlay,
             game_controls: GameControls):
         mixer.init()
         self._surface_renderer = surface_renderer
@@ -219,6 +255,7 @@ class ShooterScene(IGameScene):
         self._game_objects.add(background)
         self._game_objects.add(ship)
         self._game_objects.add(space_collisions)
+        self._game_objects.add(score_overlay)
         self._game_objects.add(self._game_controls)
 
         self._toggleables = tuple([

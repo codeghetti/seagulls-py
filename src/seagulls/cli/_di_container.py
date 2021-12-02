@@ -28,10 +28,16 @@ from seagulls.examples import (
 
 from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.rpg import RpgScene, Character
-from seagulls.examples.space_shooter import Ship, ShooterScene, AsteroidField, SpaceCollisions
+from seagulls.examples.space_shooter import (
+    Ship,
+    ShooterScene,
+    AsteroidField,
+    SpaceCollisions,
+    ScoreTracker,
+    ScoreOverlay
+)
 
 from ._framework import LoggingClient
-from ..examples.space_shooter._shooter_scene import ScoreTracker, ScoreOverlay
 
 
 class EmptyScene(IGameScene):
@@ -98,7 +104,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         SpaceCollisions,
         ship=_ship,
         asteroid_field=_asteroid_field,
-        rock_collision_callback= _score_tracker.provided.add_point
+        rock_collision_callback=_score_tracker.provided.add_point
     )
 
     _space_shooter_scene = Singleton(

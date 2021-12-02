@@ -31,6 +31,7 @@ from seagulls.examples.rpg import RpgScene, Character
 from seagulls.examples.space_shooter import Ship, ShooterScene, AsteroidField, SpaceCollisions
 
 from ._framework import LoggingClient
+from ..examples.space_shooter._shooter_scene import ScoreTracker, ScoreOverlay
 
 
 class EmptyScene(IGameScene):
@@ -86,11 +87,18 @@ class SeagullsDiContainer(DeclarativeContainer):
         clock=_game_clock,
         asset_manager=_asset_manager,
     )
+    _score_tracker = Singleton(ScoreTracker)
+
+    _score_overlay = Singleton(
+        ScoreOverlay,
+        score_tracker=_score_tracker,
+    )
 
     _space_collisions = Singleton(
         SpaceCollisions,
         ship=_ship,
         asteroid_field=_asteroid_field,
+        rock_collision_callback= _score_tracker.provided.add_point
     )
 
     _space_shooter_scene = Singleton(
@@ -102,6 +110,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         ship=_ship,
         asteroid_field=_asteroid_field,
         space_collisions=_space_collisions,
+        score_overlay=_score_overlay,
         game_controls=_game_controls
     )
 

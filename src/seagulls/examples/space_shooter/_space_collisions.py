@@ -1,5 +1,5 @@
 import logging
-from collections import Callable
+from typing import Callable
 from pathlib import Path
 from pygame.font import Font
 

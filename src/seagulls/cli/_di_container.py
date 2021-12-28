@@ -30,11 +30,14 @@ from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.rpg import RpgScene, Character
 from seagulls.examples.space_shooter import (
     Ship,
-    ShooterScene,
     AsteroidField,
     SpaceCollisions,
     ScoreTracker,
-    ScoreOverlay
+    ScoreOverlay,
+    ShipCatalog,
+    ShipSelectionMenu,
+    OrangeShip,
+    BlueShip,
 )
 
 from ._framework import LoggingClient
@@ -107,17 +110,17 @@ class SeagullsDiContainer(DeclarativeContainer):
         rock_collision_callback=_score_tracker.provided.add_point
     )
 
-    _space_shooter_scene = Singleton(
-        ShooterScene,
-        clock=_game_clock,
+    _ship_catalog = Singleton(
+        ShipCatalog,
+        ships=(OrangeShip(), BlueShip()))
+
+    _space_shooter_ship_selection_scene = Singleton(
+        ShipSelectionMenu,
+        catalog=_ship_catalog,
         surface_renderer=_surface_renderer,
+        game_controls=_game_controls,
         asset_manager=_asset_manager,
         background=_main_menu_background,
-        ship=_ship,
-        asteroid_field=_asteroid_field,
-        space_collisions=_space_collisions,
-        score_overlay=_score_overlay,
-        game_controls=_game_controls
     )
 
     _seagulls_scene = Singleton(
@@ -153,7 +156,7 @@ class SeagullsDiContainer(DeclarativeContainer):
 
     _space_shooter_menu_button = Singleton(
         GenericMenuButton,
-        scene=_space_shooter_scene,
+        scene=_space_shooter_ship_selection_scene,
         offset=0,
         button_text="Space Shooter",
         asset_manager=_asset_manager,
@@ -216,7 +219,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         game_session=_blocking_game_session,
         active_scene_manager=_active_scene_client,
         main_menu_scene=_main_menu_scene,
-        space_shooter_scene=_space_shooter_scene,
+        space_shooter_scene=_space_shooter_ship_selection_scene,
         seagulls_scene=_seagulls_scene,
         rpg_scene=_rpg_scene,
     )

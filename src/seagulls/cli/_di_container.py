@@ -25,19 +25,18 @@ from seagulls.examples import (
     SimpleStarsBackground,
     WindowScene
 )
-
+from seagulls.examples.rpg import Character, RpgScene
 from seagulls.examples.seagulls import SeagullsScene
-from seagulls.examples.rpg import RpgScene, Character
 from seagulls.examples.space_shooter import (
-    Ship,
     AsteroidField,
-    SpaceCollisions,
-    ScoreTracker,
+    BlueShip,
+    OrangeShip,
     ScoreOverlay,
+    ScoreTracker,
+    Ship,
     ShipCatalog,
     ShipSelectionMenu,
-    OrangeShip,
-    BlueShip,
+    SpaceCollisions
 )
 
 from ._framework import LoggingClient

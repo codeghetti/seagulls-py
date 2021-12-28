@@ -1,10 +1,11 @@
 import logging
-from typing import Callable
 from pathlib import Path
+from typing import Callable
+
 from pygame.font import Font
 
 from seagulls.engine import GameObject, Surface
-from seagulls.examples.space_shooter import Ship, AsteroidField
+from seagulls.examples.space_shooter import AsteroidField, Ship
 
 logger = logging.getLogger(__name__)
 

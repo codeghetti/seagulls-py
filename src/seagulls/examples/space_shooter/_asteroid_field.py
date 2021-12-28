@@ -1,11 +1,10 @@
 import logging
-from functools import lru_cache
-
 import random
+from functools import lru_cache
 from typing import List, Tuple
 
-from seagulls.engine import GameObject, Surface, GameClock, Vector2
 from seagulls.assets import AssetManager
+from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
 logger = logging.getLogger(__name__)
 

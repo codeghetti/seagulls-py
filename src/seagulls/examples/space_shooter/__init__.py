@@ -1,8 +1,13 @@
-from ._ship import Ship
 from ._asteroid_field import AsteroidField
-from ._shooter_scene import ShooterScene, ScoreTracker, ScoreOverlay
+from ._selectable_ship_menu import (
+    BlueShip,
+    OrangeShip,
+    ShipCatalog,
+    ShipSelectionMenu
+)
+from ._ship import Ship
+from ._shooter_scene import ScoreOverlay, ScoreTracker, ShooterScene
 from ._space_collisions import SpaceCollisions
-from ._selectable_ship_menu import ShipCatalog, ShipSelectionMenu, OrangeShip, BlueShip
 
 __all__ = [
     "ShooterScene",

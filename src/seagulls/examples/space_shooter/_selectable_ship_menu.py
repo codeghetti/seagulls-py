@@ -8,8 +8,14 @@ from typing import Dict, Tuple
 from pygame.font import Font
 
 from seagulls.assets import AssetManager
-from seagulls.engine import IGameScene, GameObject, GameControls, Surface, Rect, \
-    GameObjectsCollection, SurfaceRenderer
+from seagulls.engine import (
+    GameControls,
+    GameObject,
+    GameObjectsCollection,
+    IGameScene,
+    Surface,
+    SurfaceRenderer
+)
 
 logger = logging.getLogger(__name__)
 
@@ -210,4 +216,3 @@ class ShipSelectionMenu(IGameScene):
         self._game_objects.apply(lambda x: x.render(background))
 
         self._surface_renderer.render(background)
-

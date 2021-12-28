@@ -70,7 +70,7 @@ class Ship(GameObject):
         self._clock = clock
         self._asset_manager = asset_manager
         self._game_controls = game_controls
-        self._position = Vector2(400, 303)
+        self._position = Vector2(400, 450)
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
         self._lasers = []

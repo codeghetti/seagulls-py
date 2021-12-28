@@ -5,6 +5,7 @@ from pathlib import Path
 from threading import Event
 from typing import Dict, Tuple
 
+import pygame
 from pygame.font import Font
 
 from seagulls.assets import AssetManager
@@ -13,9 +14,11 @@ from seagulls.engine import (
     GameObject,
     GameObjectsCollection,
     IGameScene,
+    Rect,
     Surface,
     SurfaceRenderer
 )
+from seagulls.examples import ISetActiveScene
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +84,7 @@ class BlueShip(IShip):
 class ShipButton(GameObject):
 
     _ship: IShip
+    _scene: IGameScene
 
     _asset_manager: AssetManager
     _game_controls: GameControls
@@ -93,13 +97,21 @@ class ShipButton(GameObject):
     _button_height = 49
     _button_width = 190
 
+    _active_scene_manager: ISetActiveScene
+
     def __init__(
             self,
             ship: IShip,
-            asset_manager: AssetManager):
+            scene: IGameScene,
+            asset_manager: AssetManager,
+            game_controls: GameControls,
+            active_scene_manager: ISetActiveScene):
 
         self._ship = ship
+        self._scene = scene
         self._asset_manager = asset_manager
+        self._game_controls = game_controls
+        self._active_scene_manager = active_scene_manager
 
         self._is_highlighted = Event()
         self._is_clicked = Event()
@@ -107,7 +119,7 @@ class ShipButton(GameObject):
         self._font = Font(Path("assets/fonts/kenvector-future.ttf"), 14)
 
     def tick(self) -> None:
-        pass
+        self._detect_state()
 
     def render(self, surface: Surface) -> None:
         button = self._get_background()
@@ -127,6 +139,27 @@ class ShipButton(GameObject):
         surface.blit(ship_sprite, (self._get_position()[0], self._get_position()[1]))
         surface.blit(ship_velocity, (self._get_position()[0], self._get_position()[1] + 100))
         surface.blit(ship_power, (self._get_position()[0], self._get_position()[1] + 120))
+
+    def _detect_state(self) -> None:
+        rect = Rect(
+            (self._get_position()[0], self._get_position()[1] + 160),
+            (self._button_width,
+             self._button_height))
+
+        if rect.collidepoint(pygame.mouse.get_pos()):
+            self._is_highlighted.set()
+            click = self._game_controls.is_click_initialized()
+            if click:
+                logger.debug("CLICKY")
+                self._is_clicked.set()
+            if not self._game_controls.is_mouse_down():
+                if self._is_clicked.is_set():
+                    logger.debug("SWITCH")
+                    self._active_scene_manager.set_active_scene(self._scene)
+                self._is_clicked.clear()
+        else:
+            self._is_highlighted.clear()
+            self._is_clicked.clear()
 
     def _get_background(self) -> Surface:
         return self._get_background_map()[self._get_state_name()]
@@ -164,8 +197,11 @@ class ShipCatalog:
 class ShipSelectionMenu(IGameScene):
     _ship_catalog: Tuple[IShip, ...]
     _surface_renderer: SurfaceRenderer
+
+    _scene: IGameScene
     _game_controls: GameControls
     _asset_manager: AssetManager
+    _active_scene_manager: ISetActiveScene
 
     _game_objects: GameObjectsCollection
     _should_quit: Event
@@ -177,21 +213,30 @@ class ShipSelectionMenu(IGameScene):
             self,
             catalog: ShipCatalog,
             surface_renderer: SurfaceRenderer,
+            scene: IGameScene,
+            game_controls: GameControls,
             asset_manager: AssetManager,
-            background: GameObject,
-            game_controls: GameControls):
+            active_scene_manager: ISetActiveScene,
+            background: GameObject,):
 
         self._ship_catalog = catalog.ships
         self._surface_renderer = surface_renderer
+        self._scene = scene
         self._asset_manager = asset_manager
         self._game_controls = game_controls
+        self._active_scene_manager = active_scene_manager
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(self._game_controls)
         self._game_objects.add(background)
 
         for ship in self._ship_catalog:
-            self._game_objects.add(ShipButton(ship, self._asset_manager))
+            self._game_objects.add(ShipButton(
+                ship,
+                self._scene,
+                self._asset_manager,
+                self._game_controls,
+                self._active_scene_manager))
 
         self._should_quit = Event()
 

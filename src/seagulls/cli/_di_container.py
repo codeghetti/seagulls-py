@@ -36,6 +36,7 @@ from seagulls.examples.space_shooter import (
     Ship,
     ShipCatalog,
     ShipSelectionMenu,
+    ShooterScene,
     SpaceCollisions
 )
 
@@ -83,6 +84,36 @@ class SeagullsDiContainer(DeclarativeContainer):
         asset_manager=_asset_manager,
     )
 
+    _seagulls_scene = Singleton(
+        SeagullsScene,
+    )
+
+    _rpg_character = Singleton(
+        Character,
+        clock=_game_clock,
+        asset_manager=_asset_manager,
+        game_controls=_game_controls,
+    )
+
+    _rpg_scene = Singleton(
+        RpgScene,
+        surface_renderer=_surface_renderer,
+        debug_hud=_debug_hud,
+        clock=_game_clock,
+        asset_manager=_asset_manager,
+        background=_rpg_background,
+        character=_rpg_character,
+        game_controls=_game_controls
+    )
+
+    _empty_scene = Singleton(
+        EmptyScene
+    )
+
+    _active_scene_client = Singleton(
+        ActiveSceneClient,
+        scene=_empty_scene,
+    )
     _ship = Singleton(
         Ship,
         clock=_game_clock,
@@ -113,44 +144,28 @@ class SeagullsDiContainer(DeclarativeContainer):
         ShipCatalog,
         ships=(OrangeShip(), BlueShip()))
 
+    _space_shooter_scene = Singleton(
+        ShooterScene,
+        clock=_game_clock,
+        surface_renderer=_surface_renderer,
+        asset_manager=_asset_manager,
+        background=_main_menu_background,
+        ship=_ship,
+        asteroid_field=_asteroid_field,
+        space_collisions=_space_collisions,
+        score_overlay=_score_overlay,
+        game_controls=_game_controls
+    )
+
     _space_shooter_ship_selection_scene = Singleton(
         ShipSelectionMenu,
         catalog=_ship_catalog,
         surface_renderer=_surface_renderer,
+        scene=_space_shooter_scene,
         game_controls=_game_controls,
         asset_manager=_asset_manager,
+        active_scene_manager=_active_scene_client,
         background=_main_menu_background,
-    )
-
-    _seagulls_scene = Singleton(
-        SeagullsScene,
-    )
-
-    _rpg_character = Singleton(
-        Character,
-        clock=_game_clock,
-        asset_manager=_asset_manager,
-        game_controls=_game_controls,
-    )
-
-    _rpg_scene = Singleton(
-        RpgScene,
-        surface_renderer=_surface_renderer,
-        debug_hud=_debug_hud,
-        clock=_game_clock,
-        asset_manager=_asset_manager,
-        background=_rpg_background,
-        character=_rpg_character,
-        game_controls=_game_controls
-    )
-
-    _empty_scene = Singleton(
-        EmptyScene
-    )
-
-    _active_scene_client = Singleton(
-        ActiveSceneClient,
-        scene=_empty_scene,
     )
 
     _space_shooter_menu_button = Singleton(

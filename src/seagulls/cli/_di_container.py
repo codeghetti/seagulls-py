@@ -37,7 +37,8 @@ from seagulls.examples.space_shooter import (
     ShipCatalog,
     ShipSelectionMenu,
     ShooterScene,
-    SpaceCollisions
+    SpaceCollisions,
+    ActiveShipClient, IShip
 )
 
 from ._framework import LoggingClient
@@ -53,6 +54,24 @@ class EmptyScene(IGameScene):
 
     def tick(self) -> None:
         raise RuntimeError("You're not supposed to tick me.")
+
+
+class EmptyShip(IShip):
+
+    def sprite(self) -> str:
+        raise RuntimeError("I have no sprite, I'm empty.")
+
+    def velocity(self) -> int:
+        raise RuntimeError("I have no velocity, I'm empty.")
+
+    def power(self) -> int:
+        raise RuntimeError("I have no power, I'm empty.")
+
+    def display_name(self) -> str:
+        raise RuntimeError("I have no display name, I'm empty.")
+
+    def offset(self) -> int:
+        raise RuntimeError("I have no offset, I'm empty.")
 
 
 class SeagullsDiContainer(DeclarativeContainer):
@@ -114,8 +133,19 @@ class SeagullsDiContainer(DeclarativeContainer):
         ActiveSceneClient,
         scene=_empty_scene,
     )
+
+    _empty_ship = Singleton(
+        EmptyShip
+    )
+
+    _active_ship_client = Singleton(
+        ActiveShipClient,
+        ship=_empty_ship,
+    )
+
     _ship = Singleton(
         Ship,
+        active_ship_client=_active_ship_client,
         clock=_game_clock,
         asset_manager=_asset_manager,
         game_controls=_game_controls,
@@ -165,6 +195,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         game_controls=_game_controls,
         asset_manager=_asset_manager,
         active_scene_manager=_active_scene_client,
+        active_ship_manager=_active_ship_client,
         background=_main_menu_background,
     )
 

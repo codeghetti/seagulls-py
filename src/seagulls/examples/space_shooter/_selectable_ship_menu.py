@@ -19,6 +19,7 @@ from seagulls.engine import (
     SurfaceRenderer
 )
 from seagulls.examples import ISetActiveScene
+from seagulls.examples.space_shooter._active_ship_client import ISetActiveShip
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +99,7 @@ class ShipButton(GameObject):
     _button_width = 190
 
     _active_scene_manager: ISetActiveScene
+    _active_ship_manager: ISetActiveShip
 
     def __init__(
             self,
@@ -105,13 +107,15 @@ class ShipButton(GameObject):
             scene: IGameScene,
             asset_manager: AssetManager,
             game_controls: GameControls,
-            active_scene_manager: ISetActiveScene):
+            active_scene_manager: ISetActiveScene,
+            active_ship_manager: ISetActiveShip):
 
         self._ship = ship
         self._scene = scene
         self._asset_manager = asset_manager
         self._game_controls = game_controls
         self._active_scene_manager = active_scene_manager
+        self._active_ship_manager = active_ship_manager
 
         self._is_highlighted = Event()
         self._is_clicked = Event()
@@ -156,6 +160,7 @@ class ShipButton(GameObject):
                 if self._is_clicked.is_set():
                     logger.debug("SWITCH")
                     self._active_scene_manager.set_active_scene(self._scene)
+                    self._active_ship_manager.set_active_ship(self._ship)
                 self._is_clicked.clear()
         else:
             self._is_highlighted.clear()
@@ -202,6 +207,7 @@ class ShipSelectionMenu(IGameScene):
     _game_controls: GameControls
     _asset_manager: AssetManager
     _active_scene_manager: ISetActiveScene
+    _active_ship_manager: ISetActiveShip
 
     _game_objects: GameObjectsCollection
     _should_quit: Event
@@ -217,6 +223,7 @@ class ShipSelectionMenu(IGameScene):
             game_controls: GameControls,
             asset_manager: AssetManager,
             active_scene_manager: ISetActiveScene,
+            active_ship_manager: ISetActiveShip,
             background: GameObject,):
 
         self._ship_catalog = catalog.ships
@@ -225,6 +232,7 @@ class ShipSelectionMenu(IGameScene):
         self._asset_manager = asset_manager
         self._game_controls = game_controls
         self._active_scene_manager = active_scene_manager
+        self._active_ship_manager = active_ship_manager
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(self._game_controls)
@@ -236,7 +244,8 @@ class ShipSelectionMenu(IGameScene):
                 self._scene,
                 self._asset_manager,
                 self._game_controls,
-                self._active_scene_manager))
+                self._active_scene_manager,
+                self._active_ship_manager))
 
         self._should_quit = Event()
 

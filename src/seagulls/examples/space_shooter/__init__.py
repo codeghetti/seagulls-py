@@ -3,11 +3,13 @@ from ._selectable_ship_menu import (
     BlueShip,
     OrangeShip,
     ShipCatalog,
-    ShipSelectionMenu
+    ShipSelectionMenu,
+    IShip
 )
 from ._ship import Ship
 from ._shooter_scene import ScoreOverlay, ScoreTracker, ShooterScene
 from ._space_collisions import SpaceCollisions
+from ._active_ship_client import ActiveShipClient
 
 __all__ = [
     "ShooterScene",
@@ -20,4 +22,6 @@ __all__ = [
     "ShipSelectionMenu",
     "OrangeShip",
     "BlueShip",
+    "ActiveShipClient",
+    "IShip"
 ]

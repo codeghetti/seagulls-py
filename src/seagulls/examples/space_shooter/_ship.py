@@ -13,6 +13,7 @@ from seagulls.engine import (
     Surface,
     Vector2
 )
+from seagulls.examples.space_shooter._active_ship_client import IProvideActiveShip
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +55,7 @@ class Laser(GameObject):
 
 
 class Ship(GameObject):
+    _active_ship: IProvideActiveShip
     _clock: GameClock
     _asset_manager: AssetManager
     _game_controls: GameControls
@@ -64,9 +66,11 @@ class Ship(GameObject):
 
     def __init__(
             self,
+            _active_ship: IProvideActiveShip,
             clock: GameClock,
             asset_manager: AssetManager,
             game_controls: GameControls):
+        self._ship_selected = _active_ship.get_active_ship()
         self._clock = clock
         self._asset_manager = asset_manager
         self._game_controls = game_controls
@@ -127,7 +131,7 @@ class Ship(GameObject):
 
     @lru_cache()
     def _get_cached_ship(self) -> Surface:
-        return self._asset_manager.load_sprite("space-shooter/ship-orange").copy()
+        return self._asset_manager.load_sprite(self._ship_selected.sprite()).copy()
 
     def get_number_of_lasers(self) -> int:
         return len(self._lasers)

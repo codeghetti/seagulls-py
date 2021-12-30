@@ -1,5 +1,5 @@
 import logging
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 from enum import Enum, auto
 from functools import lru_cache
 from pathlib import Path
@@ -19,6 +19,7 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
+
 from ._asteroid_field import AsteroidField
 from ._ship import Ship
 

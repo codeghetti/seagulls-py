@@ -25,16 +25,21 @@ from seagulls.examples import (
     SimpleStarsBackground,
     WindowScene
 )
-
+from seagulls.examples.rpg import Character, RpgScene
 from seagulls.examples.seagulls import SeagullsScene
-from seagulls.examples.rpg import RpgScene, Character
 from seagulls.examples.space_shooter import (
-    Ship,
-    ShooterScene,
+    ActiveShipClient,
     AsteroidField,
-    SpaceCollisions,
+    BlueShip,
+    IShip,
+    OrangeShip,
+    ScoreOverlay,
     ScoreTracker,
-    ScoreOverlay
+    Ship,
+    ShipCatalog,
+    ShipSelectionMenu,
+    ShooterScene,
+    SpaceCollisions
 )
 
 from ._framework import LoggingClient
@@ -50,6 +55,24 @@ class EmptyScene(IGameScene):
 
     def tick(self) -> None:
         raise RuntimeError("You're not supposed to tick me.")
+
+
+class EmptyShip(IShip):
+
+    def sprite(self) -> str:
+        raise RuntimeError("I have no sprite, I'm empty.")
+
+    def velocity(self) -> int:
+        raise RuntimeError("I have no velocity, I'm empty.")
+
+    def power(self) -> int:
+        raise RuntimeError("I have no power, I'm empty.")
+
+    def display_name(self) -> str:
+        raise RuntimeError("I have no display name, I'm empty.")
+
+    def offset(self) -> int:
+        raise RuntimeError("I have no offset, I'm empty.")
 
 
 class SeagullsDiContainer(DeclarativeContainer):
@@ -79,45 +102,6 @@ class SeagullsDiContainer(DeclarativeContainer):
     _rpg_background = Singleton(
         SimpleRpgBackground,
         asset_manager=_asset_manager,
-    )
-
-    _ship = Singleton(
-        Ship,
-        clock=_game_clock,
-        asset_manager=_asset_manager,
-        game_controls=_game_controls,
-    )
-
-    _asteroid_field = Singleton(
-        AsteroidField,
-        clock=_game_clock,
-        asset_manager=_asset_manager,
-    )
-    _score_tracker = Singleton(ScoreTracker)
-
-    _score_overlay = Singleton(
-        ScoreOverlay,
-        score_tracker=_score_tracker,
-    )
-
-    _space_collisions = Singleton(
-        SpaceCollisions,
-        ship=_ship,
-        asteroid_field=_asteroid_field,
-        rock_collision_callback=_score_tracker.provided.add_point
-    )
-
-    _space_shooter_scene = Singleton(
-        ShooterScene,
-        clock=_game_clock,
-        surface_renderer=_surface_renderer,
-        asset_manager=_asset_manager,
-        background=_main_menu_background,
-        ship=_ship,
-        asteroid_field=_asteroid_field,
-        space_collisions=_space_collisions,
-        score_overlay=_score_overlay,
-        game_controls=_game_controls
     )
 
     _seagulls_scene = Singleton(
@@ -151,9 +135,74 @@ class SeagullsDiContainer(DeclarativeContainer):
         scene=_empty_scene,
     )
 
+    _empty_ship = Singleton(
+        EmptyShip
+    )
+
+    _active_ship_client = Singleton(
+        ActiveShipClient,
+        ship=_empty_ship,
+    )
+
+    _ship = Singleton(
+        Ship,
+        active_ship_manager=_active_ship_client,
+        clock=_game_clock,
+        asset_manager=_asset_manager,
+        game_controls=_game_controls,
+    )
+
+    _asteroid_field = Singleton(
+        AsteroidField,
+        clock=_game_clock,
+        asset_manager=_asset_manager,
+    )
+    _score_tracker = Singleton(ScoreTracker)
+
+    _score_overlay = Singleton(
+        ScoreOverlay,
+        score_tracker=_score_tracker,
+    )
+
+    _space_collisions = Singleton(
+        SpaceCollisions,
+        ship=_ship,
+        asteroid_field=_asteroid_field,
+        rock_collision_callback=_score_tracker.provided.add_point
+    )
+
+    _ship_catalog = Singleton(
+        ShipCatalog,
+        ships=(OrangeShip(), BlueShip()))
+
+    _space_shooter_scene = Singleton(
+        ShooterScene,
+        clock=_game_clock,
+        surface_renderer=_surface_renderer,
+        asset_manager=_asset_manager,
+        background=_main_menu_background,
+        ship=_ship,
+        asteroid_field=_asteroid_field,
+        space_collisions=_space_collisions,
+        score_overlay=_score_overlay,
+        game_controls=_game_controls
+    )
+
+    _space_shooter_ship_selection_scene = Singleton(
+        ShipSelectionMenu,
+        catalog=_ship_catalog,
+        surface_renderer=_surface_renderer,
+        scene=_space_shooter_scene,
+        game_controls=_game_controls,
+        asset_manager=_asset_manager,
+        active_scene_manager=_active_scene_client,
+        active_ship_manager=_active_ship_client,
+        background=_main_menu_background,
+    )
+
     _space_shooter_menu_button = Singleton(
         GenericMenuButton,
-        scene=_space_shooter_scene,
+        scene=_space_shooter_ship_selection_scene,
         offset=0,
         button_text="Space Shooter",
         asset_manager=_asset_manager,
@@ -216,7 +265,7 @@ class SeagullsDiContainer(DeclarativeContainer):
         game_session=_blocking_game_session,
         active_scene_manager=_active_scene_client,
         main_menu_scene=_main_menu_scene,
-        space_shooter_scene=_space_shooter_scene,
+        space_shooter_scene=_space_shooter_ship_selection_scene,
         seagulls_scene=_seagulls_scene,
         rpg_scene=_rpg_scene,
     )

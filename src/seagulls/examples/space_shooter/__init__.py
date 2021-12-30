@@ -1,15 +1,15 @@
 from ._asteroid_field import AsteroidField
 from ._selectable_ship_menu import (
+    ActiveShipClient,
     BlueShip,
+    IShip,
     OrangeShip,
     ShipCatalog,
-    ShipSelectionMenu,
-    IShip
+    ShipSelectionMenu
 )
 from ._ship import Ship
 from ._shooter_scene import ScoreOverlay, ScoreTracker, ShooterScene
 from ._space_collisions import SpaceCollisions
-from ._active_ship_client import ActiveShipClient
 
 __all__ = [
     "ShooterScene",

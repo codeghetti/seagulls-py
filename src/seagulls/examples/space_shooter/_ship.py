@@ -13,7 +13,8 @@ from seagulls.engine import (
     Surface,
     Vector2
 )
-from seagulls.examples.space_shooter._active_ship_client import IProvideActiveShip
+
+from ._selectable_ship_menu import IProvideActiveShip
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ class Laser(GameObject):
 
 
 class Ship(GameObject):
-    _active_ship: IProvideActiveShip
+    _active_ship_manager: IProvideActiveShip
     _clock: GameClock
     _asset_manager: AssetManager
     _game_controls: GameControls
@@ -66,11 +67,11 @@ class Ship(GameObject):
 
     def __init__(
             self,
-            _active_ship: IProvideActiveShip,
+            active_ship_manager: IProvideActiveShip,
             clock: GameClock,
             asset_manager: AssetManager,
             game_controls: GameControls):
-        self._ship_selected = _active_ship.get_active_ship()
+        self._active_ship_manager = active_ship_manager
         self._clock = clock
         self._asset_manager = asset_manager
         self._game_controls = game_controls
@@ -123,15 +124,15 @@ class Ship(GameObject):
             laser.tick()
 
     def render(self, surface: Surface) -> None:
-        ship_sprite = self._get_cached_ship()
+        ship_sprite = self._get_ship_sprite()
         surface.blit(ship_sprite, self._position)
 
         for laser in self._lasers:
             laser.render(surface)
 
-    @lru_cache()
-    def _get_cached_ship(self) -> Surface:
-        return self._asset_manager.load_sprite(self._ship_selected.sprite()).copy()
+    def _get_ship_sprite(self) -> Surface:
+        return self._asset_manager.load_sprite(
+            self._active_ship_manager.get_active_ship().sprite()).copy()
 
     def get_number_of_lasers(self) -> int:
         return len(self._lasers)

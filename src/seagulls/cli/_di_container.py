@@ -28,8 +28,10 @@ from seagulls.examples import (
 from seagulls.examples.rpg import Character, RpgScene
 from seagulls.examples.seagulls import SeagullsScene
 from seagulls.examples.space_shooter import (
+    ActiveShipClient,
     AsteroidField,
     BlueShip,
+    IShip,
     OrangeShip,
     ScoreOverlay,
     ScoreTracker,
@@ -37,8 +39,7 @@ from seagulls.examples.space_shooter import (
     ShipCatalog,
     ShipSelectionMenu,
     ShooterScene,
-    SpaceCollisions,
-    ActiveShipClient, IShip
+    SpaceCollisions
 )
 
 from ._framework import LoggingClient
@@ -145,7 +146,7 @@ class SeagullsDiContainer(DeclarativeContainer):
 
     _ship = Singleton(
         Ship,
-        active_ship_client=_active_ship_client,
+        active_ship_manager=_active_ship_client,
         clock=_game_clock,
         asset_manager=_asset_manager,
         game_controls=_game_controls,

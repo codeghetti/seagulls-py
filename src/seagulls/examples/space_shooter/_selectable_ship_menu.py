@@ -51,7 +51,7 @@ class OrangeShip(IShip):
         return "space-shooter/ship-orange"
 
     def velocity(self) -> int:
-        return 20
+        return 15
 
     def power(self) -> int:
         return 10
@@ -69,7 +69,7 @@ class BlueShip(IShip):
         return "space-shooter/ship-blue"
 
     def velocity(self) -> int:
-        return 10
+        return 3
 
     def power(self) -> int:
         return 20

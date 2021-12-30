@@ -75,6 +75,7 @@ class Ship(GameObject):
         self._clock = clock
         self._asset_manager = asset_manager
         self._game_controls = game_controls
+
         self._position = Vector2(400, 450)
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
@@ -83,6 +84,7 @@ class Ship(GameObject):
         self._laser_sound = mixer.Sound("assets/sounds/laser-sound.ogg")
 
     def tick(self) -> None:
+        self._max_velocity = self._active_ship_manager.get_active_ship().velocity()
         if self._game_controls.is_left_moving():
             if math.floor(abs(self._velocity.x)) <= self._max_velocity:
                 self._velocity = self._velocity + Vector2(-0.1, 0)

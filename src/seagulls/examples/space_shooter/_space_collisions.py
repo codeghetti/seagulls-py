@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from typing import Callable
 
+from pygame import mixer
 from pygame.font import Font
 
 from seagulls.engine import GameObject, Surface
@@ -23,6 +24,8 @@ class SpaceCollisions(GameObject):
         self._asteroid_field = asteroid_field
         self._font = Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 18)
         self._rock_collision_callback = rock_collision_callback
+        mixer.init()
+        self._rock_collision_sound = mixer.Sound("assets/sounds/rock-explosion.ogg")
 
     def tick(self) -> None:
         _remove_lasers = []
@@ -40,6 +43,7 @@ class SpaceCollisions(GameObject):
 
         for rock in _remove_rocks:
             self._asteroid_field.remove_rock(rock)
+            self._rock_collision_sound.play()
             self._rock_collision_callback()
 
     def render(self, surface: Surface) -> None:

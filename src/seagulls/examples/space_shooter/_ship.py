@@ -76,7 +76,7 @@ class Ship(GameObject):
         self._asset_manager = asset_manager
         self._game_controls = game_controls
 
-        self._position = Vector2(400, 450)
+        self._position = Vector2(400, 600 - 75)
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
         self._lasers = []
@@ -93,14 +93,6 @@ class Ship(GameObject):
                 self._velocity = self._velocity + Vector2(0.1, 0)
         else:
             self._velocity.x = 0.0
-        if self._game_controls.is_up_moving():
-            if math.floor(abs(self._velocity.y)) <= self._max_velocity:
-                self._velocity = self._velocity + Vector2(0, -0.1)
-        elif self._game_controls.is_down_moving():
-            if self._velocity.y <= self._max_velocity:
-                self._velocity = self._velocity + Vector2(0, 0.1)
-        else:
-            self._velocity.y = 0.0
 
         if self._game_controls.should_fire():
             self._lasers.append(Laser(self._clock, self._asset_manager, self._position))
@@ -115,12 +107,6 @@ class Ship(GameObject):
 
         if self._position.x > 1024 - 112:
             self._position.x = 1024 - 112
-
-        if self._position.y < 0:
-            self._position.y = 0
-
-        if self._position.y > 600 - 75:
-            self._position.y = 600 - 75
 
         for laser in self._lasers:
             laser.tick()

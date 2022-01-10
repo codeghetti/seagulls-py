@@ -2,7 +2,7 @@ from functools import lru_cache
 
 import pygame
 
-from ._pyagme import Surface
+from ._pygame import Surface
 
 
 class SurfaceRenderer:

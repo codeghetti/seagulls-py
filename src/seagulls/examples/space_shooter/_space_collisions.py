@@ -6,7 +6,9 @@ from pygame import mixer
 from pygame.font import Font
 
 from seagulls.engine import GameObject, Surface
-from seagulls.examples.space_shooter import AsteroidField, Ship
+
+from ._asteroid_field import AsteroidField
+from ._ship import Ship
 
 logger = logging.getLogger(__name__)
 

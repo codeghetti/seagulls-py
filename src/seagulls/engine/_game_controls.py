@@ -4,7 +4,7 @@ import pygame
 from pygame.event import Event
 
 from ._game_object import GameObject
-from ._pyagme import Surface
+from ._pygame import Surface
 
 
 class GameControls(GameObject):

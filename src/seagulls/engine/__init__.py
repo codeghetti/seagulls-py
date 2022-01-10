@@ -8,7 +8,7 @@ from ._game_scene_manager import IProvideGameScenes
 from ._game_session import IGameSession
 from ._game_session_manager import IProvideGameSessions
 from ._game_settings import GameSettings
-from ._pyagme import Color, PixelArray, Rect, Surface, Vector2, Vector3
+from ._pygame import Color, PixelArray, Rect, Surface, Vector2, Vector3
 from ._surface_renderer import SurfaceRenderer
 
 __all__ = [

@@ -1,13 +1,9 @@
 import logging
-from abc import ABC, abstractmethod
-from enum import Enum, auto
 from functools import lru_cache
-from pathlib import Path
 from threading import Event
 from typing import Tuple
 
 from pygame import mixer
-from pygame.font import Font
 
 from seagulls.assets import AssetManager
 from seagulls.engine import (
@@ -21,204 +17,16 @@ from seagulls.engine import (
 )
 
 from ._asteroid_field import AsteroidField
+from ._asteroid_missed_rule import AsteroidMissedRule
+from ._check_game_rules_interface import ICheckGameRules
+from ._game_over_overlay import GameOverOverlay
+from ._score_overlay import ScoreOverlay
 from ._ship import Ship
+from ._ship_destroyed_rule import ShipDestroyedRule
+from ._shooter_scene_client import ShooterSceneState, ShooterSceneStateClient
+from ._toggleable_game_object import ToggleableGameObject
 
 logger = logging.getLogger(__name__)
-
-
-class ShooterSceneState(Enum):
-    RUNNING = auto()
-    WON = auto()
-    LOST = auto()
-
-
-class ShooterSceneStateClient:
-    _current_state: ShooterSceneState
-
-    def __init__(self):
-        self._current_state = ShooterSceneState.RUNNING
-
-    def update_state(self, state: ShooterSceneState) -> None:
-        self._current_state = state
-
-    def get_state(self) -> ShooterSceneState:
-        return self._current_state
-
-
-class ICheckGameRules(ABC):
-
-    @abstractmethod
-    def check(self) -> None:
-        pass
-
-
-class AsteroidMissedRule(ICheckGameRules):
-    _state_client: ShooterSceneStateClient
-    _asteroid_field: AsteroidField
-
-    def __init__(self, state_client: ShooterSceneStateClient, asteroid_field: AsteroidField):
-        self._state_client = state_client
-        self._asteroid_field = asteroid_field
-
-    def check(self) -> None:
-        for x in range(self._asteroid_field.get_asteroid_field_size()):
-            if self._asteroid_field.get_rock_position_y(x) > 600:
-                self._state_client.update_state(ShooterSceneState.LOST)
-
-
-class ShipDestroyedRule(ICheckGameRules):
-    _state_client: ShooterSceneStateClient
-    _asteroid_field: AsteroidField
-    _ship: Ship
-
-    def __init__(
-            self,
-            state_client: ShooterSceneStateClient,
-            asteroid_field: AsteroidField,
-            ship: Ship):
-        self._state_client = state_client
-        self._asteroid_field = asteroid_field
-        self._ship = ship
-
-    def check(self) -> None:
-        for index in range(self._asteroid_field.get_asteroid_field_size()):
-            if self._ship_rock_collision_check(index):
-                self._state_client.update_state(ShooterSceneState.LOST)
-                return
-
-    def _ship_rock_collision_check(self, rock_number: int) -> bool:
-        ship_position = self._ship.get_ship_position()
-
-        nose_collision_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= (ship_position.x + 50) <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number) and
-            self._asteroid_field.get_rock_position_y(rock_number) <=
-            ship_position.y <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
-
-        left_upper_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= ship_position.x <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number) and
-            self._asteroid_field.get_rock_position_y(rock_number) <=
-            (ship_position.y + 30) <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
-
-        right_upper_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= (ship_position.x + 105) <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number) and
-            self._asteroid_field.get_rock_position_y(rock_number) <=
-            (ship_position.y + 30) <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
-
-        left_lower_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= ship_position.x <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number)
-            and self._asteroid_field.get_rock_position_y(rock_number) <=
-            (ship_position.y + 68) <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
-
-        right_lower_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= (ship_position.x + 105) <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number) and
-            self._asteroid_field.get_rock_position_y(rock_number) <=
-            (ship_position.y + 68) <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
-
-        return (
-            nose_collision_check or
-            left_lower_wing_check or
-            right_lower_wing_check or
-            left_upper_wing_check or
-            right_upper_wing_check)
-
-
-class GameOverOverlay(GameObject):
-
-    _font: Font
-
-    def __init__(self):
-        self._font = Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 50)
-
-    def tick(self) -> None:
-        pass
-
-    def render(self, surface: Surface) -> None:
-        img = self._font.render(
-            "GAME OVER",
-            True,
-            "red", "black"
-        )
-        surface.blit(img, (380, 260))
-
-
-class ScoreTracker:
-
-    def __init__(self):
-        self._score = 0
-
-    def add_point(self) -> None:
-        self._score += 1
-
-    def get_score(self) -> int:
-        return self._score
-
-
-class ScoreOverlay(GameObject):
-
-    _font: Font
-
-    def __init__(
-            self,
-            score_tracker: ScoreTracker):
-
-        self._font = Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 18)
-        self._score_tracker = score_tracker
-
-    def tick(self) -> None:
-        pass
-
-    def render(self, surface: Surface) -> None:
-        img = self._font.render(
-            f"Score: {self._score_tracker.get_score()}",
-            True,
-            "red", "black"
-        )
-        surface.blit(img, (920, 570))
-
-
-class ToggleableGameObject(GameObject):
-    _game_object: GameObject
-    _active: bool
-
-    def __init__(self, game_object: GameObject):
-        self._game_object = game_object
-        self._active = True
-
-    def tick(self) -> None:
-        if self._active:
-            self._game_object.tick()
-
-    def render(self, surface: Surface) -> None:
-        if self._active:
-            self._game_object.render(surface)
-
-    def toggle(self) -> None:
-        self._active = not self._active
 
 
 class ShooterScene(IGameScene):

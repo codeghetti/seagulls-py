@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable, List
 
-from ._pyagme import Surface
+from ._pygame import Surface
 
 
 class GameObject(ABC):

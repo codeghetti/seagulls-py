@@ -44,6 +44,7 @@ class GameOverScene(IGameScene):
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(background)
         self._game_objects.add(score_overlay)
+        self._game_objects.add(self._game_controls)
         self._score_overlay = score_overlay
 
         self._should_quit = Event()

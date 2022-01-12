@@ -39,7 +39,8 @@ from seagulls.examples.space_shooter import (
     ShipCatalog,
     ShipSelectionMenu,
     ShooterScene,
-    SpaceCollisions
+    SpaceCollisions,
+    GameOverScene,
 )
 
 from ._framework import LoggingClient
@@ -175,11 +176,23 @@ class SeagullsDiContainer(DeclarativeContainer):
         ShipCatalog,
         ships=(OrangeShip(), BlueShip()))
 
+    _game_over_scene = Singleton(
+        GameOverScene,
+        surface_renderer=_surface_renderer,
+        game_controls=_game_controls,
+        asset_manager=_asset_manager,
+        active_scene_manager=_active_scene_client,
+        score_overlay=_score_overlay,
+        background=_main_menu_background
+    )
+
     _space_shooter_scene = Singleton(
         ShooterScene,
         clock=_game_clock,
         surface_renderer=_surface_renderer,
+        scene=_game_over_scene,
         asset_manager=_asset_manager,
+        active_scene_manager=_active_scene_client,
         background=_main_menu_background,
         ship=_ship,
         asteroid_field=_asteroid_field,

@@ -16,10 +16,11 @@ from seagulls.engine import (
     SurfaceRenderer
 )
 
+from seagulls.examples import ISetActiveScene
+
 from ._asteroid_field import AsteroidField
 from ._asteroid_missed_rule import AsteroidMissedRule
 from ._check_game_rules_interface import ICheckGameRules
-from ._game_over_overlay import GameOverOverlay
 from ._score_overlay import ScoreOverlay
 from ._ship import Ship
 from ._ship_destroyed_rule import ShipDestroyedRule
@@ -32,8 +33,11 @@ logger = logging.getLogger(__name__)
 class ShooterScene(IGameScene):
 
     _surface_renderer: SurfaceRenderer
+
+    _scene: IGameScene
     _game_controls: GameControls
     _asset_manager: AssetManager
+    _active_scene_manager: ISetActiveScene
 
     _game_objects: GameObjectsCollection
     _should_quit: Event
@@ -47,16 +51,20 @@ class ShooterScene(IGameScene):
             self,
             clock: GameClock,
             surface_renderer: SurfaceRenderer,
+            scene: IGameScene,
             asset_manager: AssetManager,
+            active_scene_manager: ISetActiveScene,
             background: GameObject,
             ship: Ship,
             asteroid_field: AsteroidField,
             space_collisions: GameObject,
             score_overlay: ScoreOverlay,
             game_controls: GameControls):
-        mixer.init()
+
         self._surface_renderer = surface_renderer
+        self._scene = scene
         self._asset_manager = asset_manager
+        self._active_scene_manager = active_scene_manager
         self._game_controls = game_controls
 
         self._game_objects = GameObjectsCollection()
@@ -106,10 +114,9 @@ class ShooterScene(IGameScene):
 
     @lru_cache()
     def _end_game(self) -> None:
-        mixer.Sound("assets/sounds/game-over.ogg").play()
-        self._game_objects.add(GameOverOverlay())
         for item in self._toggleables:
             item.toggle()
+        self._active_scene_manager.set_active_scene(self._scene)
 
     def _render(self) -> None:
         background = Surface((1024, 600))

@@ -8,6 +8,7 @@ from ._ship import Ship
 from ._ship_interfaces import IShip
 from ._shooter_scene import ScoreOverlay, ShooterScene
 from ._space_collisions import SpaceCollisions
+from ._game_over_scene import GameOverScene
 
 __all__ = [
     "ShooterScene",
@@ -21,5 +22,6 @@ __all__ = [
     "OrangeShip",
     "BlueShip",
     "ActiveShipClient",
-    "IShip"
+    "IShip",
+    "GameOverScene",
 ]

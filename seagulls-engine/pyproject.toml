@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "seagulls"
+name = "seagulls-engine"
 version = "0.1.0"
 description = ""
 authors = ["Lorenzo Pisani <zeelot3k@gmail.com>"]

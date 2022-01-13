@@ -11,14 +11,11 @@ from seagulls.assets import AssetManager
 from seagulls.engine import GameControls, GameObject, IGameScene, Rect, Surface
 from seagulls.examples import ISetActiveScene
 
-from ._ship_interfaces import ISetActiveShip, IShip
-
 logger = logging.getLogger(__name__)
 
 
-class ShipButton(GameObject):
+class ReplayShooterButton(GameObject):
 
-    _ship: IShip
     _scene: IGameScene
 
     _asset_manager: AssetManager
@@ -33,23 +30,18 @@ class ShipButton(GameObject):
     _button_width = 190
 
     _active_scene_manager: ISetActiveScene
-    _active_ship_manager: ISetActiveShip
 
     def __init__(
             self,
-            ship: IShip,
             scene: IGameScene,
             asset_manager: AssetManager,
             game_controls: GameControls,
-            active_scene_manager: ISetActiveScene,
-            active_ship_manager: ISetActiveShip):
+            active_scene_manager: ISetActiveScene):
 
-        self._ship = ship
         self._scene = scene
         self._asset_manager = asset_manager
         self._game_controls = game_controls
         self._active_scene_manager = active_scene_manager
-        self._active_ship_manager = active_ship_manager
 
         self._is_highlighted = Event()
         self._is_clicked = Event()
@@ -62,28 +54,16 @@ class ShipButton(GameObject):
     def render(self, surface: Surface) -> None:
         button = self._get_background()
 
-        text = self._font.render(self._ship.display_name(), True, (90, 90, 70))
+        text = self._font.render("Play Again", True, (90, 90, 70))
         text_height = text.get_height()
         padding = (button.get_height() - text_height) / 2
 
-        ship_sprite = self._asset_manager.load_sprite(self._ship.sprite()).copy()
-        ship_velocity = self._font.render("Velocity: " + str(self._ship.velocity()), True,
-                                          "red", "black")
-        ship_power = self._font.render("Power: " + str(self._ship.power()), True,
-                                       "red", "black")
-
         button.blit(text, (10, padding))
-        surface.blit(button, (self._get_position()[0], self._get_position()[1] + 160))
-        surface.blit(ship_sprite, (self._get_position()[0], self._get_position()[1]))
-        surface.blit(ship_velocity, (self._get_position()[0], self._get_position()[1] + 100))
-        surface.blit(ship_power, (self._get_position()[0], self._get_position()[1] + 120))
+
+        surface.blit(button, self._get_position())
 
     def _detect_state(self) -> None:
-        rect = Rect(
-            (self._get_position()[0], self._get_position()[1] + 160),
-            (self._button_width,
-             self._button_height))
-
+        rect = Rect(self._get_position(), (self._button_width, self._button_height))
         if rect.collidepoint(pygame.mouse.get_pos()):
             self._is_highlighted.set()
             click = self._game_controls.is_click_initialized()
@@ -93,10 +73,7 @@ class ShipButton(GameObject):
             if not self._game_controls.is_mouse_down():
                 if self._is_clicked.is_set():
                     logger.debug("SWITCH")
-                    # TODO fix typing issue below
-                    self._scene.reset()  # type: ignore
                     self._active_scene_manager.set_active_scene(self._scene)
-                    self._active_ship_manager.set_active_ship(self._ship)
                 self._is_clicked.clear()
         else:
             self._is_highlighted.clear()
@@ -120,9 +97,31 @@ class ShipButton(GameObject):
         return "normal"
 
     def _get_position(self) -> Tuple[int, int]:
-        left = int((self._window_width / 4) - self._button_width / 2) + self._ship.offset()
-        top = int((self._window_height / 4) - self._button_height / 2)
+        left = int((self._window_width / 2) - self._button_width / 2)
+        top = int((self._window_height / 2) - self._button_height / 2)
         if self._is_clicked.is_set():
             top += 5
 
         return left, top
+
+
+class ReplayButtonFactory:
+    _asset_manager: AssetManager
+    _game_controls: GameControls
+    _active_scene_manager: ISetActiveScene
+
+    def __init__(
+            self,
+            asset_manager: AssetManager,
+            game_controls: GameControls,
+            active_scene_manager: ISetActiveScene):
+        self._asset_manager = asset_manager
+        self._game_controls = game_controls
+        self._active_scene_manager = active_scene_manager
+
+    def get_instance(self, scene: IGameScene) -> ReplayShooterButton:
+        return ReplayShooterButton(
+            scene,
+            self._asset_manager,
+            self._game_controls,
+            self._active_scene_manager)

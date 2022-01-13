@@ -28,3 +28,6 @@ class ScoreOverlay(GameObject):
             "red", "black"
         )
         surface.blit(img, (920, 570))
+
+    def reset(self) -> None:
+        self._score_tracker.reset()

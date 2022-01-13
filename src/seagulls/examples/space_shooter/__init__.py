@@ -1,14 +1,15 @@
 from ._active_ship_client import ActiveShipClient
 from ._asteroid_field import AsteroidField
 from ._blue_ship import BlueShip
+from ._game_over_scene import GameOverScene, GameOverSceneFactory
 from ._orange_ship import OrangeShip
+from ._replay_shooter_button import ReplayShooterButton, ReplayButtonFactory
 from ._score_tracker import ScoreTracker
-from ._selectable_ship_menu import ShipCatalog, ShipSelectionMenu
+from ._selectable_ship_menu import ShipCatalog, ShipSelectionMenu, ShipSelectionMenuFactory
 from ._ship import Ship
 from ._ship_interfaces import IShip
 from ._shooter_scene import ScoreOverlay, ShooterScene
 from ._space_collisions import SpaceCollisions
-from ._game_over_scene import GameOverScene
 
 __all__ = [
     "ShooterScene",
@@ -24,4 +25,8 @@ __all__ = [
     "ActiveShipClient",
     "IShip",
     "GameOverScene",
+    "ReplayShooterButton",
+    "ReplayButtonFactory",
+    "ShipSelectionMenuFactory",
+    "GameOverSceneFactory"
 ]

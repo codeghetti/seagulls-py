@@ -1,9 +1,6 @@
 import logging
-from functools import lru_cache
 from threading import Event
 from typing import Tuple
-
-from pygame import mixer
 
 from seagulls.assets import AssetManager
 from seagulls.engine import (
@@ -15,12 +12,14 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
-
 from seagulls.examples import ISetActiveScene
+from ._replay_shooter_button import ReplayButtonFactory
+from ._selectable_ship_menu import ShipSelectionMenuFactory
 
 from ._asteroid_field import AsteroidField
 from ._asteroid_missed_rule import AsteroidMissedRule
 from ._check_game_rules_interface import ICheckGameRules
+from ._game_over_scene import GameOverSceneFactory
 from ._score_overlay import ScoreOverlay
 from ._ship import Ship
 from ._ship_destroyed_rule import ShipDestroyedRule
@@ -34,7 +33,6 @@ class ShooterScene(IGameScene):
 
     _surface_renderer: SurfaceRenderer
 
-    _scene: IGameScene
     _game_controls: GameControls
     _asset_manager: AssetManager
     _active_scene_manager: ISetActiveScene
@@ -44,6 +42,12 @@ class ShooterScene(IGameScene):
 
     _state_client: ShooterSceneStateClient
     _game_rules: Tuple[ICheckGameRules, ...]
+    _background: GameObject
+    _score_overlay: ScoreOverlay
+    _game_over_scene_factory: GameOverSceneFactory
+    _replay_button_factory: ReplayButtonFactory
+    _ship_selection_menu_factory: ShipSelectionMenuFactory
+    _asteriod_field: AsteroidField
 
     _toggleables: Tuple[ToggleableGameObject, ...]
 
@@ -51,7 +55,6 @@ class ShooterScene(IGameScene):
             self,
             clock: GameClock,
             surface_renderer: SurfaceRenderer,
-            scene: IGameScene,
             asset_manager: AssetManager,
             active_scene_manager: ISetActiveScene,
             background: GameObject,
@@ -59,13 +62,21 @@ class ShooterScene(IGameScene):
             asteroid_field: AsteroidField,
             space_collisions: GameObject,
             score_overlay: ScoreOverlay,
-            game_controls: GameControls):
+            game_controls: GameControls,
+            game_over_scene_factory: GameOverSceneFactory,
+            replay_button_factory: ReplayButtonFactory,
+            ship_selection_menu_factory: ShipSelectionMenuFactory):
 
         self._surface_renderer = surface_renderer
-        self._scene = scene
         self._asset_manager = asset_manager
         self._active_scene_manager = active_scene_manager
         self._game_controls = game_controls
+        self._background = background
+        self._score_overlay = score_overlay
+        self._game_over_scene_factory = game_over_scene_factory
+        self._replay_button_factory = replay_button_factory
+        self._ship_selection_menu_factory = ship_selection_menu_factory
+        self._asteriod_field = asteroid_field
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(clock)
@@ -112,14 +123,19 @@ class ShooterScene(IGameScene):
 
         self._render()
 
-    @lru_cache()
     def _end_game(self) -> None:
-        for item in self._toggleables:
-            item.toggle()
-        self._active_scene_manager.set_active_scene(self._scene)
+        ship_selection_menu_scene = self._ship_selection_menu_factory.get_instance(self)
+        replay_button = self._replay_button_factory.get_instance(ship_selection_menu_scene)
+        self._active_scene_manager.set_active_scene(
+            self._game_over_scene_factory.get_instance(replay_button))
 
     def _render(self) -> None:
         background = Surface((1024, 600))
         self._game_objects.apply(lambda x: x.render(background))
 
         self._surface_renderer.render(background)
+
+    def reset(self) -> None:
+        self._asteriod_field.reset()
+        self._state_client.update_state(ShooterSceneState.RUNNING)
+        self._score_overlay.reset()

@@ -8,3 +8,6 @@ class ScoreTracker:
 
     def get_score(self) -> int:
         return self._score
+
+    def reset(self) -> None:
+        self._score = 0

@@ -40,7 +40,9 @@ from seagulls.examples.space_shooter import (
     ShipSelectionMenu,
     ShooterScene,
     SpaceCollisions,
-    GameOverScene,
+    ReplayButtonFactory,
+    ShipSelectionMenuFactory,
+    GameOverSceneFactory
 )
 
 from ._framework import LoggingClient
@@ -176,8 +178,26 @@ class SeagullsDiContainer(DeclarativeContainer):
         ShipCatalog,
         ships=(OrangeShip(), BlueShip()))
 
-    _game_over_scene = Singleton(
-        GameOverScene,
+    _replay_button_factory = Singleton(
+        ReplayButtonFactory,
+        asset_manager=_asset_manager,
+        game_controls=_game_controls,
+        active_scene_manager=_active_scene_client
+    )
+
+    _ship_selection_menu_factory = Singleton(
+        ShipSelectionMenuFactory,
+        catalog=_ship_catalog,
+        surface_renderer=_surface_renderer,
+        game_controls=_game_controls,
+        asset_manager=_asset_manager,
+        active_scene_manager=_active_scene_client,
+        active_ship_manager=_active_ship_client,
+        background=_main_menu_background
+    )
+
+    _game_over_scene_factory = Singleton(
+        GameOverSceneFactory,
         surface_renderer=_surface_renderer,
         game_controls=_game_controls,
         asset_manager=_asset_manager,
@@ -190,7 +210,6 @@ class SeagullsDiContainer(DeclarativeContainer):
         ShooterScene,
         clock=_game_clock,
         surface_renderer=_surface_renderer,
-        scene=_game_over_scene,
         asset_manager=_asset_manager,
         active_scene_manager=_active_scene_client,
         background=_main_menu_background,
@@ -198,7 +217,10 @@ class SeagullsDiContainer(DeclarativeContainer):
         asteroid_field=_asteroid_field,
         space_collisions=_space_collisions,
         score_overlay=_score_overlay,
-        game_controls=_game_controls
+        game_controls=_game_controls,
+        game_over_scene_factory=_game_over_scene_factory,
+        replay_button_factory=_replay_button_factory,
+        ship_selection_menu_factory=_ship_selection_menu_factory,
     )
 
     _space_shooter_ship_selection_scene = Singleton(

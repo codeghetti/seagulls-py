@@ -14,7 +14,6 @@ class AsteroidField(GameObject):
     _clock: GameClock
     _asset_manager: AssetManager
     _asteroid_field: List[SpaceRock]
-    _is_game_over: bool
     _spawn_timer: int
 
     def __init__(
@@ -24,7 +23,6 @@ class AsteroidField(GameObject):
         self._clock = clock
         self._asset_manager = asset_manager
         self._asteroid_field = []
-        self._is_game_over = False
         self._spawn_timer = 0
 
     def tick(self) -> None:
@@ -36,9 +34,6 @@ class AsteroidField(GameObject):
         if self._spawn_timer > 800:
             self._asteroid_field.append(self._spawn_one_rock())
             self._spawn_timer = 0
-
-        if self._is_game_over:
-            return
 
     def render(self, surface: Surface) -> None:
         for rock in self._asteroid_field:
@@ -78,3 +73,7 @@ class AsteroidField(GameObject):
 
     def set_game_over(self) -> None:
         self._is_game_over = True
+
+    def reset(self) -> None:
+        self._asteroid_field = []
+        self._spawn_timer = 0

@@ -33,9 +33,6 @@ class ShipSelectionMenu(IGameScene):
     _game_objects: GameObjectsCollection
     _should_quit: Event
 
-    _red_ship_button: GameObject
-    _blue_ship_button: GameObject
-
     def __init__(
             self,
             catalog: ShipCatalog,
@@ -45,7 +42,7 @@ class ShipSelectionMenu(IGameScene):
             asset_manager: AssetManager,
             active_scene_manager: ISetActiveScene,
             active_ship_manager: ISetActiveShip,
-            background: GameObject,):
+            background: GameObject):
 
         self._ship_catalog = catalog.ships
         self._surface_renderer = surface_renderer
@@ -91,3 +88,41 @@ class ShipSelectionMenu(IGameScene):
         self._game_objects.apply(lambda x: x.render(background))
 
         self._surface_renderer.render(background)
+
+
+class ShipSelectionMenuFactory:
+    _ship_catalog: ShipCatalog
+    _surface_renderer: SurfaceRenderer
+
+    _game_controls: GameControls
+    _asset_manager: AssetManager
+    _active_scene_manager: ISetActiveScene
+    _active_ship_manager: ISetActiveShip
+
+    def __init__(
+            self,
+            catalog: ShipCatalog,
+            surface_renderer: SurfaceRenderer,
+            game_controls: GameControls,
+            asset_manager: AssetManager,
+            active_scene_manager: ISetActiveScene,
+            active_ship_manager: ISetActiveShip,
+            background: GameObject):
+        self._ship_catalog = catalog
+        self._surface_renderer = surface_renderer
+        self._game_controls = game_controls
+        self._asset_manager = asset_manager
+        self._active_scene_manager = active_scene_manager
+        self._active_ship_manager = active_ship_manager
+        self.background = background
+
+    def get_instance(self, scene: IGameScene) -> ShipSelectionMenu:
+        return ShipSelectionMenu(
+            self._ship_catalog,
+            self._surface_renderer,
+            scene,
+            self._game_controls,
+            self._asset_manager,
+            self._active_scene_manager,
+            self._active_ship_manager,
+            self.background)

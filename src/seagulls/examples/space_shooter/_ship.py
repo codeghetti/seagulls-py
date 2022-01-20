@@ -49,13 +49,26 @@ class Ship(GameObject):
 
     def tick(self) -> None:
         self._max_velocity = self._active_ship_manager.get_active_ship().velocity()
+        is_moving = False
+
         if self._game_controls.is_left_moving():
+            if self._velocity.x > 0:
+                self._velocity.x = 0.0
             if math.floor(abs(self._velocity.x)) <= self._max_velocity:
                 self._velocity = self._velocity + Vector2(-0.1, 0)
-        elif self._game_controls.is_right_moving():
+            is_moving = True
+
+        if self._game_controls.is_right_moving():
+            if self._velocity.x < 0:
+                self._velocity.x = 0.0
             if self._velocity.x <= self._max_velocity:
                 self._velocity = self._velocity + Vector2(0.1, 0)
-        else:
+            is_moving = True
+
+        if self._game_controls.is_left_moving() and self._game_controls.is_right_moving():
+            self._velocity.x = 0.0
+
+        if not is_moving:
             self._velocity.x = 0.0
 
         if self._game_controls.should_fire():

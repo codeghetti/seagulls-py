@@ -58,7 +58,13 @@ class SpaceCollisions(GameObject):
                         self._asteroid_field.get_rock_size_x(rock_number)
 
     def _laser_rock_collision_check_y(self, laser_number: int, rock_number: int) -> bool:
-        return self._asteroid_field.get_rock_position_y(rock_number) <= \
-                            self._ship.get_laser_position_y(laser_number) <= \
-                            self._asteroid_field.get_rock_position_y(rock_number) + \
-                            self._asteroid_field.get_rock_size_y(rock_number)
+        rock_position_y = self._asteroid_field.get_rock_position_y(rock_number)
+        rock_size_y = self._asteroid_field.get_rock_size_y(rock_number)
+
+        return (rock_position_y <=
+                self._ship.get_laser_position_y(laser_number) <=
+                rock_position_y +
+                rock_size_y) and self._rock_on_screen_y(rock_position_y, rock_size_y)
+
+    def _rock_on_screen_y(self, rock_position_y: float, rock_size_y: int) -> bool:
+        return rock_position_y + rock_size_y > 0

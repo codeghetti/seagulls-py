@@ -51,7 +51,8 @@ class AsteroidField(GameObject):
                 self._get_random_rock_position())
 
     def _get_random_rock_position(self) -> Vector2:
-        return Vector2(random.randint(0, 1024 - 125), -200)
+        ship_laser_buffer = 70
+        return Vector2(random.randint(ship_laser_buffer, 1024 - 125 - ship_laser_buffer), -200)
 
     def get_asteroid_field_size(self) -> int:
         return len(self._asteroid_field)

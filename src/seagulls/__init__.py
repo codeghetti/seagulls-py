@@ -1,3 +1,0 @@
-"""
-The Seagulls Game Engine.
-"""

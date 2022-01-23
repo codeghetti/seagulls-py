@@ -14,11 +14,12 @@ jobs:
         with:
           python-version: "3.9.2"
       - name: Install Poetry
+        working-directory: seagulls-engine
         run: |
-          cd seagulls-engine
           python3 -m pip install --upgrade pip
           pip install pipx
           pipx install poetry
           poetry install --extras dev
       - name: Run Tox
+        working-directory: seagulls-engine
         run: poetry run tox

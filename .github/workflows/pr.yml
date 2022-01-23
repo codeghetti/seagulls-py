@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ $default-branch ]
 jobs:
-  tox:
+  seagulls-engine-tox:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -15,6 +15,7 @@ jobs:
           python-version: "3.9.2"
       - name: Install Poetry
         run: |
+          cd seagulls-engine
           python3 -m pip install --upgrade pip
           pip install pipx
           pipx install poetry

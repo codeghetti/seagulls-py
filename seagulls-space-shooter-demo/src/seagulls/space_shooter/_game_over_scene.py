@@ -41,7 +41,6 @@ class GameOverScene(IGameScene):
             active_scene_manager: ISetActiveScene,
             score_overlay: ScoreOverlay,
             background: GameObject):
-        mixer.init()
         self._replay_button = replay_button
         self._surface_renderer = surface_renderer
         self._game_controls = game_controls
@@ -77,6 +76,7 @@ class GameOverScene(IGameScene):
 
     @lru_cache()
     def _game_over_summary(self) -> None:
+        mixer.init()
         mixer.Sound("assets/sounds/game-over.ogg").play()
         self._game_objects.add(GameOverOverlay())
 

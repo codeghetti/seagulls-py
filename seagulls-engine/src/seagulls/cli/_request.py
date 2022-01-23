@@ -75,5 +75,10 @@ class CliRequest:
         event = CliRequestRegistrationEvent(parser)
         event_dispatcher.trigger_event(event)
 
+        def default_execute() -> None:
+            parser.print_help()
+
+        parser.set_defaults(cmd=default_execute)
+
         args = parser.parse_args(self._args)
         args.cmd()

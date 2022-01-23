@@ -4,22 +4,26 @@ on:
   pull_request:
     branches: [ $default-branch ]
 jobs:
-  seagulls-engine-tox:
+  seagulls-engine-checks:
+    name: "tox: seagulls-engine"
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
+      - name: "git checkout"
         uses: actions/checkout@v2
-      - name: Set up Python
+      - name: "setup python"
         uses: actions/setup-python@v2
         with:
           python-version: "3.9.2"
-      - name: Install Poetry
+      - name: "install package"
         working-directory: seagulls-engine
         run: |
           python3 -m pip install --upgrade pip
           pip install pipx
           pipx install poetry
           poetry install --extras dev
-      - name: Run Tox
+      - name: "run checks"
         working-directory: seagulls-engine
-        run: poetry run tox
+        run: |
+          poetry run seagulls flake8
+          poetry run seagulls mypy
+          poetry run seagulls pytest

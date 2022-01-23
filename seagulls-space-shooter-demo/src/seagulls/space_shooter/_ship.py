@@ -3,7 +3,6 @@ import math
 from typing import List
 
 from pygame import mixer
-
 from seagulls.assets import AssetManager
 from seagulls.engine import (
     GameClock,

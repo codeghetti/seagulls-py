@@ -3,7 +3,6 @@ from functools import lru_cache
 from threading import Event
 
 from pygame import Surface, mixer
-
 from seagulls.assets import AssetManager
 from seagulls.engine import (
     GameControls,
@@ -12,11 +11,11 @@ from seagulls.engine import (
     IGameScene,
     SurfaceRenderer
 )
+
 from ._active_scene_client import ISetActiveScene
+from ._game_over_overlay import GameOverOverlay
 from ._replay_shooter_button import ReplayShooterButton
 from ._score_overlay import ScoreOverlay
-
-from ._game_over_overlay import GameOverOverlay
 
 logger = logging.getLogger(__name__)
 

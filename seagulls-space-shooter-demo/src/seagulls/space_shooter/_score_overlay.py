@@ -2,7 +2,6 @@ from functools import lru_cache
 from pathlib import Path
 
 from pygame.font import Font
-
 from seagulls.engine import GameObject, Surface
 
 from ._score_tracker import ScoreTracker

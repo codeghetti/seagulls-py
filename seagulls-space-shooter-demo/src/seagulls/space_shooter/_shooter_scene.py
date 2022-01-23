@@ -12,15 +12,15 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
-from ._active_scene_client import ISetActiveScene
-from ._replay_shooter_button import ReplayButtonFactory
-from ._selectable_ship_menu import ShipSelectionMenuFactory
 
+from ._active_scene_client import ISetActiveScene
 from ._asteroid_field import AsteroidField
 from ._asteroid_missed_rule import AsteroidMissedRule
 from ._check_game_rules_interface import ICheckGameRules
 from ._game_over_scene import GameOverSceneFactory
+from ._replay_shooter_button import ReplayButtonFactory
 from ._score_overlay import ScoreOverlay
+from ._selectable_ship_menu import ShipSelectionMenuFactory
 from ._ship import Ship
 from ._ship_destroyed_rule import ShipDestroyedRule
 from ._shooter_scene_client import ShooterSceneState, ShooterSceneStateClient

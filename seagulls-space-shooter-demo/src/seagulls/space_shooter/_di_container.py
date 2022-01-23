@@ -1,23 +1,32 @@
 from functools import lru_cache
 from pathlib import Path
 
-from seagulls.cli_next import SeagullsCliApplication
-from . import ActiveShipClient, AsteroidField, SpaceCollisions, ScoreTracker, ScoreOverlay, \
-    GameOverSceneFactory, ReplayButtonFactory, ShipSelectionMenuFactory, ShipCatalog, BlueShip, \
-    OrangeShip
-from ._active_scene_client import ISetActiveScene, ActiveSceneClient
+from seagulls.assets import AssetManager
+from seagulls.engine import GameClock, GameControls, SurfaceRenderer
+from seagulls.seagulls_cli import SeagullsCliApplication
+
+from ._active_scene_client import ActiveSceneClient
+from ._active_ship_client import ActiveShipClient
+from ._asteroid_field import AsteroidField
 from ._blocking_game_session import BlockingGameSession
+from ._blue_ship import BlueShip
 from ._cli_command import GameCliCommand
 from ._cli_plugin import SpaceShooterCliPlugin
 from ._empty_scene import EmptyScene
 from ._empty_ship import EmptyShip
 from ._example_scene_manager import ExampleSceneManager
+from ._game_over_scene import GameOverSceneFactory
+from ._orange_ship import OrangeShip
+from ._replay_shooter_button import ReplayButtonFactory
+from ._score_overlay import ScoreOverlay
+from ._score_tracker import ScoreTracker
+from ._selectable_ship_menu import ShipSelectionMenuFactory
 from ._ship import Ship
+from ._ship_catalog import ShipCatalog
 from ._shooter_scene import ShooterScene
+from ._space_collisions import SpaceCollisions
 from ._stars_background import SimpleStarsBackground
 from ._window_scene import WindowScene
-from seagulls.assets import AssetManager
-from seagulls.engine import GameClock, GameControls, SurfaceRenderer
 
 
 class SpaceShooterDiContainer:

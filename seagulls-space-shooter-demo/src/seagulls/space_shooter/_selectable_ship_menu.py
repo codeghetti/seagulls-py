@@ -11,8 +11,8 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
-from ._active_scene_client import ISetActiveScene
 
+from ._active_scene_client import ISetActiveScene
 from ._ship_button import ShipButton
 from ._ship_catalog import ShipCatalog
 from ._ship_interfaces import ISetActiveShip, IShip

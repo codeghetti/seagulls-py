@@ -1,5 +1,6 @@
 from seagulls.app import ISeagullsApplicationPluginRegistrant
-from seagulls.cli_next import SeagullsCliApplication
+from seagulls.seagulls_cli import SeagullsCliApplication
+
 from ._di_container import SpaceShooterDiContainer
 
 

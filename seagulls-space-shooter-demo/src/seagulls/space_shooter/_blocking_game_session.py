@@ -1,7 +1,6 @@
 import logging
 
 import pygame
-
 from seagulls.engine import IGameSession, IProvideGameScenes
 
 logger = logging.getLogger(__name__)

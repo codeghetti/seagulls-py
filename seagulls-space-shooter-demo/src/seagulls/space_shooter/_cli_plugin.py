@@ -1,8 +1,6 @@
 from seagulls.app import ISeagullsApplicationPlugin
-
-from seagulls.cli_next import SeagullsCliApplication
-
 from seagulls.cli import CliRequestRegistrationEvent, ICliCommand
+from seagulls.seagulls_cli import SeagullsCliApplication
 
 
 class SpaceShooterCliPlugin(ISeagullsApplicationPlugin):

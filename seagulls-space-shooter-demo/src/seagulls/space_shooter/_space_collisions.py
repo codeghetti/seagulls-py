@@ -2,7 +2,6 @@ import logging
 from typing import Callable
 
 from pygame import mixer
-
 from seagulls.engine import GameObject, Surface
 
 from ._asteroid_field import AsteroidField

@@ -24,6 +24,7 @@ mkdocs = {version = "*", optional = true }
 mkdocs-material = {version = "*", optional = true }
 mkdocs-awesome-pages-plugin = {version = "*", optional = true }
 types-PyYAML = {version = "*", optional = true}
+seagulls-devtools = { version = "*", optional = true }
 
 [tool.poetry.extras]
 dev = [
@@ -35,11 +36,13 @@ dev = [
     "mkdocs",
     "mkdocs-material",
     "mkdocs-awesome-pages-plugin",
-    "types-PyYAML"
+    "types-PyYAML",
+    "seagulls-devtools",
 ]
 
 [tool.poetry.dev-dependencies]
 seagulls-engine = { path = "../seagulls-engine/", develop = true }
+seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional = true }
 
 [tool.poetry.plugins."seagulls.plugins"]
 "seagulls-space-shooter-demo" = "seagulls.space_shooter:SpaceShooterCliPluginEntryPoint"

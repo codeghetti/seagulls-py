@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from pygame.font import Font
-
 from seagulls.engine import GameObject, Surface
 
 

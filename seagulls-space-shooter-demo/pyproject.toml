@@ -15,7 +15,6 @@ colorlog = "*"
 PyYAML = "*"
 seagulls-engine = "*"
 # These are only needed during development
-tox = { version = "*", optional = true }
 isort = { version = "*", optional = true }
 pytest = { version = "*", optional = true }
 flake8 = { version = "*", optional = true }
@@ -28,7 +27,6 @@ types-PyYAML = {version = "*", optional = true}
 
 [tool.poetry.extras]
 dev = [
-    "tox",
     "isort",
     "pytest",
     "flake8",
@@ -42,10 +40,6 @@ dev = [
 
 [tool.poetry.dev-dependencies]
 seagulls-engine = { path = "../seagulls-engine/", develop = true }
-
-[tool.poetry.scripts]
-seagulls = 'seagulls.cli:main'
-seagulls-next = 'seagulls.cli_next:main'
 
 [tool.poetry.plugins."seagulls.plugins"]
 "seagulls-space-shooter-demo" = "seagulls.space_shooter:SpaceShooterCliPluginEntryPoint"

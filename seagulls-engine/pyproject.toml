@@ -15,7 +15,6 @@ dependency-injector = "*"
 colorlog = "*"
 PyYAML = "*"
 # These are only needed during development
-tox = { version = "*", optional = true }
 isort = { version = "*", optional = true }
 pytest = { version = "*", optional = true }
 flake8 = { version = "*", optional = true }
@@ -29,7 +28,6 @@ seagulls-devtools = { version = "*", optional = true }
 
 [tool.poetry.extras]
 dev = [
-    "tox",
     "isort",
     "pytest",
     "flake8",

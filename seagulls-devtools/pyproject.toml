@@ -28,7 +28,6 @@ types-PyYAML = {version = "*", optional = true}
 
 [tool.poetry.extras]
 dev = [
-    "tox",
     "isort",
     "pytest",
     "flake8",

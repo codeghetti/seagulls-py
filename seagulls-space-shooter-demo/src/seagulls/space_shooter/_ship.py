@@ -1,4 +1,6 @@
 import logging
+from functools import lru_cache
+
 import math
 from typing import List
 
@@ -43,8 +45,6 @@ class Ship(GameObject):
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
         self._lasers = []
-        mixer.init()
-        self._laser_sound = mixer.Sound("assets/sounds/laser-sound.ogg")
 
     def tick(self) -> None:
         self._max_velocity = self._active_ship_manager.get_active_ship().velocity()
@@ -72,7 +72,7 @@ class Ship(GameObject):
 
         if self._game_controls.should_fire():
             self._lasers.append(Laser(self._clock, self._asset_manager, self._position))
-            self._laser_sound.play()
+            self._laser_sound().play()
 
         delta = self._clock.get_time()
 
@@ -112,3 +112,8 @@ class Ship(GameObject):
 
     def get_ship_position(self) -> Vector2:
         return self._position
+
+    @lru_cache()
+    def _laser_sound(self) -> mixer.Sound:
+        mixer.init()
+        return mixer.Sound("assets/sounds/laser-sound.ogg")

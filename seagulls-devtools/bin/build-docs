@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -ex
+
+rm -rf docs/api/*
+cd ../seagulls-devtools
+pdoc \
+  --template-directory ../.pdoc/templates \
+  --docformat google \
+  --output-directory ../docs/api/seagulls-devtools seagulls
+# Delete the pdoc home page because it's pretty broken for now
+rm ../docs/api/seagulls-devtools/index.html
+rm ../docs/api/seagulls-devtools/search.js
+
+cd ../seagulls-engine
+pdoc \
+  --template-directory ../.pdoc/templates \
+  --docformat google \
+  --output-directory ../docs/api/seagulls-engine seagulls
+# Delete the pdoc home page because it's pretty broken for now
+rm ../docs/api/seagulls-engine/index.html
+rm ../docs/api/seagulls-engine/search.js
+
+cd ../seagulls-space-shooter-demo
+pdoc \
+  --template-directory ../.pdoc/templates \
+  --docformat google \
+  --output-directory ../docs/api/seagulls-space-shooter-demo seagulls
+# Delete the pdoc home page because it's pretty broken for now
+rm ../docs/api/seagulls-space-shooter-demo/index.html
+rm ../docs/api/seagulls-space-shooter-demo/search.js
+
+cd ..
+# Rename all *.html files to *.md
+find docs/api -name "*.html" -exec rename -v 's/\.html$/\.md/i' {} \;
+
+cd seagulls-devtools
+mkdocs build --config-file ../mkdocs.yml

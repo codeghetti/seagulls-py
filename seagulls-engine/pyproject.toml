@@ -1,0 +1,60 @@
+[tool.poetry]
+name = "seagulls-engine"
+version = "0.1.0"
+description = ""
+authors = ["Lorenzo Pisani <zeelot3k@gmail.com>"]
+license = "MIT"
+packages = [
+    {include = "seagulls", from = "src"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pygame = "*"
+dependency-injector = "*"
+colorlog = "*"
+PyYAML = "*"
+# These are only needed during development
+isort = { version = "*", optional = true }
+pytest = { version = "*", optional = true }
+pytest-cov = { version = "*", optional = true }
+flake8 = { version = "*", optional = true }
+mypy = { version = "*", optional = true }
+pdoc = { version = "*", optional = true }
+mkdocs = { version = "*", optional = true }
+mkdocs-material = { version = "*", optional = true }
+mkdocs-awesome-pages-plugin = { version = "*", optional = true }
+types-PyYAML = { version = "*", optional = true }
+seagulls-devtools = { version = "*", optional = true }
+
+[tool.poetry.extras]
+dev = [
+    "isort",
+    "pytest",
+    "pytest-cov",
+    "flake8",
+    "mypy",
+    "pdoc",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-awesome-pages-plugin",
+    "types-PyYAML",
+    "seagulls-devtools",
+]
+
+[tool.poetry.dev-dependencies]
+seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional = true }
+
+[tool.poetry.scripts]
+seagulls = "seagulls.seagulls_cli:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+multi_line_output = 3
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+addopts = "-s --cache-clear --cov src/seagulls --cov-report=term-missing"

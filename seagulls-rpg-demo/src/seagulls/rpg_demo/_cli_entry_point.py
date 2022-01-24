@@ -1,4 +1,4 @@
-from seagulls.app import ISeagullsApplicationPluginRegistrant, ISeagullsApplication
+from seagulls.app import ISeagullsApplicationPluginRegistrant
 from seagulls.seagulls_cli import SeagullsCliApplication
 
 from ._di_container import RpgDemoDiContainer

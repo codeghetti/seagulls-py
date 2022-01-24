@@ -1,6 +1,7 @@
 dist/
 *.pyc
 .tox
+.coverage
 
 .gitignore.swp
 

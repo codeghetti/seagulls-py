@@ -11,7 +11,7 @@ class PytestCommand(ICliCommand):
         pass
 
     def execute(self) -> None:
-        cmd = ["poetry", "run", "pytest", "-s"]
+        cmd = ["poetry", "run", "pytest"]
         try:
             subprocess.run(cmd, check=True)
             print("All Checks Passed :)")

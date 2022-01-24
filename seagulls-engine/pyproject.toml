@@ -17,6 +17,7 @@ PyYAML = "*"
 # These are only needed during development
 isort = { version = "*", optional = true }
 pytest = { version = "*", optional = true }
+pytest-cov = { version = "*", optional = true }
 flake8 = { version = "*", optional = true }
 mypy = { version = "*", optional = true }
 pdoc = { version = "*", optional = true }
@@ -30,6 +31,7 @@ seagulls-devtools = { version = "*", optional = true }
 dev = [
     "isort",
     "pytest",
+    "pytest-cov",
     "flake8",
     "mypy",
     "pdoc",
@@ -55,4 +57,4 @@ multi_line_output = 3
 
 [tool.pytest.ini_options]
 testpaths = ["test"]
-addopts = "--cache-clear"
+addopts = "-s --cache-clear --cov src/seagulls --cov-report=term-missing"

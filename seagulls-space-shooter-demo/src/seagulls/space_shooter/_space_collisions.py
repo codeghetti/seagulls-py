@@ -32,8 +32,9 @@ class SpaceCollisions(GameObject):
             for rock in range(self._asteroid_field.get_asteroid_field_size()):
                 if self._laser_rock_collision_check_x(laser, rock):
                     if self._laser_rock_collision_check_y(laser, rock):
-                        _remove_lasers.append(laser)
-                        _remove_rocks.append(rock)
+                        if not(laser in _remove_lasers):
+                            _remove_lasers.append(laser)
+                            _remove_rocks.append(rock)
 
         for laser in _remove_lasers:
             self._ship.remove_laser(laser)

@@ -13,7 +13,6 @@ from ._surface_renderer import SurfaceRenderer
 from ._active_scene_client import ISetActiveScene, ActiveSceneClient
 from ._window_scene import WindowScene
 from ._empty_scene import EmptyScene
-from ._toggleable_game_object import ToggleableGameObject
 
 __all__ = [
     "flag_from_string",
@@ -38,5 +37,4 @@ __all__ = [
     "ActiveSceneClient",
     "WindowScene",
     "EmptyScene",
-    "ToggleableGameObject"
 ]

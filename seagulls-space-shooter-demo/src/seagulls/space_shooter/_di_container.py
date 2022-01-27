@@ -8,18 +8,18 @@ from seagulls.engine import (
     GameClock,
     GameControls,
     SurfaceRenderer,
-    WindowScene
+    WindowScene,
+    BlockingGameSession,
+    BasicSceneManager
 )
 from seagulls.seagulls_cli import SeagullsCliApplication
 
 from ._active_ship_client import ActiveShipClient
 from ._asteroid_field import AsteroidField
-from ._blocking_game_session import BlockingGameSession
 from ._blue_ship import BlueShip
 from ._cli_command import GameCliCommand
 from ._cli_plugin import SpaceShooterCliPlugin
 from ._empty_ship import EmptyShip
-from ._example_scene_manager import ExampleSceneManager
 from ._game_over_scene import GameOverSceneFactory
 from ._orange_ship import OrangeShip
 from ._replay_shooter_button import ReplayButtonFactory
@@ -54,7 +54,7 @@ class SpaceShooterDiContainer:
     @lru_cache()
     def _blocking_game_session(self) -> BlockingGameSession:
         return BlockingGameSession(
-            scene_manager=ExampleSceneManager(scene=self._window_scene()))
+            scene_manager=BasicSceneManager(scene=self._window_scene()))
 
     @lru_cache()
     def _window_scene(self) -> WindowScene:

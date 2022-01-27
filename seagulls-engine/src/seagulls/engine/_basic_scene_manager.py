@@ -1,7 +1,8 @@
-from seagulls.engine import IGameScene, IProvideGameScenes
+from ._game_scene import IGameScene
+from ._game_scene_manager import IProvideGameScenes
 
 
-class ExampleSceneManager(IProvideGameScenes):
+class BasicSceneManager(IProvideGameScenes):
     _scene: IGameScene
 
     def __init__(self, scene: IGameScene):

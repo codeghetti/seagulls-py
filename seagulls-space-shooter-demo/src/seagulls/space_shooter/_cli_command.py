@@ -2,9 +2,8 @@ from argparse import ArgumentParser
 
 import pygame
 from seagulls.cli import ICliCommand
-from seagulls.engine import IGameScene, IGameSession
+from seagulls.engine import IGameScene, IGameSession, ISetActiveScene
 
-from ._active_scene_client import ISetActiveScene
 from ._selectable_ship_menu import ShipSelectionMenuFactory
 
 

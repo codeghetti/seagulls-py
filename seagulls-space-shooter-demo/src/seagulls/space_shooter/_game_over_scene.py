@@ -9,10 +9,10 @@ from seagulls.engine import (
     GameObject,
     GameObjectsCollection,
     IGameScene,
+    ISetActiveScene,
     SurfaceRenderer
 )
 
-from ._active_scene_client import ISetActiveScene
 from ._game_over_overlay import GameOverOverlay
 from ._replay_shooter_button import ReplayShooterButton
 from ._score_overlay import ScoreOverlay

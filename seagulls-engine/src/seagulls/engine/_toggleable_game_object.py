@@ -1,4 +1,5 @@
-from seagulls.engine import GameObject, Surface
+from ._game_object import GameObject
+from ._pygame import Surface
 
 
 class ToggleableGameObject(GameObject):

@@ -2,19 +2,24 @@ from functools import lru_cache
 from pathlib import Path
 
 from seagulls.assets import AssetManager
-from seagulls.engine import GameClock, GameControls, SurfaceRenderer
+from seagulls.engine import (
+    ActiveSceneClient,
+    EmptyScene,
+    GameClock,
+    GameControls,
+    SurfaceRenderer,
+    WindowScene,
+    BlockingGameSession,
+    BasicSceneManager
+)
 from seagulls.seagulls_cli import SeagullsCliApplication
 
-from ._active_scene_client import ActiveSceneClient
 from ._active_ship_client import ActiveShipClient
 from ._asteroid_field import AsteroidField
-from ._blocking_game_session import BlockingGameSession
 from ._blue_ship import BlueShip
 from ._cli_command import GameCliCommand
 from ._cli_plugin import SpaceShooterCliPlugin
-from ._empty_scene import EmptyScene
 from ._empty_ship import EmptyShip
-from ._example_scene_manager import ExampleSceneManager
 from ._game_over_scene import GameOverSceneFactory
 from ._orange_ship import OrangeShip
 from ._replay_shooter_button import ReplayButtonFactory
@@ -26,7 +31,6 @@ from ._ship_catalog import ShipCatalog
 from ._shooter_scene import ShooterScene
 from ._space_collisions import SpaceCollisions
 from ._stars_background import SimpleStarsBackground
-from ._window_scene import WindowScene
 
 
 class SpaceShooterDiContainer:
@@ -50,7 +54,7 @@ class SpaceShooterDiContainer:
     @lru_cache()
     def _blocking_game_session(self) -> BlockingGameSession:
         return BlockingGameSession(
-            scene_manager=ExampleSceneManager(scene=self._window_scene()))
+            scene_manager=BasicSceneManager(scene=self._window_scene()))
 
     @lru_cache()
     def _window_scene(self) -> WindowScene:

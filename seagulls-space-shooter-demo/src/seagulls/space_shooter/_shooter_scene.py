@@ -9,11 +9,11 @@ from seagulls.engine import (
     GameObject,
     GameObjectsCollection,
     IGameScene,
+    ISetActiveScene,
     Surface,
     SurfaceRenderer
 )
 
-from ._active_scene_client import ISetActiveScene
 from ._asteroid_field import AsteroidField
 from ._asteroid_missed_rule import AsteroidMissedRule
 from ._check_game_rules_interface import ICheckGameRules
@@ -24,7 +24,6 @@ from ._selectable_ship_menu import ShipSelectionMenuFactory
 from ._ship import Ship
 from ._ship_destroyed_rule import ShipDestroyedRule
 from ._shooter_scene_client import ShooterSceneState, ShooterSceneStateClient
-from ._toggleable_game_object import ToggleableGameObject
 
 logger = logging.getLogger(__name__)
 
@@ -47,9 +46,7 @@ class ShooterScene(IGameScene):
     _game_over_scene_factory: GameOverSceneFactory
     _replay_button_factory: ReplayButtonFactory
     _ship_selection_menu_factory: ShipSelectionMenuFactory
-    _asteriod_field: AsteroidField
-
-    _toggleables: Tuple[ToggleableGameObject, ...]
+    _asteroid_field: AsteroidField
 
     def __init__(
             self,
@@ -76,7 +73,7 @@ class ShooterScene(IGameScene):
         self._game_over_scene_factory = game_over_scene_factory
         self._replay_button_factory = replay_button_factory
         self._ship_selection_menu_factory = ship_selection_menu_factory
-        self._asteriod_field = asteroid_field
+        self._asteroid_field = asteroid_field
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(clock)
@@ -85,19 +82,13 @@ class ShooterScene(IGameScene):
         self._game_objects.add(space_collisions)
         self._game_objects.add(score_overlay)
         self._game_objects.add(self._game_controls)
-
-        self._toggleables = tuple([
-            ToggleableGameObject(asteroid_field)
-        ])
+        self._game_objects.add(self._asteroid_field)
 
         self._state_client = ShooterSceneStateClient()
         self._game_rules = tuple([
             AsteroidMissedRule(self._state_client, asteroid_field),
             ShipDestroyedRule(self._state_client, asteroid_field, ship),
         ])
-
-        for item in self._toggleables:
-            self._game_objects.add(item)
 
         self._should_quit = Event()
 
@@ -136,6 +127,6 @@ class ShooterScene(IGameScene):
         self._surface_renderer.render(background)
 
     def reset(self) -> None:
-        self._asteriod_field.reset()
+        self._asteroid_field.reset()
         self._state_client.update_state(ShooterSceneState.RUNNING)
         self._score_overlay.reset()

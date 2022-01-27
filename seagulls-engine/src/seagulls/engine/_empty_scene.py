@@ -1,4 +1,4 @@
-from seagulls.engine import IGameScene
+from ._game_scene import IGameScene
 
 
 class EmptyScene(IGameScene):

@@ -10,6 +10,11 @@ from ._game_session_manager import IProvideGameSessions
 from ._game_settings import GameSettings
 from ._pygame import Color, PixelArray, Rect, Surface, Vector2, Vector3
 from ._surface_renderer import SurfaceRenderer
+from ._active_scene_client import ISetActiveScene, ActiveSceneClient
+from ._window_scene import WindowScene
+from ._empty_scene import EmptyScene
+from ._basic_scene_manager import BasicSceneManager
+from ._blocking_game_session import BlockingGameSession
 
 __all__ = [
     "flag_from_string",
@@ -30,4 +35,10 @@ __all__ = [
     "PixelArray",
     "Vector2",
     "Vector3",
+    "ISetActiveScene",
+    "ActiveSceneClient",
+    "WindowScene",
+    "EmptyScene",
+    "BasicSceneManager",
+    "BlockingGameSession",
 ]

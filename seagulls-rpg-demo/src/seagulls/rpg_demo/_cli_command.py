@@ -2,9 +2,7 @@ from argparse import ArgumentParser
 
 import pygame
 from seagulls.cli import ICliCommand
-from seagulls.engine import IGameScene, IGameSession
-
-from ._active_scene_client import ISetActiveScene
+from seagulls.engine import IGameScene, IGameSession, ISetActiveScene
 
 
 class GameCliCommand(ICliCommand):

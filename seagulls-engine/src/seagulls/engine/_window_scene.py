@@ -1,4 +1,4 @@
-from seagulls.engine import IGameScene
+from ._game_scene import IGameScene
 
 from ._active_scene_client import IProvideActiveScene
 

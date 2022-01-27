@@ -8,11 +8,11 @@ from seagulls.engine import (
     GameObject,
     GameObjectsCollection,
     IGameScene,
+    ISetActiveScene,
     Surface,
     SurfaceRenderer
 )
 
-from ._active_scene_client import ISetActiveScene
 from ._ship_button import ShipButton
 from ._ship_catalog import ShipCatalog
 from ._ship_interfaces import ISetActiveShip, IShip

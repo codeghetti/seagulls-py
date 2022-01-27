@@ -1,7 +1,6 @@
 import logging
-from functools import lru_cache
-
 import math
+from functools import lru_cache
 from typing import List
 
 from pygame import mixer

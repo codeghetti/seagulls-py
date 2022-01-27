@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable
 
-from seagulls.engine import IGameScene
+from ._game_scene import IGameScene
 
 
 class IProvideActiveScene(ABC):

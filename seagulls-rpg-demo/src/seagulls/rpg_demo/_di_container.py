@@ -3,19 +3,23 @@ from pathlib import Path
 
 from seagulls.assets import AssetManager
 from seagulls.debug import DebugHud
-from seagulls.engine import GameClock, GameControls, SurfaceRenderer
+from seagulls.engine import (
+    ActiveSceneClient,
+    EmptyScene,
+    GameClock,
+    GameControls,
+    SurfaceRenderer,
+    WindowScene,
+    BlockingGameSession,
+    BasicSceneManager
+)
 from seagulls.seagulls_cli import SeagullsCliApplication
 
-from seagulls.rpg_demo._active_scene_client import ActiveSceneClient
-from seagulls.rpg_demo._blocking_game_session import BlockingGameSession
 from seagulls.rpg_demo._character import Character
 from seagulls.rpg_demo._cli_command import GameCliCommand
 from seagulls.rpg_demo._cli_plugin import RpgDemoCliPlugin
-from seagulls.rpg_demo._empty_scene import EmptyScene
-from seagulls.rpg_demo._example_scene_manager import ExampleSceneManager
 from seagulls.rpg_demo._rpg_background import SimpleRpgBackground
 from seagulls.rpg_demo._rpg_scene import RpgScene
-from seagulls.rpg_demo._window_scene import WindowScene
 
 
 class RpgDemoDiContainer:
@@ -40,7 +44,7 @@ class RpgDemoDiContainer:
     @lru_cache()
     def _blocking_game_session(self) -> BlockingGameSession:
         return BlockingGameSession(
-            scene_manager=ExampleSceneManager(scene=self._window_scene()))
+            scene_manager=BasicSceneManager(scene=self._window_scene()))
 
     @lru_cache()
     def _window_scene(self) -> WindowScene:

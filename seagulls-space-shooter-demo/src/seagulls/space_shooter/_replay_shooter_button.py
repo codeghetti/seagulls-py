@@ -7,9 +7,14 @@ from typing import Dict, Tuple
 import pygame
 from pygame.font import Font
 from seagulls.assets import AssetManager
-from seagulls.engine import GameControls, GameObject, IGameScene, Rect, Surface
-
-from ._active_scene_client import ISetActiveScene
+from seagulls.engine import (
+    GameControls,
+    GameObject,
+    IGameScene,
+    ISetActiveScene,
+    Rect,
+    Surface
+)
 
 logger = logging.getLogger(__name__)
 

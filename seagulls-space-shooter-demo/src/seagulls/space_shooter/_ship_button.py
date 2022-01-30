@@ -31,9 +31,6 @@ class ShipButton(GameObject):
     _is_highlighted: Event
     _is_clicked: Event
 
-    _window_height = 768
-    _window_width = 1024
-
     _button_height = 49
     _button_width = 190
 
@@ -125,9 +122,17 @@ class ShipButton(GameObject):
         return "normal"
 
     def _get_position(self) -> Tuple[int, int]:
-        left = int((self._window_width / 4) - self._button_width / 2) + self._ship.offset()
-        top = int((self._window_height / 4) - self._button_height / 2)
+        left = int((self._get_display_width() / 3) - self._button_width / 2) + self._ship.offset()
+        top = int((self._get_display_height() / 3) - self._button_height / 2)
         if self._is_clicked.is_set():
             top += 5
 
         return left, top
+
+    @lru_cache()
+    def _get_display_width(self) -> int:
+        return pygame.display.Info().current_w
+
+    @lru_cache()
+    def _get_display_height(self) -> int:
+        return pygame.display.Info().current_h

@@ -28,9 +28,6 @@ class ReplayShooterButton(GameObject):
     _is_highlighted: Event
     _is_clicked: Event
 
-    _window_height = 768
-    _window_width = 1024
-
     _button_height = 49
     _button_width = 190
 
@@ -102,12 +99,20 @@ class ReplayShooterButton(GameObject):
         return "normal"
 
     def _get_position(self) -> Tuple[int, int]:
-        left = int((self._window_width / 2) - self._button_width / 2)
-        top = int((self._window_height / 2) - self._button_height / 2)
+        left = int((self._get_display_width() / 2 + 40) - self._button_width / 2)
+        top = int((self._get_display_height() / 2 + 100) - self._button_height / 2)
         if self._is_clicked.is_set():
             top += 5
 
         return left, top
+
+    @lru_cache()
+    def _get_display_width(self) -> int:
+        return pygame.display.Info().current_w
+
+    @lru_cache()
+    def _get_display_height(self) -> int:
+        return pygame.display.Info().current_h
 
 
 class ReplayButtonFactory:
@@ -130,3 +135,5 @@ class ReplayButtonFactory:
             self._asset_manager,
             self._game_controls,
             self._active_scene_manager)
+
+

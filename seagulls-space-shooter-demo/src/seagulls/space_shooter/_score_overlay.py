@@ -47,4 +47,3 @@ class ScoreOverlay(GameObject):
     @lru_cache()
     def _get_display_height(self) -> int:
         return pygame.display.Info().current_h
-

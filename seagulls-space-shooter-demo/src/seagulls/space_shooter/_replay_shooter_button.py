@@ -135,5 +135,3 @@ class ReplayButtonFactory:
             self._asset_manager,
             self._game_controls,
             self._active_scene_manager)
-
-

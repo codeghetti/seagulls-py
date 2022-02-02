@@ -3,6 +3,7 @@ import math
 from functools import lru_cache
 from typing import List
 
+import pygame
 from pygame import mixer
 from seagulls.assets import AssetManager
 from seagulls.engine import (
@@ -28,6 +29,7 @@ class Ship(GameObject):
     _velocity: Vector2
     _max_velocity: float
     _lasers: List[Laser]
+    _is_new_game: bool
 
     def __init__(
             self,
@@ -39,8 +41,7 @@ class Ship(GameObject):
         self._clock = clock
         self._asset_manager = asset_manager
         self._game_controls = game_controls
-
-        self._position = Vector2(400, 600 - 75)
+        self._is_new_game = True
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
         self._lasers = []
@@ -48,6 +49,10 @@ class Ship(GameObject):
     def tick(self) -> None:
         self._max_velocity = self._active_ship_manager.get_active_ship().velocity()
         is_moving = False
+
+        if self._is_new_game:
+            self._position = self._get_start_position()
+            self._is_new_game = False
 
         if self._game_controls.is_left_moving():
             if self._velocity.x > 0:
@@ -80,8 +85,8 @@ class Ship(GameObject):
         if self._position.x < 0:
             self._position.x = 0
 
-        if self._position.x > 1024 - 112:
-            self._position.x = 1024 - 112
+        if self._position.x > self._get_display_width() - 112:
+            self._position.x = self._get_display_width() - 112
 
         for laser in self._lasers:
             laser.tick()
@@ -112,7 +117,22 @@ class Ship(GameObject):
     def get_ship_position(self) -> Vector2:
         return self._position
 
+    def reset(self) -> None:
+        self._is_new_game = True
+
     @lru_cache()
     def _laser_sound(self) -> mixer.Sound:
         mixer.init()
         return mixer.Sound("assets/sounds/laser-sound.ogg")
+
+    @lru_cache()
+    def _get_display_width(self) -> int:
+        return pygame.display.Info().current_w
+
+    @lru_cache()
+    def _get_display_height(self) -> int:
+        return pygame.display.Info().current_h
+
+    @lru_cache()
+    def _get_start_position(self) -> Vector2:
+        return Vector2(self._get_display_width() / 2 - 112, self._get_display_height() - 100)

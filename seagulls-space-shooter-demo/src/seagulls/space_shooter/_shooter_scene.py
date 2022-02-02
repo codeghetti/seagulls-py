@@ -1,6 +1,9 @@
 import logging
+from functools import lru_cache
 from threading import Event
 from typing import Tuple
+
+import pygame
 
 from seagulls.assets import AssetManager
 from seagulls.engine import (
@@ -74,11 +77,12 @@ class ShooterScene(IGameScene):
         self._replay_button_factory = replay_button_factory
         self._ship_selection_menu_factory = ship_selection_menu_factory
         self._asteroid_field = asteroid_field
+        self._ship = ship
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(clock)
         self._game_objects.add(background)
-        self._game_objects.add(ship)
+        self._game_objects.add(self._ship)
         self._game_objects.add(space_collisions)
         self._game_objects.add(score_overlay)
         self._game_objects.add(self._game_controls)
@@ -121,12 +125,21 @@ class ShooterScene(IGameScene):
             self._game_over_scene_factory.get_instance(replay_button))
 
     def _render(self) -> None:
-        background = Surface((1024, 600))
+        background = Surface((self._get_display_width(), self._get_display_height()))
         self._game_objects.apply(lambda x: x.render(background))
 
         self._surface_renderer.render(background)
+
+    @lru_cache()
+    def _get_display_width(self) -> int:
+        return pygame.display.Info().current_w
+
+    @lru_cache()
+    def _get_display_height(self) -> int:
+        return pygame.display.Info().current_h
 
     def reset(self) -> None:
         self._asteroid_field.reset()
         self._state_client.update_state(ShooterSceneState.RUNNING)
         self._score_overlay.reset()
+        self._ship.reset()

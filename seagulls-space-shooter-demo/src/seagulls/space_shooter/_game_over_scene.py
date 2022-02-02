@@ -2,6 +2,7 @@ import logging
 from functools import lru_cache
 from threading import Event
 
+import pygame
 from pygame import Surface, mixer
 from seagulls.assets import AssetManager
 from seagulls.engine import (
@@ -81,10 +82,18 @@ class GameOverScene(IGameScene):
         self._game_objects.add(GameOverOverlay())
 
     def _render(self) -> None:
-        background = Surface((1024, 600))
+        background = Surface((self._get_display_width(), self._get_display_height()))
         self._game_objects.apply(lambda x: x.render(background))
 
         self._surface_renderer.render(background)
+
+    @lru_cache()
+    def _get_display_width(self) -> int:
+        return pygame.display.Info().current_w
+
+    @lru_cache()
+    def _get_display_height(self) -> int:
+        return pygame.display.Info().current_h
 
 
 class GameOverSceneFactory:

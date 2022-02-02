@@ -75,7 +75,13 @@ class Ship(GameObject):
             self._velocity.x = 0.0
 
         if self._game_controls.should_fire():
-            self._lasers.append(Laser(self._clock, self._asset_manager, self._position))
+            self._lasers.append(
+                Laser(
+                    self._clock,
+                    self._asset_manager,
+                    self._position,
+                    self._get_ship_width()))
+
             self._laser_sound().play()
 
         delta = self._clock.get_time()
@@ -93,6 +99,11 @@ class Ship(GameObject):
 
     def render(self, surface: Surface) -> None:
         ship_sprite = self._get_ship_sprite()
+
+        ship_sprite = pygame.transform.scale(
+            ship_sprite,
+            (self._get_ship_width(), self._get_ship_height()))
+
         surface.blit(ship_sprite, self._position)
 
         for laser in self._lasers:
@@ -135,4 +146,15 @@ class Ship(GameObject):
 
     @lru_cache()
     def _get_start_position(self) -> Vector2:
-        return Vector2(self._get_display_width() / 2 - 112, self._get_display_height() - 100)
+        return Vector2(
+            self._get_display_width() / 2 - self._get_ship_width(),
+            self._get_display_height() - self._get_ship_height()
+        )
+
+    @lru_cache()
+    def _get_ship_width(self) -> float:
+        return self._get_display_width() / 1920 * self._get_ship_sprite().get_width()
+
+    @lru_cache()
+    def _get_ship_height(self) -> float:
+        return self._get_display_height() / 1080 * self._get_ship_sprite().get_height()

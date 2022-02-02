@@ -1,5 +1,7 @@
 from functools import lru_cache
 
+import pygame
+
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
@@ -14,10 +16,13 @@ class Laser(GameObject):
             self,
             clock: GameClock,
             asset_manager: AssetManager,
-            ship_position: Vector2):
+            ship_position: Vector2,
+            ship_width: float):
         self._clock = clock
         self._asset_manager = asset_manager
-        self._position = Vector2(ship_position.x + 52, ship_position.y - 57)
+        self._position = Vector2(
+            ship_position.x + (ship_width / 2),
+            ship_position.y - self._get_laser_height())
         self._velocity = Vector2(0, 8)
 
     def tick(self) -> None:
@@ -27,6 +32,11 @@ class Laser(GameObject):
 
     def render(self, surface: Surface) -> None:
         laser_sprite = self._get_cached_laser()
+
+        laser_sprite = pygame.transform.scale(
+            laser_sprite,
+            (self._get_laser_width(), self._get_laser_height()))
+
         surface.blit(laser_sprite, self._position)
 
     @lru_cache()
@@ -38,3 +48,19 @@ class Laser(GameObject):
 
     def get_laser_position_y(self) -> float:
         return self._position.y
+
+    @lru_cache()
+    def _get_laser_width(self) -> float:
+        return self._get_display_width() / 1920 * self._get_cached_laser().get_width()
+
+    @lru_cache()
+    def _get_laser_height(self) -> float:
+        return self._get_display_height() / 1080 * self._get_cached_laser().get_height()
+
+    @lru_cache()
+    def _get_display_width(self) -> int:
+        return pygame.display.Info().current_w
+
+    @lru_cache()
+    def _get_display_height(self) -> int:
+        return pygame.display.Info().current_h

@@ -15,7 +15,7 @@ pdoc = "*"
 mkdocs = "*"
 mkdocs-material = "*"
 mkdocs-awesome-pages-plugin = "*"
-seagulls-engine = "*"
+seagulls-engine = { version = "*", extras = ["cli"]}
 isort = "*"
 pytest = "*"
 pytest-cov = "*"
@@ -25,7 +25,8 @@ mypy = "*"
 [tool.poetry.extras]
 
 [tool.poetry.dev-dependencies]
-seagulls-engine = { path = "../seagulls-engine/", develop = true }
+seagulls-cli = { path = "../seagulls-cli/", develop = true }
+seagulls-engine = { path = "../seagulls-engine/", develop = true, extras = ["cli"] }
 
 [tool.poetry.plugins."seagulls.plugins"]
 "seagulls-engine" = "seagulls.devtools:DevtoolsCliPluginEntryPoint"

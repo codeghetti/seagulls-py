@@ -494,7 +494,7 @@ mypy = "*"
 pdoc = "*"
 pytest = "*"
 pytest-cov = "*"
-seagulls-engine = "*"
+seagulls-engine = {version = "*", extras = ["cli"]}
 
 [package.source]
 type = "directory"
@@ -516,8 +516,8 @@ PyYAML = "*"
 seagulls-cli = {version = "*", optional = true}
 
 [package.extras]
-dev = ["colorlog", "types-pyyaml", "seagulls-devtools", "seagulls-cli"]
 cli = ["seagulls-cli"]
+dev = ["colorlog", "types-pyyaml", "seagulls-devtools", "seagulls-cli"]
 
 [package.source]
 type = "directory"

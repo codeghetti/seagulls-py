@@ -1,7 +1,5 @@
 name: Seagulls CI
-on:
-  pull_request:
-    branches: [ $default-branch ]
+on: [pull_request]
 jobs:
   seagulls-cli:
     name: "checks: seagulls-cli"

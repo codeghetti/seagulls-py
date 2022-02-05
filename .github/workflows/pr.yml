@@ -4,6 +4,30 @@ on:
   pull_request:
     branches: [ $default-branch ]
 jobs:
+  seagulls-cli:
+    name: "checks: seagulls-cli"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "git checkout"
+        uses: actions/checkout@v2
+      - name: "setup python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.2"
+      - name: "install package"
+        working-directory: seagulls-cli
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pipx
+          pipx install poetry
+          poetry install --extras dev
+      - name: "run checks"
+        working-directory: seagulls-cli
+        run: |
+          poetry run seagulls flake8
+          poetry run seagulls mypy
+          poetry run seagulls pytest
+
   seagulls-devtools-checks:
     name: "checks: seagulls-devtools"
     runs-on: ubuntu-latest

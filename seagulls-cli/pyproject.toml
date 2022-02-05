@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "seagulls-devtools"
+name = "seagulls-cli"
 version = "0.1.0"
 description = ""
 authors = ["Lorenzo Pisani <zeelot3k@gmail.com>"]
@@ -10,25 +10,19 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-colorlog = "*"
-pdoc = "*"
-mkdocs = "*"
-mkdocs-material = "*"
-mkdocs-awesome-pages-plugin = "*"
 seagulls-engine = "*"
-isort = "*"
-pytest = "*"
-pytest-cov = "*"
-flake8 = "*"
-mypy = "*"
+# These are only needed during development
+seagulls-devtools = { version = "*", optional = true }
 
 [tool.poetry.extras]
+dev = ["seagulls-devtools"]
 
 [tool.poetry.dev-dependencies]
-seagulls-engine = { path = "../seagulls-engine/", develop = true }
+seagulls-engine = { path = "../seagulls-engine/", develop = true, optional = true }
+seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional = true }
 
-[tool.poetry.plugins."seagulls.plugins"]
-"seagulls-engine" = "seagulls.devtools:DevtoolsCliPluginEntryPoint"
+[tool.poetry.scripts]
+seagulls = "seagulls.seagulls_cli:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

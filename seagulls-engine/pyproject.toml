@@ -11,10 +11,11 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.8"
 pygame = "*"
-dependency-injector = "*"
-colorlog = "*"
 PyYAML = "*"
+importlib-metadata = "*"
+seagulls-cli = { version = "*", optional = true }
 # These are only needed during development
+colorlog = { version = "*", optional = true }
 isort = { version = "*", optional = true }
 pytest = { version = "*", optional = true }
 pytest-cov = { version = "*", optional = true }
@@ -29,21 +30,18 @@ seagulls-devtools = { version = "*", optional = true }
 
 [tool.poetry.extras]
 dev = [
-    "isort",
-    "pytest",
-    "pytest-cov",
-    "flake8",
-    "mypy",
-    "pdoc",
-    "mkdocs",
-    "mkdocs-material",
-    "mkdocs-awesome-pages-plugin",
+    "colorlog",
     "types-PyYAML",
     "seagulls-devtools",
+    "seagulls-cli",
+]
+cli = [
+    "seagulls-cli",
 ]
 
 [tool.poetry.dev-dependencies]
 seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional = true }
+seagulls-cli = { path = "../seagulls-cli/", develop = true, optional = true }
 
 [tool.poetry.scripts]
 seagulls = "seagulls.seagulls_cli:main"

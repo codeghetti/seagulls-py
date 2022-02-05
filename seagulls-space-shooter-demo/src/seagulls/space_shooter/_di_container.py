@@ -31,6 +31,7 @@ from ._ship_catalog import ShipCatalog
 from ._shooter_scene import ShooterScene
 from ._space_collisions import SpaceCollisions
 from ._stars_background import SimpleStarsBackground
+from .fit_to_screen import FitToScreen
 
 
 class SpaceShooterDiContainer:
@@ -166,7 +167,12 @@ class SpaceShooterDiContainer:
     def _main_menu_background(self) -> SimpleStarsBackground:
         return SimpleStarsBackground(
             asset_manager=self._asset_manager(),
+            fit_to_screen=self._fit_to_screen()
         )
+
+    @lru_cache()
+    def _fit_to_screen(self) -> FitToScreen:
+        return FitToScreen()
 
     @lru_cache()
     def _surface_renderer(self) -> SurfaceRenderer:

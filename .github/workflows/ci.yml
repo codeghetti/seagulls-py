@@ -33,6 +33,12 @@ jobs:
           files: .tmp/seagulls-cli/coverage.xml
           name: codecov-seagulls-cli
           verbose: true
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: ".tmp/seagulls-cli/junit.xml"
+          log_level: DEBUG
 
   seagulls-devtools-checks:
     name: "checks: seagulls-devtools"
@@ -62,6 +68,12 @@ jobs:
           files: .tmp/seagulls-devtools/coverage.xml
           name: codecov-seagulls-devtools
           verbose: true
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: ".tmp/seagulls-devtools/junit.xml"
+          log_level: DEBUG
 
   seagulls-engine-checks:
     name: "checks: seagulls-engine"
@@ -91,6 +103,12 @@ jobs:
           files: .tmp/seagulls-engine/coverage.xml
           name: codecov-seagulls-engine
           verbose: true
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: ".tmp/seagulls-engine/junit.xml"
+          log_level: DEBUG
 
   seagulls-rpg-demo-checks:
     name: "checks: seagulls-rpg-demo"
@@ -120,6 +138,12 @@ jobs:
           files: .tmp/seagulls-rpg-demo/coverage.xml
           name: codecov-seagulls-rpg-demo
           verbose: true
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: ".tmp/seagulls-rpg-demo/junit.xml"
+          log_level: DEBUG
 
   seagulls-space-shooter-demo-checks:
     name: "checks: seagulls-space-shooter-demo"
@@ -149,3 +173,9 @@ jobs:
           files: .tmp/seagulls-space-shooter-demo/coverage.xml
           name: codecov-seagulls-space-shooter-demo
           verbose: true
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: ".tmp/seagulls-space-shooter-demo/junit.xml"
+          log_level: DEBUG

@@ -46,7 +46,7 @@ multi_line_output = 3
 
 [tool.pytest.ini_options]
 testpaths = ["test"]
-addopts = "-s --cache-clear --cov --cov-report=term-missing --cov-report=xml"
+addopts = "-s --cache-clear --cov --cov-report=term-missing --cov-report=xml --junit-xml ../.tmp/seagulls-engine/junit.xml"
 
 [tool.coverage.run]
 branch = true

@@ -36,4 +36,13 @@ multi_line_output = 3
 
 [tool.pytest.ini_options]
 testpaths = ["test"]
-addopts = "-s --cache-clear --cov src/seagulls --cov-report=term-missing"
+addopts = "-s --cache-clear --cov --cov-report=term-missing --cov-report=xml"
+
+[tool.coverage.run]
+branch = true
+data_file = "../.tmp/seagulls-space-shooter-demo/.coverage"
+source = ["src/seagulls"]
+relative_files = true
+
+[tool.coverage.xml]
+output = "../.tmp/seagulls-space-shooter-demo/coverage.xml"

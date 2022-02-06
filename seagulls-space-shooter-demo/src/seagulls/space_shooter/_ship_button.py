@@ -32,9 +32,6 @@ class ShipButton(GameObject):
     _is_highlighted: Event
     _is_clicked: Event
 
-    _button_height = 49
-    _button_width = 190
-
     _active_scene_manager: ISetActiveScene
     _active_ship_manager: ISetActiveShip
 
@@ -86,10 +83,12 @@ class ShipButton(GameObject):
         surface.blit(ship_power, (self._get_position()[0], self._get_position()[1] + 120))
 
     def _detect_state(self) -> None:
+        _button_width = self._get_button_width()
+        _button_height = self._get_button_height()
         rect = Rect(
             (self._get_position()[0], self._get_position()[1] + 160),
-            (self._button_width,
-             self._button_height))
+            (_button_width,
+             _button_height))
 
         if rect.collidepoint(pygame.mouse.get_pos()):
             self._is_highlighted.set()
@@ -115,10 +114,40 @@ class ShipButton(GameObject):
     @lru_cache()
     def _get_background_map(self) -> Dict[str, Surface]:
         return {
-            "normal": self._asset_manager.load_png("ui/blue.button00").copy(),
-            "hover": self._asset_manager.load_png("ui/green.button00").copy(),
-            "click": self._asset_manager.load_png("ui/green.button01").copy(),
+            "normal": self._get_blue_button(),
+            "hover": self._get_green_button_0(),
+            "click": self._get_green_button_1(),
         }
+
+    def _get_blue_button(self) -> Surface:
+        sprite = self._asset_manager.load_png("ui/blue.button00").copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (self._fit_to_screen.get_actual_surface_width() * sprite.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * sprite.get_height() / 1080
+             ))
+
+        return sprite
+
+    def _get_green_button_0(self) -> Surface:
+        sprite = self._asset_manager.load_png("ui/green.button00").copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (self._fit_to_screen.get_actual_surface_width() * sprite.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * sprite.get_height() / 1080
+             ))
+
+        return sprite
+
+    def _get_green_button_1(self) -> Surface:
+        sprite = self._asset_manager.load_png("ui/green.button01").copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (self._fit_to_screen.get_actual_surface_width() * sprite.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * sprite.get_height() / 1080
+             ))
+
+        return sprite
 
     def _get_state_name(self) -> str:
         if self._is_highlighted.is_set():
@@ -127,8 +156,9 @@ class ShipButton(GameObject):
         return "normal"
 
     def _get_position(self) -> Tuple[int, int]:
-        left = int((self._get_display_width() / 3) - self._button_width / 2) + self._ship.offset()
-        top = int((self._get_display_height() / 3) - self._button_height / 2)
+        left = int((self._get_display_width() / 3) - self._get_button_width() / 2) + \
+               self._ship.offset()
+        top = int((self._get_display_height() / 3) - self._get_button_height() / 2)
         if self._is_clicked.is_set():
             top += 5
 
@@ -153,3 +183,9 @@ class ShipButton(GameObject):
         )
 
         return sprite
+
+    def _get_button_height(self) -> int:
+        return int(self._fit_to_screen.get_actual_surface_height() * 49 / 1080)
+
+    def _get_button_width(self) -> int:
+        return int(self._fit_to_screen.get_actual_surface_width() * 190 / 1920)

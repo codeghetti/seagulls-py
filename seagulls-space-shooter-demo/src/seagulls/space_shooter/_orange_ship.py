@@ -1,11 +1,17 @@
 import logging
 
 from ._ship_interfaces import IShip
+from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 
 
 class OrangeShip(IShip):
+
+    _fit_to_screen: FitToScreen
+
+    def __init__(self, fit_to_screen: FitToScreen):
+        self._fit_to_screen = fit_to_screen
 
     def sprite(self) -> str:
         return "space-shooter/ship-orange"
@@ -20,4 +26,4 @@ class OrangeShip(IShip):
         return "Orange Ship"
 
     def offset(self) -> int:
-        return 0
+        return int(-self._fit_to_screen.get_actual_surface_width() / 4)

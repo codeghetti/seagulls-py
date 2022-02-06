@@ -97,7 +97,7 @@ class SpaceShooterDiContainer:
 
     @lru_cache()
     def _ship_catalog(self) -> ShipCatalog:
-        return ShipCatalog(ships=(OrangeShip(), BlueShip()))
+        return ShipCatalog(ships=(OrangeShip(self._fit_to_screen()), BlueShip(self._fit_to_screen())))
 
     @lru_cache()
     def _replay_button_factory(self) -> ReplayButtonFactory:

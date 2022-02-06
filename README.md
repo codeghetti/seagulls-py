@@ -1,5 +1,7 @@
 # seagulls-py
 
+[![codecov](https://codecov.io/gh/codeghetti/seagulls-py/branch/main/graph/badge.svg?token=VJ67644A08)](https://codecov.io/gh/codeghetti/seagulls-py)
+
 ## Development Environment
 These are development environment instructions based on the assumption that you are on an Ubuntu
 machine.

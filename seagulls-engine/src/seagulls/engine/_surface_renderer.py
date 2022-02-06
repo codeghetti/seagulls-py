@@ -15,4 +15,5 @@ class SurfaceRenderer:
 
     @lru_cache()
     def _get_surface(self) -> Surface:
-        return pygame.display.set_mode((2000, 600))
+        return pygame.display.set_mode((450, 800))
+        #return pygame.display.set_mode((2000, 600))

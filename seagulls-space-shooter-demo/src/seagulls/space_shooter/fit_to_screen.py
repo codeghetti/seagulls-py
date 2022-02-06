@@ -1,6 +1,7 @@
 from functools import lru_cache
 
 import pygame
+from seagulls.engine import Vector2
 
 
 class FitToScreen:
@@ -55,3 +56,16 @@ class FitToScreen:
     @lru_cache()
     def get_y_padding(self) -> float:
         return (self._get_current_window_height() - self.get_actual_surface_height()) / 2
+
+    @lru_cache()
+    def get_x_boundaries(self) -> Vector2:
+        return Vector2(
+            self.get_x_padding(),
+            self.get_x_padding() + self.get_actual_surface_width()
+        )
+
+    def get_y_boundaries(self) -> Vector2:
+        return Vector2(
+            self.get_y_padding(),
+            self.get_y_padding() + self.get_actual_surface_height()
+        )

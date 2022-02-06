@@ -4,11 +4,11 @@ from functools import lru_cache
 from typing import List
 
 import pygame
-
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
 from ._space_rock import SpaceRock
+from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 
@@ -16,15 +16,18 @@ logger = logging.getLogger(__name__)
 class AsteroidField(GameObject):
     _clock: GameClock
     _asset_manager: AssetManager
+    _fit_to_screen: FitToScreen
     _asteroid_field: List[SpaceRock]
     _spawn_timer: int
 
     def __init__(
             self,
             clock: GameClock,
-            asset_manager: AssetManager):
+            asset_manager: AssetManager,
+            fit_to_screen: FitToScreen):
         self._clock = clock
         self._asset_manager = asset_manager
+        self._fit_to_screen = fit_to_screen
         self._asteroid_field = []
         self._spawn_timer = 0
 
@@ -51,15 +54,16 @@ class AsteroidField(GameObject):
                 self._clock,
                 self._asset_manager,
                 rock_options[rock_size],
-                self._get_random_rock_position())
+                self._get_random_rock_position(),
+                self._fit_to_screen)
 
     def _get_random_rock_position(self) -> Vector2:
         ship_laser_buffer = 70
         return Vector2(
             random.randint(
-                ship_laser_buffer,
-                self._get_display_width() - 125 - ship_laser_buffer),
-            -200)
+                int(self._fit_to_screen.get_x_boundaries().x + ship_laser_buffer),
+                int(self._fit_to_screen.get_x_boundaries().y - 125 - ship_laser_buffer)),
+            int(self._fit_to_screen.get_y_boundaries().x - 100))
 
     def get_asteroid_field_size(self) -> int:
         return len(self._asteroid_field)

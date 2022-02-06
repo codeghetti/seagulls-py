@@ -4,13 +4,13 @@ from pathlib import Path
 from seagulls.assets import AssetManager
 from seagulls.engine import (
     ActiveSceneClient,
+    BasicSceneManager,
+    BlockingGameSession,
     EmptyScene,
     GameClock,
     GameControls,
     SurfaceRenderer,
-    WindowScene,
-    BlockingGameSession,
-    BasicSceneManager
+    WindowScene
 )
 from seagulls.seagulls_cli import SeagullsCliApplication
 
@@ -79,6 +79,7 @@ class SpaceShooterDiContainer:
             game_over_scene_factory=self._game_over_scene_factory(),
             replay_button_factory=self._replay_button_factory(),
             ship_selection_menu_factory=self._ship_selection_menu_factory(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -90,7 +91,8 @@ class SpaceShooterDiContainer:
             asset_manager=self._asset_manager(),
             active_scene_manager=self._active_scene_client(),
             active_ship_manager=self._active_ship_client(),
-            background=self._main_menu_background()
+            background=self._main_menu_background(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -125,7 +127,9 @@ class SpaceShooterDiContainer:
 
     @lru_cache()
     def _score_overlay(self) -> ScoreOverlay:
-        return ScoreOverlay(score_tracker=self._score_tracker())
+        return ScoreOverlay(
+            score_tracker=self._score_tracker(),
+            fit_to_screen=self._fit_to_screen())
 
     @lru_cache()
     def _score_tracker(self) -> ScoreTracker:
@@ -136,6 +140,7 @@ class SpaceShooterDiContainer:
         return AsteroidField(
             clock=self._game_clock(),
             asset_manager=self._asset_manager(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -145,6 +150,7 @@ class SpaceShooterDiContainer:
             clock=self._game_clock(),
             asset_manager=self._asset_manager(),
             game_controls=self._game_controls(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()

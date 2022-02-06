@@ -17,6 +17,7 @@ from seagulls.engine import (
 )
 
 from ._ship_interfaces import ISetActiveShip, IShip
+from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +38,8 @@ class ShipButton(GameObject):
     _active_scene_manager: ISetActiveScene
     _active_ship_manager: ISetActiveShip
 
+    _fit_to_screen: FitToScreen
+
     def __init__(
             self,
             ship: IShip,
@@ -44,7 +47,8 @@ class ShipButton(GameObject):
             asset_manager: AssetManager,
             game_controls: GameControls,
             active_scene_manager: ISetActiveScene,
-            active_ship_manager: ISetActiveShip):
+            active_ship_manager: ISetActiveShip,
+            fit_to_screen: FitToScreen):
 
         self._ship = ship
         self._scene = scene
@@ -52,6 +56,7 @@ class ShipButton(GameObject):
         self._game_controls = game_controls
         self._active_scene_manager = active_scene_manager
         self._active_ship_manager = active_ship_manager
+        self._fit_to_screen = fit_to_screen
 
         self._is_highlighted = Event()
         self._is_clicked = Event()
@@ -68,7 +73,7 @@ class ShipButton(GameObject):
         text_height = text.get_height()
         padding = (button.get_height() - text_height) / 2
 
-        ship_sprite = self._asset_manager.load_sprite(self._ship.sprite()).copy()
+        ship_sprite = self._get_ship_sprite()
         ship_velocity = self._font.render("Velocity: " + str(self._ship.velocity()), True,
                                           "red", "black")
         ship_power = self._font.render("Power: " + str(self._ship.power()), True,
@@ -136,3 +141,15 @@ class ShipButton(GameObject):
     @lru_cache()
     def _get_display_height(self) -> int:
         return pygame.display.Info().current_h
+
+    @lru_cache()
+    def _get_ship_sprite(self) -> Surface:
+        sprite = self._asset_manager.load_sprite(self._ship.sprite()).copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (
+                self._fit_to_screen.get_actual_surface_width() * sprite.get_width() / 1920,
+                self._fit_to_screen.get_actual_surface_height() * sprite.get_height() / 1080)
+        )
+
+        return sprite

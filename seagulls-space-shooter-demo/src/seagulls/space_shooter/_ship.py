@@ -16,6 +16,7 @@ from seagulls.engine import (
 
 from ._laser import Laser
 from ._ship_interfaces import IProvideActiveShip
+from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 
@@ -30,17 +31,20 @@ class Ship(GameObject):
     _max_velocity: float
     _lasers: List[Laser]
     _is_new_game: bool
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
             active_ship_manager: IProvideActiveShip,
             clock: GameClock,
             asset_manager: AssetManager,
-            game_controls: GameControls):
+            game_controls: GameControls,
+            fit_to_screen: FitToScreen):
         self._active_ship_manager = active_ship_manager
         self._clock = clock
         self._asset_manager = asset_manager
         self._game_controls = game_controls
+        self._fit_to_screen = fit_to_screen
         self._is_new_game = True
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
@@ -88,11 +92,11 @@ class Ship(GameObject):
 
         self._position = self._position + (self._velocity * delta / 10)
 
-        if self._position.x < 0:
-            self._position.x = 0
+        if self._position.x < self._fit_to_screen.get_x_boundaries().x:
+            self._position.x = self._fit_to_screen.get_x_boundaries().x
 
-        if self._position.x > self._get_display_width() - 112:
-            self._position.x = self._get_display_width() - 112
+        if self._position.x > self._fit_to_screen.get_x_boundaries().y - 112:
+            self._position.x = self._fit_to_screen.get_x_boundaries().y - 112
 
         for laser in self._lasers:
             laser.tick()
@@ -147,14 +151,18 @@ class Ship(GameObject):
     @lru_cache()
     def _get_start_position(self) -> Vector2:
         return Vector2(
-            self._get_display_width() / 2 - self._get_ship_width(),
-            self._get_display_height() - self._get_ship_height()
-        )
+            (self._fit_to_screen.get_x_boundaries().y - self._fit_to_screen.get_x_boundaries().x)/2,
+            self._fit_to_screen.get_y_boundaries().y - self._get_ship_height())
 
     @lru_cache()
     def _get_ship_width(self) -> float:
-        return self._get_display_width() / 1920 * self._get_ship_sprite().get_width()
+        return (
+                self._fit_to_screen.get_actual_surface_width() *
+                self._get_ship_sprite().get_width() /
+                1920)
 
     @lru_cache()
     def _get_ship_height(self) -> float:
-        return self._get_display_height() / 1080 * self._get_ship_sprite().get_height()
+        return (self._fit_to_screen.get_actual_surface_height() *
+                self._get_ship_sprite().get_height()
+                / 1080)

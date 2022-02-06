@@ -2,8 +2,11 @@ import logging
 from functools import lru_cache
 from typing import Tuple
 
+import pygame.transform
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
+
+from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 
@@ -14,17 +17,20 @@ class SpaceRock(GameObject):
     _rock_size: Tuple
     _position: Vector2
     _velocity: Vector2
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
             clock: GameClock,
             asset_manager: AssetManager,
             rock_size: Tuple,
-            position: Vector2):
+            position: Vector2,
+            fit_to_screen: FitToScreen):
         self._clock = clock
         self._asset_manager = asset_manager
         self._rock_size = rock_size
         self._position = position
+        self._fit_to_screen = fit_to_screen
         self._velocity = self._set_velocity(rock_size)
 
     def tick(self):
@@ -41,15 +47,38 @@ class SpaceRock(GameObject):
 
     @lru_cache()
     def _get_cached_rock_small(self) -> Surface:
-        return self._asset_manager.load_sprite("space-shooter/rock-small").copy()
+        sprite = self._asset_manager.load_sprite("space-shooter/rock-small").copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (
+                self._fit_to_screen.get_actual_surface_width() * 28 / 1920,
+                self._fit_to_screen.get_actual_surface_height() * 28 / 1080)
+        )
+        return sprite
 
     @lru_cache()
     def _get_cached_rock_med(self) -> Surface:
-        return self._asset_manager.load_sprite("space-shooter/rock-med").copy()
+        sprite = self._asset_manager.load_sprite("space-shooter/rock-med").copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (
+                self._fit_to_screen.get_actual_surface_width() * 45 / 1920,
+                self._fit_to_screen.get_actual_surface_height() * 40 / 1080)
+        )
+
+        return sprite
 
     @lru_cache()
     def _get_cached_rock_large(self) -> Surface:
-        return self._asset_manager.load_sprite("space-shooter/rock-large").copy()
+        sprite = self._asset_manager.load_sprite("space-shooter/rock-large").copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (
+                self._fit_to_screen.get_actual_surface_width() * 120 / 1920,
+                self._fit_to_screen.get_actual_surface_height() * 98 / 1080)
+        )
+
+        return sprite
 
     def get_rock_size_x(self) -> int:
         return self._rock_size[0]

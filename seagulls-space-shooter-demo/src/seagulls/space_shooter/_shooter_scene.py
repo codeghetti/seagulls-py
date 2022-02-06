@@ -4,7 +4,6 @@ from threading import Event
 from typing import Tuple
 
 import pygame
-
 from seagulls.assets import AssetManager
 from seagulls.engine import (
     GameClock,
@@ -27,6 +26,7 @@ from ._selectable_ship_menu import ShipSelectionMenuFactory
 from ._ship import Ship
 from ._ship_destroyed_rule import ShipDestroyedRule
 from ._shooter_scene_client import ShooterSceneState, ShooterSceneStateClient
+from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +50,7 @@ class ShooterScene(IGameScene):
     _replay_button_factory: ReplayButtonFactory
     _ship_selection_menu_factory: ShipSelectionMenuFactory
     _asteroid_field: AsteroidField
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
@@ -65,7 +66,8 @@ class ShooterScene(IGameScene):
             game_controls: GameControls,
             game_over_scene_factory: GameOverSceneFactory,
             replay_button_factory: ReplayButtonFactory,
-            ship_selection_menu_factory: ShipSelectionMenuFactory):
+            ship_selection_menu_factory: ShipSelectionMenuFactory,
+            fit_to_screen: FitToScreen):
 
         self._surface_renderer = surface_renderer
         self._asset_manager = asset_manager
@@ -78,6 +80,7 @@ class ShooterScene(IGameScene):
         self._ship_selection_menu_factory = ship_selection_menu_factory
         self._asteroid_field = asteroid_field
         self._ship = ship
+        self._fit_to_screen = fit_to_screen
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(clock)
@@ -90,7 +93,7 @@ class ShooterScene(IGameScene):
 
         self._state_client = ShooterSceneStateClient()
         self._game_rules = tuple([
-            AsteroidMissedRule(self._state_client, asteroid_field),
+            AsteroidMissedRule(self._state_client, asteroid_field, self._fit_to_screen),
             ShipDestroyedRule(self._state_client, asteroid_field, ship),
         ])
 

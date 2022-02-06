@@ -1,7 +1,6 @@
 from functools import lru_cache
 
 import pygame
-
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 

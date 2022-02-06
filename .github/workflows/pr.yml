@@ -24,6 +24,11 @@ jobs:
           poetry run seagulls flake8
           poetry run seagulls mypy
           poetry run seagulls pytest
+      - uses: codecov/codecov-action@v2
+        with:
+          files: .tmp/seagulls-cli/coverage.xml
+          name: codecov-seagulls-cli
+          verbose: true
 
   seagulls-devtools-checks:
     name: "checks: seagulls-devtools"
@@ -48,6 +53,11 @@ jobs:
           poetry run seagulls flake8
           poetry run seagulls mypy
           poetry run seagulls pytest
+      - uses: codecov/codecov-action@v2
+        with:
+          files: .tmp/seagulls-devtools/coverage.xml
+          name: codecov-seagulls-devtools
+          verbose: true
 
   seagulls-engine-checks:
     name: "checks: seagulls-engine"
@@ -72,6 +82,11 @@ jobs:
           poetry run seagulls flake8
           poetry run seagulls mypy
           poetry run seagulls pytest
+      - uses: codecov/codecov-action@v2
+        with:
+          files: .tmp/seagulls-engine/coverage.xml
+          name: codecov-seagulls-engine
+          verbose: true
 
   seagulls-rpg-demo-checks:
     name: "checks: seagulls-rpg-demo"
@@ -96,6 +111,11 @@ jobs:
           poetry run seagulls flake8
           poetry run seagulls mypy
           poetry run seagulls pytest
+      - uses: codecov/codecov-action@v2
+        with:
+          files: .tmp/seagulls-rpg-demo/coverage.xml
+          name: codecov-seagulls-rpg-demo
+          verbose: true
 
   seagulls-space-shooter-demo-checks:
     name: "checks: seagulls-space-shooter-demo"
@@ -120,3 +140,8 @@ jobs:
           poetry run seagulls flake8
           poetry run seagulls mypy
           poetry run seagulls pytest
+      - uses: codecov/codecov-action@v2
+        with:
+          files: .tmp/seagulls-space-shooter-demo/coverage.xml
+          name: codecov-seagulls-space-shooter-demo
+          verbose: true

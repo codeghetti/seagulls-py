@@ -6,7 +6,7 @@ on:
   pull_request:
 jobs:
   build-and-test:
-    name: "checks: seagulls-cli"
+    name: "Checks"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -47,7 +47,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: "JUnit Test Results: ${{ matrix.package }}"
+          name: "JUnit Test Results - ${{ matrix.package }}"
           path: ".tmp/${{ matrix.package }}/junit.xml"
   publish-test-results:
     name: "Publish JUnit Reports"

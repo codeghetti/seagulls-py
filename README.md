@@ -1,6 +1,8 @@
 # seagulls-py
 
+[![Seagulls CI](https://github.com/codeghetti/seagulls-py/actions/workflows/ci.yml/badge.svg)](https://github.com/codeghetti/seagulls-py/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/codeghetti/seagulls-py/branch/main/graph/badge.svg?token=VJ67644A08)](https://codecov.io/gh/codeghetti/seagulls-py)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Development Environment
 These are development environment instructions based on the assumption that you are on an Ubuntu

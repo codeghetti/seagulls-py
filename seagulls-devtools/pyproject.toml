@@ -23,6 +23,8 @@ flake8 = "*"
 mypy = "*"
 
 [tool.poetry.extras]
+# Every package needs a `dev` extra for CI to pass but we don't actually need any other packages.
+dev = []
 
 [tool.poetry.dev-dependencies]
 seagulls-cli = { path = "../seagulls-cli/", develop = true }

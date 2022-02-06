@@ -5,177 +5,62 @@ on:
       - main
   pull_request:
 jobs:
-  seagulls-cli:
+  build-and-test:
     name: "checks: seagulls-cli"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - seagulls-cli
+          - seagulls-devtools
+          - seagulls-engine
+          - seagulls-rpg-demo
+          - seagulls-space-shooter-demo
     steps:
-      - name: "git checkout"
+      - name: Git Checkout
         uses: actions/checkout@v2
-      - name: "setup python"
+      - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: "3.9.2"
-      - name: "install package"
-        working-directory: seagulls-cli
+      - name: Install Package
+        working-directory: ${{ matrix.package }}
         run: |
           python3 -m pip install --upgrade pip
           pip install pipx
           pipx install poetry
           poetry install --extras dev
-      - name: "run checks"
-        working-directory: seagulls-cli
+      - name: Run Checks
+        working-directory: ${{ matrix.package }}
         run: |
           poetry run seagulls flake8
           poetry run seagulls mypy
           poetry run seagulls pytest
-      - uses: codecov/codecov-action@v2
+      - name: Publish Code Coverage Results
+        uses: codecov/codecov-action@v2
         with:
-          files: .tmp/seagulls-cli/coverage.xml
-          name: codecov-seagulls-cli
+          files: .tmp/${{ matrix.package }}/coverage.xml
+          name: codecov-${{ matrix.package }}
           verbose: true
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
+      - name: Upload JUnit Report
         if: always()
+        uses: actions/upload-artifact@v2
         with:
-          files: ".tmp/seagulls-cli/junit.xml"
-          log_level: DEBUG
-
-  seagulls-devtools-checks:
-    name: "checks: seagulls-devtools"
+          name: "JUnit Test Results: ${{ matrix.package }}"
+          path: ".tmp/${{ matrix.package }}/junit.xml"
+  publish-test-results:
+    name: "Publish JUnit Reports"
+    needs: build-and-test
     runs-on: ubuntu-latest
+    if: always()
     steps:
-      - name: "git checkout"
-        uses: actions/checkout@v2
-      - name: "setup python"
-        uses: actions/setup-python@v2
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
         with:
-          python-version: "3.9.2"
-      - name: "install package"
-        working-directory: seagulls-devtools
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install pipx
-          pipx install poetry
-          poetry install
-      - name: "run checks"
-        working-directory: seagulls-devtools
-        run: |
-          poetry run seagulls flake8
-          poetry run seagulls mypy
-          poetry run seagulls pytest
-      - uses: codecov/codecov-action@v2
-        with:
-          files: .tmp/seagulls-devtools/coverage.xml
-          name: codecov-seagulls-devtools
-          verbose: true
+          path: artifacts
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
         with:
-          files: ".tmp/seagulls-devtools/junit.xml"
-          log_level: DEBUG
-
-  seagulls-engine-checks:
-    name: "checks: seagulls-engine"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "git checkout"
-        uses: actions/checkout@v2
-      - name: "setup python"
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.9.2"
-      - name: "install package"
-        working-directory: seagulls-engine
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install pipx
-          pipx install poetry
-          poetry install --extras dev
-      - name: "run checks"
-        working-directory: seagulls-engine
-        run: |
-          poetry run seagulls flake8
-          poetry run seagulls mypy
-          poetry run seagulls pytest
-      - uses: codecov/codecov-action@v2
-        with:
-          files: .tmp/seagulls-engine/coverage.xml
-          name: codecov-seagulls-engine
-          verbose: true
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
-        with:
-          files: ".tmp/seagulls-engine/junit.xml"
-          log_level: DEBUG
-
-  seagulls-rpg-demo-checks:
-    name: "checks: seagulls-rpg-demo"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "git checkout"
-        uses: actions/checkout@v2
-      - name: "setup python"
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.9.2"
-      - name: "install package"
-        working-directory: seagulls-rpg-demo
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install pipx
-          pipx install poetry
-          poetry install --extras dev
-      - name: "run checks"
-        working-directory: seagulls-rpg-demo
-        run: |
-          poetry run seagulls flake8
-          poetry run seagulls mypy
-          poetry run seagulls pytest
-      - uses: codecov/codecov-action@v2
-        with:
-          files: .tmp/seagulls-rpg-demo/coverage.xml
-          name: codecov-seagulls-rpg-demo
-          verbose: true
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
-        with:
-          files: ".tmp/seagulls-rpg-demo/junit.xml"
-          log_level: DEBUG
-
-  seagulls-space-shooter-demo-checks:
-    name: "checks: seagulls-space-shooter-demo"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "git checkout"
-        uses: actions/checkout@v2
-      - name: "setup python"
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.9.2"
-      - name: "install package"
-        working-directory: seagulls-space-shooter-demo
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install pipx
-          pipx install poetry
-          poetry install --extras dev
-      - name: "run checks"
-        working-directory: seagulls-space-shooter-demo
-        run: |
-          poetry run seagulls flake8
-          poetry run seagulls mypy
-          poetry run seagulls pytest
-      - uses: codecov/codecov-action@v2
-        with:
-          files: .tmp/seagulls-space-shooter-demo/coverage.xml
-          name: codecov-seagulls-space-shooter-demo
-          verbose: true
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
-        with:
-          files: ".tmp/seagulls-space-shooter-demo/junit.xml"
+          files: artifacts/**/junit.xml
           log_level: DEBUG

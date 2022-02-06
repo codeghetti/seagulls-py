@@ -457,7 +457,7 @@ pyyaml = "*"
 
 [[package]]
 name = "seagulls-cli"
-version = "0.1.0"
+version = "0.1.0-rc.1"
 description = ""
 category = "main"
 optional = false
@@ -476,26 +476,20 @@ url = "../seagulls-cli"
 
 [[package]]
 name = "seagulls-engine"
-version = "0.1.0"
+version = "0.1.0rc1"
 description = ""
 category = "main"
 optional = false
-python-versions = "^3.8"
-develop = true
+python-versions = ">=3.8,<4.0"
 
 [package.dependencies]
 importlib-metadata = "*"
 pygame = "*"
 PyYAML = "*"
-seagulls-cli = {version = "*", optional = true}
 
 [package.extras]
 cli = ["seagulls-cli"]
-dev = ["colorlog", "types-pyyaml", "seagulls-devtools", "seagulls-cli"]
-
-[package.source]
-type = "directory"
-url = "../seagulls-engine"
+dev = ["seagulls-cli", "colorlog", "types-pyyaml", "seagulls-devtools"]
 
 [[package]]
 name = "six"
@@ -561,7 +555,7 @@ dev = []
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "1a22538e86a276f3942899fec1b10cfbccc686e4c7680a1a6153365d02583d55"
+content-hash = "46ba8f1037406a9134033bb1d6bd33cd7e8a0c24424a13df60cc7d713d9c0f34"
 
 [metadata.files]
 astunparse = [
@@ -916,7 +910,9 @@ pyyaml-env-tag = [
     {file = "pyyaml_env_tag-0.1.tar.gz", hash = "sha256:70092675bda14fdec33b31ba77e7543de9ddc88f2e5b99160396572d11525bdb"},
 ]
 seagulls-cli = []
-seagulls-engine = []
+seagulls-engine = [
+    {file = "seagulls_engine-0.1.0rc1-py3-none-any.whl", hash = "sha256:3e270d1c4857217673edab4d7b25269a810cb98ab974360ae81f62c41350a6a9"},
+]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},

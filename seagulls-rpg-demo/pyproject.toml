@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "seagulls-rpg-demo"
-version = "0.1.0"
+version = "0.1.0-rc.1"
 description = ""
 authors = ["Lorenzo Pisani <zeelot3k@gmail.com>"]
 license = "MIT"
@@ -12,9 +12,9 @@ packages = [
 python = "^3.8"
 pygame = "*"
 # We want the version of the game engine that includes the `seagulls` cli :)
-seagulls-engine = { version = "*", extras = ["cli"] }
+seagulls-engine = { version = "*", allow-prereleases = true, extras = ["cli"] }
 # These are only needed during development
-seagulls-devtools = { version = "*", optional = true }
+seagulls-devtools = { version = "*", allow-prereleases = true, optional = true }
 
 [tool.poetry.extras]
 dev = ["seagulls-devtools"]

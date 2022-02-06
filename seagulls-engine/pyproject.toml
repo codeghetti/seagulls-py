@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "seagulls-engine"
-version = "0.1.0"
+version = "0.1.0-rc.1"
 description = ""
 authors = ["Lorenzo Pisani <zeelot3k@gmail.com>"]
 license = "MIT"
@@ -13,11 +13,12 @@ python = "^3.8"
 pygame = "*"
 PyYAML = "*"
 importlib-metadata = "*"
-seagulls-cli = { version = "*", optional = true }
+# Only required by `seagulls-engine[cli]`
+seagulls-cli = { version = "*", optional = true, allow-prereleases = true }
 # These are only needed during development
 colorlog = { version = "*", optional = true }
 types-PyYAML = { version = "*", optional = true }
-seagulls-devtools = { version = "*", optional = true }
+seagulls-devtools = { version = "*", optional = true, allow-prereleases = true }
 
 [tool.poetry.extras]
 cli = [
@@ -31,8 +32,8 @@ dev = [
 ]
 
 [tool.poetry.dev-dependencies]
-seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional = true }
 seagulls-cli = { path = "../seagulls-cli/", develop = true, optional = true }
+seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional = true }
 
 [tool.poetry.scripts]
 seagulls = "seagulls.seagulls_cli:main"

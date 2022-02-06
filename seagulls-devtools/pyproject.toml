@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "seagulls-devtools"
-version = "0.1.0"
+version = "0.1.0-rc.1"
 description = ""
 authors = ["Lorenzo Pisani <zeelot3k@gmail.com>"]
 license = "MIT"
@@ -15,12 +15,12 @@ pdoc = "*"
 mkdocs = "*"
 mkdocs-material = "*"
 mkdocs-awesome-pages-plugin = "*"
-seagulls-engine = { version = "*", extras = ["cli"]}
 isort = "*"
 pytest = "*"
 pytest-cov = "*"
 flake8 = "*"
 mypy = "*"
+seagulls-cli = { version = "", allow-prereleases = true}
 
 [tool.poetry.extras]
 # Every package needs a `dev` extra for CI to pass but we don't actually need any other packages.
@@ -28,7 +28,6 @@ dev = []
 
 [tool.poetry.dev-dependencies]
 seagulls-cli = { path = "../seagulls-cli/", develop = true }
-seagulls-engine = { path = "../seagulls-engine/", develop = true, extras = ["cli"] }
 
 [tool.poetry.plugins."seagulls.plugins"]
 "seagulls-engine" = "seagulls.devtools:DevtoolsCliPluginEntryPoint"

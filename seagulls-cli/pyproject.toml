@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "seagulls-cli"
-version = "0.1.0"
+version = "0.1.0-rc.1"
 description = ""
 authors = ["Lorenzo Pisani <zeelot3k@gmail.com>"]
 license = "MIT"
@@ -10,9 +10,9 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-seagulls-engine = "*"
+seagulls-engine = { version = "*", allow-prereleases = true }
 # These are only needed during development
-seagulls-devtools = { version = "*", optional = true }
+seagulls-devtools = { version = "*", optional = true, allow-prereleases = true }
 
 [tool.poetry.extras]
 dev = ["seagulls-devtools"]

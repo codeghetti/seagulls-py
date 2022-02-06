@@ -41,3 +41,7 @@ multi_line_output = 3
 [tool.pytest.ini_options]
 testpaths = ["test"]
 addopts = "-s --cache-clear --cov src/seagulls --cov-report=term-missing"
+
+[tool.coverage.run]
+branch = true
+data_file = "../.tmp/seagulls-devtools/.coverage"

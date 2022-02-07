@@ -4,7 +4,7 @@ import pygame
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
-from .fit_to_screen import FitToScreen
+from ._fit_to_screen import FitToScreen
 
 
 class Laser(GameObject):
@@ -65,11 +65,3 @@ class Laser(GameObject):
         return (self._fit_to_screen.get_actual_surface_height() *
                 self._get_cached_laser().get_height()
                 / 1080)
-
-    @lru_cache()
-    def _get_display_width(self) -> int:
-        return pygame.display.Info().current_w
-
-    @lru_cache()
-    def _get_display_height(self) -> int:
-        return pygame.display.Info().current_h

@@ -4,8 +4,8 @@ import pygame
 
 from ._asteroid_field import AsteroidField
 from ._check_game_rules_interface import ICheckGameRules
+from ._fit_to_screen import FitToScreen
 from ._shooter_scene_client import ShooterSceneState, ShooterSceneStateClient
-from .fit_to_screen import FitToScreen
 
 
 class AsteroidMissedRule(ICheckGameRules):

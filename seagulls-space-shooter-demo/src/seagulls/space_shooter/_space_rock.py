@@ -6,7 +6,7 @@ import pygame.transform
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
-from .fit_to_screen import FitToScreen
+from ._fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 

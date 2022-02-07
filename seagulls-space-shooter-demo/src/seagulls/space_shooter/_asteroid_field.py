@@ -7,8 +7,8 @@ import pygame
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
+from ._fit_to_screen import FitToScreen
 from ._space_rock import SpaceRock
-from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 

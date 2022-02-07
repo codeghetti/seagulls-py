@@ -14,9 +14,9 @@ from seagulls.engine import (
     Vector2
 )
 
+from ._fit_to_screen import FitToScreen
 from ._laser import Laser
 from ._ship_interfaces import IProvideActiveShip
-from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 

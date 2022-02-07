@@ -4,8 +4,8 @@ from pathlib import Path
 from pygame.font import Font
 from seagulls.engine import GameObject, Surface
 
+from ._fit_to_screen import FitToScreen
 from ._score_tracker import ScoreTracker
-from .fit_to_screen import FitToScreen
 
 
 class ScoreOverlay(GameObject):

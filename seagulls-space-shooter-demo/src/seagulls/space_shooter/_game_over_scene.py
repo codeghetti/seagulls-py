@@ -14,10 +14,10 @@ from seagulls.engine import (
     SurfaceRenderer
 )
 
+from ._fit_to_screen import FitToScreen
 from ._game_over_overlay import GameOverOverlay
 from ._replay_shooter_button import ReplayShooterButton
 from ._score_overlay import ScoreOverlay
-from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 

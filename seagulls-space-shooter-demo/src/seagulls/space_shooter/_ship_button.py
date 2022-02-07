@@ -16,8 +16,8 @@ from seagulls.engine import (
     Surface
 )
 
+from ._fit_to_screen import FitToScreen
 from ._ship_interfaces import ISetActiveShip, IShip
-from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 

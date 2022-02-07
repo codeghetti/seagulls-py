@@ -5,7 +5,7 @@ import pygame
 from pygame.font import Font
 from seagulls.engine import GameObject, Surface
 
-from .fit_to_screen import FitToScreen
+from ._fit_to_screen import FitToScreen
 
 
 class GameOverOverlay(GameObject):

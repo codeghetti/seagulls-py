@@ -5,7 +5,7 @@ import pygame
 from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface
 
-from .fit_to_screen import FitToScreen
+from ._fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 

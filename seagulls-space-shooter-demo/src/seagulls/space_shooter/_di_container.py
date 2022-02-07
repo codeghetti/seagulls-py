@@ -20,6 +20,7 @@ from ._blue_ship import BlueShip
 from ._cli_command import GameCliCommand
 from ._cli_plugin import SpaceShooterCliPlugin
 from ._empty_ship import EmptyShip
+from ._fit_to_screen import FitToScreen
 from ._game_over_scene import GameOverSceneFactory
 from ._orange_ship import OrangeShip
 from ._replay_shooter_button import ReplayButtonFactory
@@ -31,7 +32,6 @@ from ._ship_catalog import ShipCatalog
 from ._shooter_scene import ShooterScene
 from ._space_collisions import SpaceCollisions
 from ._stars_background import SimpleStarsBackground
-from .fit_to_screen import FitToScreen
 
 
 class SpaceShooterDiContainer:

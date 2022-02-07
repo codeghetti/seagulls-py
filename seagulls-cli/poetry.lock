@@ -456,25 +456,6 @@ python-versions = ">=3.6"
 pyyaml = "*"
 
 [[package]]
-name = "seagulls-cli"
-version = "0.1.0-rc.1"
-description = ""
-category = "main"
-optional = false
-python-versions = "^3.8"
-develop = true
-
-[package.dependencies]
-seagulls-engine = "*"
-
-[package.extras]
-dev = ["seagulls-devtools"]
-
-[package.source]
-type = "directory"
-url = "../seagulls-cli"
-
-[[package]]
 name = "seagulls-devtools"
 version = "0.1.0-rc.1"
 description = ""
@@ -516,7 +497,6 @@ develop = true
 importlib-metadata = "*"
 pygame = "*"
 PyYAML = "*"
-seagulls-cli = {version = "*", optional = true}
 
 [package.extras]
 cli = ["seagulls-cli"]
@@ -590,7 +570,7 @@ dev = ["seagulls-devtools"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b0e9db800d0c9dca2e7543102a33ee62f3ddfc29d975761c21c07a2d52deed70"
+content-hash = "059b1584a8830584ca8a1fb3b823e0b2feca736bd5955d52e39438529d9164a8"
 
 [metadata.files]
 astunparse = [
@@ -944,7 +924,6 @@ pyyaml-env-tag = [
     {file = "pyyaml_env_tag-0.1-py3-none-any.whl", hash = "sha256:af31106dec8a4d68c60207c1886031cbf839b68aa7abccdb19868200532c2069"},
     {file = "pyyaml_env_tag-0.1.tar.gz", hash = "sha256:70092675bda14fdec33b31ba77e7543de9ddc88f2e5b99160396572d11525bdb"},
 ]
-seagulls-cli = []
 seagulls-devtools = []
 seagulls-engine = []
 six = [

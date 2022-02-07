@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "seagulls-engine"
+name = "seagulls-cli"
 version = "0.1.0-rc.1"
 description = ""
 authors = ["Lorenzo Pisani <zeelot3k@gmail.com>"]
@@ -10,29 +10,15 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-pygame = "*"
-PyYAML = "*"
-importlib-metadata = "*"
-# Only required by `seagulls-engine[cli]`
-seagulls-cli = { version = "*", optional = true, allow-prereleases = true }
+seagulls-engine = { version = "*", allow-prereleases = true }
 # These are only needed during development
-colorlog = { version = "*", optional = true }
-types-PyYAML = { version = "*", optional = true }
 seagulls-devtools = { version = "*", optional = true, allow-prereleases = true }
 
 [tool.poetry.extras]
-cli = [
-    "seagulls-cli",
-]
-dev = [
-    "colorlog",
-    "types-PyYAML",
-    "seagulls-devtools",
-    "seagulls-cli",
-]
+dev = ["seagulls-devtools"]
 
 [tool.poetry.dev-dependencies]
-seagulls-cli = { path = "../seagulls-cli/", develop = true, optional = true }
+seagulls-engine = { path = "../seagulls-engine/", develop = true, optional = true }
 seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional = true }
 
 [tool.poetry.scripts]
@@ -47,13 +33,13 @@ multi_line_output = 3
 
 [tool.pytest.ini_options]
 testpaths = ["test"]
-addopts = "-s --cache-clear --cov --cov-report=term-missing --cov-report=xml --junit-xml ../.tmp/seagulls-engine/junit.xml"
+addopts = "-s --cache-clear --cov --cov-report=term-missing --cov-report=xml --junit-xml ../.tmp/seagulls-cli/junit.xml"
 
 [tool.coverage.run]
 branch = true
-data_file = "../.tmp/seagulls-engine/.coverage"
+data_file = "../.tmp/seagulls-cli/.coverage"
 source = ["src/seagulls"]
 relative_files = true
 
 [tool.coverage.xml]
-output = "../.tmp/seagulls-engine/coverage.xml"
+output = "../.tmp/seagulls-cli/coverage.xml"

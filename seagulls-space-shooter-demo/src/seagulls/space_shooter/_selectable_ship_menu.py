@@ -4,7 +4,6 @@ from threading import Event
 from typing import Tuple
 
 import pygame
-
 from seagulls.assets import AssetManager
 from seagulls.engine import (
     GameControls,
@@ -16,6 +15,7 @@ from seagulls.engine import (
     SurfaceRenderer
 )
 
+from ._fit_to_screen import FitToScreen
 from ._ship_button import ShipButton
 from ._ship_catalog import ShipCatalog
 from ._ship_interfaces import ISetActiveShip, IShip
@@ -36,6 +36,8 @@ class ShipSelectionMenu(IGameScene):
     _game_objects: GameObjectsCollection
     _should_quit: Event
 
+    _fit_to_screen: FitToScreen
+
     def __init__(
             self,
             catalog: ShipCatalog,
@@ -45,7 +47,8 @@ class ShipSelectionMenu(IGameScene):
             asset_manager: AssetManager,
             active_scene_manager: ISetActiveScene,
             active_ship_manager: ISetActiveShip,
-            background: GameObject):
+            background: GameObject,
+            fit_to_screen: FitToScreen):
 
         self._ship_catalog = catalog.ships
         self._surface_renderer = surface_renderer
@@ -58,6 +61,7 @@ class ShipSelectionMenu(IGameScene):
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(self._game_controls)
         self._game_objects.add(background)
+        self._fit_to_screen = fit_to_screen
 
         for ship in self._ship_catalog:
             self._game_objects.add(ShipButton(
@@ -66,7 +70,8 @@ class ShipSelectionMenu(IGameScene):
                 self._asset_manager,
                 self._game_controls,
                 self._active_scene_manager,
-                self._active_ship_manager))
+                self._active_ship_manager,
+                self._fit_to_screen))
 
         self._should_quit = Event()
 
@@ -109,6 +114,7 @@ class ShipSelectionMenuFactory:
     _asset_manager: AssetManager
     _active_scene_manager: ISetActiveScene
     _active_ship_manager: ISetActiveShip
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
@@ -118,7 +124,8 @@ class ShipSelectionMenuFactory:
             asset_manager: AssetManager,
             active_scene_manager: ISetActiveScene,
             active_ship_manager: ISetActiveShip,
-            background: GameObject):
+            background: GameObject,
+            fit_to_screen: FitToScreen):
         self._ship_catalog = catalog
         self._surface_renderer = surface_renderer
         self._game_controls = game_controls
@@ -126,6 +133,7 @@ class ShipSelectionMenuFactory:
         self._active_scene_manager = active_scene_manager
         self._active_ship_manager = active_ship_manager
         self.background = background
+        self._fit_to_screen = fit_to_screen
 
     def get_instance(self, scene: IGameScene) -> ShipSelectionMenu:
         return ShipSelectionMenu(
@@ -136,4 +144,5 @@ class ShipSelectionMenuFactory:
             self._asset_manager,
             self._active_scene_manager,
             self._active_ship_manager,
-            self.background)
+            self.background,
+            self._fit_to_screen)

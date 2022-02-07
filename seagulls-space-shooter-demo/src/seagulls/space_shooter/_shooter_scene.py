@@ -4,7 +4,6 @@ from threading import Event
 from typing import Tuple
 
 import pygame
-
 from seagulls.assets import AssetManager
 from seagulls.engine import (
     GameClock,
@@ -20,6 +19,7 @@ from seagulls.engine import (
 from ._asteroid_field import AsteroidField
 from ._asteroid_missed_rule import AsteroidMissedRule
 from ._check_game_rules_interface import ICheckGameRules
+from ._fit_to_screen import FitToScreen
 from ._game_over_scene import GameOverSceneFactory
 from ._replay_shooter_button import ReplayButtonFactory
 from ._score_overlay import ScoreOverlay
@@ -50,6 +50,7 @@ class ShooterScene(IGameScene):
     _replay_button_factory: ReplayButtonFactory
     _ship_selection_menu_factory: ShipSelectionMenuFactory
     _asteroid_field: AsteroidField
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
@@ -65,7 +66,8 @@ class ShooterScene(IGameScene):
             game_controls: GameControls,
             game_over_scene_factory: GameOverSceneFactory,
             replay_button_factory: ReplayButtonFactory,
-            ship_selection_menu_factory: ShipSelectionMenuFactory):
+            ship_selection_menu_factory: ShipSelectionMenuFactory,
+            fit_to_screen: FitToScreen):
 
         self._surface_renderer = surface_renderer
         self._asset_manager = asset_manager
@@ -78,6 +80,7 @@ class ShooterScene(IGameScene):
         self._ship_selection_menu_factory = ship_selection_menu_factory
         self._asteroid_field = asteroid_field
         self._ship = ship
+        self._fit_to_screen = fit_to_screen
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(clock)
@@ -90,8 +93,8 @@ class ShooterScene(IGameScene):
 
         self._state_client = ShooterSceneStateClient()
         self._game_rules = tuple([
-            AsteroidMissedRule(self._state_client, asteroid_field),
-            ShipDestroyedRule(self._state_client, asteroid_field, ship),
+            AsteroidMissedRule(self._state_client, asteroid_field, self._fit_to_screen),
+            ShipDestroyedRule(self._state_client, asteroid_field, ship, self._fit_to_screen),
         ])
 
         self._should_quit = Event()
@@ -127,6 +130,17 @@ class ShooterScene(IGameScene):
     def _render(self) -> None:
         background = Surface((self._get_display_width(), self._get_display_height()))
         self._game_objects.apply(lambda x: x.render(background))
+
+        top_black_bar = Surface((
+            self._get_display_width(),
+            int(self._fit_to_screen.get_y_padding())))
+        bottom_black_bar = Surface((
+            self._get_display_width(),
+            int(self._fit_to_screen.get_y_padding())))
+        background.blit(top_black_bar, (0, 0))
+        background.blit(bottom_black_bar, (
+            0,
+            self._fit_to_screen.get_y_padding() + self._fit_to_screen.get_actual_surface_height()))
 
         self._surface_renderer.render(background)
 

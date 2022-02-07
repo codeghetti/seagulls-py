@@ -1,21 +1,24 @@
 from functools import lru_cache
 from pathlib import Path
 
-import pygame
 from pygame.font import Font
 from seagulls.engine import GameObject, Surface
 
+from ._fit_to_screen import FitToScreen
 from ._score_tracker import ScoreTracker
 
 
 class ScoreOverlay(GameObject):
-    _position_buffer = 200
+    _position_buffer = 100
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
-            score_tracker: ScoreTracker):
+            score_tracker: ScoreTracker,
+            fit_to_screen: FitToScreen):
 
         self._score_tracker = score_tracker
+        self._fit_to_screen = fit_to_screen
 
     def tick(self) -> None:
         pass
@@ -29,8 +32,8 @@ class ScoreOverlay(GameObject):
         surface.blit(
             img,
             (
-                self._get_display_width() - self._position_buffer,
-                self._get_display_height() - 100
+                self._fit_to_screen.get_x_boundaries().y - self._position_buffer,
+                self._fit_to_screen.get_y_boundaries().y - 30
             ))
 
     def reset(self) -> None:
@@ -39,11 +42,3 @@ class ScoreOverlay(GameObject):
     @lru_cache()
     def _font(self) -> Font:
         return Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 18)
-
-    @lru_cache()
-    def _get_display_width(self) -> int:
-        return pygame.display.Info().current_w
-
-    @lru_cache()
-    def _get_display_height(self) -> int:
-        return pygame.display.Info().current_h

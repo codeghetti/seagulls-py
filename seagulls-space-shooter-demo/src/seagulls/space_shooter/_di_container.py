@@ -4,13 +4,13 @@ from pathlib import Path
 from seagulls.assets import AssetManager
 from seagulls.engine import (
     ActiveSceneClient,
+    BasicSceneManager,
+    BlockingGameSession,
     EmptyScene,
     GameClock,
     GameControls,
     SurfaceRenderer,
-    WindowScene,
-    BlockingGameSession,
-    BasicSceneManager
+    WindowScene
 )
 from seagulls.seagulls_cli import SeagullsCliApplication
 
@@ -20,6 +20,7 @@ from ._blue_ship import BlueShip
 from ._cli_command import GameCliCommand
 from ._cli_plugin import SpaceShooterCliPlugin
 from ._empty_ship import EmptyShip
+from ._fit_to_screen import FitToScreen
 from ._game_over_scene import GameOverSceneFactory
 from ._orange_ship import OrangeShip
 from ._replay_shooter_button import ReplayButtonFactory
@@ -78,6 +79,7 @@ class SpaceShooterDiContainer:
             game_over_scene_factory=self._game_over_scene_factory(),
             replay_button_factory=self._replay_button_factory(),
             ship_selection_menu_factory=self._ship_selection_menu_factory(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -89,19 +91,22 @@ class SpaceShooterDiContainer:
             asset_manager=self._asset_manager(),
             active_scene_manager=self._active_scene_client(),
             active_ship_manager=self._active_ship_client(),
-            background=self._main_menu_background()
+            background=self._main_menu_background(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
     def _ship_catalog(self) -> ShipCatalog:
-        return ShipCatalog(ships=(OrangeShip(), BlueShip()))
+        return ShipCatalog(
+            ships=(OrangeShip(), BlueShip(self._fit_to_screen())))
 
     @lru_cache()
     def _replay_button_factory(self) -> ReplayButtonFactory:
         return ReplayButtonFactory(
             asset_manager=self._asset_manager(),
             game_controls=self._game_controls(),
-            active_scene_manager=self._active_scene_client()
+            active_scene_manager=self._active_scene_client(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -113,6 +118,7 @@ class SpaceShooterDiContainer:
             active_scene_manager=self._active_scene_client(),
             score_overlay=self._score_overlay(),
             background=self._main_menu_background(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -124,7 +130,9 @@ class SpaceShooterDiContainer:
 
     @lru_cache()
     def _score_overlay(self) -> ScoreOverlay:
-        return ScoreOverlay(score_tracker=self._score_tracker())
+        return ScoreOverlay(
+            score_tracker=self._score_tracker(),
+            fit_to_screen=self._fit_to_screen())
 
     @lru_cache()
     def _score_tracker(self) -> ScoreTracker:
@@ -135,6 +143,7 @@ class SpaceShooterDiContainer:
         return AsteroidField(
             clock=self._game_clock(),
             asset_manager=self._asset_manager(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -144,6 +153,7 @@ class SpaceShooterDiContainer:
             clock=self._game_clock(),
             asset_manager=self._asset_manager(),
             game_controls=self._game_controls(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -166,7 +176,12 @@ class SpaceShooterDiContainer:
     def _main_menu_background(self) -> SimpleStarsBackground:
         return SimpleStarsBackground(
             asset_manager=self._asset_manager(),
+            fit_to_screen=self._fit_to_screen()
         )
+
+    @lru_cache()
+    def _fit_to_screen(self) -> FitToScreen:
+        return FitToScreen()
 
     @lru_cache()
     def _surface_renderer(self) -> SurfaceRenderer:

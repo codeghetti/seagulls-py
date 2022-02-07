@@ -63,4 +63,3 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v1
         with:
           files: artifacts/**/junit.xml
-          log_level: DEBUG

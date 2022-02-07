@@ -26,4 +26,3 @@ class BlueShip(IShip):
 
     def offset(self) -> int:
         return int(self._fit_to_screen.get_actual_surface_width() / 3)
-

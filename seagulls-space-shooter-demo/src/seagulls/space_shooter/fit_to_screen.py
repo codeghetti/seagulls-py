@@ -64,6 +64,7 @@ class FitToScreen:
             self.get_x_padding() + self.get_actual_surface_width()
         )
 
+    @lru_cache()
     def get_y_boundaries(self) -> Vector2:
         return Vector2(
             self.get_y_padding(),

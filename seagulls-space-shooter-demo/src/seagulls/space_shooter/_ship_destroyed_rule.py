@@ -4,6 +4,7 @@ from ._asteroid_field import AsteroidField
 from ._check_game_rules_interface import ICheckGameRules
 from ._ship import Ship
 from ._shooter_scene_client import ShooterSceneState, ShooterSceneStateClient
+from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 
@@ -12,15 +13,18 @@ class ShipDestroyedRule(ICheckGameRules):
     _state_client: ShooterSceneStateClient
     _asteroid_field: AsteroidField
     _ship: Ship
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
             state_client: ShooterSceneStateClient,
             asteroid_field: AsteroidField,
-            ship: Ship):
+            ship: Ship,
+            fit_to_screen: FitToScreen):
         self._state_client = state_client
         self._asteroid_field = asteroid_field
         self._ship = ship
+        self._fit_to_screen = fit_to_screen
 
     def check(self) -> None:
         for index in range(self._asteroid_field.get_asteroid_field_size()):
@@ -32,7 +36,8 @@ class ShipDestroyedRule(ICheckGameRules):
         ship_position = self._ship.get_ship_position()
 
         nose_collision_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= (ship_position.x + 50) <=
+            self._asteroid_field.get_rock_position_x(rock_number) <=
+            (ship_position.x + 50) <=
             self._asteroid_field.get_rock_position_x(rock_number) +
             self._asteroid_field.get_rock_size_x(rock_number) and
             self._asteroid_field.get_rock_position_y(rock_number) <=
@@ -52,7 +57,8 @@ class ShipDestroyedRule(ICheckGameRules):
         )
 
         right_upper_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= (ship_position.x + 105) <=
+            self._asteroid_field.get_rock_position_x(rock_number) <=
+            (ship_position.x + 105) <=
             self._asteroid_field.get_rock_position_x(rock_number) +
             self._asteroid_field.get_rock_size_x(rock_number) and
             self._asteroid_field.get_rock_position_y(rock_number) <=
@@ -72,7 +78,8 @@ class ShipDestroyedRule(ICheckGameRules):
         )
 
         right_lower_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= (ship_position.x + 105) <=
+            self._asteroid_field.get_rock_position_x(rock_number) <=
+            (ship_position.x + 105) <=
             self._asteroid_field.get_rock_position_x(rock_number) +
             self._asteroid_field.get_rock_size_x(rock_number) and
             self._asteroid_field.get_rock_position_y(rock_number) <=

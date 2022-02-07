@@ -16,6 +16,8 @@ from seagulls.engine import (
     Surface
 )
 
+from .fit_to_screen import FitToScreen
+
 logger = logging.getLogger(__name__)
 
 
@@ -33,17 +35,21 @@ class ReplayShooterButton(GameObject):
 
     _active_scene_manager: ISetActiveScene
 
+    _fit_to_screen: FitToScreen
+
     def __init__(
             self,
             scene: IGameScene,
             asset_manager: AssetManager,
             game_controls: GameControls,
-            active_scene_manager: ISetActiveScene):
+            active_scene_manager: ISetActiveScene,
+            fit_to_screen: FitToScreen):
 
         self._scene = scene
         self._asset_manager = asset_manager
         self._game_controls = game_controls
         self._active_scene_manager = active_scene_manager
+        self._fit_to_screen = fit_to_screen
 
         self._is_highlighted = Event()
         self._is_clicked = Event()
@@ -57,6 +63,11 @@ class ReplayShooterButton(GameObject):
         button = self._get_background()
 
         text = self._font.render("Play Again", True, (90, 90, 70))
+        text = pygame.transform.scale(
+            text,
+            (self._fit_to_screen.get_actual_surface_width() * text.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * text.get_height() / 1080
+             ))
         text_height = text.get_height()
         padding = (button.get_height() - text_height) / 2
 
@@ -87,10 +98,40 @@ class ReplayShooterButton(GameObject):
     @lru_cache()
     def _get_background_map(self) -> Dict[str, Surface]:
         return {
-            "normal": self._asset_manager.load_png("ui/blue.button00").copy(),
-            "hover": self._asset_manager.load_png("ui/green.button00").copy(),
-            "click": self._asset_manager.load_png("ui/green.button01").copy(),
+            "normal": self._get_blue_button(),
+            "hover": self._get_green_button_0(),
+            "click": self._get_green_button_1(),
         }
+
+    def _get_blue_button(self) -> Surface:
+        sprite = self._asset_manager.load_png("ui/blue.button00").copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (self._fit_to_screen.get_actual_surface_width() * sprite.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * sprite.get_height() / 1080
+             ))
+
+        return sprite
+
+    def _get_green_button_0(self) -> Surface:
+        sprite = self._asset_manager.load_png("ui/green.button00").copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (self._fit_to_screen.get_actual_surface_width() * sprite.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * sprite.get_height() / 1080
+             ))
+
+        return sprite
+
+    def _get_green_button_1(self) -> Surface:
+        sprite = self._asset_manager.load_png("ui/green.button01").copy()
+        sprite = pygame.transform.scale(
+            sprite,
+            (self._fit_to_screen.get_actual_surface_width() * sprite.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * sprite.get_height() / 1080
+             ))
+
+        return sprite
 
     def _get_state_name(self) -> str:
         if self._is_highlighted.is_set():
@@ -124,14 +165,17 @@ class ReplayButtonFactory:
             self,
             asset_manager: AssetManager,
             game_controls: GameControls,
-            active_scene_manager: ISetActiveScene):
+            active_scene_manager: ISetActiveScene,
+            fit_to_screen: FitToScreen):
         self._asset_manager = asset_manager
         self._game_controls = game_controls
         self._active_scene_manager = active_scene_manager
+        self._fit_to_screen = fit_to_screen
 
     def get_instance(self, scene: IGameScene) -> ReplayShooterButton:
         return ReplayShooterButton(
             scene,
             self._asset_manager,
             self._game_controls,
-            self._active_scene_manager)
+            self._active_scene_manager,
+            self._fit_to_screen)

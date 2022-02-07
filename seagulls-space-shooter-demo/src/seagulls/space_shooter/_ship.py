@@ -84,7 +84,8 @@ class Ship(GameObject):
                     self._clock,
                     self._asset_manager,
                     self._position,
-                    self._get_ship_width()))
+                    self._get_ship_width(),
+                    self._fit_to_screen))
 
             self._laser_sound().play()
 
@@ -95,8 +96,8 @@ class Ship(GameObject):
         if self._position.x < self._fit_to_screen.get_x_boundaries().x:
             self._position.x = self._fit_to_screen.get_x_boundaries().x
 
-        if self._position.x > self._fit_to_screen.get_x_boundaries().y - 112:
-            self._position.x = self._fit_to_screen.get_x_boundaries().y - 112
+        if self._position.x > self._fit_to_screen.get_x_boundaries().y - self._get_ship_width():
+            self._position.x = self._fit_to_screen.get_x_boundaries().y - self._get_ship_width()
 
         for laser in self._lasers:
             laser.tick()

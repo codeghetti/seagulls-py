@@ -26,4 +26,4 @@ class OrangeShip(IShip):
         return "Orange Ship"
 
     def offset(self) -> int:
-        return int(-self._fit_to_screen.get_actual_surface_width() / 4)
+        return 0

@@ -5,13 +5,17 @@ import pygame
 from pygame.font import Font
 from seagulls.engine import GameObject, Surface
 
+from .fit_to_screen import FitToScreen
+
 
 class GameOverOverlay(GameObject):
 
     _font: Font
+    _fit_to_screen: FitToScreen
 
-    def __init__(self):
+    def __init__(self, fit_to_screen: FitToScreen):
         self._font = Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 50)
+        self._fit_to_screen = fit_to_screen
 
     def tick(self) -> None:
         pass
@@ -22,6 +26,11 @@ class GameOverOverlay(GameObject):
             True,
             "red", "black"
         )
+        img = pygame.transform.scale(
+            img,
+            (self._fit_to_screen.get_actual_surface_width() * img.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * img.get_height() / 1080
+             ))
         surface.blit(img, (self._get_display_width() / 2 - 80, self._get_display_height() / 2))
 
     @lru_cache()

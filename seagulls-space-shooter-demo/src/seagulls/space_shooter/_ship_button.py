@@ -67,14 +67,31 @@ class ShipButton(GameObject):
         button = self._get_background()
 
         text = self._font.render(self._ship.display_name(), True, (90, 90, 70))
+        text = pygame.transform.scale(
+            text,
+            (self._fit_to_screen.get_actual_surface_width() * text.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * text.get_height() / 1080
+             ))
         text_height = text.get_height()
         padding = (button.get_height() - text_height) / 2
 
         ship_sprite = self._get_ship_sprite()
+
         ship_velocity = self._font.render("Velocity: " + str(self._ship.velocity()), True,
                                           "red", "black")
+        ship_velocity = pygame.transform.scale(
+            ship_velocity,
+            (self._fit_to_screen.get_actual_surface_width() * ship_velocity.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * ship_velocity.get_height() / 1080
+             ))
+
         ship_power = self._font.render("Power: " + str(self._ship.power()), True,
                                        "red", "black")
+        ship_power = pygame.transform.scale(
+            ship_power,
+            (self._fit_to_screen.get_actual_surface_width() * ship_power.get_width() / 1920,
+             self._fit_to_screen.get_actual_surface_height() * ship_power.get_height() / 1080
+             ))
 
         button.blit(text, (10, padding))
         surface.blit(button, (self._get_position()[0], self._get_position()[1] + 160))
@@ -156,9 +173,12 @@ class ShipButton(GameObject):
         return "normal"
 
     def _get_position(self) -> Tuple[int, int]:
-        left = int((self._get_display_width() / 3) - self._get_button_width() / 2) + \
-               self._ship.offset()
-        top = int((self._get_display_height() / 3) - self._get_button_height() / 2)
+        left = int(self._fit_to_screen.get_x_boundaries().x +
+                   (self._fit_to_screen.get_actual_surface_width() / 3)) + self._ship.offset()
+
+        top = int(self._fit_to_screen.get_y_boundaries().x +
+                  self._fit_to_screen.get_actual_surface_height() / 3)
+
         if self._is_clicked.is_set():
             top += 5
 

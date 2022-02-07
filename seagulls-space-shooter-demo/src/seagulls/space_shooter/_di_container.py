@@ -97,14 +97,16 @@ class SpaceShooterDiContainer:
 
     @lru_cache()
     def _ship_catalog(self) -> ShipCatalog:
-        return ShipCatalog(ships=(OrangeShip(self._fit_to_screen()), BlueShip(self._fit_to_screen())))
+        return ShipCatalog(
+            ships=(OrangeShip(self._fit_to_screen()), BlueShip(self._fit_to_screen())))
 
     @lru_cache()
     def _replay_button_factory(self) -> ReplayButtonFactory:
         return ReplayButtonFactory(
             asset_manager=self._asset_manager(),
             game_controls=self._game_controls(),
-            active_scene_manager=self._active_scene_client()
+            active_scene_manager=self._active_scene_client(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -116,6 +118,7 @@ class SpaceShooterDiContainer:
             active_scene_manager=self._active_scene_client(),
             score_overlay=self._score_overlay(),
             background=self._main_menu_background(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()

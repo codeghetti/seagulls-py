@@ -4,21 +4,26 @@ import pygame
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
+from .fit_to_screen import FitToScreen
+
 
 class Laser(GameObject):
     _clock: GameClock
     _asset_manager: AssetManager
     _position: Vector2
     _velocity: Vector2
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
             clock: GameClock,
             asset_manager: AssetManager,
             ship_position: Vector2,
-            ship_width: float):
+            ship_width: float,
+            fit_to_screen: FitToScreen):
         self._clock = clock
         self._asset_manager = asset_manager
+        self._fit_to_screen = fit_to_screen
         self._position = Vector2(
             ship_position.x + (ship_width / 2),
             ship_position.y - self._get_laser_height())
@@ -50,11 +55,16 @@ class Laser(GameObject):
 
     @lru_cache()
     def _get_laser_width(self) -> float:
-        return self._get_display_width() / 1920 * self._get_cached_laser().get_width()
+        return (
+                self._fit_to_screen.get_actual_surface_width() *
+                self._get_cached_laser().get_width() /
+                1920)
 
     @lru_cache()
     def _get_laser_height(self) -> float:
-        return self._get_display_height() / 1080 * self._get_cached_laser().get_height()
+        return (self._fit_to_screen.get_actual_surface_height() *
+                self._get_cached_laser().get_height()
+                / 1080)
 
     @lru_cache()
     def _get_display_width(self) -> int:

@@ -17,6 +17,7 @@ from seagulls.engine import (
 from ._game_over_overlay import GameOverOverlay
 from ._replay_shooter_button import ReplayShooterButton
 from ._score_overlay import ScoreOverlay
+from .fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,8 @@ class GameOverScene(IGameScene):
 
     _score_overlay: ScoreOverlay
 
+    _fit_to_screen: FitToScreen
+
     def __init__(
             self,
             replay_button: ReplayShooterButton,
@@ -41,12 +44,14 @@ class GameOverScene(IGameScene):
             asset_manager: AssetManager,
             active_scene_manager: ISetActiveScene,
             score_overlay: ScoreOverlay,
-            background: GameObject):
+            background: GameObject,
+            fit_to_screen: FitToScreen):
         self._replay_button = replay_button
         self._surface_renderer = surface_renderer
         self._game_controls = game_controls
         self._asset_manager = asset_manager
         self._active_scene_manager = active_scene_manager
+        self._fit_to_screen = fit_to_screen
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(background)
@@ -79,7 +84,7 @@ class GameOverScene(IGameScene):
     def _game_over_summary(self) -> None:
         mixer.init()
         mixer.Sound("assets/sounds/game-over.ogg").play()
-        self._game_objects.add(GameOverOverlay())
+        self._game_objects.add(GameOverOverlay(self._fit_to_screen))
 
     def _render(self) -> None:
         background = Surface((self._get_display_width(), self._get_display_height()))
@@ -103,6 +108,7 @@ class GameOverSceneFactory:
     _active_scene_manager: ISetActiveScene
     _score_overlay: ScoreOverlay
     _background: GameObject
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
@@ -111,13 +117,15 @@ class GameOverSceneFactory:
             asset_manager: AssetManager,
             active_scene_manager: ISetActiveScene,
             score_overlay: ScoreOverlay,
-            background: GameObject):
+            background: GameObject,
+            fit_to_screen: FitToScreen):
         self._surface_renderer = surface_renderer
         self._game_controls = game_controls
         self._asset_manager = asset_manager
         self._active_scene_manager = active_scene_manager
         self._score_overlay = score_overlay
         self._background = background
+        self._fit_to_screen = fit_to_screen
 
     def get_instance(self, replay_button: ReplayShooterButton) -> GameOverScene:
         return GameOverScene(
@@ -127,5 +135,6 @@ class GameOverSceneFactory:
             self._asset_manager,
             self._active_scene_manager,
             self._score_overlay,
-            self._background
+            self._background,
+            self._fit_to_screen
         )

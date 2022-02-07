@@ -1,0 +1,65 @@
+name: Seagulls CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  build-and-test:
+    name: "Checks"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - seagulls-cli
+          - seagulls-devtools
+          - seagulls-engine
+          - seagulls-rpg-demo
+          - seagulls-space-shooter-demo
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.2"
+      - name: Install Package
+        working-directory: ${{ matrix.package }}
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pipx
+          pipx install poetry
+          poetry install --extras dev
+      - name: Run Checks
+        working-directory: ${{ matrix.package }}
+        run: |
+          poetry run seagulls flake8
+          poetry run seagulls mypy
+          poetry run seagulls pytest
+      - name: Publish Code Coverage Results
+        uses: codecov/codecov-action@v2
+        with:
+          files: .tmp/${{ matrix.package }}/coverage.xml
+          name: codecov-${{ matrix.package }}
+          verbose: true
+      - name: Upload JUnit Report
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: "JUnit Test Results - ${{ matrix.package }}"
+          path: ".tmp/${{ matrix.package }}/junit.xml"
+  publish-test-results:
+    name: "Publish JUnit Reports"
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: artifacts/**/junit.xml

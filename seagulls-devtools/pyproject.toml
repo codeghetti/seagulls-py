@@ -19,6 +19,7 @@ isort = "*"
 pytest = "*"
 pytest-cov = "*"
 flake8 = "*"
+flake8-isort = "*"
 mypy = "*"
 seagulls-cli = { version = "", allow-prereleases = true}
 

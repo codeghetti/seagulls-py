@@ -2,7 +2,6 @@ from functools import lru_cache
 from pathlib import Path
 
 from seagulls.assets import AssetManager
-from seagulls.debug import DebugHud
 from seagulls.engine import (
     ActiveSceneClient,
     EmptyScene,
@@ -15,11 +14,12 @@ from seagulls.engine import (
 )
 from seagulls.seagulls_cli import SeagullsCliApplication
 
-from seagulls.rpg_demo._character import Character
-from seagulls.rpg_demo._cli_command import GameCliCommand
-from seagulls.rpg_demo._cli_plugin import RpgDemoCliPlugin
-from seagulls.rpg_demo._rpg_background import SimpleRpgBackground
-from seagulls.rpg_demo._rpg_scene import RpgScene
+from ._character import Character
+from ._cli_command import GameCliCommand
+from ._cli_plugin import RpgDemoCliPlugin
+from ._rpg_background import SimpleRpgBackground
+from ._rpg_scene import RpgScene
+from ._debug_hud import DebugHud
 
 
 class RpgDemoDiContainer:
@@ -89,7 +89,7 @@ class RpgDemoDiContainer:
 
     @lru_cache()
     def _debug_hud(self) -> DebugHud:
-        return DebugHud(game_clock=self._clock())
+        return DebugHud(asset_manager=self._asset_manager(), game_clock=self._clock())
 
     @lru_cache()
     def _clock(self) -> GameClock:
@@ -101,4 +101,12 @@ class RpgDemoDiContainer:
 
     @lru_cache()
     def _asset_manager(self) -> AssetManager:
-        return AssetManager(assets_path=Path("assets"))
+        return AssetManager(assets_path=self._find_assets_path())
+
+    def _find_assets_path(self) -> Path:
+        container_dir_path = Path(__file__).parent
+        parts = str(container_dir_path.resolve()).split("/site-packages/")
+        if len(parts) == 2:
+            return Path(parts[0]) / "site-packages/seagulls_assets"
+
+        return Path("seagulls_assets")

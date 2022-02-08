@@ -1,14 +1,14 @@
 from ._app_interfaces import ISeagullsApplication
 from ._plugin_client import SeagullsEntryPointsPluginsClient
+from ._plugin_exceptions import DuplicatePluginError
 from ._plugin_interfaces import (
     ApplicationType,
-    PluginType,
-    ISeagullsApplicationPlugin,
     IPluggableSeagullsApplication,
-    ISeagullsPluginClient,
+    ISeagullsApplicationPlugin,
     ISeagullsApplicationPluginRegistrant,
+    ISeagullsPluginClient,
+    PluginType
 )
-from ._plugin_exceptions import DuplicatePluginError
 
 __all__ = [
     # App

@@ -1,7 +1,7 @@
 from seagulls.app import ISeagullsApplicationPlugin
 from seagulls.cli import CliRequestRegistrationEvent
-
 from seagulls.seagulls_cli import SeagullsCliApplication
+
 from ._flake8_command import Flake8Command
 from ._mypy_command import MypyCommand
 from ._publish_command import PublishWheelCommand

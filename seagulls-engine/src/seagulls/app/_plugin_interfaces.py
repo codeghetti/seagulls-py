@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Protocol, TypeVar, Type, runtime_checkable
+from typing import Protocol, Type, TypeVar, runtime_checkable
 
 
 class ISeagullsApplicationPlugin(Protocol):

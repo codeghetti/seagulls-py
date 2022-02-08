@@ -4,22 +4,22 @@ from pathlib import Path
 from seagulls.assets import AssetManager
 from seagulls.engine import (
     ActiveSceneClient,
+    BasicSceneManager,
+    BlockingGameSession,
     EmptyScene,
     GameClock,
     GameControls,
     SurfaceRenderer,
-    WindowScene,
-    BlockingGameSession,
-    BasicSceneManager
+    WindowScene
 )
 from seagulls.seagulls_cli import SeagullsCliApplication
 
 from ._character import Character
 from ._cli_command import GameCliCommand
 from ._cli_plugin import RpgDemoCliPlugin
+from ._debug_hud import DebugHud
 from ._rpg_background import SimpleRpgBackground
 from ._rpg_scene import RpgScene
-from ._debug_hud import DebugHud
 
 
 class RpgDemoDiContainer:

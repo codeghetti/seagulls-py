@@ -1,6 +1,5 @@
-from ._game_scene import IGameScene
-
 from ._active_scene_client import IProvideActiveScene
+from ._game_scene import IGameScene
 
 
 class WindowScene(IGameScene):

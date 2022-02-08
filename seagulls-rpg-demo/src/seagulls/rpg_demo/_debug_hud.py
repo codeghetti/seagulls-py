@@ -3,11 +3,9 @@ This module contains classes for rendering a Debug Hud in game scenes.
 """
 import logging
 from functools import lru_cache
-from pathlib import Path
 
 from pygame import font
 from pygame.font import Font
-
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface
 

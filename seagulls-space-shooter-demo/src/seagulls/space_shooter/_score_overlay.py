@@ -1,12 +1,11 @@
 from functools import lru_cache
-from pathlib import Path
 
 from pygame.font import Font
+from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface
 
 from ._fit_to_screen import FitToScreen
 from ._score_tracker import ScoreTracker
-from ..assets import AssetManager
 
 
 class ScoreOverlay(GameObject):

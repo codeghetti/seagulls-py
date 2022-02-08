@@ -3,11 +3,11 @@ from functools import lru_cache
 from typing import Callable
 
 from pygame import mixer
+from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface
 
 from ._asteroid_field import AsteroidField
 from ._ship import Ship
-from seagulls.assets import AssetManager
 
 logger = logging.getLogger(__name__)
 

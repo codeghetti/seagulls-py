@@ -1,8 +1,8 @@
+import logging
 import shutil
 import subprocess
-from pathlib import Path
-import logging
 from argparse import ArgumentParser
+from pathlib import Path
 
 from seagulls.cli import ICliCommand
 

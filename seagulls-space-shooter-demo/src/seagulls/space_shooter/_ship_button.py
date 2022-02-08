@@ -58,7 +58,7 @@ class ShipButton(GameObject):
         self._is_highlighted = Event()
         self._is_clicked = Event()
 
-        self._font = Font(Path("assets/fonts/kenvector-future.ttf"), 14)
+        self._font = Font(self._asset_manager.get_path("fonts/kenvector-future.ttf"), 14)
 
     def tick(self) -> None:
         self._detect_state()

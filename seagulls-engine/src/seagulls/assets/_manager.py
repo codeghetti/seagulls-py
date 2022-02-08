@@ -18,9 +18,16 @@ class AssetManager:
         return self.load_png(f"sprites/{name}")
 
     def load_png(self, name: str) -> Surface:
-        path = self._assets_path / f"{name}.png"
+        path = self.get_path(f"{name}.png")
         loaded_sprite = load(path.resolve())
         if loaded_sprite.get_alpha() is None:
             return loaded_sprite.convert()
         else:
             return loaded_sprite.convert_alpha()
+
+    def get_path(self, name: str) -> Path:
+        p = self._assets_path / name
+        if not p.exists():
+            raise RuntimeError(f"no path found for asset: {name}")
+
+        return p

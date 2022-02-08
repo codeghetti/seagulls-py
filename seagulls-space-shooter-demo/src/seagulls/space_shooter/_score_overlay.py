@@ -6,17 +6,20 @@ from seagulls.engine import GameObject, Surface
 
 from ._fit_to_screen import FitToScreen
 from ._score_tracker import ScoreTracker
+from ..assets import AssetManager
 
 
 class ScoreOverlay(GameObject):
+    _asset_manager: AssetManager
     _position_buffer = 100
     _fit_to_screen: FitToScreen
 
     def __init__(
             self,
+            asset_manager: AssetManager,
             score_tracker: ScoreTracker,
             fit_to_screen: FitToScreen):
-
+        self._asset_manager = asset_manager
         self._score_tracker = score_tracker
         self._fit_to_screen = fit_to_screen
 
@@ -41,4 +44,4 @@ class ScoreOverlay(GameObject):
 
     @lru_cache()
     def _font(self) -> Font:
-        return Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 18)
+        return Font(self._asset_manager.get_path("fonts/ubuntu-mono-v10-latin-regular.ttf"), 18)

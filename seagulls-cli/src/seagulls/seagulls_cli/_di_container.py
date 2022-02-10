@@ -1,15 +1,15 @@
 import os
+import sys
 from functools import lru_cache
 from pathlib import Path
-import sys
 from typing import Tuple
 
-from ._application import SeagullsCliApplication
-from seagulls.cli import CliRequest
-from ._container_repository import DiContainerRepository
-from seagulls.cli import RequestEnvironment
-from ._logging_client import LoggingClient
 from seagulls.app import SeagullsEntryPointsPluginsClient
+from seagulls.cli import CliRequest, RequestEnvironment
+
+from ._application import SeagullsCliApplication
+from ._container_repository import DiContainerRepository
+from ._logging_client import LoggingClient
 
 
 class SeagullsAppDiContainer:

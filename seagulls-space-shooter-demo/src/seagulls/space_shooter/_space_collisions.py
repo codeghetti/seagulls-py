@@ -3,6 +3,7 @@ from functools import lru_cache
 from typing import Callable
 
 from pygame import mixer
+from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface
 
 from ._asteroid_field import AsteroidField
@@ -12,14 +13,17 @@ logger = logging.getLogger(__name__)
 
 
 class SpaceCollisions(GameObject):
+    _asset_manager: AssetManager
     _ship: Ship
     _asteroid_field: AsteroidField
 
     def __init__(
             self,
+            asset_manager: AssetManager,
             ship: Ship,
             asteroid_field: AsteroidField,
             rock_collision_callback: Callable[[], None]):
+        self._asset_manager = asset_manager
         self._ship = ship
         self._asteroid_field = asteroid_field
         self._rock_collision_callback = rock_collision_callback
@@ -68,4 +72,4 @@ class SpaceCollisions(GameObject):
     @lru_cache()
     def _rock_collision_sound(self) -> mixer.Sound:
         mixer.init()
-        return mixer.Sound("assets/sounds/rock-explosion.ogg")
+        return mixer.Sound(self._asset_manager.get_path("sounds/rock-explosion.ogg"))

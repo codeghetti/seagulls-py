@@ -46,6 +46,7 @@ build-backend = "poetry.core.masonry.api"
 multi_line_output = 3
 
 [tool.pytest.ini_options]
+cache_dir = "../.tmp/seagulls-engine/.pytest_cache"
 testpaths = ["test"]
 addopts = "-s --cache-clear --cov --cov-report=term-missing --cov-report=xml --junit-xml ../.tmp/seagulls-engine/junit.xml"
 
@@ -57,3 +58,8 @@ relative_files = true
 
 [tool.coverage.xml]
 output = "../.tmp/seagulls-engine/coverage.xml"
+
+[tool.mypy]
+cache_dir = "../.tmp/seagulls-engine/.mypy_cache"
+namespace_packages = true
+mypy_path = "src/:test/"

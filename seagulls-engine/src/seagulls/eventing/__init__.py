@@ -1,8 +1,4 @@
-from ._interfaces import (
-    IDispatchEvents,
-    EventType,
-    EventCallbackType,
-)
+from ._interfaces import EventCallbackType, EventType, IDispatchEvents
 
 __all__ = [
     "IDispatchEvents",

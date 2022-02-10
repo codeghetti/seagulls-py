@@ -1,8 +1,8 @@
 from ._request import (
     CliRequest,
-    ICliCommand,
-    RequestEnvironment,
     CliRequestRegistrationEvent,
+    ICliCommand,
+    RequestEnvironment
 )
 
 __all__ = [

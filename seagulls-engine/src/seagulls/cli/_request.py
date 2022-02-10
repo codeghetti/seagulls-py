@@ -2,7 +2,7 @@ from abc import abstractmethod
 from argparse import ArgumentParser
 from functools import lru_cache
 from pathlib import Path
-from typing import Tuple, Dict, Optional, Protocol
+from typing import Dict, Optional, Protocol, Tuple
 
 from seagulls.eventing import IDispatchEvents
 

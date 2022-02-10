@@ -3,6 +3,15 @@
 [![Seagulls CI](https://github.com/codeghetti/seagulls-py/actions/workflows/ci.yml/badge.svg)](https://github.com/codeghetti/seagulls-py/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/codeghetti/seagulls-py/branch/main/graph/badge.svg?token=VJ67644A08)](https://codecov.io/gh/codeghetti/seagulls-py)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Discord](https://img.shields.io/discord/820832501723168779?label=Discord)](https://discord.gg/vStqR48Q9r)
+
+## Latest Releases
+
+[![PyPI](https://img.shields.io/pypi/v/seagulls-engine?label=seagulls-engine&logo=pypi&logoColor=green)](https://pypi.org/project/seagulls-engine/)
+[![PyPI](https://img.shields.io/pypi/v/seagulls-devtools?label=seagulls-devtools&logo=pypi&logoColor=green)](https://pypi.org/project/seagulls-devtools/)
+[![PyPI](https://img.shields.io/pypi/v/seagulls-cli?label=seagulls-cli&logo=pypi&logoColor=green)](https://pypi.org/project/seagulls-cli/)
+[![PyPI](https://img.shields.io/pypi/v/seagulls-rpg-demo?label=seagulls-rpg-demo&logo=pypi&logoColor=green)](https://pypi.org/project/seagulls-rpg-demo/)
+[![PyPI](https://img.shields.io/pypi/v/seagulls-space-shooter-demo?label=seagulls-space-shooter-demo&logo=pypi&logoColor=green)](https://pypi.org/project/seagulls-space-shooter-demo/)
 
 ## Development Environment
 These are development environment instructions based on the assumption that you are on an Ubuntu

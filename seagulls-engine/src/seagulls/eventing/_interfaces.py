@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Protocol, TypeVar, Callable, Type
+from typing import Callable, Protocol, Type, TypeVar
 
 EventType = TypeVar("EventType")
 EventCallbackType = Callable[[EventType], None]

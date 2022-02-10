@@ -83,8 +83,10 @@ class GameOverScene(IGameScene):
     @lru_cache()
     def _game_over_summary(self) -> None:
         mixer.init()
-        mixer.Sound("assets/sounds/game-over.ogg").play()
-        self._game_objects.add(GameOverOverlay(self._fit_to_screen))
+        mixer.Sound(self._asset_manager.get_path("sounds/game-over.ogg")).play()
+        self._game_objects.add(GameOverOverlay(
+            asset_manager=self._asset_manager,
+            fit_to_screen=self._fit_to_screen))
 
     def _render(self) -> None:
         background = Surface((self._get_display_width(), self._get_display_height()))

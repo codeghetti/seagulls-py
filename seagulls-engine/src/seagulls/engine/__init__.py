@@ -1,5 +1,9 @@
 """Core Engine Components"""
+from ._active_scene_client import ActiveSceneClient, ISetActiveScene
+from ._basic_scene_manager import BasicSceneManager
+from ._blocking_game_session import BlockingGameSession
 from ._collisions import CollidableObject, flag_from_string
+from ._empty_scene import EmptyScene
 from ._game_clock import GameClock
 from ._game_controls import GameControls
 from ._game_object import GameObject, GameObjectsCollection
@@ -10,11 +14,7 @@ from ._game_session_manager import IProvideGameSessions
 from ._game_settings import GameSettings
 from ._pygame import Color, PixelArray, Rect, Surface, Vector2, Vector3
 from ._surface_renderer import SurfaceRenderer
-from ._active_scene_client import ISetActiveScene, ActiveSceneClient
 from ._window_scene import WindowScene
-from ._empty_scene import EmptyScene
-from ._basic_scene_manager import BasicSceneManager
-from ._blocking_game_session import BlockingGameSession
 
 __all__ = [
     "flag_from_string",

@@ -9,9 +9,9 @@ else:
     from importlib.metadata import entry_points
 
 from ._plugin_interfaces import (
-    ISeagullsPluginClient,
-    ISeagullsApplicationPluginRegistrant,
     ApplicationType,
+    ISeagullsApplicationPluginRegistrant,
+    ISeagullsPluginClient
 )
 
 

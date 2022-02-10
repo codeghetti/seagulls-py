@@ -1,8 +1,8 @@
 from functools import lru_cache
-from pathlib import Path
 
 import pygame
 from pygame.font import Font
+from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface
 
 from ._fit_to_screen import FitToScreen
@@ -10,11 +10,12 @@ from ._fit_to_screen import FitToScreen
 
 class GameOverOverlay(GameObject):
 
+    _asset_manager: AssetManager
     _font: Font
     _fit_to_screen: FitToScreen
 
-    def __init__(self, fit_to_screen: FitToScreen):
-        self._font = Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 50)
+    def __init__(self, asset_manager: AssetManager, fit_to_screen: FitToScreen):
+        self._font = Font(asset_manager.get_path("fonts/ubuntu-mono-v10-latin-regular.ttf"), 50)
         self._fit_to_screen = fit_to_screen
 
     def tick(self) -> None:

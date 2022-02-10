@@ -139,7 +139,7 @@ class Ship(GameObject):
     @lru_cache()
     def _laser_sound(self) -> mixer.Sound:
         mixer.init()
-        return mixer.Sound("assets/sounds/laser-sound.ogg")
+        return mixer.Sound(self._asset_manager.get_path("sounds/laser-sound.ogg"))
 
     @lru_cache()
     def _get_display_width(self) -> int:

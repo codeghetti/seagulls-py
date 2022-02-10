@@ -1,10 +1,10 @@
 from seagulls.app import (
     ApplicationType,
-    PluginType,
-    ISeagullsApplicationPlugin,
     IPluggableSeagullsApplication,
-    ISeagullsPluginClient,
+    ISeagullsApplicationPlugin,
     ISeagullsApplicationPluginRegistrant,
+    ISeagullsPluginClient,
+    PluginType
 )
 
 

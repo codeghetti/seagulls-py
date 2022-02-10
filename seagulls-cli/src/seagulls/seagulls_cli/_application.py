@@ -1,23 +1,20 @@
 import logging
 from functools import lru_cache
-from typing import Type, Dict, Callable, List, Any
+from typing import Any, Callable, Dict, List, Type
 
 from seagulls.app import (
-    ISeagullsApplication,
-    IPluggableSeagullsApplication,
-    ISeagullsApplicationPlugin,
-    PluginType,
     DuplicatePluginError,
+    IPluggableSeagullsApplication,
+    ISeagullsApplication,
+    ISeagullsApplicationPlugin,
     ISeagullsPluginClient,
+    PluginType
 )
 from seagulls.cli import CliRequest
+from seagulls.eventing import EventCallbackType, EventType, IDispatchEvents
+
 from ._container_repository import DiContainerRepository, ObjectType
 from ._logging_client import LoggingClient
-from seagulls.eventing import (
-    IDispatchEvents,
-    EventType,
-    EventCallbackType,
-)
 
 logger = logging.getLogger(__name__)
 

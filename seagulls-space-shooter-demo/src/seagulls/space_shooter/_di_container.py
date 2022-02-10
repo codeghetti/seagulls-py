@@ -124,6 +124,7 @@ class SpaceShooterDiContainer:
     @lru_cache()
     def _space_collisions(self) -> SpaceCollisions:
         return SpaceCollisions(
+            asset_manager=self._asset_manager(),
             ship=self._ship(),
             asteroid_field=self._asteroid_field(),
             rock_collision_callback=self._score_tracker().add_point)
@@ -131,6 +132,7 @@ class SpaceShooterDiContainer:
     @lru_cache()
     def _score_overlay(self) -> ScoreOverlay:
         return ScoreOverlay(
+            asset_manager=self._asset_manager(),
             score_tracker=self._score_tracker(),
             fit_to_screen=self._fit_to_screen())
 
@@ -197,4 +199,12 @@ class SpaceShooterDiContainer:
 
     @lru_cache()
     def _asset_manager(self) -> AssetManager:
-        return AssetManager(assets_path=Path("assets"))
+        return AssetManager(assets_path=self._find_assets_path())
+
+    def _find_assets_path(self) -> Path:
+        container_dir_path = Path(__file__).parent
+        parts = str(container_dir_path.resolve()).split("/site-packages/")
+        if len(parts) == 2:
+            return Path(parts[0]) / "site-packages/seagulls_assets"
+
+        return Path("seagulls_assets")

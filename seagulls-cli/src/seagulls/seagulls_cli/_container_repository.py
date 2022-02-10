@@ -1,4 +1,4 @@
-from typing import TypeVar, Dict, Type, Any
+from typing import Any, Dict, Type, TypeVar
 
 ObjectType = TypeVar("ObjectType")
 

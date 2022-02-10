@@ -3,11 +3,10 @@ This module contains classes for rendering a Debug Hud in game scenes.
 """
 import logging
 from functools import lru_cache
-from pathlib import Path
 
 from pygame import font
 from pygame.font import Font
-
+from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface
 
 logger = logging.getLogger(__name__)
@@ -18,12 +17,14 @@ class DebugHud(GameObject):
     UI Component to display FPS and other debug information during gameplay.
     """
 
+    _asset_manager: AssetManager
     _game_clock: GameClock
 
-    def __init__(self, game_clock: GameClock):
+    def __init__(self, asset_manager: AssetManager, game_clock: GameClock):
         """
         Initializes a Debug Hud where `game_clock` controls how we measure time.
         """
+        self._asset_manager = asset_manager
         self._game_clock = game_clock
         self._background = Surface((1024, 20))
         self._background.fill((100, 100, 100))
@@ -55,4 +56,5 @@ class DebugHud(GameObject):
     @lru_cache()
     def _font(self) -> Font:
         font.init()
-        return Font(Path("assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 14)
+        return Font(
+            self._asset_manager.get_path("fonts/ubuntu-mono-v10-latin-regular.ttf"), 14)

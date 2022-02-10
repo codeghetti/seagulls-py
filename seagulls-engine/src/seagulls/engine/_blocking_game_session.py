@@ -1,8 +1,9 @@
 import logging
 
 import pygame
-from ._game_session import IGameSession
+
 from ._game_scene_manager import IProvideGameScenes
+from ._game_session import IGameSession
 
 logger = logging.getLogger(__name__)
 

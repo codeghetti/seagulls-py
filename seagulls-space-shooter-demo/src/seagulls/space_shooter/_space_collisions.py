@@ -40,8 +40,12 @@ class SpaceCollisions(GameObject):
                             _remove_lasers.append(laser)
                             _remove_rocks.append(rock)
 
+        _remove_lasers.sort(reverse=True)
+
         for laser in _remove_lasers:
             self._ship.remove_laser(laser)
+
+        _remove_rocks.sort(reverse=True)
 
         for rock in _remove_rocks:
             self._asteroid_field.remove_rock(rock)

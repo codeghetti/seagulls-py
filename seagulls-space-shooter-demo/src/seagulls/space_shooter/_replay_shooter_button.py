@@ -53,15 +53,13 @@ class ReplayShooterButton(GameObject):
         self._is_highlighted = Event()
         self._is_clicked = Event()
 
-        self._font = Font(asset_manager.get_path("fonts/kenvector-future.ttf"), 14)
-
     def tick(self) -> None:
         self._detect_state()
 
     def render(self, surface: Surface) -> None:
         button = self._get_background()
 
-        text = self._font.render("Play Again", True, (90, 90, 70))
+        text = self._get_font().render("Play Again", True, (90, 90, 70))
         text = pygame.transform.scale(
             text,
             (self._fit_to_screen.get_actual_surface_width() * text.get_width() / 1920,
@@ -73,6 +71,10 @@ class ReplayShooterButton(GameObject):
         button.blit(text, (10, padding))
 
         surface.blit(button, self._get_position())
+
+    @lru_cache()
+    def _get_font(self) -> Font:
+        return Font(self._asset_manager.get_path("fonts/kenvector-future.ttf"), 14)
 
     def _detect_state(self) -> None:
         rect = Rect(self._get_position(), (self._button_width, self._button_height))

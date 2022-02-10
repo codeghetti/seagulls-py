@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class ShipSelectionMenu(IGameScene):
-    _ship_catalog: Tuple[IShip, ...]
+    _catalog: ShipCatalog
     _surface_renderer: SurfaceRenderer
 
     _scene: IGameScene
@@ -50,7 +50,7 @@ class ShipSelectionMenu(IGameScene):
             background: GameObject,
             fit_to_screen: FitToScreen):
 
-        self._ship_catalog = catalog.ships
+        self._catalog = catalog
         self._surface_renderer = surface_renderer
         self._scene = scene
         self._asset_manager = asset_manager
@@ -63,7 +63,13 @@ class ShipSelectionMenu(IGameScene):
         self._game_objects.add(background)
         self._fit_to_screen = fit_to_screen
 
-        for ship in self._ship_catalog:
+        self._should_quit = Event()
+
+    def _get_ships(self) -> Tuple[IShip, ...]:
+        return self._catalog.ships
+
+    def start(self) -> None:
+        for ship in self._get_ships():
             self._game_objects.add(ShipButton(
                 ship,
                 self._scene,
@@ -73,9 +79,6 @@ class ShipSelectionMenu(IGameScene):
                 self._active_ship_manager,
                 self._fit_to_screen))
 
-        self._should_quit = Event()
-
-    def start(self) -> None:
         self._surface_renderer.start()
         self.tick()
 

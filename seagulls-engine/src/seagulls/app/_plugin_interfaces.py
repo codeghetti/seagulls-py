@@ -17,10 +17,16 @@ PluginType = TypeVar("PluginType", bound=ISeagullsApplicationPlugin)
 class IPluggableSeagullsApplication(Protocol):
 
     @abstractmethod
-    def register_plugin(self, plugin: ISeagullsApplicationPlugin) -> None: ...
+    def register_plugin(self, plugin: ISeagullsApplicationPlugin) -> None:
+        """
+        Do your thing.
+        """
 
     @abstractmethod
-    def get_plugin(self, plugin: Type[PluginType]) -> PluginType: ...
+    def get_plugin(self, plugin: Type[PluginType]) -> PluginType:
+        """
+        Do your thing.
+        """
 
 
 ApplicationType = TypeVar("ApplicationType", contravariant=True)
@@ -39,8 +45,10 @@ class ISeagullsApplicationPluginRegistrant(Protocol[ApplicationType]):
 
 class ILocatePluginRegistrants(Protocol):
     @abstractmethod
-    def entry_points(
-            self, group: str) -> Tuple[Type[ISeagullsApplicationPluginRegistrant], ...]: ...
+    def entry_points(self, group: str) -> Tuple[Type[ISeagullsApplicationPluginRegistrant], ...]:
+        """
+        Do your thing.
+        """
 
 
 class ISeagullsPluginClient(Protocol):
@@ -53,4 +61,7 @@ class ISeagullsPluginClient(Protocol):
 
 
 class EntryPointsCallback(Protocol):
-    def __call__(self, group: str) -> Tuple[Any]: ...
+    def __call__(self, group: str) -> Tuple[Any]:
+        """
+        Do your thing.
+        """

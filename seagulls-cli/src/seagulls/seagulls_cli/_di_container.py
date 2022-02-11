@@ -4,7 +4,9 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Tuple
 
-from seagulls.app import SeagullsEntryPointsPluginsClient
+from importlib_metadata import entry_points
+
+from seagulls.app import SeagullsEntryPointsPluginsClient, SeagullsEntryPointsPluginSource
 from seagulls.cli import CliRequest, RequestEnvironment
 
 from ._application import SeagullsCliApplication
@@ -38,7 +40,10 @@ class SeagullsAppDiContainer:
 
     @lru_cache()
     def _plugin_client(self) -> SeagullsEntryPointsPluginsClient:
-        return SeagullsEntryPointsPluginsClient("seagulls.plugins")
+        return SeagullsEntryPointsPluginsClient(
+            entrypoint_source=SeagullsEntryPointsPluginSource(entry_points),
+            entrypoint_name="seagulls.plugins",
+        )
 
     @lru_cache()
     def _container_registry(self) -> DiContainerRepository:

@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Protocol, Type, TypeVar, runtime_checkable
+from typing import Protocol, Tuple, Type, TypeVar, runtime_checkable
 
 
 class ISeagullsApplicationPlugin(Protocol):
@@ -26,15 +26,6 @@ class IPluggableSeagullsApplication(Protocol):
 ApplicationType = TypeVar("ApplicationType", contravariant=True)
 
 
-class ISeagullsPluginClient(Protocol):
-
-    @abstractmethod
-    def register_plugins(self, application: ApplicationType) -> None:
-        """
-        Find all plugins and let them register plugins to the running application.
-        """
-
-
 @runtime_checkable
 class ISeagullsApplicationPluginRegistrant(Protocol[ApplicationType]):
 
@@ -43,4 +34,19 @@ class ISeagullsApplicationPluginRegistrant(Protocol[ApplicationType]):
     def register_plugins(application: ApplicationType) -> None:
         """
         Called at the start of the process for plugin devs to register their plugins in the app.
+        """
+
+
+class ILocatePluginRegistrants(Protocol):
+    @abstractmethod
+    def entry_points(
+            self, group: str) -> Tuple[Type[ISeagullsApplicationPluginRegistrant], ...]: ...
+
+
+class ISeagullsPluginClient(Protocol):
+
+    @abstractmethod
+    def register_plugins(self, application: ApplicationType) -> None:
+        """
+        Find all plugins and let them register plugins to the running application.
         """

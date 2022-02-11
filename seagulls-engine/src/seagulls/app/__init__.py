@@ -6,6 +6,7 @@ from ._plugin_client import (
 from ._plugin_exceptions import InvalidPluginError
 from ._plugin_interfaces import (
     ApplicationType,
+    EntryPointsCallback,
     IPluggableSeagullsApplication,
     ISeagullsApplicationPlugin,
     ISeagullsApplicationPluginRegistrant,
@@ -26,6 +27,7 @@ __all__ = [
     "IPluggableSeagullsApplication",
     "ISeagullsPluginClient",
     "ISeagullsApplicationPluginRegistrant",
+    "EntryPointsCallback",
     # Exceptions
     "InvalidPluginError",
 ]

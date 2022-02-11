@@ -1,7 +1,10 @@
 import pytest
 
-from seagulls.seagulls_cli._container_repository import DiContainerRepository, \
-    DiContainerNotFoundError, DuplicateDiContainerKeyError
+from seagulls.seagulls_cli._container_repository import (
+    DiContainerNotFoundError,
+    DiContainerRepository,
+    DuplicateDiContainerKeyError
+)
 
 
 class Something:

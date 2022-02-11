@@ -5,8 +5,10 @@ from pathlib import Path
 from typing import Tuple
 
 from importlib_metadata import entry_points
-
-from seagulls.app import SeagullsEntryPointsPluginsClient, SeagullsEntryPointsPluginSource
+from seagulls.app import (
+    SeagullsEntryPointsPluginsClient,
+    SeagullsEntryPointsPluginSource
+)
 from seagulls.cli import CliRequest, RequestEnvironment
 
 from ._application import SeagullsCliApplication

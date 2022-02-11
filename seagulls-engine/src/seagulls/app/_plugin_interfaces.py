@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Protocol, Tuple, Type, TypeVar, runtime_checkable
+from typing import Any, Protocol, Tuple, Type, TypeVar, runtime_checkable
 
 
 class ISeagullsApplicationPlugin(Protocol):
@@ -50,3 +50,7 @@ class ISeagullsPluginClient(Protocol):
         """
         Find all plugins and let them register plugins to the running application.
         """
+
+
+class EntryPointsCallback(Protocol):
+    def __call__(self, group: str) -> Tuple[Any]: ...

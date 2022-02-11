@@ -1,3 +1,4 @@
+# type: ignore
 from abc import abstractmethod
 from typing import Any, Dict, Tuple, Type
 

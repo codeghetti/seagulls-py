@@ -4,7 +4,6 @@ from typing import Any, Dict, Tuple, Type
 import pytest
 
 from seagulls.app import (
-    ApplicationType,
     ISeagullsApplicationPluginRegistrant,
     SeagullsEntryPointsPluginsClient
 )

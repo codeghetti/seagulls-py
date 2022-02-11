@@ -1,15 +1,5 @@
 from importlib_metadata import EntryPoint
 
-from ._plugin_interfaces import ISeagullsApplicationPlugin
-
-
-class DuplicatePluginError(RuntimeError):
-    plugin: ISeagullsApplicationPlugin
-
-    def __init__(self, plugin: ISeagullsApplicationPlugin):
-        super().__init__(f"Duplicate plugin registration detected: {type(plugin)}")
-        self.plugin = plugin
-
 
 class InvalidPluginError(RuntimeError):
     entry_point: EntryPoint

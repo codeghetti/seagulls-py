@@ -1,5 +1,8 @@
 from ._app_interfaces import ISeagullsApplication
-from ._plugin_client import SeagullsEntryPointsPluginsClient, SeagullsEntryPointsPluginSource
+from ._plugin_client import (
+    SeagullsEntryPointsPluginsClient,
+    SeagullsEntryPointsPluginSource
+)
 from ._plugin_exceptions import InvalidPluginError
 from ._plugin_interfaces import (
     ApplicationType,

@@ -26,7 +26,7 @@ class ScoreOverlay(GameObject):
         pass
 
     def render(self, surface: Surface) -> None:
-        img = self._font().render(
+        img = self._get_font().render(
             f"Score: {self._score_tracker.get_score()}",
             True,
             "red", "black"
@@ -42,5 +42,5 @@ class ScoreOverlay(GameObject):
         self._score_tracker.reset()
 
     @lru_cache()
-    def _font(self) -> Font:
+    def _get_font(self) -> Font:
         return Font(self._asset_manager.get_path("fonts/ubuntu-mono-v10-latin-regular.ttf"), 18)

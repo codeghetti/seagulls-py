@@ -8,14 +8,14 @@ class IProvideActiveScene(ABC):
 
     @abstractmethod
     def apply(self, callback: Callable[[IGameScene], None]):
-        pass
+        """Call a callback with the active scene"""
 
 
 class ISetActiveScene(ABC):
 
     @abstractmethod
     def set_active_scene(self, scene: IGameScene) -> None:
-        pass
+        """Update the active scene"""
 
 
 class ActiveSceneClient(IProvideActiveScene, ISetActiveScene):

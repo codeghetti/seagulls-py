@@ -34,8 +34,8 @@ class ScoreOverlay(GameObject):
         surface.blit(
             img,
             (
-                self._fit_to_screen.get_x_boundaries().y - self._position_buffer,
-                self._fit_to_screen.get_y_boundaries().y - 30
+                self._fit_to_screen.get_x_boundaries()[1] - self._position_buffer,
+                self._fit_to_screen.get_y_boundaries()[1] - 30
             ))
 
     def reset(self) -> None:

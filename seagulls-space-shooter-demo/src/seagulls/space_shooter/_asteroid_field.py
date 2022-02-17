@@ -61,9 +61,9 @@ class AsteroidField(GameObject):
         ship_laser_buffer = 70
         return Vector2(
             random.randint(
-                int(self._fit_to_screen.get_x_boundaries().x + ship_laser_buffer),
-                int(self._fit_to_screen.get_x_boundaries().y - 125 - ship_laser_buffer)),
-            int(self._fit_to_screen.get_y_boundaries().x - 100))
+                int(self._fit_to_screen.get_x_boundaries()[0] + ship_laser_buffer),
+                int(self._fit_to_screen.get_x_boundaries()[1] - 125 - ship_laser_buffer)),
+            int(self._fit_to_screen.get_y_boundaries()[0] - 100))
 
     def get_asteroid_field_size(self) -> int:
         return len(self._asteroid_field)

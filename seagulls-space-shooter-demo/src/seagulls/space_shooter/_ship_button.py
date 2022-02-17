@@ -174,10 +174,10 @@ class ShipButton(GameObject):
         return "normal"
 
     def _get_position(self) -> Tuple[int, int]:
-        left = int(self._fit_to_screen.get_x_boundaries().x +
+        left = int(self._fit_to_screen.get_x_boundaries()[0] +
                    (self._fit_to_screen.get_actual_surface_width() / 3)) + self._ship.offset()
 
-        top = int(self._fit_to_screen.get_y_boundaries().x +
+        top = int(self._fit_to_screen.get_y_boundaries()[0] +
                   self._fit_to_screen.get_actual_surface_height() / 3)
 
         if self._is_clicked.is_set():

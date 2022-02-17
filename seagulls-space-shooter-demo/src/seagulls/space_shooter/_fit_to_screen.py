@@ -2,7 +2,6 @@ from functools import lru_cache
 from typing import Tuple
 
 import pygame
-from seagulls.engine import Vector2
 
 
 class FitToScreen:

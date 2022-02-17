@@ -138,6 +138,7 @@ class ShipSelectionMenuFactory:
         self.background = background
         self._fit_to_screen = fit_to_screen
 
+    @lru_cache()
     def get_instance(self, scene: IGameScene) -> ShipSelectionMenu:
         return ShipSelectionMenu(
             self._ship_catalog,

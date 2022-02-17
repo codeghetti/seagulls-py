@@ -1,9 +1,7 @@
 import logging
 import random
-from functools import lru_cache
 from typing import List
 
-import pygame
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
@@ -79,10 +77,6 @@ class AsteroidField(GameObject):
 
     def get_rock_position_y(self, rock_number: int) -> float:
         return self._asteroid_field[rock_number].get_rock_position_y()
-
-    @lru_cache()
-    def _get_display_width(self) -> int:
-        return pygame.display.Info().current_w
 
     def remove_rock(self, rock_number: int) -> None:
         self._asteroid_field.pop(rock_number)

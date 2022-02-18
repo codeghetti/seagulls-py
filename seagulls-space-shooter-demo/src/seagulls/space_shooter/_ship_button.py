@@ -57,15 +57,13 @@ class ShipButton(GameObject):
         self._is_highlighted = Event()
         self._is_clicked = Event()
 
-        self._font = Font(self._asset_manager.get_path("fonts/kenvector-future.ttf"), 14)
-
     def tick(self) -> None:
         self._detect_state()
 
     def render(self, surface: Surface) -> None:
         button = self._get_background()
 
-        text = self._font.render(self._ship.display_name(), True, (90, 90, 70))
+        text = self._get_font().render(self._ship.display_name(), True, (90, 90, 70))
         text = pygame.transform.scale(
             text,
             (self._fit_to_screen.get_actual_surface_width() * text.get_width() / 1920,
@@ -76,16 +74,16 @@ class ShipButton(GameObject):
 
         ship_sprite = self._get_ship_sprite()
 
-        ship_velocity = self._font.render("Velocity: " + str(self._ship.velocity()), True,
-                                          "red", "black")
+        ship_velocity = self._get_font().render(
+            "Velocity: " + str(self._ship.velocity()), True, "red", "black")
         ship_velocity = pygame.transform.scale(
             ship_velocity,
             (self._fit_to_screen.get_actual_surface_width() * ship_velocity.get_width() / 1920,
              self._fit_to_screen.get_actual_surface_height() * ship_velocity.get_height() / 1080
              ))
 
-        ship_power = self._font.render("Power: " + str(self._ship.power()), True,
-                                       "red", "black")
+        ship_power = self._get_font().render(
+            "Power: " + str(self._ship.power()), True, "red", "black")
         ship_power = pygame.transform.scale(
             ship_power,
             (self._fit_to_screen.get_actual_surface_width() * ship_power.get_width() / 1920,
@@ -126,6 +124,10 @@ class ShipButton(GameObject):
 
     def _get_background(self) -> Surface:
         return self._get_background_map()[self._get_state_name()]
+
+    @lru_cache()
+    def _get_font(self) -> Font:
+        return Font(self._asset_manager.get_path("fonts/kenvector-future.ttf"), 14)
 
     @lru_cache()
     def _get_background_map(self) -> Dict[str, Surface]:
@@ -172,10 +174,10 @@ class ShipButton(GameObject):
         return "normal"
 
     def _get_position(self) -> Tuple[int, int]:
-        left = int(self._fit_to_screen.get_x_boundaries().x +
+        left = int(self._fit_to_screen.get_x_boundaries()[0] +
                    (self._fit_to_screen.get_actual_surface_width() / 3)) + self._ship.offset()
 
-        top = int(self._fit_to_screen.get_y_boundaries().x +
+        top = int(self._fit_to_screen.get_y_boundaries()[0] +
                   self._fit_to_screen.get_actual_surface_height() / 3)
 
         if self._is_clicked.is_set():

@@ -1,9 +1,7 @@
 import logging
 import random
-from functools import lru_cache
 from typing import List
 
-import pygame
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
@@ -61,9 +59,9 @@ class AsteroidField(GameObject):
         ship_laser_buffer = 70
         return Vector2(
             random.randint(
-                int(self._fit_to_screen.get_x_boundaries().x + ship_laser_buffer),
-                int(self._fit_to_screen.get_x_boundaries().y - 125 - ship_laser_buffer)),
-            int(self._fit_to_screen.get_y_boundaries().x - 100))
+                int(self._fit_to_screen.get_x_boundaries()[0] + ship_laser_buffer),
+                int(self._fit_to_screen.get_x_boundaries()[1] - 125 - ship_laser_buffer)),
+            int(self._fit_to_screen.get_y_boundaries()[0] - 100))
 
     def get_asteroid_field_size(self) -> int:
         return len(self._asteroid_field)
@@ -79,10 +77,6 @@ class AsteroidField(GameObject):
 
     def get_rock_position_y(self, rock_number: int) -> float:
         return self._asteroid_field[rock_number].get_rock_position_y()
-
-    @lru_cache()
-    def _get_display_width(self) -> int:
-        return pygame.display.Info().current_w
 
     def remove_rock(self, rock_number: int) -> None:
         self._asteroid_field.pop(rock_number)

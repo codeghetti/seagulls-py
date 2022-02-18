@@ -1,21 +1,21 @@
 from functools import lru_cache
+from typing import Tuple
 
 import pygame
-from seagulls.engine import Vector2
 
 
 class FitToScreen:
 
     @lru_cache()
-    def get_x_boundaries(self) -> Vector2:
-        return Vector2(
+    def get_x_boundaries(self) -> Tuple[float, float]:
+        return (
             self.get_x_padding(),
             self.get_x_padding() + self.get_actual_surface_width()
         )
 
     @lru_cache()
-    def get_y_boundaries(self) -> Vector2:
-        return Vector2(
+    def get_y_boundaries(self) -> Tuple[float, float]:
+        return (
             self.get_y_padding(),
             self.get_y_padding() + self.get_actual_surface_height()
         )

@@ -5,4 +5,4 @@ class ICheckGameRules(ABC):
 
     @abstractmethod
     def check(self) -> None:
-        pass
+        """This should check the game rule to see if it has been met"""

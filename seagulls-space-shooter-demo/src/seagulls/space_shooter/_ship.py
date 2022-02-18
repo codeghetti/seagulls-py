@@ -93,11 +93,11 @@ class Ship(GameObject):
 
         self._position = self._position + (self._velocity * delta / 10)
 
-        if self._position.x < self._fit_to_screen.get_x_boundaries().x:
-            self._position.x = self._fit_to_screen.get_x_boundaries().x
+        if self._position.x < self._fit_to_screen.get_x_boundaries()[0]:
+            self._position.x = self._fit_to_screen.get_x_boundaries()[0]
 
-        if self._position.x > self._fit_to_screen.get_x_boundaries().y - self._get_ship_width():
-            self._position.x = self._fit_to_screen.get_x_boundaries().y - self._get_ship_width()
+        if self._position.x > self._fit_to_screen.get_x_boundaries()[1] - self._get_ship_width():
+            self._position.x = self._fit_to_screen.get_x_boundaries()[1] - self._get_ship_width()
 
         for laser in self._lasers:
             laser.tick()
@@ -152,8 +152,9 @@ class Ship(GameObject):
     @lru_cache()
     def _get_start_position(self) -> Vector2:
         return Vector2(
-            (self._fit_to_screen.get_x_boundaries().y - self._fit_to_screen.get_x_boundaries().x)/2,
-            self._fit_to_screen.get_y_boundaries().y - self._get_ship_height())
+            (self._fit_to_screen.get_x_boundaries()[1]
+             - self._fit_to_screen.get_x_boundaries()[0]) / 2,
+            self._fit_to_screen.get_y_boundaries()[1] - self._get_ship_height())
 
     @lru_cache()
     def _get_ship_width(self) -> float:

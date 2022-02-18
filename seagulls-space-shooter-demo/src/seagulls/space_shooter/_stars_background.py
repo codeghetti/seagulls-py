@@ -23,7 +23,7 @@ class SimpleStarsBackground(GameObject):
         self._fit_to_screen = fit_to_screen
 
     def tick(self) -> None:
-        pass
+        """This method is called every frame to update the game object"""
 
     def render(self, surface: Surface) -> None:
         background = self._get_cached_background()

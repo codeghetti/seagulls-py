@@ -23,7 +23,7 @@ class ScoreOverlay(GameObject):
         self._fit_to_screen = fit_to_screen
 
     def tick(self) -> None:
-        pass
+        """This method updates the game object each frame"""
 
     def render(self, surface: Surface) -> None:
         img = self._get_font().render(

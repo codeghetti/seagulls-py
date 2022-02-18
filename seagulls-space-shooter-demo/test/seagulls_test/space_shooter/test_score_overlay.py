@@ -7,5 +7,5 @@ class TestScoreOverlay:
         ScoreOverlay(
             "asset_manager",
             "score_tracker",
-            "fit_to_screen:"
+            "fit_to_screen"
         )

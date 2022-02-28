@@ -1,5 +1,4 @@
 # type: ignore
-from abc import abstractmethod
 from typing import Any, Dict, Tuple, Type
 
 import pytest
@@ -14,7 +13,6 @@ from seagulls.app._plugin_exceptions import InvalidPluginError
 
 class FakeRegistrant:
     @staticmethod
-    @abstractmethod
     def register_plugins(application: Dict) -> None:
         application["loaded-plugin"] = True
 

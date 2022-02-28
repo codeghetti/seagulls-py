@@ -29,6 +29,7 @@ from ._score_tracker import ScoreTracker
 from ._selectable_ship_menu import ShipSelectionMenuFactory
 from ._ship import Ship
 from ._ship_catalog import ShipCatalog
+from ._ship_state_client import ShipStateClient
 from ._shooter_scene import ShooterScene
 from ._space_collisions import SpaceCollisions
 from ._stars_background import SimpleStarsBackground
@@ -75,11 +76,13 @@ class SpaceShooterDiContainer:
             asteroid_field=self._asteroid_field(),
             space_collisions=self._space_collisions(),
             score_overlay=self._score_overlay(),
+            score_tracker=self._score_tracker(),
             game_controls=self._game_controls(),
             game_over_scene_factory=self._game_over_scene_factory(),
             replay_button_factory=self._replay_button_factory(),
             ship_selection_menu_factory=self._ship_selection_menu_factory(),
-            fit_to_screen=self._fit_to_screen()
+            fit_to_screen=self._fit_to_screen(),
+            ship_state_client=self._ship_state_client()
         )
 
     @lru_cache()
@@ -155,8 +158,13 @@ class SpaceShooterDiContainer:
             clock=self._game_clock(),
             asset_manager=self._asset_manager(),
             game_controls=self._game_controls(),
-            fit_to_screen=self._fit_to_screen()
+            fit_to_screen=self._fit_to_screen(),
+            ship_state_client=self._ship_state_client()
         )
+
+    @lru_cache()
+    def _ship_state_client(self) -> ShipStateClient:
+        return ShipStateClient()
 
     @lru_cache()
     def _active_scene_client(self) -> ActiveSceneClient:

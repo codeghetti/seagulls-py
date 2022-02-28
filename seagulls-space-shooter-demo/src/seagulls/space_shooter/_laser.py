@@ -18,15 +18,12 @@ class Laser(GameObject):
             self,
             clock: GameClock,
             asset_manager: AssetManager,
-            ship_position: Vector2,
-            ship_width: float,
+            laser_position: Vector2,
             fit_to_screen: FitToScreen):
         self._clock = clock
         self._asset_manager = asset_manager
         self._fit_to_screen = fit_to_screen
-        self._position = Vector2(
-            ship_position.x + (ship_width / 2),
-            ship_position.y - self._get_laser_height())
+        self._position = laser_position
         self._velocity = Vector2(0, 8)
 
     def tick(self) -> None:

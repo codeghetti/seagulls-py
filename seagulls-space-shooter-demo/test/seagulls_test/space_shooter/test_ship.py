@@ -9,5 +9,6 @@ class TestShip:
             "clock",
             "asset_manager",
             "game_controls",
-            "fit_to_screen"
+            "fit_to_screen",
+            "ship_state_client"
         )

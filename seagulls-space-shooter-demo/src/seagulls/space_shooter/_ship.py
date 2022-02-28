@@ -17,6 +17,7 @@ from seagulls.engine import (
 from ._fit_to_screen import FitToScreen
 from ._laser import Laser
 from ._ship_interfaces import IProvideActiveShip
+from ._ship_state_client import ShipStateClient
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,8 @@ class Ship(GameObject):
     _lasers: List[Laser]
     _is_new_game: bool
     _fit_to_screen: FitToScreen
+    _ship_state_client: ShipStateClient
+    _powered_up: bool
 
     def __init__(
             self,
@@ -39,7 +42,8 @@ class Ship(GameObject):
             clock: GameClock,
             asset_manager: AssetManager,
             game_controls: GameControls,
-            fit_to_screen: FitToScreen):
+            fit_to_screen: FitToScreen,
+            ship_state_client: ShipStateClient):
         self._active_ship_manager = active_ship_manager
         self._clock = clock
         self._asset_manager = asset_manager
@@ -49,6 +53,8 @@ class Ship(GameObject):
         self._velocity = Vector2(0, 0)
         self._max_velocity = 7.0
         self._lasers = []
+        self._ship_state_client = ship_state_client
+        self._powered_up = False
 
     def tick(self) -> None:
         self._max_velocity = self._active_ship_manager.get_active_ship().velocity()
@@ -79,13 +85,10 @@ class Ship(GameObject):
             self._velocity.x = 0.0
 
         if self._game_controls.should_fire():
-            self._lasers.append(
-                Laser(
-                    self._clock,
-                    self._asset_manager,
-                    self._position,
-                    self._get_ship_width(),
-                    self._fit_to_screen))
+            if self._ship_state_client.is_powered_up():
+                self._fire_triple_laser()
+            else:
+                self._fire_center_laser()
 
             self._laser_sound().play()
 
@@ -101,6 +104,46 @@ class Ship(GameObject):
 
         for laser in self._lasers:
             laser.tick()
+
+    def _fire_triple_laser(self):
+        ship_width = self._get_ship_width()
+        laser_width_offset = self._get_laser_width() / 2
+
+        left_wing_laser = Laser(
+            self._clock,
+            self._asset_manager,
+            Vector2(self._position.x - laser_width_offset, self._position.y),
+            self._fit_to_screen)
+
+        right_wing_laser = Laser(
+            self._clock,
+            self._asset_manager,
+            Vector2(self._position.x + ship_width - laser_width_offset, self._position.y),
+            self._fit_to_screen)
+
+        self._fire_center_laser()
+        self._lasers.append(left_wing_laser)
+        self._lasers.append(right_wing_laser)
+
+    def _fire_center_laser(self):
+        ship_width = self._get_ship_width()
+        laser_width_offset = self._get_laser_width() / 2
+        self._lasers.append(
+            Laser(
+                self._clock,
+                self._asset_manager,
+                Vector2(
+                    self._position.x + (ship_width / 2) - laser_width_offset,
+                    self._position.y - self._get_laser_height()),
+                self._fit_to_screen))
+
+    @lru_cache()
+    def _get_laser_height(self) -> float:
+        return self._fit_to_screen.get_actual_surface_height() * 54 / 1080
+
+    @lru_cache()
+    def _get_laser_width(self) -> float:
+        return self._fit_to_screen.get_actual_surface_width() * 9 / 1920
 
     def render(self, surface: Surface) -> None:
         ship_sprite = self._get_ship_sprite()

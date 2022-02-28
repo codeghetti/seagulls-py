@@ -23,9 +23,12 @@ from ._fit_to_screen import FitToScreen
 from ._game_over_scene import GameOverSceneFactory
 from ._replay_shooter_button import ReplayButtonFactory
 from ._score_overlay import ScoreOverlay
+from ._score_tracker import ScoreTracker
 from ._selectable_ship_menu import ShipSelectionMenuFactory
 from ._ship import Ship
 from ._ship_destroyed_rule import ShipDestroyedRule
+from ._ship_powered_up_rule import ShipPoweredUpRule
+from ._ship_state_client import ShipStateClient
 from ._shooter_scene_client import ShooterSceneState, ShooterSceneStateClient
 
 logger = logging.getLogger(__name__)
@@ -43,9 +46,11 @@ class ShooterScene(IGameScene):
     _should_quit: Event
 
     _state_client: ShooterSceneStateClient
+    _ship_state_client: ShipStateClient
     _game_rules: Tuple[ICheckGameRules, ...]
     _background: GameObject
     _score_overlay: ScoreOverlay
+    _score_tracker: ScoreTracker
     _game_over_scene_factory: GameOverSceneFactory
     _replay_button_factory: ReplayButtonFactory
     _ship_selection_menu_factory: ShipSelectionMenuFactory
@@ -63,11 +68,13 @@ class ShooterScene(IGameScene):
             asteroid_field: AsteroidField,
             space_collisions: GameObject,
             score_overlay: ScoreOverlay,
+            score_tracker: ScoreTracker,
             game_controls: GameControls,
             game_over_scene_factory: GameOverSceneFactory,
             replay_button_factory: ReplayButtonFactory,
             ship_selection_menu_factory: ShipSelectionMenuFactory,
-            fit_to_screen: FitToScreen):
+            fit_to_screen: FitToScreen,
+            ship_state_client: ShipStateClient):
 
         self._surface_renderer = surface_renderer
         self._asset_manager = asset_manager
@@ -75,6 +82,7 @@ class ShooterScene(IGameScene):
         self._game_controls = game_controls
         self._background = background
         self._score_overlay = score_overlay
+        self._score_tracker = score_tracker
         self._game_over_scene_factory = game_over_scene_factory
         self._replay_button_factory = replay_button_factory
         self._ship_selection_menu_factory = ship_selection_menu_factory
@@ -92,9 +100,11 @@ class ShooterScene(IGameScene):
         self._game_objects.add(self._asteroid_field)
 
         self._state_client = ShooterSceneStateClient()
+        self._ship_state_client = ship_state_client
         self._game_rules = tuple([
             AsteroidMissedRule(self._state_client, asteroid_field, self._fit_to_screen),
             ShipDestroyedRule(self._state_client, asteroid_field, ship, self._fit_to_screen),
+            ShipPoweredUpRule(self._ship_state_client, self._score_tracker)
         ])
 
         self._should_quit = Event()

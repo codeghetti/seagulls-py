@@ -3,7 +3,6 @@ from functools import lru_cache
 from typing import Any, Callable, Dict, List, Type
 
 from seagulls.app import (
-    DuplicatePluginError,
     IPluggableSeagullsApplication,
     ISeagullsApplication,
     ISeagullsApplicationPlugin,
@@ -88,3 +87,11 @@ class SeagullsCliApplication(
     def _apply_to_plugins(self, callback: Callable[[PluginType], None]) -> None:
         for plugin in self._plugins.values():
             callback(plugin)
+
+
+class DuplicatePluginError(RuntimeError):
+    plugin: ISeagullsApplicationPlugin
+
+    def __init__(self, plugin: ISeagullsApplicationPlugin):
+        super().__init__(f"Duplicate plugin registration detected: {type(plugin)}")
+        self.plugin = plugin

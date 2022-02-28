@@ -1,5 +1,9 @@
 """Core Engine Components"""
-from ._active_scene_client import ActiveSceneClient, ISetActiveScene
+from ._active_scene_client import (
+    ActiveSceneClient,
+    IProvideActiveScene,
+    ISetActiveScene
+)
 from ._basic_scene_manager import BasicSceneManager
 from ._blocking_game_session import BlockingGameSession
 from ._collisions import CollidableObject, flag_from_string
@@ -20,6 +24,7 @@ __all__ = [
     "flag_from_string",
     "CollidableObject",
     "IGameScene",
+    "IProvideActiveScene",
     "IProvideGameScenes",
     "IProvideGameSessions",
     "IGameSession",

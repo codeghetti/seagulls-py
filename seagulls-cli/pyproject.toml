@@ -13,9 +13,10 @@ python = "^3.8"
 seagulls-engine = { version = "*", allow-prereleases = true }
 # These are only needed during development
 seagulls-devtools = { version = "*", optional = true, allow-prereleases = true }
+pytest = "*"
 
 [tool.poetry.extras]
-dev = ["seagulls-devtools"]
+dev = ["seagulls-devtools", "pytest"]
 
 [tool.poetry.dev-dependencies]
 seagulls-engine = { path = "../seagulls-engine/", develop = true, optional = true }

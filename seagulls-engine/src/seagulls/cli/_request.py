@@ -26,10 +26,16 @@ class RequestEnvironment:
 class ICliCommand(Protocol):
 
     @abstractmethod
-    def configure_parser(self, parser: ArgumentParser) -> None: ...
+    def configure_parser(self, parser: ArgumentParser) -> None:
+        """
+        Do your thing.
+        """
 
     @abstractmethod
-    def execute(self) -> None: ...
+    def execute(self) -> None:
+        """
+        Do your thing.
+        """
 
 
 class CliRequestRegistrationEvent:

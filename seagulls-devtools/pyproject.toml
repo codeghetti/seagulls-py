@@ -22,12 +22,14 @@ flake8 = "*"
 flake8-isort = "*"
 mypy = "*"
 seagulls-cli = { version = "", allow-prereleases = true}
+seagulls-engine = { version = "", allow-prereleases = true}
 
 [tool.poetry.extras]
 # Every package needs a `dev` extra for CI to pass but we don't actually need any other packages.
 dev = []
 
 [tool.poetry.dev-dependencies]
+seagulls-engine = { path = "../seagulls-engine/", develop = true }
 seagulls-cli = { path = "../seagulls-cli/", develop = true }
 
 [tool.poetry.plugins."seagulls.plugins"]

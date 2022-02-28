@@ -1,5 +1,5 @@
-from ._score_tracker import ScoreTracker
 from ._check_game_rules_interface import ICheckGameRules
+from ._score_tracker import ScoreTracker
 from ._ship_state_client import ShipStateClient
 
 

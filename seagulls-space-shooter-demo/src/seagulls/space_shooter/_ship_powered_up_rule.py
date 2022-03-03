@@ -19,4 +19,4 @@ class ShipPoweredUpRule(ICheckGameRules):
             self._state_client.update_state(True)
 
     def _score_threshold_check(self) -> bool:
-        return self._score_tracker.get_score() >= 75
+        return self._score_tracker.get_score() >= 20

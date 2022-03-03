@@ -1,3 +1,4 @@
+from functools import lru_cache
 from pathlib import Path
 
 from pygame.image import load
@@ -14,6 +15,7 @@ class AssetManager:
     def __init__(self, assets_path: Path):
         self._assets_path = assets_path
 
+    @lru_cache()
     def load_sprite(self, name: str) -> Surface:
         return self.load_png(f"sprites/{name}")
 

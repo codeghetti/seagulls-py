@@ -1,10 +1,12 @@
-from functools import lru_cache
+import logging
 
 import pygame
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameObject, Surface, Vector2
 
 from ._fit_to_screen import FitToScreen
+
+logger = logging.getLogger(__name__)
 
 
 class Laser(GameObject):
@@ -40,7 +42,6 @@ class Laser(GameObject):
 
         surface.blit(laser_sprite, self._position)
 
-    @lru_cache()
     def _get_cached_laser(self) -> Surface:
         return self._asset_manager.load_sprite("space-shooter/laser-red").copy()
 
@@ -50,14 +51,12 @@ class Laser(GameObject):
     def get_laser_position_y(self) -> float:
         return self._position.y
 
-    @lru_cache()
     def _get_laser_width(self) -> float:
         return (
                 self._fit_to_screen.get_actual_surface_width() *
                 self._get_cached_laser().get_width() /
                 1920)
 
-    @lru_cache()
     def _get_laser_height(self) -> float:
         return (self._fit_to_screen.get_actual_surface_height() *
                 self._get_cached_laser().get_height()

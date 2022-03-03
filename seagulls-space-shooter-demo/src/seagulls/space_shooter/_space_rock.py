@@ -1,5 +1,4 @@
 import logging
-from functools import lru_cache
 from typing import Tuple
 
 import pygame.transform
@@ -45,7 +44,6 @@ class SpaceRock(GameObject):
         else:
             surface.blit(self._get_cached_rock_large(), self._position)
 
-    @lru_cache()
     def _get_cached_rock_small(self) -> Surface:
         sprite = self._asset_manager.load_sprite("space-shooter/rock-small").copy()
         sprite = pygame.transform.scale(
@@ -56,7 +54,6 @@ class SpaceRock(GameObject):
         )
         return sprite
 
-    @lru_cache()
     def _get_cached_rock_med(self) -> Surface:
         sprite = self._asset_manager.load_sprite("space-shooter/rock-med").copy()
         sprite = pygame.transform.scale(
@@ -68,7 +65,6 @@ class SpaceRock(GameObject):
 
         return sprite
 
-    @lru_cache()
     def _get_cached_rock_large(self) -> Surface:
         sprite = self._asset_manager.load_sprite("space-shooter/rock-large").copy()
         sprite = pygame.transform.scale(

@@ -33,6 +33,9 @@ class SpaceCollisions(GameObject):
         _remove_rocks = []
 
         for laser in range(self._ship.get_number_of_lasers()):
+            if not self._laser_on_screen_y(self._ship.get_laser_position_y(laser)):
+                _remove_lasers.append(laser)
+                continue
             for rock in range(self._asteroid_field.get_asteroid_field_size()):
                 if self._laser_rock_collision_check_x(laser, rock):
                     if self._laser_rock_collision_check_y(laser, rock):
@@ -43,6 +46,7 @@ class SpaceCollisions(GameObject):
         _remove_lasers.sort(reverse=True)
 
         for laser in _remove_lasers:
+
             self._ship.remove_laser(laser)
 
         _remove_rocks.sort(reverse=True)
@@ -77,3 +81,6 @@ class SpaceCollisions(GameObject):
     def _rock_collision_sound(self) -> mixer.Sound:
         mixer.init()
         return mixer.Sound(self._asset_manager.get_path("sounds/rock-explosion.ogg"))
+
+    def _laser_on_screen_y(self, laser_position_y: float) -> bool:
+        return laser_position_y + 1000 > 0

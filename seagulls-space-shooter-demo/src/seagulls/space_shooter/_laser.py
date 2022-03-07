@@ -34,7 +34,7 @@ class Laser(GameObject):
         self._position = self._position - (self._velocity * delta / 10)
 
     def render(self, surface: Surface) -> None:
-        laser_sprite = self._get_cached_laser()
+        laser_sprite = self._get_sprite()
 
         laser_sprite = pygame.transform.scale(
             laser_sprite,
@@ -42,7 +42,7 @@ class Laser(GameObject):
 
         surface.blit(laser_sprite, self._position)
 
-    def _get_cached_laser(self) -> Surface:
+    def _get_sprite(self) -> Surface:
         return self._asset_manager.load_sprite("space-shooter/laser-red").copy()
 
     def get_laser_position_x(self) -> float:
@@ -54,10 +54,10 @@ class Laser(GameObject):
     def _get_laser_width(self) -> float:
         return (
                 self._fit_to_screen.get_actual_surface_width() *
-                self._get_cached_laser().get_width() /
+                self._get_sprite().get_width() /
                 1920)
 
     def _get_laser_height(self) -> float:
         return (self._fit_to_screen.get_actual_surface_height() *
-                self._get_cached_laser().get_height()
+                self._get_sprite().get_height()
                 / 1080)

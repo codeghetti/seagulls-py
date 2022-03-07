@@ -38,13 +38,13 @@ class SpaceRock(GameObject):
 
     def render(self, surface: Surface) -> None:
         if self._rock_size[0] == 28:
-            surface.blit(self._get_cached_rock_small(), self._position)
+            surface.blit(self._get_small_sprite(), self._position)
         elif self._rock_size[0] == 45:
-            surface.blit(self._get_cached_rock_med(), self._position)
+            surface.blit(self._get_medium_sprite(), self._position)
         else:
-            surface.blit(self._get_cached_rock_large(), self._position)
+            surface.blit(self._get_large_sprite(), self._position)
 
-    def _get_cached_rock_small(self) -> Surface:
+    def _get_small_sprite(self) -> Surface:
         sprite = self._asset_manager.load_sprite("space-shooter/rock-small").copy()
         sprite = pygame.transform.scale(
             sprite,
@@ -54,7 +54,7 @@ class SpaceRock(GameObject):
         )
         return sprite
 
-    def _get_cached_rock_med(self) -> Surface:
+    def _get_medium_sprite(self) -> Surface:
         sprite = self._asset_manager.load_sprite("space-shooter/rock-med").copy()
         sprite = pygame.transform.scale(
             sprite,
@@ -65,7 +65,7 @@ class SpaceRock(GameObject):
 
         return sprite
 
-    def _get_cached_rock_large(self) -> Surface:
+    def _get_large_sprite(self) -> Surface:
         sprite = self._asset_manager.load_sprite("space-shooter/rock-large").copy()
         sprite = pygame.transform.scale(
             sprite,

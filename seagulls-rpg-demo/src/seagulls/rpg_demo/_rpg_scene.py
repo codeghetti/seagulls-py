@@ -1,5 +1,8 @@
 import logging
+from functools import lru_cache
 from threading import Event
+
+import pygame
 
 from seagulls.assets import AssetManager
 from seagulls.engine import (
@@ -11,6 +14,7 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
+from ._fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +27,7 @@ class RpgScene(IGameScene):
     _asset_manager: AssetManager
     _game_objects: GameObjectsCollection
     _should_quit: Event
+    _fit_to_screen: FitToScreen
 
     def __init__(
             self,
@@ -32,10 +37,12 @@ class RpgScene(IGameScene):
             asset_manager: AssetManager,
             background: GameObject,
             character: GameObject,
-            game_controls: GameControls):
+            game_controls: GameControls,
+            fit_to_screen: FitToScreen):
         self._surface_render = surface_renderer
         self._asset_manager = asset_manager
         self._game_controls = game_controls
+        self._fit_to_screen = fit_to_screen
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(clock)
@@ -65,5 +72,35 @@ class RpgScene(IGameScene):
     def _render(self) -> None:
         background = Surface((1024, 600))
         self._game_objects.apply(lambda x: x.render(background))
+        background = pygame.transform.scale(
+            background,
+            (
+                self._get_scaled_width(),
+                self._get_scaled_height()
+            )
+        )
+        screen_size_w = pygame.display.Info().current_w
+        screen_size_h = pygame.display.Info().current_h
+        screen = Surface((screen_size_w, screen_size_h))
+        screen.blit(background, (self._x_padding(), self._y_padding()))
+        self._surface_render.render(screen)
 
-        self._surface_render.render(background)
+    @lru_cache()
+    def _get_scaled_width(self) -> float:
+        return self._fit_to_screen.get_actual_surface_width() * 1024 * 1.8 / 1920
+
+    @lru_cache()
+    def _get_scaled_height(self) -> float:
+        return self._fit_to_screen.get_actual_surface_height() * 600 * 1.8 / 1080
+
+    def _x_padding(self) -> float:
+        screen_size_w = pygame.display.Info().current_w
+        playable_w = self._get_scaled_width()
+        padding = (screen_size_w - playable_w) / 2
+        return padding
+
+    def _y_padding(self) -> float:
+        screen_size_h = pygame.display.Info().current_h
+        playabe_h = self._get_scaled_height()
+        padding = (screen_size_h - playabe_h) / 2
+        return padding

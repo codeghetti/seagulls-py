@@ -18,6 +18,7 @@ from ._character import Character
 from ._cli_command import GameCliCommand
 from ._cli_plugin import RpgDemoCliPlugin
 from ._debug_hud import DebugHud
+from ._fit_to_screen import FitToScreen
 from ._rpg_background import SimpleRpgBackground
 from ._rpg_scene import RpgScene
 
@@ -69,6 +70,7 @@ class RpgDemoDiContainer:
             background=self._background(),
             character=self._character(),
             game_controls=self._game_controls(),
+            fit_to_screen=self._fit_to_screen()
         )
 
     @lru_cache()
@@ -82,6 +84,10 @@ class RpgDemoDiContainer:
             asset_manager=self._asset_manager(),
             game_controls=self._game_controls(),
         )
+
+    @lru_cache()
+    def _fit_to_screen(self) -> FitToScreen:
+        return FitToScreen()
 
     @lru_cache()
     def _surface_renderer(self) -> SurfaceRenderer:

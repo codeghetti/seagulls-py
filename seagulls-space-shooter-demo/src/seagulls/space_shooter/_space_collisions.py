@@ -53,7 +53,7 @@ class SpaceCollisions(GameObject):
             self._rock_collision_callback()
 
     def render(self, surface: Surface) -> None:
-        """"This method renders the game object every frame"""
+        pass
 
     def _laser_rock_collision_check_x(self, laser_number: int, rock_number: int) -> bool:
         return self._asteroid_field.get_rock_position_x(rock_number) <= \

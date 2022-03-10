@@ -3,7 +3,6 @@ from functools import lru_cache
 from threading import Event
 
 import pygame
-
 from seagulls.assets import AssetManager
 from seagulls.engine import (
     GameClock,
@@ -14,6 +13,7 @@ from seagulls.engine import (
     Surface,
     SurfaceRenderer
 )
+
 from ._fit_to_screen import FitToScreen
 
 logger = logging.getLogger(__name__)

@@ -186,14 +186,6 @@ class ShipButton(GameObject):
         return left, top
 
     @lru_cache()
-    def _get_display_width(self) -> int:
-        return pygame.display.Info().current_w
-
-    @lru_cache()
-    def _get_display_height(self) -> int:
-        return pygame.display.Info().current_h
-
-    @lru_cache()
     def _get_ship_sprite(self) -> Surface:
         sprite = self._asset_manager.load_sprite(self._ship.sprite()).copy()
         sprite = pygame.transform.scale(

@@ -2,7 +2,7 @@ import random
 from functools import lru_cache
 from typing import Any, Dict, List, Optional
 
-from pygame.rect import Rect
+from pygame import Rect
 from seagulls.assets import AssetManager
 from seagulls.engine import GameObject, Surface
 

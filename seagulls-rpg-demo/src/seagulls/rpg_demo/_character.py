@@ -12,7 +12,7 @@ from seagulls.engine import (
     Vector2
 )
 
-from seagulls.rpg_demo._homes_and_trees import HomesAndTrees
+from ._homes_and_trees import HomesAndTrees
 
 logger = logging.getLogger(__name__)
 

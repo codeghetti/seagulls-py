@@ -1,6 +1,6 @@
 import logging
 from functools import lru_cache
-from typing import Dict
+from typing import Dict, List
 
 import pygame
 from seagulls.assets import AssetManager
@@ -12,6 +12,8 @@ from seagulls.engine import (
     Vector2
 )
 
+from seagulls.rpg_demo._homes_and_trees import HomesAndTrees
+
 logger = logging.getLogger(__name__)
 
 
@@ -19,6 +21,7 @@ class Character(GameObject):
     _clock: GameClock
     _asset_manager: AssetManager
     _game_controls: GameControls
+    _homes_and_trees: HomesAndTrees
     _position: Vector2
     _velocity: Vector2
 
@@ -30,10 +33,12 @@ class Character(GameObject):
             self,
             clock: GameClock,
             asset_manager: AssetManager,
-            game_controls: GameControls):
+            game_controls: GameControls,
+            homes_and_trees: HomesAndTrees):
         self._clock = clock
         self._asset_manager = asset_manager
         self._game_controls = game_controls
+        self._homes_and_trees = homes_and_trees
         self._position = Vector2(400, 303)
         self._velocity = Vector2(0, 0)
         self._time = 0.0
@@ -66,7 +71,29 @@ class Character(GameObject):
             self._velocity = Vector2(0, 0)
 
         delta = self._clock.get_time()
-        self._position = self._position + (self._velocity * delta / 10)
+
+        desired_position = self._position + (self._velocity * delta / 10)
+
+        character_square = pygame.Rect(desired_position, (16, 16))
+
+        world_objects = self._homes_and_trees.get_world_object_rectangles()
+        collision = self._collision(character_square, world_objects)
+        if collision == -1:
+            self._position = desired_position
+        else:
+            if self._velocity.x != 0:
+                if self._position.x > world_objects[collision].x:
+                    self._position.x = world_objects[collision].x + world_objects[collision].width
+                elif self._position.x < world_objects[collision].x:
+                    self._position.x = world_objects[collision].x - 16
+            if self._velocity.y != 0:
+                if self._position.y > world_objects[collision].y + world_objects[collision].height:
+                    self._position.y = world_objects[collision].y + world_objects[collision].height
+                elif self._position.y < world_objects[collision].y:
+                    self._position.y = world_objects[collision].y - 16
+
+    def _collision(self, character_square: pygame.Rect, rectangles: List[pygame.Rect]):
+        return character_square.collidelist(rectangles)
 
     def _walk(self, direction: str) -> None:
         self._standing_position = direction

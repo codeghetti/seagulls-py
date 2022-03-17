@@ -19,6 +19,7 @@ from ._cli_command import GameCliCommand
 from ._cli_plugin import RpgDemoCliPlugin
 from ._debug_hud import DebugHud
 from ._fit_to_screen import FitToScreen
+from ._homes_and_trees import HomesAndTrees
 from ._rpg_background import SimpleRpgBackground
 from ._rpg_scene import RpgScene
 
@@ -68,6 +69,7 @@ class RpgDemoDiContainer:
             debug_hud=self._debug_hud(),
             asset_manager=self._asset_manager(),
             background=self._background(),
+            homes_and_trees=self._homes_and_trees(),
             character=self._character(),
             game_controls=self._game_controls(),
             fit_to_screen=self._fit_to_screen()
@@ -83,6 +85,13 @@ class RpgDemoDiContainer:
             clock=self._clock(),
             asset_manager=self._asset_manager(),
             game_controls=self._game_controls(),
+            homes_and_trees=self._homes_and_trees(),
+        )
+
+    @lru_cache()
+    def _homes_and_trees(self) -> HomesAndTrees:
+        return HomesAndTrees(
+            asset_manager=self._asset_manager()
         )
 
     @lru_cache()

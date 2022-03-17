@@ -15,6 +15,7 @@ from seagulls.engine import (
 )
 
 from ._fit_to_screen import FitToScreen
+from ._homes_and_trees import HomesAndTrees
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ class RpgScene(IGameScene):
     _game_objects: GameObjectsCollection
     _should_quit: Event
     _fit_to_screen: FitToScreen
+    _homes_and_trees: HomesAndTrees
 
     def __init__(
             self,
@@ -37,16 +39,19 @@ class RpgScene(IGameScene):
             asset_manager: AssetManager,
             background: GameObject,
             character: GameObject,
+            homes_and_trees: HomesAndTrees,
             game_controls: GameControls,
             fit_to_screen: FitToScreen):
         self._surface_render = surface_renderer
         self._asset_manager = asset_manager
         self._game_controls = game_controls
         self._fit_to_screen = fit_to_screen
+        self._homes_and_trees = homes_and_trees
 
         self._game_objects = GameObjectsCollection()
         self._game_objects.add(clock)
         self._game_objects.add(background)
+        self._game_objects.add(self._homes_and_trees)
         self._game_objects.add(debug_hud)
         self._game_objects.add(character)
         self._game_objects.add(self._game_controls)

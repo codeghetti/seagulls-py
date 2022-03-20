@@ -10,6 +10,7 @@ from seagulls.app import (
     SeagullsEntryPointsPluginSource
 )
 from seagulls.cli import CliRequest, RequestEnvironment
+from ._runtime_client import SeagullsRuntimeClient
 
 from ._application import SeagullsCliApplication
 from ._container_repository import DiContainerRepository
@@ -44,6 +45,10 @@ class SeagullsAppDiContainer:
     @lru_cache()
     def logging_client(self) -> LoggingClient:
         return LoggingClient(verbosity=2)
+
+    @lru_cache()
+    def runtime_client(self) -> SeagullsRuntimeClient:
+        return SeagullsRuntimeClient()
 
     @lru_cache()
     def _plugin_client(self) -> SeagullsEntryPointsPluginsClient:

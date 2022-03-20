@@ -33,6 +33,7 @@ class BuildExecutableCommand(ICliCommand):
             "--workpath", f"../.tmp/{details.name}/build/",
             "--specpath", f"../.tmp/{details.name}/",
             "--name", details.name,
+            "--onefile",
             "--clean",
         ]
 

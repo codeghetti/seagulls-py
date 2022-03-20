@@ -1,3 +1,4 @@
+import sys
 from functools import lru_cache
 from pathlib import Path
 
@@ -12,7 +13,11 @@ from seagulls.engine import (
     SurfaceRenderer,
     WindowScene
 )
-from seagulls.seagulls_cli import SeagullsCliApplication
+from seagulls.seagulls_cli import (
+    SeagullsAppDiContainer,
+    SeagullsCliApplication,
+    SeagullsRuntimeClient
+)
 
 from ._active_ship_client import ActiveShipClient
 from ._asteroid_field import AsteroidField
@@ -210,9 +215,18 @@ class SpaceShooterDiContainer:
         return AssetManager(assets_path=self._find_assets_path())
 
     def _find_assets_path(self) -> Path:
+        if self._runtime_client().is_bundled():
+            return Path(f"{getattr(sys, '_MEIPASS')}/seagulls_assets")
+
         container_dir_path = Path(__file__).parent
         parts = str(container_dir_path.resolve()).split("/site-packages/")
         if len(parts) == 2:
             return Path(parts[0]) / "site-packages/seagulls_assets"
 
         return Path("seagulls_assets")
+
+    def _runtime_client(self) -> SeagullsRuntimeClient:
+        return self._seagulls_app_container().runtime_client()
+
+    def _seagulls_app_container(self) -> SeagullsAppDiContainer:
+        return self._application.get_container(SeagullsAppDiContainer)

@@ -10,11 +10,11 @@ from seagulls.app import (
     SeagullsEntryPointsPluginSource
 )
 from seagulls.cli import CliRequest, RequestEnvironment
-from ._runtime_client import SeagullsRuntimeClient
 
 from ._application import SeagullsCliApplication
 from ._container_repository import DiContainerRepository
 from ._logging_client import LoggingClient
+from ._runtime_client import SeagullsRuntimeClient
 
 
 class SeagullsAppDiContainer:

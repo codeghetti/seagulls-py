@@ -15,6 +15,7 @@ from ._ship import Ship
 from ._ship_interfaces import IShip
 from ._shooter_scene import ScoreOverlay, ShooterScene
 from ._space_collisions import SpaceCollisions
+from ._di_container import SpaceShooterDiContainer
 
 __all__ = [
     "ShooterScene",
@@ -35,4 +36,5 @@ __all__ = [
     "ShipSelectionMenuFactory",
     "GameOverSceneFactory",
     "SpaceShooterCliPluginEntryPoint",
+    "SpaceShooterDiContainer",
 ]

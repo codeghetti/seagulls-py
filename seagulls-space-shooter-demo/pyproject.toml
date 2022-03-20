@@ -1,3 +1,7 @@
+[tool.seagulls]
+name = "seagulls-space-shooter-demo"
+entry_point_path = "src/seagulls/space_shooter/_cli_entry_point.py"
+
 [tool.poetry]
 name = "seagulls-space-shooter-demo"
 version = "0.1.0-rc.1"

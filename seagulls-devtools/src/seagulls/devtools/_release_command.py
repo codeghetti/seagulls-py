@@ -1,10 +1,10 @@
 import logging
 import subprocess
-import toml
 from argparse import ArgumentParser
 from dataclasses import dataclass
 from pathlib import Path
 
+import toml
 from seagulls.cli import ICliCommand
 
 logger = logging.getLogger(__name__)

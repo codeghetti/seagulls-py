@@ -51,11 +51,7 @@ class BuildExecutableCommand(ICliCommand):
             "--clean",
         ]
 
-        splash_path = assets_path / "splash.png"
         ico_path = assets_path / "application.ico"
-
-        # if splash_path.is_file():
-        #     cmd.extend(["--splash", str(splash_path.resolve())])
 
         if ico_path.is_file():
             cmd.extend(["--icon", str(ico_path.resolve())])

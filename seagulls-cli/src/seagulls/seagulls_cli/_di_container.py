@@ -1,5 +1,4 @@
 import os
-import sys
 from functools import lru_cache
 from pathlib import Path
 from typing import Tuple, cast
@@ -15,9 +14,15 @@ from seagulls.cli import CliRequest, RequestEnvironment
 from ._application import SeagullsCliApplication
 from ._container_repository import DiContainerRepository
 from ._logging_client import LoggingClient
+from ._runtime_client import SeagullsRuntimeClient
 
 
 class SeagullsAppDiContainer:
+
+    _argv: Tuple[str, ...]
+
+    def __init__(self, argv: Tuple[str, ...]):
+        self._argv = argv
 
     @lru_cache()
     def application(self) -> SeagullsCliApplication:
@@ -32,14 +37,18 @@ class SeagullsAppDiContainer:
     def _request(self) -> CliRequest:
         env_tuple: Tuple[Tuple[str, str], ...] = tuple(os.environ.items())  # type: ignore
         return CliRequest(
-            file=Path(sys.argv[0]).resolve(),
-            args=tuple(sys.argv[1:]),
+            file=Path(self._argv[0]).resolve(),
+            args=tuple(self._argv[1:]),
             env=RequestEnvironment(env_tuple),
         )
 
     @lru_cache()
     def logging_client(self) -> LoggingClient:
         return LoggingClient(verbosity=2)
+
+    @lru_cache()
+    def runtime_client(self) -> SeagullsRuntimeClient:
+        return SeagullsRuntimeClient()
 
     @lru_cache()
     def _plugin_client(self) -> SeagullsEntryPointsPluginsClient:

@@ -2,6 +2,7 @@ from ._active_ship_client import ActiveShipClient
 from ._asteroid_field import AsteroidField
 from ._blue_ship import BlueShip
 from ._cli_entry_point import SpaceShooterCliPluginEntryPoint
+from ._di_container import SpaceShooterDiContainer
 from ._game_over_scene import GameOverScene, GameOverSceneFactory
 from ._orange_ship import OrangeShip
 from ._replay_shooter_button import ReplayButtonFactory, ReplayShooterButton
@@ -35,4 +36,5 @@ __all__ = [
     "ShipSelectionMenuFactory",
     "GameOverSceneFactory",
     "SpaceShooterCliPluginEntryPoint",
+    "SpaceShooterDiContainer",
 ]

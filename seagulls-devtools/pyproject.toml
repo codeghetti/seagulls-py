@@ -21,12 +21,14 @@ pytest-cov = "*"
 flake8 = "*"
 flake8-isort = "*"
 mypy = "*"
+pyinstaller = "*"
 seagulls-cli = { version = "", allow-prereleases = true}
 seagulls-engine = { version = "", allow-prereleases = true}
+toml = "^0.10.2"
+types-toml = { version = "", optional = true }
 
 [tool.poetry.extras]
-# Every package needs a `dev` extra for CI to pass but we don't actually need any other packages.
-dev = []
+dev = ["types-toml"]
 
 [tool.poetry.dev-dependencies]
 seagulls-engine = { path = "../seagulls-engine/", develop = true }

@@ -135,7 +135,8 @@ class SpaceShooterDiContainer:
             asset_manager=self._asset_manager(),
             ship=self._ship(),
             asteroid_field=self._asteroid_field(),
-            rock_collision_callback=self._score_tracker().add_point)
+            rock_collision_callback=self._score_tracker().add_point,
+            fit_to_screen=self._fit_to_screen())
 
     @lru_cache()
     def _score_overlay(self) -> ScoreOverlay:

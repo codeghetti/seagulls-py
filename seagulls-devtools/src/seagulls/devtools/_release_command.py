@@ -1,4 +1,5 @@
 import logging
+import platform
 import subprocess
 from argparse import ArgumentParser
 from dataclasses import dataclass
@@ -30,10 +31,19 @@ class BuildExecutableCommand(ICliCommand):
         work_path = Path(f"../.tmp/{details.name}/build/")
         spec_path = Path(f"../.tmp/{details.name}/")
 
+        splash_path = assets_path / "spash.png"
+
+        system = platform.system()
+
+        if system.lower() == "windows":
+            add_data = f"{assets_path.resolve()};seagulls_assets"
+        else:
+            add_data = f"{assets_path.resolve()}:seagulls_assets"
+
         cmd = [
             "pyinstaller",
             str(details.entry_point_path),
-            "--add-data", f"{assets_path.resolve()}:seagulls_assets",
+            "--add-data", add_data,
             "--distpath", str(dist_path.resolve()),
             "--workpath", str(work_path),
             "--specpath", str(spec_path),
@@ -42,6 +52,9 @@ class BuildExecutableCommand(ICliCommand):
             "--noconsole",
             "--clean",
         ]
+
+        if splash_path.is_file():
+            cmd.extend(["--splash", str(splash_path)])
 
         subprocess.run(cmd, check=True)
 

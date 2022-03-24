@@ -31,8 +31,6 @@ class BuildExecutableCommand(ICliCommand):
         work_path = Path(f"../.tmp/{details.name}/build/")
         spec_path = Path(f"../.tmp/{details.name}/")
 
-        splash_path = assets_path / "spash.png"
-
         system = platform.system()
 
         if system.lower() == "windows":
@@ -53,8 +51,16 @@ class BuildExecutableCommand(ICliCommand):
             "--clean",
         ]
 
+        splash_path = assets_path / "splash.png"
+        ico_path = assets_path / "application.ico"
+
         if splash_path.is_file():
-            cmd.extend(["--splash", str(splash_path)])
+            cmd.extend(["--splash", str(splash_path.resolve())])
+
+        if ico_path.is_file():
+            cmd.extend(["--icon", str(ico_path.resolve())])
+
+        print(f"Running: {' '.join(cmd)}")
 
         subprocess.run(cmd, check=True)
 

@@ -25,15 +25,21 @@ class BuildExecutableCommand(ICliCommand):
     def execute(self) -> None:
         details = self._load_program_details()
 
+        assets_path = details.project_path / "seagulls_assets"
+        dist_path = Path(f"../.tmp/{details.name}/dist/")
+        work_path = Path(f"../.tmp/{details.name}/build/")
+        spec_path = Path(f"../.tmp/{details.name}/")
+
         cmd = [
             "pyinstaller",
             str(details.entry_point_path),
-            "--add-data", f"{details.project_path.resolve()}/seagulls_assets:seagulls_assets",
-            "--distpath", f"../.tmp/{details.name}/dist/",
-            "--workpath", f"../.tmp/{details.name}/build/",
-            "--specpath", f"../.tmp/{details.name}/",
+            "--add-data", f"{assets_path.resolve()}:seagulls_assets",
+            "--distpath", str(dist_path.resolve()),
+            "--workpath", str(work_path),
+            "--specpath", str(spec_path),
             "--name", details.name,
             "--onefile",
+            "--noconsole",
             "--clean",
         ]
 

@@ -1,4 +1,7 @@
 import logging
+from typing import Tuple
+
+import pygame
 
 from ._asteroid_field import AsteroidField
 from ._check_game_rules_interface import ICheckGameRules
@@ -35,62 +38,35 @@ class ShipDestroyedRule(ICheckGameRules):
     def _ship_rock_collision_check(self, rock_number: int) -> bool:
         ship_position = self._ship.get_ship_position()
 
-        nose_collision_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <=
-            (ship_position.x + 50) <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number) and
-            self._asteroid_field.get_rock_position_y(rock_number) <=
-            ship_position.y <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
+        rock_rect = pygame.Rect(
+            (self._asteroid_field.get_rock_position_x(rock_number),
+             self._asteroid_field.get_rock_position_y(rock_number)),
+            self._calculate_rock_size(rock_number))
 
-        left_upper_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= ship_position.x <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number) and
-            self._asteroid_field.get_rock_position_y(rock_number) <=
-            (ship_position.y + 30) <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
+        ship_body_rect = pygame.Rect(
+            (ship_position.x, ship_position.y + self._ship_height() * 0.5),
+            (self._ship_width(), self._ship_height() * 0.5))
 
-        right_upper_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <=
-            (ship_position.x + 105) <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number) and
-            self._asteroid_field.get_rock_position_y(rock_number) <=
-            (ship_position.y + 30) <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
-
-        left_lower_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <= ship_position.x <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number)
-            and self._asteroid_field.get_rock_position_y(rock_number) <=
-            (ship_position.y + 68) <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
-
-        right_lower_wing_check = (
-            self._asteroid_field.get_rock_position_x(rock_number) <=
-            (ship_position.x + 105) <=
-            self._asteroid_field.get_rock_position_x(rock_number) +
-            self._asteroid_field.get_rock_size_x(rock_number) and
-            self._asteroid_field.get_rock_position_y(rock_number) <=
-            (ship_position.y + 68) <=
-            self._asteroid_field.get_rock_position_y(rock_number) +
-            self._asteroid_field.get_rock_size_y(rock_number)
-        )
+        ship_nose_rect = pygame.Rect(
+            (ship_position.x + self._ship_width() * (1/3), ship_position.y),
+            (self._ship_width() * (1/3), self._ship_height() * 0.5))
 
         return (
-            nose_collision_check or
-            left_lower_wing_check or
-            right_lower_wing_check or
-            left_upper_wing_check or
-            right_upper_wing_check)
+                       pygame.Rect.colliderect(rock_rect, ship_body_rect) or
+                       pygame.Rect.colliderect(rock_rect, ship_nose_rect))
+
+    def _calculate_rock_size(self, rock_number: int) -> Tuple[float, float]:
+        return (self._fit_to_screen.get_actual_surface_width() *
+                self._asteroid_field.get_rock_size_x(rock_number) / 1920,
+                self._fit_to_screen.get_actual_surface_height() *
+                self._asteroid_field.get_rock_size_y(rock_number) / 1080)
+
+    def _ship_width(self) -> float:
+        return self._fit_to_screen.get_actual_surface_width() * 112 / 1920
+
+    def _ship_height(self) -> float:
+        return self._fit_to_screen.get_actual_surface_height() * 75 / 1080
+
+    def _calculate_ship_size(self) -> Tuple[float, float]:
+        return (self._fit_to_screen.get_actual_surface_width() * 112 / 1920,
+                self._fit_to_screen.get_actual_surface_height() * 75 / 1080)

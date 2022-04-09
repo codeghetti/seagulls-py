@@ -6,12 +6,14 @@ from ._position import Position
 from ._size import Size
 
 
-class Printer(Protocol):
+class IPrintSquares(Protocol):
 
     @abstractmethod
-    # Can we hide the rect detail here?
     def render(self, color: Color, size: Size, position: Position):
         """"""
+
+
+class IClearPrinters(Protocol):
 
     @abstractmethod
     def clear(self):

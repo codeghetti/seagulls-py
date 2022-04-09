@@ -1,16 +1,20 @@
 import logging
 import random
-from abc import abstractmethod
 from functools import cache
-from typing import Protocol, Tuple
+from typing import Tuple
 
 import pygame
-from pygame import Surface
 
-from seagulls.rendering import IGameScreen, IProvideGameScreens
+from seagulls.pygame import PygameSquarePrinter, WindowSurface
+from seagulls.rendering import (
+    IClearPrinters,
+    IGameScreen,
+    IPrintSquares,
+    IProvideGameScreens
+)
+from seagulls.rendering._camera import Camera
 from seagulls.rendering._color import Color
 from seagulls.rendering._position import Position
-from seagulls.rendering._printer import Printer
 from seagulls.rendering._renderable_component import (
     IProvideRenderables,
     RenderableComponent
@@ -28,61 +32,14 @@ from seagulls.session import (
 logger = logging.getLogger(__name__)
 
 
-class GameObject:
-    pass
-
-
-class GameComponent:
-    pass
-
-
-class IProvideSurfaces(Protocol):
-    """Move this into seagulls.pygame?"""
-
-    @abstractmethod
-    def get(self) -> Surface:
-        """"""
-
-
-class WindowSurfaceProvider(IProvideSurfaces):
-
-    def get(self) -> Surface:
-        return self._get_window()
-
-    @cache
-    def _get_window(self) -> Surface:
-        return pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-
-
-class PygamePrinter(Printer):
-    """Move this into seagulls.pygame?"""
-
-    _surface: IProvideSurfaces
-
-    def __init__(self, surface: IProvideSurfaces):
-        self._surface = surface
-
-    def render(self, color: Color, size: Size, position: Position):
-        c = color.get()
-        s = size.get()
-        p = position.get()
-
-        square = Surface((s["width"], s["height"]))
-        square.fill((c["r"], c["g"], c["b"]))
-        self._surface.get().blit(square, (p["x"], p["y"]))
-
-    def clear(self) -> None:
-        self._surface.get().fill((0, 0, 0))
-
-
 class SolidColorComponent(RenderableComponent):
 
     _color: Color
     _size: Size
     _position: Position
-    _printer: Printer
+    _printer: IPrintSquares
 
-    def __init__(self, color: Color, size: Size, position: Position, printer: Printer):
+    def __init__(self, color: Color, size: Size, position: Position, printer: IPrintSquares):
         self._color = color
         self._size = size
         self._position = position
@@ -130,9 +87,9 @@ class ScreenProvider(IProvideGameScreens):
 
 class MyRenderables(IProvideRenderables):
 
-    _printer: Printer
+    _printer: IPrintSquares
 
-    def __init__(self, printer: Printer):
+    def __init__(self, printer: IPrintSquares):
         self._printer = printer
 
     def get(self) -> Tuple[RenderableComponent, ...]:
@@ -173,20 +130,36 @@ class MySessionStopper(IStopGameSessions):
         self._session.stop()
 
 
+class MyResolutionSettings:
+    _window: WindowSurface
+
+    def __init__(self, window: WindowSurface):
+        self._window = window
+
+
 class MyScene(IGameScene):
 
     _session: IProvideGameSessions
-    _printer: Printer
+    _printer: IPrintSquares
+    _clearer: IClearPrinters
     _renderables: IProvideRenderables
+    _resoution_settings: WindowSurface
 
     def __init__(
-            self, session: IProvideGameSessions, printer: Printer, renderables: IProvideRenderables):
+            self,
+            session: IProvideGameSessions,
+            printer: IPrintSquares,
+            clearer: IClearPrinters,
+            renderables: IProvideRenderables,
+            resoution_settings: WindowSurface):
         self._session = session
         self._printer = printer
+        self._clearer = clearer
         self._renderables = renderables
+        self._resoution_settings = resoution_settings
 
     def tick(self) -> None:
-        self._printer.clear()
+        self._clearer.clear()
 
         # How do we move this logic out of scenes?
         for event in pygame.event.get():
@@ -194,6 +167,12 @@ class MyScene(IGameScene):
                 # How do we stop violating liskov substitution principle here?
                 self._session.get().stop()
                 return
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                self._resoution_settings.set_resolution({
+                    "height": random.randint(100, 700),
+                    "width": random.randint(100, 700),
+                })
+                self._resoution_settings.update_window()
 
         for component in self._renderables.get():
             component.render()
@@ -214,19 +193,29 @@ class MySessionProvider(IProvideGameSessions):
 
 def _test() -> None:
     # Printers "print" onto surfaces
-    surface_provider = WindowSurfaceProvider()
+    surface_provider = WindowSurface({"width": 500, "height": 500})
+    surface_provider.initialize()
     # These two classes are pygame specific implementations
-    printer = PygamePrinter(surface_provider)
+    printer = PygameSquarePrinter(surface_provider)
+
+    camera = Camera(
+        square_renderer=printer,
+        clearer=printer,
+        # If camera size does not match scene size, some objects skip rendering
+        size=Size({"height": 500, "width": 500}),
+        # If the camera does not start at 0, 0, we also skip rendering some objects
+        position=Position({"x": 0, "y": 0}),
+    )
 
     # Objects with a render() method are provided by this class
-    renderables = MyRenderables(printer)
+    renderables = MyRenderables(camera)
 
     # A session is one execution of the game
     # Sessions run until the game is exited
     session_provider = MySessionProvider(NullGameSession())
 
     # Scenes are the game's "levels" but could be the main menu scene too
-    scene = MyScene(session_provider, printer, renderables)
+    scene = MyScene(session_provider, camera, camera, renderables, resoution_settings=surface_provider)
     # Our scene uses the session provider to exit but we could move that somewhere else
     # This is the reason for the `NullGameSession`
     scene_provider = SceneProvider(scene)
@@ -240,6 +229,7 @@ def _test() -> None:
     session_provider.set(session)
     try:
         # Since this is blocking, one of the active scene objects must call stop()
+        pygame.init()
         session.start()
     except KeyboardInterrupt:
         session.stop()

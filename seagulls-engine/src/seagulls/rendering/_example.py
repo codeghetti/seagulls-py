@@ -1,5 +1,6 @@
 import logging
 import random
+from dataclasses import dataclass
 from functools import cache
 from typing import Tuple
 
@@ -19,7 +20,7 @@ from seagulls.rendering._renderable_component import (
     IProvideRenderables,
     RenderableComponent
 )
-from seagulls.rendering._size import Size
+from seagulls.rendering._size import Size, SizeDict
 from seagulls.scene import IGameScene, IProvideGameScenes
 from seagulls.session import (
     BlockingGameSession,
@@ -99,12 +100,12 @@ class MyRenderables(IProvideRenderables):
             "b": random.randint(0, 255),
         })
         size = Size({
-            "height": random.randint(1, 500),
-            "width": random.randint(1, 500),
+            "height": 1,
+            "width": 1,
         })
         position = Position({
-            "x": random.randint(0, 500),
-            "y": random.randint(0, 500),
+            "x": random.randint(100, 400),
+            "y": random.randint(100, 400),
         })
         return tuple([
             SolidColorComponent(
@@ -159,7 +160,7 @@ class MyScene(IGameScene):
         self._resoution_settings = resoution_settings
 
     def tick(self) -> None:
-        self._clearer.clear()
+        # self._clearer.clear()
 
         # How do we move this logic out of scenes?
         for event in pygame.event.get():
@@ -191,9 +192,22 @@ class MySessionProvider(IProvideGameSessions):
         return self._session
 
 
+@dataclass(frozen=True)
+class VideoSettings:
+    window_size: SizeDict
+    scene_size: SizeDict
+    camera_size: SizeDict
+
+
 def _test() -> None:
+    video_settings = VideoSettings(
+        window_size={"height": 500, "width": 500},
+        scene_size={"height": 500, "width": 500},
+        camera_size={"height": 500, "width": 500},
+    )
+
     # Printers "print" onto surfaces
-    surface_provider = WindowSurface({"width": 500, "height": 500})
+    surface_provider = WindowSurface(video_settings.window_size)
     surface_provider.initialize()
     # These two classes are pygame specific implementations
     printer = PygameSquarePrinter(surface_provider)
@@ -202,7 +216,7 @@ def _test() -> None:
         square_renderer=printer,
         clearer=printer,
         # If camera size does not match scene size, some objects skip rendering
-        size=Size({"height": 500, "width": 500}),
+        size=Size(video_settings.camera_size),
         # If the camera does not start at 0, 0, we also skip rendering some objects
         position=Position({"x": 0, "y": 0}),
     )
@@ -215,7 +229,12 @@ def _test() -> None:
     session_provider = MySessionProvider(NullGameSession())
 
     # Scenes are the game's "levels" but could be the main menu scene too
-    scene = MyScene(session_provider, camera, camera, renderables, resoution_settings=surface_provider)
+    scene = MyScene(
+        session=session_provider,
+        printer=camera,
+        clearer=camera,
+        renderables=renderables,
+        resoution_settings=surface_provider)
     # Our scene uses the session provider to exit but we could move that somewhere else
     # This is the reason for the `NullGameSession`
     scene_provider = SceneProvider(scene)

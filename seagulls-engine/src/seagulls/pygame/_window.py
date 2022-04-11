@@ -36,6 +36,17 @@ class WindowSurface(IProvideSurfaces):
         self._resolution_setting = resolution
 
     def _get_window(self) -> Surface:
-        return pygame.display.set_mode(
+        surface = pygame.display.set_mode(
             (self._resolution_setting["height"], self._resolution_setting["width"])
         )
+
+        # Adding some backgrounds to debug with for now
+        surface.fill((200, 20, 20))
+
+        inner = Surface(
+            (self._resolution_setting["height"] - 10, self._resolution_setting["width"] - 10))
+        inner.fill((20, 200, 20))
+
+        surface.blit(inner, (5, 5))
+
+        return surface

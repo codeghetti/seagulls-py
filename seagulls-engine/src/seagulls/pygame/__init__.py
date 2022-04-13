@@ -7,11 +7,12 @@ us the ability to use other graphical libraries in the future.
 """
 
 from ._printer import PygameSquarePrinter
-from ._surface import IProvideSurfaces
+from ._surface import IProvideSurfaces, PygameSurface
 from ._window import WindowSurface
 
 __all__ = [
     "PygameSquarePrinter",
     "IProvideSurfaces",
+    "PygameSurface",
     "WindowSurface",
 ]

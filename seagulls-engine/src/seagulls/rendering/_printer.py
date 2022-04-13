@@ -9,7 +9,11 @@ from ._size import Size
 class IPrintSquares(Protocol):
 
     @abstractmethod
-    def render(self, color: Color, size: Size, position: Position):
+    def print(self, color: Color, size: Size, position: Position) -> None:
+        """"""
+
+    @abstractmethod
+    def commit(self) -> None:
         """"""
 
 

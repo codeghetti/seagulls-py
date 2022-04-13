@@ -6,7 +6,7 @@ from typing import Tuple
 
 import pygame
 
-from seagulls.pygame import PygameSquarePrinter, WindowSurface
+from seagulls.pygame import PygameSquarePrinter, WindowSurface, PygameSurface
 from seagulls.rendering import (
     IClearPrinters,
     IGameScreen,
@@ -47,7 +47,7 @@ class SolidColorComponent(RenderableComponent):
         self._printer = printer
 
     def render(self) -> None:
-        self._printer.render(self._color, self._size, self._position)
+        self._printer.print(self._color, self._size, self._position)
 
 
 class SceneProvider(IProvideGameScenes):
@@ -68,13 +68,7 @@ class PygameScreen:
         self._scene = scene
 
     def refresh(self) -> None:
-        self._set_caption()
         self._scene.get().tick()
-        pygame.display.flip()
-
-    @cache
-    def _set_caption(self) -> None:
-        pygame.display.set_caption("Our Game")
 
 
 class ScreenProvider(IProvideGameScreens):
@@ -160,8 +154,6 @@ class MyScene(IGameScene):
         self._resoution_settings = resoution_settings
 
     def tick(self) -> None:
-        # self._clearer.clear()
-
         # How do we move this logic out of scenes?
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -177,6 +169,9 @@ class MyScene(IGameScene):
 
         for component in self._renderables.get():
             component.render()
+
+        self._printer.commit()
+        # self._clearer.clear()
 
 
 class MySessionProvider(IProvideGameSessions):
@@ -201,19 +196,23 @@ class VideoSettings:
 
 def _test() -> None:
     video_settings = VideoSettings(
-        window_size={"height": 500, "width": 500},
+        window_size={"width": 1000, "height": 500},
         scene_size={"height": 500, "width": 500},
         camera_size={"height": 500, "width": 500},
     )
 
     # Printers "print" onto surfaces
-    surface_provider = WindowSurface(video_settings.window_size)
+    surface_provider = WindowSurface(video_settings.window_size, video_settings.camera_size)
     surface_provider.initialize()
+
+    camera_surface_provider = PygameSurface(surface_provider, video_settings.camera_size)
     # These two classes are pygame specific implementations
     printer = PygameSquarePrinter(surface_provider)
 
+    camera_printer = PygameSquarePrinter(camera_surface_provider)
+
     camera = Camera(
-        square_renderer=printer,
+        square_renderer=camera_printer,
         clearer=printer,
         # If camera size does not match scene size, some objects skip rendering
         size=Size(video_settings.camera_size),

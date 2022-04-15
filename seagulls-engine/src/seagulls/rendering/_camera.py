@@ -1,7 +1,5 @@
 import logging
 
-import pygame
-
 from seagulls.rendering import (
     Color,
     IClearPrinters,
@@ -79,7 +77,6 @@ class Camera(IPrintSquares, IClearPrinters):
 
     def clear(self):
         self._clearer.clear()
-        # self._square_renderer.print(self._background_color, self._size, Position({"x": 0, "y": 0}))
 
 
 class ObjectDoesNotOverlapError(Exception):

@@ -91,15 +91,6 @@ class WindowSurface(IProvideSurfaces):
         # TODO where does window caption logic go?
         pygame.display.set_caption("Our Game")
 
-        # Adding some backgrounds to debug with for now
-        # surface.fill((200, 20, 20))
-        #
-        # inner = Surface(
-        #     (self._resolution_setting["width"] - 10, self._resolution_setting["height"] - 10))
-        # inner.fill((20, 200, 20))
-        #
-        # surface.blit(inner, (5, 5))
-
         surface.fill(self._padding_color)
 
         return surface

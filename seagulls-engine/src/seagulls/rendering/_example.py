@@ -1,7 +1,6 @@
 import logging
 import random
 from dataclasses import dataclass
-from functools import cache
 from typing import Tuple
 
 import pygame
@@ -94,18 +93,28 @@ class MyRenderables(IProvideRenderables):
             "b": random.randint(0, 255),
         })
         size = Size({
-            "height": 1,
-            "width": 1,
+            "height": random.randint(1, 3),
+            "width": random.randint(1, 3),
         })
-        position = Position({
-            "x": random.randint(100, 400),
-            "y": random.randint(100, 400),
+        position1 = Position({
+            "x": random.randint(0, 50),
+            "y": random.randint(0, 50),
+        })
+        position2 = Position({
+            "x": random.randint(450, 500),
+            "y": random.randint(450, 500),
         })
         return tuple([
             SolidColorComponent(
                 color=color,
                 size=size,
-                position=position,
+                position=position1,
+                printer=self._printer,
+            ),
+            SolidColorComponent(
+                color=color,
+                size=size,
+                position=position2,
                 printer=self._printer,
             ),
         ])
@@ -196,7 +205,7 @@ class VideoSettings:
 
 def _test() -> None:
     video_settings = VideoSettings(
-        window_size={"width": 1000, "height": 500},
+        window_size={"width": 500, "height": 500},
         scene_size={"height": 500, "width": 500},
         camera_size={"height": 500, "width": 500},
     )

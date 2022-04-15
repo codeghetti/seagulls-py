@@ -1,6 +1,7 @@
 import logging
 import random
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Tuple
 
 import pygame
@@ -82,9 +83,11 @@ class ScreenProvider(IProvideGameScreens):
 class MyRenderables(IProvideRenderables):
 
     _printer: IPrintSquares
+    _scene_size: SizeDict
 
-    def __init__(self, printer: IPrintSquares):
+    def __init__(self, printer: IPrintSquares, scene_size: SizeDict):
         self._printer = printer
+        self._scene_size = scene_size
 
     def get(self) -> Tuple[RenderableComponent, ...]:
         color = Color({
@@ -101,8 +104,11 @@ class MyRenderables(IProvideRenderables):
             "y": random.randint(0, 50),
         })
         position2 = Position({
-            "x": random.randint(450, 500),
-            "y": random.randint(450, 500),
+            "x": random.randint(self._scene_size["width"] - 50,
+                                self._scene_size["width"]),
+
+            "y": random.randint(self._scene_size["height"] - 50,
+                                self._scene_size["height"]),
         })
         return tuple([
             SolidColorComponent(
@@ -148,6 +154,7 @@ class MyScene(IGameScene):
     _clearer: IClearPrinters
     _renderables: IProvideRenderables
     _resoution_settings: WindowSurface
+    _scene_size: SizeDict
 
     def __init__(
             self,
@@ -155,12 +162,14 @@ class MyScene(IGameScene):
             printer: IPrintSquares,
             clearer: IClearPrinters,
             renderables: IProvideRenderables,
-            resoution_settings: WindowSurface):
+            resoution_settings: WindowSurface,
+            scene_size: SizeDict):
         self._session = session
         self._printer = printer
         self._clearer = clearer
         self._renderables = renderables
         self._resoution_settings = resoution_settings
+        self._scene_size = scene_size
 
     def tick(self) -> None:
         # How do we move this logic out of scenes?
@@ -176,11 +185,21 @@ class MyScene(IGameScene):
                 })
                 self._resoution_settings.update_window()
 
+        self._black_background()
         for component in self._renderables.get():
             component.render()
 
         self._printer.commit()
         # self._clearer.clear()
+
+    @lru_cache()
+    def _black_background(self) -> None:
+        self._printer.print(Color({
+            "r": 0,
+            "g": 0,
+            "b": 0}),
+            Size(self._scene_size),
+            Position({"x": 0, "y": 0}))
 
 
 class MySessionProvider(IProvideGameSessions):
@@ -205,16 +224,19 @@ class VideoSettings:
 
 def _test() -> None:
     video_settings = VideoSettings(
-        window_size={"width": 500, "height": 500},
+        window_size={"width": 1000, "height": 1000},
         scene_size={"height": 500, "width": 500},
-        camera_size={"height": 500, "width": 500},
+        camera_size={"height": 700, "width": 500},
     )
 
     # Printers "print" onto surfaces
     surface_provider = WindowSurface(video_settings.window_size, video_settings.camera_size)
     surface_provider.initialize()
 
-    camera_surface_provider = PygameSurface(surface_provider, video_settings.camera_size)
+    camera_surface_provider = PygameSurface(
+        surface_provider,
+        video_settings.camera_size,
+        (230, 230, 250))
     # These two classes are pygame specific implementations
     printer = PygameSquarePrinter(surface_provider)
 
@@ -230,7 +252,7 @@ def _test() -> None:
     )
 
     # Objects with a render() method are provided by this class
-    renderables = MyRenderables(camera)
+    renderables = MyRenderables(camera, video_settings.scene_size)
 
     # A session is one execution of the game
     # Sessions run until the game is exited
@@ -242,7 +264,8 @@ def _test() -> None:
         printer=camera,
         clearer=camera,
         renderables=renderables,
-        resoution_settings=surface_provider)
+        resoution_settings=surface_provider,
+        scene_size=video_settings.scene_size)
     # Our scene uses the session provider to exit but we could move that somewhere else
     # This is the reason for the `NullGameSession`
     scene_provider = SceneProvider(scene)

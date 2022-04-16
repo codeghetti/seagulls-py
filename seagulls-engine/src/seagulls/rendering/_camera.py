@@ -1,4 +1,5 @@
 import logging
+from typing import Tuple
 
 from seagulls.rendering import (
     Color,
@@ -7,11 +8,12 @@ from seagulls.rendering import (
     Position,
     Size
 )
+from seagulls.rendering._position import IUpdatePosition
 
 logger = logging.getLogger(__name__)
 
 
-class Camera(IPrintSquares, IClearPrinters):
+class Camera(IPrintSquares, IClearPrinters, IUpdatePosition):
 
     _square_renderer: IPrintSquares
     _clearer: IClearPrinters
@@ -77,6 +79,19 @@ class Camera(IPrintSquares, IClearPrinters):
 
     def clear(self):
         self._clearer.clear()
+
+    def update_position(self, position: Position) -> None:
+        self._position = position
+
+    def move_position(self, direction: Tuple[int, int]) -> None:
+        current = self._position.get()
+        c_x = current["x"]
+        c_y = current["y"]
+
+        self._position = Position({
+            "x": c_x + direction[0],
+            "y": c_y + direction[1],
+        })
 
 
 class ObjectDoesNotOverlapError(Exception):

@@ -1,4 +1,5 @@
-from typing import TypedDict
+from abc import abstractmethod
+from typing import TypedDict, Protocol, Tuple
 
 
 class PositionDict(TypedDict):
@@ -15,3 +16,14 @@ class Position:
 
     def get(self) -> PositionDict:
         return self._position
+
+
+class IUpdatePosition(Protocol):
+
+    @abstractmethod
+    def update_position(self, position: Position) -> None:
+        """"""
+
+    @abstractmethod
+    def move_position(self, direction: Tuple[int, int]) -> None:
+        """"""

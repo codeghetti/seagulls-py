@@ -15,7 +15,7 @@ from seagulls.rendering import (
 )
 from seagulls.rendering._camera import Camera
 from seagulls.rendering._color import Color
-from seagulls.rendering._position import Position
+from seagulls.rendering._position import Position, IUpdatePosition
 from seagulls.rendering._renderable_component import (
     IProvideRenderables,
     RenderableComponent
@@ -155,6 +155,7 @@ class MyScene(IGameScene):
     _renderables: IProvideRenderables
     _resoution_settings: WindowSurface
     _scene_size: SizeDict
+    _camera_position: IUpdatePosition
 
     def __init__(
             self,
@@ -163,13 +164,15 @@ class MyScene(IGameScene):
             clearer: IClearPrinters,
             renderables: IProvideRenderables,
             resoution_settings: WindowSurface,
-            scene_size: SizeDict):
+            scene_size: SizeDict,
+            camera_position: IUpdatePosition):
         self._session = session
         self._printer = printer
         self._clearer = clearer
         self._renderables = renderables
         self._resoution_settings = resoution_settings
         self._scene_size = scene_size
+        self._camera_position = camera_position
 
     def tick(self) -> None:
         # How do we move this logic out of scenes?
@@ -184,13 +187,28 @@ class MyScene(IGameScene):
                     "width": random.randint(100, 700),
                 })
                 self._resoution_settings.update_window()
+            if pygame.key.get_pressed()[pygame.K_LEFT]:
+                self._camera_position.move_position((-5, 0))
+                self._clearer.clear()
+                self._black_background.cache_clear()
+            if pygame.key.get_pressed()[pygame.K_RIGHT]:
+                self._camera_position.move_position((5, 0))
+                self._clearer.clear()
+                self._black_background.cache_clear()
+            if pygame.key.get_pressed()[pygame.K_UP]:
+                self._camera_position.move_position((0, -5))
+                self._clearer.clear()
+                self._black_background.cache_clear()
+            if pygame.key.get_pressed()[pygame.K_DOWN]:
+                self._camera_position.move_position((0, 5))
+                self._clearer.clear()
+                self._black_background.cache_clear()
 
         self._black_background()
         for component in self._renderables.get():
             component.render()
 
         self._printer.commit()
-        # self._clearer.clear()
 
     @lru_cache()
     def _black_background(self) -> None:
@@ -265,7 +283,9 @@ def _test() -> None:
         clearer=camera,
         renderables=renderables,
         resoution_settings=surface_provider,
-        scene_size=video_settings.scene_size)
+        scene_size=video_settings.scene_size,
+        camera_position=camera,
+    )
     # Our scene uses the session provider to exit but we could move that somewhere else
     # This is the reason for the `NullGameSession`
     scene_provider = SceneProvider(scene)

@@ -1,15 +1,16 @@
 import logging
-from functools import lru_cache, cache
+from functools import cache
+from pathlib import Path
 
 import pygame.display
 from pygame import Surface
+from pygame.image import load
 
 from seagulls.rendering import (
     Color,
-    IClearPrinters,
     IPrintSquares,
     Position,
-    Size,
+    Size, IPrintSprites,
 )
 
 from ._surface import IProvideSurfaces
@@ -17,14 +18,55 @@ from ._surface import IProvideSurfaces
 logger = logging.getLogger(__name__)
 
 
-class PygameSquarePrinter(IPrintSquares, IClearPrinters):
+class PygameSpritePrinter(IPrintSprites):
 
     _surface: IProvideSurfaces
 
     def __init__(self, surface: IProvideSurfaces):
         self._surface = surface
 
-    def print(self, color: Color, size: Size, position: Position):
+    def print_sprite(self, image_path: Path, size: Size, position: Position) -> None:
+        # Pixel Units
+        png_surface = self._load_png(image_path)
+        s = size.get()
+        p = position.get()
+        # World Units
+        scaled_png = pygame.transform.scale(png_surface, (s["width"], s["height"]))
+        self._get_frame().blit(scaled_png, (p["x"], p["y"]))
+        logger.warning(f"surface provider in sprite printer: {self._surface}")
+
+    def commit(self) -> None:
+        self._surface.update(self._get_frame())
+
+    def clear(self) -> None:
+        self._get_frame.cache_clear()
+
+    @cache
+    def _get_frame(self) -> Surface:
+        frame = self._surface.get()
+        frame.blit(self._get_copy(), (0, 0))
+        return frame
+
+    @cache
+    def _get_copy(self) -> Surface:
+        return self._surface.get().copy()
+
+    def _load_png(self, png_path: Path) -> Surface:
+        loaded_sprite = load(png_path.resolve())
+        if loaded_sprite.get_alpha() is None:
+            return loaded_sprite.convert()
+        else:
+            return loaded_sprite.convert_alpha()
+
+
+class PygameSquarePrinter(IPrintSquares):
+
+    _surface: IProvideSurfaces
+
+    def __init__(self, surface: IProvideSurfaces):
+        self._surface = surface
+
+    def print_square(self, color: Color, size: Size, position: Position):
         c = color.get()
         s = size.get()
         p = position.get()

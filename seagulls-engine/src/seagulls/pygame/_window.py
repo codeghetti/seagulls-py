@@ -1,4 +1,5 @@
 import logging
+from functools import cache
 from typing import Optional, Tuple
 
 import pygame
@@ -94,3 +95,27 @@ class WindowSurface(IProvideSurfaces):
         surface.fill(self._padding_color)
 
         return surface
+
+
+class DeferredWindowSurface(IProvideSurfaces):
+
+    _window_provider: WindowSurface
+    _size: SizeDict
+
+    def __init__(self, window_provider: WindowSurface, size: SizeDict):
+        self._window_provider = window_provider
+        self._size = size
+
+    def get(self) -> Surface:
+        return self._get_frame()
+
+    def update(self, surface: Surface):
+        self._get_frame().blit(surface, (0, 0))
+
+    def end_frame(self) -> None:
+        self._window_provider.update(self._get_frame())
+        self._get_frame.cache_clear()
+
+    @cache
+    def _get_frame(self) -> Surface:
+        return Surface((self._size["width"], self._size["height"]))

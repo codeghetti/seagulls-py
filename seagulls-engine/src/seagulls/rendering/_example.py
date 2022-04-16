@@ -2,13 +2,14 @@ import logging
 import random
 from dataclasses import dataclass
 from functools import lru_cache
+from pathlib import Path
 from typing import Tuple
 
 import pygame
 
-from seagulls.pygame import PygameSquarePrinter, WindowSurface, PygameSurface
+from seagulls.pygame import PygameSquarePrinter, WindowSurface, PygameSurface, PygameSpritePrinter, \
+    DeferredWindowSurface
 from seagulls.rendering import (
-    IClearPrinters,
     IGameScreen,
     IPrintSquares,
     IProvideGameScreens
@@ -16,6 +17,7 @@ from seagulls.rendering import (
 from seagulls.rendering._camera import Camera
 from seagulls.rendering._color import Color
 from seagulls.rendering._position import Position, IUpdatePosition
+from seagulls.rendering._printer import IPrintSprites
 from seagulls.rendering._renderable_component import (
     IProvideRenderables,
     RenderableComponent
@@ -47,7 +49,25 @@ class SolidColorComponent(RenderableComponent):
         self._printer = printer
 
     def render(self) -> None:
-        self._printer.print(self._color, self._size, self._position)
+        self._printer.print_square(self._color, self._size, self._position)
+
+
+class SpriteComponent(RenderableComponent):
+
+    _image_path: Path
+    _size: Size
+    _position: Position
+    _printer: IPrintSprites
+
+    def __init__(self, image_path: Path, size: Size, position: Position, printer: IPrintSprites):
+        self._image_path = image_path
+        self._size = size
+        self._position = position
+        self._printer = printer
+
+    def render(self) -> None:
+        logger.warning(self._printer)
+        self._printer.print_sprite(self._image_path, self._size, self._position)
 
 
 class SceneProvider(IProvideGameScenes):
@@ -82,11 +102,17 @@ class ScreenProvider(IProvideGameScreens):
 
 class MyRenderables(IProvideRenderables):
 
-    _printer: IPrintSquares
+    _square_printer: IPrintSquares
+    _sprite_printer: IPrintSprites
     _scene_size: SizeDict
 
-    def __init__(self, printer: IPrintSquares, scene_size: SizeDict):
-        self._printer = printer
+    def __init__(
+            self,
+            square_printer: IPrintSquares,
+            sprite_printer: IPrintSprites,
+            scene_size: SizeDict):
+        self._square_printer = square_printer
+        self._sprite_printer = sprite_printer
         self._scene_size = scene_size
 
     def get(self) -> Tuple[RenderableComponent, ...]:
@@ -115,13 +141,25 @@ class MyRenderables(IProvideRenderables):
                 color=color,
                 size=size,
                 position=position1,
-                printer=self._printer,
+                printer=self._square_printer,
             ),
             SolidColorComponent(
                 color=color,
                 size=size,
                 position=position2,
-                printer=self._printer,
+                printer=self._square_printer,
+            ),
+            SpriteComponent(
+                image_path=Path(
+                    "../../../../"
+                    "seagulls-rpg-demo/seagulls_assets/sprites/rpg/rpg-urban-tilemap.packed.png"
+                ).resolve(),
+                size=Size({"height": 50, "width": 50}),
+                position=Position({
+                    "x": int(self._scene_size["width"] / 2),
+                    "y": int(self._scene_size["width"] / 2),
+                }),
+                printer=self._sprite_printer,
             ),
         ])
 
@@ -150,8 +188,8 @@ class MyResolutionSettings:
 class MyScene(IGameScene):
 
     _session: IProvideGameSessions
-    _printer: IPrintSquares
-    _clearer: IClearPrinters
+    _camera: Camera
+    _deferred_window: DeferredWindowSurface
     _renderables: IProvideRenderables
     _resoution_settings: WindowSurface
     _scene_size: SizeDict
@@ -160,15 +198,15 @@ class MyScene(IGameScene):
     def __init__(
             self,
             session: IProvideGameSessions,
-            printer: IPrintSquares,
-            clearer: IClearPrinters,
+            camera: Camera,
+            deferred_window: DeferredWindowSurface,
             renderables: IProvideRenderables,
             resoution_settings: WindowSurface,
             scene_size: SizeDict,
             camera_position: IUpdatePosition):
         self._session = session
-        self._printer = printer
-        self._clearer = clearer
+        self._camera = camera
+        self._deferred_window = deferred_window
         self._renderables = renderables
         self._resoution_settings = resoution_settings
         self._scene_size = scene_size
@@ -189,32 +227,34 @@ class MyScene(IGameScene):
                 self._resoution_settings.update_window()
             if pygame.key.get_pressed()[pygame.K_LEFT]:
                 self._camera_position.move_position((-5, 0))
-                self._clearer.clear()
-                self._black_background.cache_clear()
+                self._set_scene_background.cache_clear()
+                self._camera.clear()
             if pygame.key.get_pressed()[pygame.K_RIGHT]:
                 self._camera_position.move_position((5, 0))
-                self._clearer.clear()
-                self._black_background.cache_clear()
+                self._set_scene_background.cache_clear()
+                self._camera.clear()
             if pygame.key.get_pressed()[pygame.K_UP]:
                 self._camera_position.move_position((0, -5))
-                self._clearer.clear()
-                self._black_background.cache_clear()
+                self._set_scene_background.cache_clear()
+                self._camera.clear()
             if pygame.key.get_pressed()[pygame.K_DOWN]:
                 self._camera_position.move_position((0, 5))
-                self._clearer.clear()
-                self._black_background.cache_clear()
+                self._set_scene_background.cache_clear()
+                self._camera.clear()
 
-        self._black_background()
+        # self._set_scene_background()
         for component in self._renderables.get():
             component.render()
 
-        self._printer.commit()
+        self._camera.commit()
+
+        self._deferred_window.end_frame()
 
     @lru_cache()
-    def _black_background(self) -> None:
-        self._printer.print(Color({
+    def _set_scene_background(self) -> None:
+        self._camera.print_square(Color({
             "r": 0,
-            "g": 0,
+            "g": 50,
             "b": 0}),
             Size(self._scene_size),
             Position({"x": 0, "y": 0}))
@@ -248,29 +288,84 @@ def _test() -> None:
     )
 
     # Printers "print" onto surfaces
-    surface_provider = WindowSurface(video_settings.window_size, video_settings.camera_size)
-    surface_provider.initialize()
+    window_surface_provider = WindowSurface(video_settings.window_size, video_settings.camera_size)
+    window_surface_provider.initialize()
+
+    deferred_window_surface_provider = DeferredWindowSurface(
+        window_surface_provider,
+        video_settings.camera_size
+    )
+
+    # camera_surface_provider = PygameSurface(
+    #     deferred_window_surface_provider,
+    #     video_settings.camera_size,
+    #     (230, 230, 250))
+    #
+    # square_printer = PygameSquarePrinter(camera_surface_provider)
+    # sprite_printer = PygameSpritePrinter(camera_surface_provider)
+    #
+    # camera = Camera(
+    #     square_printer=square_printer,
+    #     sprite_printer=sprite_printer,
+    #     # If camera size does not match scene size, some objects skip rendering
+    #     size=Size(video_settings.camera_size),
+    #     # If the camera does not start at 0, 0, we also skip rendering some objects
+    #     position=Position({"x": 0, "y": 0}),
+    # )
+    #
+    # while True:
+    #     camera.print_square(
+    #         Color({"r": 10, "g": 10, "b": 200}),
+    #         Size({"height": 10, "width": 10}),
+    #         Position({"x": 50, "y": 50}),
+    #     )
+    #     camera.print_square(
+    #         Color({"r": 10, "g": 200, "b": 10}),
+    #         Size({"height": 10, "width": 10}),
+    #         Position({"x": 100, "y": 50}),
+    #     )
+    #     camera.print_sprite(
+    #         image_path=Path(
+    #             "../../../../"
+    #             "seagulls-rpg-demo/seagulls_assets/sprites/rpg/rpg-urban-tilemap.packed.png"
+    #         ).resolve(),
+    #         size=Size({"height": 50, "width": 50}),
+    #         position=Position({
+    #             "x": random.randint(150, 200),
+    #             "y": 50,
+    #         }),
+    #     )
+    #
+    #     camera.commit()
+    #     camera.clear()
+    #
+    #     deferred_window_surface_provider.end_frame()
 
     camera_surface_provider = PygameSurface(
-        surface_provider,
+        deferred_window_surface_provider,
         video_settings.camera_size,
         (230, 230, 250))
-    # These two classes are pygame specific implementations
-    printer = PygameSquarePrinter(surface_provider)
 
-    camera_printer = PygameSquarePrinter(camera_surface_provider)
+    # These two classes are pygame specific implementations
+    pygame_square_printer = PygameSquarePrinter(camera_surface_provider)
+    pygame_sprite_printer = PygameSpritePrinter(camera_surface_provider)
 
     camera = Camera(
-        square_renderer=camera_printer,
-        clearer=printer,
+        square_printer=pygame_square_printer,
+        sprite_printer=pygame_sprite_printer,
         # If camera size does not match scene size, some objects skip rendering
         size=Size(video_settings.camera_size),
         # If the camera does not start at 0, 0, we also skip rendering some objects
-        position=Position({"x": 0, "y": 0}),
+        position=Position({"x": -50, "y": -50}),
     )
 
+    camera.clear()
+
     # Objects with a render() method are provided by this class
-    renderables = MyRenderables(camera, video_settings.scene_size)
+    renderables = MyRenderables(
+        square_printer=camera,
+        sprite_printer=camera,
+        scene_size=video_settings.scene_size)
 
     # A session is one execution of the game
     # Sessions run until the game is exited
@@ -279,10 +374,10 @@ def _test() -> None:
     # Scenes are the game's "levels" but could be the main menu scene too
     scene = MyScene(
         session=session_provider,
-        printer=camera,
-        clearer=camera,
+        camera=camera,
+        deferred_window=deferred_window_surface_provider,
         renderables=renderables,
-        resoution_settings=surface_provider,
+        resoution_settings=window_surface_provider,
         scene_size=video_settings.scene_size,
         camera_position=camera,
     )

@@ -14,17 +14,27 @@ logger = logging.getLogger(__name__)
 
 class Camera(IPrintSquares, IUpdatePosition):
 
-    _square_renderer: IPrintSquares
+    """
+    2022-04-16
+    New Camera Idea:
+    - Camera is not a printer
+    - Store all the `print` operations in a list
+    - Filter the `print` operations based on camera position + size
+    - On `commit`, forward the operations to a `real` printer
+    - end the frame?
+    """
+
+    _square_printer: IPrintSquares
     _size: Size
     _position: Position
     _background_color: Color
 
     def __init__(
             self,
-            square_renderer: IPrintSquares,
+            square_printer: IPrintSquares,
             size: Size,
             position: Position):
-        self._square_renderer = square_renderer
+        self._square_printer = square_printer
         self._size = size
         self._position = position
 
@@ -65,16 +75,16 @@ class Camera(IPrintSquares, IUpdatePosition):
                 "x": object_position["x"] - camera_position["x"],
                 "y": object_position["y"] - camera_position["y"],
             })
-            self._square_renderer.print_square(color, size, adjusted_position)
+            self._square_printer.print_square(color, size, adjusted_position)
         except ObjectDoesNotOverlapError:
             logger.warning("Skipping!")
             pass
 
     def commit(self) -> None:
-        self._square_renderer.commit()
+        self._square_printer.commit()
 
     def clear(self):
-        self._square_renderer.clear()
+        self._square_printer.clear()
 
     def update_position(self, position: Position) -> None:
         self._position = position

@@ -4,7 +4,7 @@ from typing import Optional, Tuple
 import pygame
 from pygame import Surface
 
-from seagulls.rendering import SizeDict, ColorDict
+from seagulls.rendering import SizeDict
 
 from ._surface import IProvideSurfaces
 

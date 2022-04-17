@@ -7,6 +7,7 @@ from typing import Tuple
 import pygame
 
 from seagulls.pygame import PygameSquarePrinter, WindowSurface, PygameSurface
+from seagulls.pygame._surface import DeferredPygameSurface, IProvideSurfaces
 from seagulls.rendering import (
     IGameScreen,
     IPrintSquares,
@@ -151,7 +152,7 @@ class MyScene(IGameScene):
     _session: IProvideGameSessions
     _camera: Camera
     _renderables: IProvideRenderables
-    _resoution_settings: WindowSurface
+    _resoution_settings: IProvideSurfaces
     _scene_size: SizeDict
     _camera_position: IUpdatePosition
 
@@ -160,7 +161,7 @@ class MyScene(IGameScene):
             session: IProvideGameSessions,
             camera: Camera,
             renderables: IProvideRenderables,
-            resoution_settings: WindowSurface,
+            resoution_settings: IProvideSurfaces,
             scene_size: SizeDict,
             camera_position: IUpdatePosition):
         self._session = session
@@ -178,11 +179,12 @@ class MyScene(IGameScene):
                 self._session.get().stop()
                 return
             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
-                self._resoution_settings.set_resolution({
-                    "height": random.randint(100, 700),
-                    "width": random.randint(100, 700),
-                })
-                self._resoution_settings.update_window()
+                pass
+                # self._resoution_settings.set_resolution({
+                #     "height": random.randint(100, 700),
+                #     "width": random.randint(100, 700),
+                # })
+                # self._resoution_settings.update_window()
             if pygame.key.get_pressed()[pygame.K_LEFT]:
                 self._camera_position.move_position((-5, 0))
                 self._camera.clear()
@@ -205,6 +207,7 @@ class MyScene(IGameScene):
             component.render()
 
         self._camera.commit()
+        self._resoution_settings.end_frame()
 
     @lru_cache()
     def _set_scene_background(self) -> None:
@@ -247,15 +250,17 @@ def _test() -> None:
     surface_provider = WindowSurface(video_settings.window_size, video_settings.camera_size)
     surface_provider.initialize()
 
+    deferred_provider = DeferredPygameSurface(surface_provider)
+
     camera_surface_provider = PygameSurface(
-        surface_provider,
+        deferred_provider,
         video_settings.camera_size,
         (130, 130, 150))
 
     camera_printer = PygameSquarePrinter(camera_surface_provider)
 
     camera = Camera(
-        square_renderer=camera_printer,
+        square_printer=camera_printer,
         # If camera size does not match scene size, some objects skip rendering
         size=Size(video_settings.camera_size),
         # If the camera does not start at 0, 0, we also skip rendering some objects
@@ -274,7 +279,7 @@ def _test() -> None:
         session=session_provider,
         camera=camera,
         renderables=renderables,
-        resoution_settings=surface_provider,
+        resoution_settings=deferred_provider,
         scene_size=video_settings.scene_size,
         camera_position=camera,
     )

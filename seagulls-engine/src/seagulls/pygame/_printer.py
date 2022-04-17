@@ -12,8 +12,36 @@ from seagulls.rendering import (
 )
 
 from ._surface import IProvideSurfaces
+from ..rendering._printer import IPrintThings, IPrintable
 
 logger = logging.getLogger(__name__)
+
+
+class PygameThingsPrinter(IPrintThings):
+
+    _surface: IProvideSurfaces
+
+    def __init__(self, surface: IProvideSurfaces):
+        self._surface = surface
+
+    def print(self, printable: IPrintable) -> None:
+        printable.print(self._get_frame())
+
+    def commit(self) -> None:
+        self._surface.update(self._get_frame())
+
+    def clear(self):
+        self._get_frame.cache_clear()
+
+    @cache
+    def _get_frame(self) -> Surface:
+        frame = self._surface.get()
+        frame.blit(self._get_copy(), (0, 0))
+        return frame
+
+    @cache
+    def _get_copy(self) -> Surface:
+        return self._surface.get().copy()
 
 
 class PygameSquarePrinter(IPrintSquares):

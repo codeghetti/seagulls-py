@@ -59,6 +59,7 @@ class Camera(IPrintSquares, IPrintSprites, IUpdatePosition):
 
         camera_position = self._position.get()
         logger.warning(f"camera position: {self._position.get()}")
+        logger.warning(f"object position: {object_position}")
 
         try:
             self._assert_visible(object_position, object_size)
@@ -66,6 +67,7 @@ class Camera(IPrintSquares, IPrintSprites, IUpdatePosition):
                 "x": object_position["x"] - camera_position["x"],
                 "y": object_position["y"] - camera_position["y"],
             })
+            logger.warning(f"square adjusted position: {adjusted_position.get()}")
             self._square_printer.print_square(color, size, adjusted_position)
         except ObjectDoesNotOverlapError:
             pass

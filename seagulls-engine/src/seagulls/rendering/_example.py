@@ -1,5 +1,6 @@
 import logging
 import random
+import time
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -137,30 +138,30 @@ class MyRenderables(IProvideRenderables):
                                 self._scene_size["height"]),
         })
         return tuple([
-            SolidColorComponent(
-                color=color,
-                size=size,
-                position=position1,
-                printer=self._square_printer,
-            ),
-            SolidColorComponent(
-                color=color,
-                size=size,
-                position=position2,
-                printer=self._square_printer,
-            ),
-            SpriteComponent(
-                image_path=Path(
-                    "../../../../"
-                    "seagulls-rpg-demo/seagulls_assets/sprites/rpg/rpg-urban-tilemap.packed.png"
-                ).resolve(),
-                size=Size({"height": 50, "width": 50}),
-                position=Position({
-                    "x": int(self._scene_size["width"] / 2),
-                    "y": int(self._scene_size["width"] / 2),
-                }),
-                printer=self._sprite_printer,
-            ),
+            # SolidColorComponent(
+            #     color=color,
+            #     size=size,
+            #     position=position1,
+            #     printer=self._square_printer,
+            # ),
+            # SolidColorComponent(
+            #     color=color,
+            #     size=size,
+            #     position=position2,
+            #     printer=self._square_printer,
+            # ),
+            # SpriteComponent(
+            #     image_path=Path(
+            #         "../../../../"
+            #         "seagulls-rpg-demo/seagulls_assets/sprites/rpg/rpg-urban-tilemap.packed.png"
+            #     ).resolve(),
+            #     size=Size({"height": 50, "width": 50}),
+            #     position=Position({
+            #         "x": int(self._scene_size["width"] / 2),
+            #         "y": int(self._scene_size["width"] / 2),
+            #     }),
+            #     printer=self._sprite_printer,
+            # ),
         ])
 
 
@@ -242,13 +243,20 @@ class MyScene(IGameScene):
                 self._set_scene_background.cache_clear()
                 self._camera.clear()
 
-        # self._set_scene_background()
-        for component in self._renderables.get():
-            component.render()
+        self._set_scene_background()
+        # for component in self._renderables.get():
+        #     component.render()
+
+        self._camera.print_square(Color({
+            "r": 20,
+            "g": 200,
+            "b": 20}),
+            Size({"height": 50, "width": 50}),
+            Position({"x": 50, "y": 50}))
 
         self._camera.commit()
-
         self._deferred_window.end_frame()
+        self._camera.clear()
 
     @lru_cache()
     def _set_scene_background(self) -> None:
@@ -296,108 +304,113 @@ def _test() -> None:
         video_settings.camera_size
     )
 
+    camera_surface_provider = PygameSurface(
+        deferred_window_surface_provider,
+        video_settings.camera_size)
+
+    square_printer = PygameSquarePrinter(camera_surface_provider)
+    sprite_printer = PygameSpritePrinter(camera_surface_provider)
+
+    camera = Camera(
+        square_printer=square_printer,
+        sprite_printer=sprite_printer,
+        # If camera size does not match scene size, some objects skip rendering
+        size=Size(video_settings.camera_size),
+        # If the camera does not start at 0, 0, we also skip rendering some objects
+        position=Position({"x": 0, "y": 0}),
+    )
+
+    while True:
+        camera.print_square(
+            Color({"r": 10, "g": 200, "b": 10}),
+            Size(video_settings.scene_size),
+            Position({"x": 0, "y": 0}),
+        )
+        camera.print_square(
+            Color({"r": 10, "g": 10, "b": 200}),
+            Size({"height": 10, "width": 10}),
+            Position({"x": random.randint(50, 100), "y": 50}),
+        )
+        camera.print_square(
+            Color({"r": 200, "g": 10, "b": 10}),
+            Size({"height": 10, "width": 10}),
+            Position({"x": 100, "y": random.randint(50, 100)}),
+        )
+        # camera.print_sprite(
+        #     image_path=Path(
+        #         "../../../../"
+        #         "seagulls-rpg-demo/seagulls_assets/sprites/rpg/rpg-urban-tilemap.packed.png"
+        #     ).resolve(),
+        #     size=Size({"height": 50, "width": 50}),
+        #     position=Position({
+        #         "x": random.randint(150, 200),
+        #         "y": 50,
+        #     }),
+        # )
+
+        camera.commit()
+        deferred_window_surface_provider.end_frame()
+
+        camera.clear()
+        time.sleep(1)
+
     # camera_surface_provider = PygameSurface(
     #     deferred_window_surface_provider,
     #     video_settings.camera_size,
     #     (230, 230, 250))
     #
-    # square_printer = PygameSquarePrinter(camera_surface_provider)
-    # sprite_printer = PygameSpritePrinter(camera_surface_provider)
+    # # These two classes are pygame specific implementations
+    # pygame_square_printer = PygameSquarePrinter(camera_surface_provider)
+    # pygame_sprite_printer = PygameSpritePrinter(camera_surface_provider)
     #
     # camera = Camera(
-    #     square_printer=square_printer,
-    #     sprite_printer=sprite_printer,
+    #     square_printer=pygame_square_printer,
+    #     sprite_printer=pygame_sprite_printer,
     #     # If camera size does not match scene size, some objects skip rendering
     #     size=Size(video_settings.camera_size),
     #     # If the camera does not start at 0, 0, we also skip rendering some objects
     #     position=Position({"x": 0, "y": 0}),
     # )
     #
-    # while True:
-    #     camera.print_square(
-    #         Color({"r": 10, "g": 10, "b": 200}),
-    #         Size({"height": 10, "width": 10}),
-    #         Position({"x": 50, "y": 50}),
-    #     )
-    #     camera.print_square(
-    #         Color({"r": 10, "g": 200, "b": 10}),
-    #         Size({"height": 10, "width": 10}),
-    #         Position({"x": 100, "y": 50}),
-    #     )
-    #     camera.print_sprite(
-    #         image_path=Path(
-    #             "../../../../"
-    #             "seagulls-rpg-demo/seagulls_assets/sprites/rpg/rpg-urban-tilemap.packed.png"
-    #         ).resolve(),
-    #         size=Size({"height": 50, "width": 50}),
-    #         position=Position({
-    #             "x": random.randint(150, 200),
-    #             "y": 50,
-    #         }),
-    #     )
+    # camera.clear()
     #
-    #     camera.commit()
-    #     camera.clear()
+    # # Objects with a render() method are provided by this class
+    # renderables = MyRenderables(
+    #     square_printer=camera,
+    #     sprite_printer=camera,
+    #     scene_size=video_settings.scene_size)
     #
-    #     deferred_window_surface_provider.end_frame()
-
-    camera_surface_provider = PygameSurface(
-        deferred_window_surface_provider,
-        video_settings.camera_size,
-        (230, 230, 250))
-
-    # These two classes are pygame specific implementations
-    pygame_square_printer = PygameSquarePrinter(camera_surface_provider)
-    pygame_sprite_printer = PygameSpritePrinter(camera_surface_provider)
-
-    camera = Camera(
-        square_printer=pygame_square_printer,
-        sprite_printer=pygame_sprite_printer,
-        # If camera size does not match scene size, some objects skip rendering
-        size=Size(video_settings.camera_size),
-        # If the camera does not start at 0, 0, we also skip rendering some objects
-        position=Position({"x": -50, "y": -50}),
-    )
-
-    camera.clear()
-
-    # Objects with a render() method are provided by this class
-    renderables = MyRenderables(
-        square_printer=camera,
-        sprite_printer=camera,
-        scene_size=video_settings.scene_size)
-
-    # A session is one execution of the game
-    # Sessions run until the game is exited
-    session_provider = MySessionProvider(NullGameSession())
-
-    # Scenes are the game's "levels" but could be the main menu scene too
-    scene = MyScene(
-        session=session_provider,
-        camera=camera,
-        deferred_window=deferred_window_surface_provider,
-        renderables=renderables,
-        resoution_settings=window_surface_provider,
-        scene_size=video_settings.scene_size,
-        camera_position=camera,
-    )
-    # Our scene uses the session provider to exit but we could move that somewhere else
-    # This is the reason for the `NullGameSession`
-    scene_provider = SceneProvider(scene)
-
-    # Sessions refresh "screens" which typically render a scene
-    screen = PygameScreen(scene_provider)
-    screen_provider = ScreenProvider(screen)
-
-    # Sessions just need a screen to constantly call refresh() on
-    session = BlockingGameSession(screen_provider)
-    session_provider.set(session)
-    try:
-        # Since this is blocking, one of the active scene objects must call stop()
-        pygame.init()
-        session.start()
-    except KeyboardInterrupt:
-        session.stop()
+    # # A session is one execution of the game
+    # # Sessions run until the game is exited
+    # session_provider = MySessionProvider(NullGameSession())
+    #
+    # # Scenes are the game's "levels" but could be the main menu scene too
+    # scene = MyScene(
+    #     session=session_provider,
+    #     camera=camera,
+    #     deferred_window=deferred_window_surface_provider,
+    #     renderables=renderables,
+    #     resoution_settings=window_surface_provider,
+    #     scene_size=video_settings.scene_size,
+    #     camera_position=camera,
+    # )
+    # # Our scene uses the session provider to exit but we could move that somewhere else
+    # # This is the reason for the `NullGameSession`
+    # scene_provider = SceneProvider(scene)
+    #
+    # # Sessions refresh "screens" which typically render a scene
+    # screen = PygameScreen(scene_provider)
+    # screen_provider = ScreenProvider(screen)
+    #
+    # # Sessions just need a screen to constantly call refresh() on
+    # session = BlockingGameSession(screen_provider)
+    # session_provider.set(session)
+    # try:
+    #     # Since this is blocking, one of the active scene objects must call stop()
+    #     pygame.init()
+    #     session.start()
+    # except KeyboardInterrupt:
+    #     session.stop()
 
 
 _test()

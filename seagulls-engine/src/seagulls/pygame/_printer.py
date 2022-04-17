@@ -6,7 +6,6 @@ from pygame import Surface
 
 from seagulls.rendering import (
     Color,
-    IClearPrinters,
     IPrintSquares,
     Position,
     Size,
@@ -17,14 +16,14 @@ from ._surface import IProvideSurfaces
 logger = logging.getLogger(__name__)
 
 
-class PygameSquarePrinter(IPrintSquares, IClearPrinters):
+class PygameSquarePrinter(IPrintSquares):
 
     _surface: IProvideSurfaces
 
     def __init__(self, surface: IProvideSurfaces):
         self._surface = surface
 
-    def print(self, color: Color, size: Size, position: Position):
+    def print_square(self, color: Color, size: Size, position: Position):
         c = color.get()
         s = size.get()
         p = position.get()

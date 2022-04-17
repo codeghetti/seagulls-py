@@ -3,7 +3,6 @@ from typing import Tuple
 
 from seagulls.rendering import (
     Color,
-    IClearPrinters,
     IPrintSquares,
     Position,
     Size
@@ -13,10 +12,9 @@ from seagulls.rendering._position import IUpdatePosition
 logger = logging.getLogger(__name__)
 
 
-class Camera(IPrintSquares, IClearPrinters, IUpdatePosition):
+class Camera(IPrintSquares, IUpdatePosition):
 
     _square_renderer: IPrintSquares
-    _clearer: IClearPrinters
     _size: Size
     _position: Position
     _background_color: Color
@@ -24,17 +22,15 @@ class Camera(IPrintSquares, IClearPrinters, IUpdatePosition):
     def __init__(
             self,
             square_renderer: IPrintSquares,
-            clearer: IClearPrinters,
             size: Size,
             position: Position):
         self._square_renderer = square_renderer
-        self._clearer = clearer
         self._size = size
         self._position = position
 
         self._background_color = Color({"r": 0, "g": 0, "b": 0})
 
-    def print(self, color: Color, size: Size, position: Position):
+    def print_square(self, color: Color, size: Size, position: Position):
         object_position = position.get()
         object_size = size.get()
 
@@ -69,7 +65,7 @@ class Camera(IPrintSquares, IClearPrinters, IUpdatePosition):
                 "x": object_position["x"] - camera_position["x"],
                 "y": object_position["y"] - camera_position["y"],
             })
-            self._square_renderer.print(color, size, adjusted_position)
+            self._square_renderer.print_square(color, size, adjusted_position)
         except ObjectDoesNotOverlapError:
             logger.warning("Skipping!")
             pass
@@ -78,7 +74,7 @@ class Camera(IPrintSquares, IClearPrinters, IUpdatePosition):
         self._square_renderer.commit()
 
     def clear(self):
-        self._clearer.clear()
+        self._square_renderer.clear()
 
     def update_position(self, position: Position) -> None:
         self._position = position

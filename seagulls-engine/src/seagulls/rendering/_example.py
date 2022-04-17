@@ -8,7 +8,6 @@ import pygame
 
 from seagulls.pygame import PygameSquarePrinter, WindowSurface, PygameSurface
 from seagulls.rendering import (
-    IClearPrinters,
     IGameScreen,
     IPrintSquares,
     IProvideGameScreens
@@ -47,7 +46,7 @@ class SolidColorComponent(RenderableComponent):
         self._printer = printer
 
     def render(self) -> None:
-        self._printer.print(self._color, self._size, self._position)
+        self._printer.print_square(self._color, self._size, self._position)
 
 
 class SceneProvider(IProvideGameScenes):
@@ -150,8 +149,7 @@ class MyResolutionSettings:
 class MyScene(IGameScene):
 
     _session: IProvideGameSessions
-    _printer: IPrintSquares
-    _clearer: IClearPrinters
+    _camera: Camera
     _renderables: IProvideRenderables
     _resoution_settings: WindowSurface
     _scene_size: SizeDict
@@ -160,15 +158,13 @@ class MyScene(IGameScene):
     def __init__(
             self,
             session: IProvideGameSessions,
-            printer: IPrintSquares,
-            clearer: IClearPrinters,
+            camera: Camera,
             renderables: IProvideRenderables,
             resoution_settings: WindowSurface,
             scene_size: SizeDict,
             camera_position: IUpdatePosition):
         self._session = session
-        self._printer = printer
-        self._clearer = clearer
+        self._camera = camera
         self._renderables = renderables
         self._resoution_settings = resoution_settings
         self._scene_size = scene_size
@@ -189,31 +185,31 @@ class MyScene(IGameScene):
                 self._resoution_settings.update_window()
             if pygame.key.get_pressed()[pygame.K_LEFT]:
                 self._camera_position.move_position((-5, 0))
-                self._clearer.clear()
-                self._black_background.cache_clear()
+                self._camera.clear()
+                self._set_scene_background.cache_clear()
             if pygame.key.get_pressed()[pygame.K_RIGHT]:
                 self._camera_position.move_position((5, 0))
-                self._clearer.clear()
-                self._black_background.cache_clear()
+                self._camera.clear()
+                self._set_scene_background.cache_clear()
             if pygame.key.get_pressed()[pygame.K_UP]:
                 self._camera_position.move_position((0, -5))
-                self._clearer.clear()
-                self._black_background.cache_clear()
+                self._camera.clear()
+                self._set_scene_background.cache_clear()
             if pygame.key.get_pressed()[pygame.K_DOWN]:
                 self._camera_position.move_position((0, 5))
-                self._clearer.clear()
-                self._black_background.cache_clear()
+                self._camera.clear()
+                self._set_scene_background.cache_clear()
 
-        self._black_background()
+        self._set_scene_background()
         for component in self._renderables.get():
             component.render()
 
-        self._printer.commit()
+        self._camera.commit()
 
     @lru_cache()
-    def _black_background(self) -> None:
-        self._printer.print(Color({
-            "r": 0,
+    def _set_scene_background(self) -> None:
+        self._camera.print_square(Color({
+            "r": 50,
             "g": 0,
             "b": 0}),
             Size(self._scene_size),
@@ -254,15 +250,12 @@ def _test() -> None:
     camera_surface_provider = PygameSurface(
         surface_provider,
         video_settings.camera_size,
-        (230, 230, 250))
-    # These two classes are pygame specific implementations
-    printer = PygameSquarePrinter(surface_provider)
+        (130, 130, 150))
 
     camera_printer = PygameSquarePrinter(camera_surface_provider)
 
     camera = Camera(
         square_renderer=camera_printer,
-        clearer=printer,
         # If camera size does not match scene size, some objects skip rendering
         size=Size(video_settings.camera_size),
         # If the camera does not start at 0, 0, we also skip rendering some objects
@@ -279,8 +272,7 @@ def _test() -> None:
     # Scenes are the game's "levels" but could be the main menu scene too
     scene = MyScene(
         session=session_provider,
-        printer=camera,
-        clearer=camera,
+        camera=camera,
         renderables=renderables,
         resoution_settings=surface_provider,
         scene_size=video_settings.scene_size,

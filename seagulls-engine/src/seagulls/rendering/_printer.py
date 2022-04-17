@@ -6,19 +6,18 @@ from ._position import Position
 from ._size import Size
 
 
-class IPrintSquares(Protocol):
-
-    @abstractmethod
-    def print(self, color: Color, size: Size, position: Position) -> None:
-        """"""
-
+class IPrinter(Protocol):
     @abstractmethod
     def commit(self) -> None:
         """"""
 
-
-class IClearPrinters(Protocol):
-
     @abstractmethod
     def clear(self):
+        """"""
+
+
+class IPrintSquares(IPrinter, Protocol):
+
+    @abstractmethod
+    def print_square(self, color: Color, size: Size, position: Position) -> None:
         """"""

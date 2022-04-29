@@ -1,50 +1,23 @@
 import logging
 from functools import lru_cache, cache
+from pathlib import Path
 
 import pygame.display
 from pygame import Surface
 
 from seagulls.rendering import (
     Color,
-    IPrintSquares,
+    IPrinter,
     Position,
     Size,
 )
 
 from ._surface import IProvideSurfaces
-from ..rendering._printer import IPrintThings, IPrintable
 
 logger = logging.getLogger(__name__)
 
 
-class PygameThingsPrinter(IPrintThings):
-
-    _surface: IProvideSurfaces
-
-    def __init__(self, surface: IProvideSurfaces):
-        self._surface = surface
-
-    def print(self, printable: IPrintable) -> None:
-        printable.print(self._get_frame())
-
-    def commit(self) -> None:
-        self._surface.update(self._get_frame())
-
-    def clear(self):
-        self._get_frame.cache_clear()
-
-    @cache
-    def _get_frame(self) -> Surface:
-        frame = self._surface.get()
-        frame.blit(self._get_copy(), (0, 0))
-        return frame
-
-    @cache
-    def _get_copy(self) -> Surface:
-        return self._surface.get().copy()
-
-
-class PygameSquarePrinter(IPrintSquares):
+class PygamePrinter(IPrinter):
 
     _surface: IProvideSurfaces
 
@@ -59,6 +32,21 @@ class PygameSquarePrinter(IPrintSquares):
         square = Surface((s["width"], s["height"]))
         square.fill((c["r"], c["g"], c["b"]))
         self._get_frame().blit(square, (p["x"], p["y"]))
+
+    def print_sprite(self, file: Path, size: Size, position: Position) -> None:
+        s = size.get()
+        p = position.get()
+
+        sprite = self._load_png(file)
+        scaled_surface = pygame.transform.scale(sprite, (s["width"], s["height"]))
+        self._get_frame().blit(scaled_surface, (p["x"], p["y"]))
+
+    def _load_png(self, file: Path) -> Surface:
+        loaded_sprite = pygame.image.load(file.resolve())
+        if loaded_sprite.get_alpha() is None:
+            return loaded_sprite.convert()
+        else:
+            return loaded_sprite.convert_alpha()
 
     def commit(self) -> None:
         self._surface.update(self._get_frame())

@@ -41,23 +41,3 @@ class PygameSurface(IProvideSurfaces):
 
     def update(self, surface: Surface):
         self._parent.update(surface)
-
-
-class DeferredPygameSurface(IProvideSurfaces):
-
-    _parent: IProvideSurfaces
-
-    def __init__(self, parent: IProvideSurfaces):
-        self._parent = parent
-
-    def get(self) -> Surface:
-        return self._parent.get()
-
-    def update(self, surface: Surface):
-        logger.warning(f"deferred update called")
-        self._parent.update(surface)
-        # self._parent.get().blit(surface, (0, 0))
-
-    def end_frame(self) -> None:
-        logger.warning(f"deferred end frame called")
-        # self._parent.update(self._parent.get())

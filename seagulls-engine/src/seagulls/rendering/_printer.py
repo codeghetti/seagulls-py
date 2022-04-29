@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from pathlib import Path
 from typing import Protocol
 
 from ._color import Color
@@ -7,40 +8,21 @@ from ._size import Size
 
 
 class IPrinter(Protocol):
+
+    @abstractmethod
+    def print_square(self, color: Color, size: Size, position: Position) -> None:
+        """"""
+
+    @abstractmethod
+    def print_sprite(self, file: Path, size: Size, position: Position) -> None:
+        """"""
+
     @abstractmethod
     def commit(self) -> None:
         """"""
 
     @abstractmethod
     def clear(self):
-        """"""
-
-
-class IPrintable(Protocol):
-    @abstractmethod
-    def print(self) -> None:
-        """"""
-
-
-class IPrintThings(IPrinter, Protocol):
-    @abstractmethod
-    def print(self, printable: IPrintable) -> None:
-        """"""
-
-
-class IPrintSquares(IPrinter, Protocol):
-
-    @abstractmethod
-    def print_square(self, color: Color, size: Size, position: Position) -> None:
-        """"""
-
-
-class PrintableSquare(IPrintable):
-    _color: Color
-    _size: Size
-    _position: Position
-
-    def print(self) -> None:
         """"""
 
 

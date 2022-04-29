@@ -6,12 +6,12 @@ concepts. We should see no references to the pygame library outside this package
 us the ability to use other graphical libraries in the future.
 """
 
-from ._printer import PygameSquarePrinter
+from ._printer import PygamePrinter
 from ._surface import IProvideSurfaces, PygameSurface
 from ._window import WindowSurface
 
 __all__ = [
-    "PygameSquarePrinter",
+    "PygamePrinter",
     "IProvideSurfaces",
     "PygameSurface",
     "WindowSurface",

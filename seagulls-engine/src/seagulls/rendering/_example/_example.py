@@ -23,8 +23,8 @@ logger = logging.getLogger(__name__)
 def _test() -> None:
     video_settings = VideoSettings(
         window_size={"height": 800, "width": 1200},
-        scene_size={"height": 300, "width": 800},
-        camera_size={"height": 300, "width": 300},
+        scene_size={"height": 500, "width": 500},
+        camera_size={"height": 500, "width": 500},
     )
 
     # Printers "print" onto surfaces
@@ -60,7 +60,7 @@ def _test() -> None:
         session=session_provider,
         camera=camera,
         renderables=renderables,
-        resoution_settings=surface_provider,
+        window=surface_provider,
         scene_size=video_settings.scene_size,
         camera_position=camera,
     )

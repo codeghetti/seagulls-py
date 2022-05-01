@@ -1,9 +1,8 @@
 import random
-from functools import lru_cache
 
 import pygame
 
-from seagulls.pygame import IProvideSurfaces
+from seagulls.pygame import WindowSurface
 from seagulls.rendering import SizeDict, Color, Size, Position
 from seagulls.rendering._camera import Camera
 from seagulls.rendering._position import IUpdatePosition
@@ -17,7 +16,7 @@ class MyScene(IGameScene):
     _session: IProvideGameSessions
     _camera: Camera
     _renderables: IProvideRenderables
-    _resoution_settings: IProvideSurfaces
+    _resoution_settings: WindowSurface
     _scene_size: SizeDict
     _camera_position: IUpdatePosition
 
@@ -26,13 +25,13 @@ class MyScene(IGameScene):
             session: IProvideGameSessions,
             camera: Camera,
             renderables: IProvideRenderables,
-            resoution_settings: IProvideSurfaces,
+            window: WindowSurface,
             scene_size: SizeDict,
             camera_position: IUpdatePosition):
         self._session = session
         self._camera = camera
         self._renderables = renderables
-        self._resoution_settings = resoution_settings
+        self._window = window
         self._scene_size = scene_size
         self._camera_position = camera_position
 
@@ -46,11 +45,11 @@ class MyScene(IGameScene):
                 self._session.get().stop()
                 return
             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
-                self._resoution_settings.set_resolution({
-                    "height": random.randint(100, 700),
-                    "width": random.randint(100, 700),
+                self._window.set_resolution({
+                    "height": random.randint(100, 1200),
+                    "width": random.randint(100, 1200),
                 })
-                self._resoution_settings.update_window()
+                self._window.update_window()
             if pygame.key.get_pressed()[pygame.K_LEFT]:
                 self._camera_position.move_position((-5, 0))
             if pygame.key.get_pressed()[pygame.K_RIGHT]:

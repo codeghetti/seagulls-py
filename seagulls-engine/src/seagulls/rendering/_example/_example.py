@@ -2,7 +2,7 @@ import logging
 
 import pygame
 
-from seagulls.pygame import PygamePrinter, WindowSurface, PygameSurface
+from seagulls.pygame import PygamePrinter, PygameSurface, WindowSurface
 from seagulls.rendering._camera import Camera
 from seagulls.rendering._example._pygame_screen import PygameScreen
 from seagulls.rendering._example._renderables import MyRenderables
@@ -12,10 +12,7 @@ from seagulls.rendering._example._session import MySessionProvider
 from seagulls.rendering._example._settings import VideoSettings
 from seagulls.rendering._position import Position
 from seagulls.rendering._size import Size
-from seagulls.session import (
-    BlockingGameSession,
-    NullGameSession
-)
+from seagulls.session import BlockingGameSession, NullGameSession
 
 logger = logging.getLogger(__name__)
 

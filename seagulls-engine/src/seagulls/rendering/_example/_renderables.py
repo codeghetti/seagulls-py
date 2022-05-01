@@ -2,9 +2,15 @@ import random
 from pathlib import Path
 from typing import Tuple
 
-from seagulls.rendering import IPrinter, SizeDict, Color, Size, Position
-from seagulls.rendering._example._components import SolidColorComponent, SpriteComponent
-from seagulls.rendering._renderable_component import IProvideRenderables, RenderableComponent
+from seagulls.rendering import Color, IPrinter, Position, Size, SizeDict
+from seagulls.rendering._example._components import (
+    SolidColorComponent,
+    SpriteComponent
+)
+from seagulls.rendering._renderable_component import (
+    IProvideRenderables,
+    RenderableComponent
+)
 
 
 class MyRenderables(IProvideRenderables):

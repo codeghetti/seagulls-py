@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from seagulls.rendering import Color, Size, Position, IPrinter
+from seagulls.rendering import Color, IPrinter, Position, Size
 from seagulls.rendering._renderable_component import RenderableComponent
 
 

@@ -2,8 +2,8 @@ import logging
 from typing import Optional, Tuple
 
 import pygame
-from pygame import Surface
 
+from seagulls.engine import Surface
 from seagulls.rendering import SizeDict
 
 from ._surface import IProvideSurfaces
@@ -17,12 +17,12 @@ class WindowSurface(IProvideSurfaces):
     # Is it bad to depend on a data structure like this instead of using Size?
     _resolution_setting: SizeDict
     _camera_setting: SizeDict
-    _padding_color = Tuple[int, int, int]
+    _padding_color: Tuple[int, int, int]
 
     def __init__(self, resolution_setting: SizeDict, camera_setting: SizeDict):
         self._resolution_setting = resolution_setting
         self._camera_setting = camera_setting
-        self._padding_color = tuple([100, 100, 100])
+        self._padding_color = (100, 100, 100)
         self._current_surface = None
 
     def initialize(self) -> None:

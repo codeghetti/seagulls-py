@@ -3,7 +3,7 @@ import random
 import pygame
 
 from seagulls.pygame import WindowSurface
-from seagulls.rendering import SizeDict, Color, Size, Position
+from seagulls.rendering import Color, Position, Size, SizeDict
 from seagulls.rendering._camera import Camera
 from seagulls.rendering._position import IUpdatePosition
 from seagulls.rendering._renderable_component import IProvideRenderables

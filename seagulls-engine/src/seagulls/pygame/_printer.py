@@ -1,16 +1,11 @@
 import logging
-from functools import lru_cache, cache
+from functools import lru_cache
 from pathlib import Path
 
 import pygame.display
-from pygame import Surface
 
-from seagulls.rendering import (
-    Color,
-    IPrinter,
-    Position,
-    Size,
-)
+from seagulls.engine import Surface
+from seagulls.rendering import Color, IPrinter, Position, Size
 
 from ._surface import IProvideSurfaces
 
@@ -54,13 +49,13 @@ class PygamePrinter(IPrinter):
     def clear(self) -> None:
         self._get_frame.cache_clear()
 
-    @cache
+    @lru_cache()
     def _get_frame(self) -> Surface:
         frame = self._surface.get()
         frame.blit(self._get_copy(), (0, 0))
         return frame
 
-    @cache
+    @lru_cache()
     def _get_copy(self) -> Surface:
         return self._surface.get().copy()
 
@@ -81,15 +76,15 @@ class AwaitableReference:
     # Whether this class is available for interaction
     _available: Event
     _presenter: AwaitableReferencePresenter
-    
+
     def __init__(self):
         self._available = Event()
-    
+
     @release_reference
     def execute(self) -> None:
         # Do some stuff
         self._presenter.on_ready(random.randint(1, 100))
 ```
 
-This is almost certainly a bad idea. 
+This is almost certainly a bad idea.
 """

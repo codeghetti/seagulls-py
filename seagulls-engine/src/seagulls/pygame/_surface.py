@@ -2,8 +2,7 @@ import logging
 from abc import abstractmethod
 from typing import Protocol, Tuple
 
-from pygame import Surface
-
+from seagulls.engine import Surface
 from seagulls.rendering import SizeDict
 
 logger = logging.getLogger(__name__)

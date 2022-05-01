@@ -2,12 +2,7 @@ import logging
 from pathlib import Path
 from typing import Tuple
 
-from seagulls.rendering import (
-    Color,
-    IPrinter,
-    Position,
-    Size
-)
+from seagulls.rendering import Color, IPrinter, Position, Size
 from seagulls.rendering._position import IUpdatePosition
 
 logger = logging.getLogger(__name__)

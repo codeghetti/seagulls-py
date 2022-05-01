@@ -1,4 +1,8 @@
-from seagulls.session import IStopGameSessions, IProvideGameSessions, IGameSession
+from seagulls.session import (
+    IGameSession,
+    IProvideGameSessions,
+    IStopGameSessions
+)
 
 
 class MySessionStopper(IStopGameSessions):

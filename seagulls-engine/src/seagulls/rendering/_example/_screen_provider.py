@@ -1,4 +1,4 @@
-from seagulls.rendering import IProvideGameScreens, IGameScreen
+from seagulls.rendering import IGameScreen, IProvideGameScreens
 
 
 class ScreenProvider(IProvideGameScreens):

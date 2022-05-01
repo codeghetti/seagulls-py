@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import TypedDict, Protocol, Tuple
+from typing import Protocol, Tuple, TypedDict
 
 
 class PositionDict(TypedDict):

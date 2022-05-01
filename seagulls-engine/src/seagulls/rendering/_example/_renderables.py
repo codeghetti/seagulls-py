@@ -11,6 +11,7 @@ from seagulls.rendering._renderable_component import (
     IProvideRenderables,
     RenderableComponent
 )
+from seagulls.rendering._sprite import Sprite, SpriteGrid
 
 
 class MyRenderables(IProvideRenderables):
@@ -60,19 +61,48 @@ class MyRenderables(IProvideRenderables):
                 printer=self._printer,
             ),
             SpriteComponent(
-                filepath=Path(
-                    "seagulls-rpg-demo/seagulls_assets/sprites/environment/"
-                    "rpg-environment-options/tile_0060.png"),
+                sprite=Sprite(
+                    sprite_grid=SpriteGrid(
+                        file_path=Path(
+                            "../../../../../seagulls-rpg-demo/seagulls_assets/sprites/environment/"
+                            "rpg-environment-options/tile_0060.png"),
+                        resolution=Size({"height": 16, "width": 16}),
+                        grid_size=Size({"height": 1, "width": 1}),
+                    ),
+                    coordinates=Position({"x": 0, "y": 0}),
+                ),
                 size=Size({"height": 16, "width": 16}),
                 position=Position({"x": 200, "y": 50}),
                 printer=self._printer,
             ),
             SpriteComponent(
-                filepath=Path(
-                    "seagulls-rpg-demo/seagulls_assets/sprites/environment/"
-                    "rpg-environment-options/tile_0026.png"),
+                sprite=Sprite(
+                    sprite_grid=SpriteGrid(
+                        file_path=Path(
+                            "../../../../../seagulls-rpg-demo/seagulls_assets/sprites/environment/"
+                            "rpg-environment-options/tile_0026.png"),
+                        resolution=Size({"height": 16, "width": 16}),
+                        grid_size=Size({"height": 1, "width": 1}),
+                    ),
+                    coordinates=Position({"x": 0, "y": 0}),
+                ),
                 size=Size({"height": 16*4, "width": 16*4}),
                 position=Position({"x": 100, "y": 50}),
+                printer=self._printer,
+            ),
+            SpriteComponent(
+                sprite=Sprite(
+                    sprite_grid=SpriteGrid(
+                        file_path=Path(
+                            "../../../../../seagulls-rpg-demo/seagulls_assets/sprites/"
+                            "rpg/rpg-urban-tilemap.packed.png"),
+                        resolution=Size({"height": 288, "width": 432}),
+                        grid_size=Size({"height": 18, "width": 27}),
+                    ),
+                    coordinates=Position({"x": 26, "y": 17}),
+                ),
+                size=Size({"height": 16*4, "width": 16*4}),
+                position=Position({"x": 200, "y": 250}),
                 printer=self._printer,
             ),
         ])

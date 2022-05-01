@@ -8,6 +8,7 @@ from seagulls.engine import Surface
 from seagulls.rendering import Color, IPrinter, Position, Size
 
 from ._surface import IProvideSurfaces
+from ..rendering._sprite import Sprite
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +29,20 @@ class PygamePrinter(IPrinter):
         square.fill((c["r"], c["g"], c["b"]))
         self._get_frame().blit(square, (p["x"], p["y"]))
 
-    def print_sprite(self, file: Path, size: Size, position: Position) -> None:
+    def print_sprite(self, sprite: Sprite, size: Size, position: Position) -> None:
         s = size.get()
         p = position.get()
 
-        sprite = self._load_png(file)
-        scaled_surface = pygame.transform.scale(sprite, (s["width"], s["height"]))
+        rez = sprite.resolution().get()
+        pos = sprite.position().get()
+
+        sprite_surface = self._load_png(sprite.sprite_grid.file_path)
+
+        unit_surface = Surface((rez["width"], rez["height"]))
+        unit_surface.set_colorkey((0, 0, 0))
+        unit_surface.blit(
+            sprite_surface, (0, 0), (pos["x"], pos["y"], rez["width"], rez["height"]))
+        scaled_surface = pygame.transform.scale(unit_surface, (s["width"], s["height"]))
         self._get_frame().blit(scaled_surface, (p["x"], p["y"]))
 
     def _load_png(self, file: Path) -> Surface:

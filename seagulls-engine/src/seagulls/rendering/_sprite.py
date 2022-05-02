@@ -6,7 +6,7 @@ from ._position import Position
 
 
 @dataclass(frozen=True)
-class SpriteGrid:
+class SpriteSheet:
     file_path: Path
     resolution: Size
     grid_size: Size
@@ -35,7 +35,7 @@ class SpriteGrid:
 
 @dataclass(frozen=True)
 class Sprite:
-    sprite_grid: SpriteGrid
+    sprite_grid: SpriteSheet
     coordinates: Position
 
     def position(self) -> Position:

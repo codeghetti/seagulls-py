@@ -5,10 +5,17 @@ from pathlib import Path
 import pygame.display
 
 from seagulls.engine import Surface
-from seagulls.rendering import Color, IPrinter, Position, Size
+from seagulls.rendering import (
+    Color,
+    IPrinter,
+    Position,
+    Size,
+    Sprite,
+    Camera,
+    ObjectDoesNotOverlapError
+)
 
 from ._surface import IProvideSurfaces
-from ..rendering._sprite import Sprite
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +27,30 @@ class PygamePrinter(IPrinter):
     def __init__(self, surface: IProvideSurfaces):
         self._surface = surface
 
-    def print_square(self, color: Color, size: Size, position: Position):
+    def print_box(self, color: Color, size: Size, border_size: int, position: Position) -> None:
+        try:
+            self._assert_visible(size, position)
+        except ObjectDoesNotOverlapError:
+            return
+
+        c = color.get()
+        s = size.get()
+        p = position.get()
+
+        square = Surface((s["width"], s["height"]))
+        square.fill((c["r"], c["g"], c["b"]))
+
+        center = Surface((s["width"] - border_size * 2, s["height"] - border_size * 2))
+        square.blit(center, (border_size, border_size))
+
+        self._get_frame().blit(square, (p["x"], p["y"]))
+
+    def print_square(self, color: Color, size: Size, position: Position) -> None:
+        try:
+            self._assert_visible(size, position)
+        except ObjectDoesNotOverlapError:
+            return
+
         c = color.get()
         s = size.get()
         p = position.get()
@@ -30,6 +60,11 @@ class PygamePrinter(IPrinter):
         self._get_frame().blit(square, (p["x"], p["y"]))
 
     def print_sprite(self, sprite: Sprite, size: Size, position: Position) -> None:
+        try:
+            self._assert_visible(size, position)
+        except ObjectDoesNotOverlapError:
+            return
+
         s = size.get()
         p = position.get()
 
@@ -58,6 +93,12 @@ class PygamePrinter(IPrinter):
     def clear(self) -> None:
         self._get_frame.cache_clear()
 
+    def _assert_visible(self, size: Size, position: Position) -> None:
+        pass
+
+    def _get_adjusted_position(self, original: Position) -> Position:
+        return original
+
     @lru_cache()
     def _get_frame(self) -> Surface:
         frame = self._surface.get()
@@ -67,6 +108,24 @@ class PygamePrinter(IPrinter):
     @lru_cache()
     def _get_copy(self) -> Surface:
         return self._surface.get().copy()
+
+
+class PygameCameraPrinter(PygamePrinter):
+
+    _camera: Camera
+
+    def __init__(self, surface: IProvideSurfaces, camera: Camera):
+        super().__init__(surface)
+        self._camera = camera
+
+    def _assert_visible(self, size: Size, position: Position) -> None:
+        self._camera.assert_visible(size, position)
+
+    def _get_adjusted_position(self, original: Position) -> Position:
+        adjusted = self._camera.adjust_position(original)
+        print(f"original: {original.get()}")
+        print(f"adjusted: {adjusted.get()}")
+        return adjusted
 
 
 """

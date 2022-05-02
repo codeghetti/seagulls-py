@@ -3,6 +3,7 @@ import logging
 import pygame
 
 from seagulls.pygame import PygamePrinter, PygameSurface, WindowSurface
+from seagulls.pygame._printer import PygameCameraPrinter
 from seagulls.rendering._camera import Camera
 from seagulls.rendering._example._pygame_screen import PygameScreen
 from seagulls.rendering._example._renderables import MyRenderables
@@ -33,19 +34,24 @@ def _test() -> None:
         video_settings.camera_size,
         (70, 70, 150))
 
-    camera_printer = PygamePrinter(camera_surface_provider)
+    printer = PygamePrinter(camera_surface_provider)
 
     camera = Camera(
-        printer=camera_printer,
+        printer=printer,
         # If camera size does not match scene size, some objects skip rendering
         size=Size(video_settings.camera_size),
         # If the camera does not start at 0, 0, we also skip rendering some objects
         position=Position({"x": 0, "y": 0}),
     )
 
+    camera_printer = PygameCameraPrinter(
+        surface=camera_surface_provider,
+        camera=camera,
+    )
+
     # Objects with a render() method are provided by this class
     renderables = MyRenderables(
-        camera,
+        camera_printer,
         video_settings.scene_size)
 
     # A session is one execution of the game

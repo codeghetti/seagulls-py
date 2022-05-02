@@ -5,13 +5,13 @@ from typing import Tuple
 from seagulls.rendering import Color, IPrinter, Position, Size, SizeDict
 from seagulls.rendering._example._components import (
     SolidColorComponent,
-    SpriteComponent
+    SpriteComponent, BoxComponent
 )
 from seagulls.rendering._renderable_component import (
     IProvideRenderables,
     RenderableComponent
 )
-from seagulls.rendering._sprite import Sprite, SpriteGrid
+from seagulls.rendering._sprite import Sprite, SpriteSheet
 
 
 class MyRenderables(IProvideRenderables):
@@ -54,15 +54,16 @@ class MyRenderables(IProvideRenderables):
                 position=position1,
                 printer=self._printer,
             ),
-            SolidColorComponent(
-                color=color,
-                size=size,
-                position=position2,
-                printer=self._printer,
-            ),
+            # BoxComponent(
+            #     color=color,
+            #     size=size,
+            #     border_size=2,
+            #     position=position2,
+            #     printer=self._printer,
+            # ),
             SpriteComponent(
                 sprite=Sprite(
-                    sprite_grid=SpriteGrid(
+                    sprite_grid=SpriteSheet(
                         file_path=Path(
                             "../../../../../seagulls-rpg-demo/seagulls_assets/sprites/environment/"
                             "rpg-environment-options/tile_0060.png"),
@@ -77,7 +78,7 @@ class MyRenderables(IProvideRenderables):
             ),
             SpriteComponent(
                 sprite=Sprite(
-                    sprite_grid=SpriteGrid(
+                    sprite_grid=SpriteSheet(
                         file_path=Path(
                             "../../../../../seagulls-rpg-demo/seagulls_assets/sprites/environment/"
                             "rpg-environment-options/tile_0026.png"),
@@ -92,7 +93,7 @@ class MyRenderables(IProvideRenderables):
             ),
             SpriteComponent(
                 sprite=Sprite(
-                    sprite_grid=SpriteGrid(
+                    sprite_grid=SpriteSheet(
                         file_path=Path(
                             "../../../../../seagulls-rpg-demo/seagulls_assets/sprites/"
                             "rpg/rpg-urban-tilemap.packed.png"),

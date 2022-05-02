@@ -1,9 +1,12 @@
 import logging
-from pathlib import Path
 from typing import Tuple
 
-from seagulls.rendering import Color, IPrinter, Position, Size
-from seagulls.rendering._position import IUpdatePosition
+from ._color import Color
+from ._printer import IPrinter
+from ._position import Position
+from ._size import Size
+from ._sprite import Sprite
+from ._position import IUpdatePosition
 
 logger = logging.getLogger(__name__)
 
@@ -36,27 +39,27 @@ class Camera(IPrinter, IUpdatePosition):
 
         self._background_color = Color({"r": 0, "g": 0, "b": 0})
 
-    def print_sprite(self, file: Path, size: Size, position: Position) -> None:
+    def print_sprite(self, sprite: Sprite, size: Size, position: Position) -> None:
         object_position = position.get()
         camera_position = self._position.get()
 
         try:
-            self._assert_objects_overlap(size, position)
+            self.assert_visible(size, position)
             adjusted_position = Position({
                 "x": object_position["x"] - camera_position["x"],
                 "y": object_position["y"] - camera_position["y"],
             })
-            self._printer.print_sprite(file, size, adjusted_position)
+            self._printer.print_sprite(sprite, size, adjusted_position)
         except ObjectDoesNotOverlapError:
             logger.warning("Skipping!")
             pass
 
-    def print_square(self, color: Color, size: Size, position: Position):
+    def print_square(self, color: Color, size: Size, position: Position) -> None:
         object_position = position.get()
         camera_position = self._position.get()
 
         try:
-            self._assert_objects_overlap(size, position)
+            self.assert_visible(size, position)
             adjusted_position = Position({
                 "x": object_position["x"] - camera_position["x"],
                 "y": object_position["y"] - camera_position["y"],
@@ -66,7 +69,16 @@ class Camera(IPrinter, IUpdatePosition):
             logger.warning("Skipping!")
             pass
 
-    def _assert_objects_overlap(self, size: Size, position: Position) -> None:
+    def adjust_position(self, original: Position) -> Position:
+        object_position = original.get()
+        camera_position = self._position.get()
+
+        return Position({
+            "x": object_position["x"] - camera_position["x"],
+            "y": object_position["y"] - camera_position["y"],
+        })
+
+    def assert_visible(self, size: Size, position: Position) -> None:
         object_position = position.get()
         object_size = size.get()
 

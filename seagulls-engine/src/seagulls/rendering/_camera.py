@@ -1,11 +1,8 @@
 import logging
 from typing import Tuple
 
-from ._color import Color
 from ._position import IUpdatePosition, Position
-from ._printer import IPrinter
 from ._size import Size
-from ._sprite import Sprite
 
 logger = logging.getLogger(__name__)
 

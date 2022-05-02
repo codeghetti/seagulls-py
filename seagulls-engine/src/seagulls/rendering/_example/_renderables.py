@@ -7,11 +7,12 @@ import pygame
 from pygame.rect import Rect
 
 from seagulls.pygame import PygameCameraPrinter
-from seagulls.rendering import Color, Position, Size, SizeDict, Camera
+from seagulls.rendering import Camera, Color, Position, Size, SizeDict
 from seagulls.rendering._example._components import (
     BoxComponent,
     SolidColorComponent,
-    SpriteComponent
+    SpriteComponent,
+    TextComponent
 )
 from seagulls.rendering._renderable_component import (
     IProvideRenderables,
@@ -153,8 +154,7 @@ class MyRenderables(IProvideRenderables):
         for rect, coordinates in self._get_sprite_sheet_rects():
             if rect.collidepoint(pygame.mouse.get_pos()):
                 coords_pos = coordinates.get()
-                print(f"Highlighted Cell: {coords_pos}")
-                items.append(
+                items.extend([
                     BoxComponent(
                         color=Color({"r": 1, "g": 0, "b": 0}),
                         size=Size({
@@ -166,7 +166,22 @@ class MyRenderables(IProvideRenderables):
                             {"x": coords_pos["x"] * 16, "y": 50 + coords_pos["y"] * 16}),
                         printer=self._printer,
                     ),
-                )
+                    TextComponent(
+                        text=(
+                            f"Cell: "
+                            f"({str(coords_pos['x']).zfill(2)}, {str(coords_pos['y']).zfill(2)})"
+                        ),
+                        font_path=Path(
+                            "../../../../../"
+                            "seagulls-rpg-demo/seagulls_assets/fonts/"
+                            "ubuntu-mono-v10-latin-regular.ttf"),
+                        font_size=15,
+                        color=Color({"r": 250, "g": 250, "b": 250}),
+                        size=Size({"height": 17, "width": 175}),
+                        position=Position({"x": 200, "y": 10}),
+                        printer=self._printer,
+                    ),
+                ])
 
         return tuple(items)
 

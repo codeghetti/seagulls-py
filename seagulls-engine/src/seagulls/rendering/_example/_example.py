@@ -2,8 +2,7 @@ import logging
 
 import pygame
 
-from seagulls.pygame import PygamePrinter, PygameSurface, WindowSurface
-from seagulls.pygame._printer import PygameCameraPrinter
+from seagulls.pygame import PygameCameraPrinter, PygameSurface, WindowSurface
 from seagulls.rendering._camera import Camera
 from seagulls.rendering._example._pygame_screen import PygameScreen
 from seagulls.rendering._example._renderables import MyRenderables

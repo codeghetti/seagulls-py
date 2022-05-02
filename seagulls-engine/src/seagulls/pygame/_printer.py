@@ -3,6 +3,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import pygame.display
+from pygame.font import Font
 
 from seagulls.engine import Surface
 from seagulls.rendering import (
@@ -26,6 +27,31 @@ class PygamePrinter(IPrinter):
 
     def __init__(self, surface: IProvideSurfaces):
         self._surface = surface
+
+    def print_text(
+            self,
+            text: str,
+            font_path: Path,
+            font_size: int,
+            color: Color,
+            size: Size,
+            position: Position) -> None:
+        try:
+            self._assert_visible(size, position)
+        except ObjectDoesNotOverlapError:
+            return
+
+        c = color.get()
+        s = size.get()
+        p = self._get_adjusted_position(position).get()
+
+        font = Font(font_path, font_size)
+        surface = font.render(text, True, (c["r"], c["g"], c["b"]), "black")
+        surface.set_colorkey((0, 0, 0))
+
+        surface = pygame.transform.scale(surface, (s["width"], s["height"]))
+
+        self._get_frame().blit(surface, (p["x"], p["y"]))
 
     def print_box(self, color: Color, size: Size, border_size: int, position: Position) -> None:
         try:

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 def _test() -> None:
     video_settings = VideoSettings(
-        window_size={"height": 800, "width": 1200},
+        window_size={"height": 500, "width": 500},
         scene_size={"height": 500, "width": 500},
         camera_size={"height": 500, "width": 500},
     )
@@ -48,8 +48,9 @@ def _test() -> None:
 
     # Objects with a render() method are provided by this class
     renderables = MyRenderables(
-        camera_printer,
-        video_settings.scene_size)
+        printer=camera_printer,
+        camera=camera,
+        scene_size=video_settings.scene_size)
 
     # A session is one execution of the game
     # Sessions run until the game is exited

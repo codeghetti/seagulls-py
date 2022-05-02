@@ -125,10 +125,7 @@ class PygameCameraPrinter(PygamePrinter):
         self._camera.assert_visible(size, position)
 
     def _get_adjusted_position(self, original: Position) -> Position:
-        adjusted = self._camera.adjust_position(original)
-        print(f"original: {original.get()}")
-        print(f"adjusted: {adjusted.get()}")
-        return adjusted
+        return self._camera.adjust_position(original)
 
 
 """

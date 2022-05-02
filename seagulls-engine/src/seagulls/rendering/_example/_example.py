@@ -34,10 +34,7 @@ def _test() -> None:
         video_settings.camera_size,
         (70, 70, 150))
 
-    printer = PygamePrinter(camera_surface_provider)
-
     camera = Camera(
-        printer=printer,
         # If camera size does not match scene size, some objects skip rendering
         size=Size(video_settings.camera_size),
         # If the camera does not start at 0, 0, we also skip rendering some objects
@@ -61,7 +58,7 @@ def _test() -> None:
     # Scenes are the game's "levels" but could be the main menu scene too
     scene = MyScene(
         session=session_provider,
-        camera=camera,
+        printer=camera_printer,
         renderables=renderables,
         window=surface_provider,
         scene_size=video_settings.scene_size,

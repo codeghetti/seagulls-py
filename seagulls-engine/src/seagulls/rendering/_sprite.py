@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from ._size import Size
 from ._position import Position
+from ._size import Size
 
 
 @dataclass(frozen=True)

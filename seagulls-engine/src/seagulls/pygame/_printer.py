@@ -6,13 +6,13 @@ import pygame.display
 
 from seagulls.engine import Surface
 from seagulls.rendering import (
+    Camera,
     Color,
     IPrinter,
+    ObjectDoesNotOverlapError,
     Position,
     Size,
-    Sprite,
-    Camera,
-    ObjectDoesNotOverlapError
+    Sprite
 )
 
 from ._surface import IProvideSurfaces
@@ -35,13 +35,16 @@ class PygamePrinter(IPrinter):
 
         c = color.get()
         s = size.get()
-        p = position.get()
+        p = self._get_adjusted_position(position).get()
 
         square = Surface((s["width"], s["height"]))
         square.fill((c["r"], c["g"], c["b"]))
 
-        center = Surface((s["width"] - border_size * 2, s["height"] - border_size * 2))
+        center = Surface(
+            (s["width"] - border_size * 2, s["height"] - border_size * 2))
+
         square.blit(center, (border_size, border_size))
+        square.set_colorkey((0, 0, 0))
 
         self._get_frame().blit(square, (p["x"], p["y"]))
 
@@ -53,7 +56,7 @@ class PygamePrinter(IPrinter):
 
         c = color.get()
         s = size.get()
-        p = position.get()
+        p = self._get_adjusted_position(position).get()
 
         square = Surface((s["width"], s["height"]))
         square.fill((c["r"], c["g"], c["b"]))
@@ -66,7 +69,7 @@ class PygamePrinter(IPrinter):
             return
 
         s = size.get()
-        p = position.get()
+        p = self._get_adjusted_position(position).get()
 
         rez = sprite.resolution().get()
         pos = sprite.position().get()

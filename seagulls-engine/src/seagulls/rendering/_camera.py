@@ -2,16 +2,15 @@ import logging
 from typing import Tuple
 
 from ._color import Color
+from ._position import IUpdatePosition, Position
 from ._printer import IPrinter
-from ._position import Position
 from ._size import Size
 from ._sprite import Sprite
-from ._position import IUpdatePosition
 
 logger = logging.getLogger(__name__)
 
 
-class Camera(IPrinter, IUpdatePosition):
+class Camera(IUpdatePosition):
 
     """
     2022-04-16
@@ -23,51 +22,15 @@ class Camera(IPrinter, IUpdatePosition):
     - end the frame?
     """
 
-    _printer: IPrinter
     _size: Size
     _position: Position
-    _background_color: Color
 
     def __init__(
             self,
-            printer: IPrinter,
             size: Size,
             position: Position):
-        self._printer = printer
         self._size = size
         self._position = position
-
-        self._background_color = Color({"r": 0, "g": 0, "b": 0})
-
-    def print_sprite(self, sprite: Sprite, size: Size, position: Position) -> None:
-        object_position = position.get()
-        camera_position = self._position.get()
-
-        try:
-            self.assert_visible(size, position)
-            adjusted_position = Position({
-                "x": object_position["x"] - camera_position["x"],
-                "y": object_position["y"] - camera_position["y"],
-            })
-            self._printer.print_sprite(sprite, size, adjusted_position)
-        except ObjectDoesNotOverlapError:
-            logger.warning("Skipping!")
-            pass
-
-    def print_square(self, color: Color, size: Size, position: Position) -> None:
-        object_position = position.get()
-        camera_position = self._position.get()
-
-        try:
-            self.assert_visible(size, position)
-            adjusted_position = Position({
-                "x": object_position["x"] - camera_position["x"],
-                "y": object_position["y"] - camera_position["y"],
-            })
-            self._printer.print_square(color, size, adjusted_position)
-        except ObjectDoesNotOverlapError:
-            logger.warning("Skipping!")
-            pass
 
     def adjust_position(self, original: Position) -> Position:
         object_position = original.get()
@@ -105,12 +68,6 @@ class Camera(IPrinter, IUpdatePosition):
             # Object is too far below to be visible
             logger.warning("Object is too far below to be visible")
             raise ObjectDoesNotOverlapError()
-
-    def commit(self) -> None:
-        self._printer.commit()
-
-    def clear(self):
-        self._printer.clear()
 
     def update_position(self, position: Position) -> None:
         self._position = position

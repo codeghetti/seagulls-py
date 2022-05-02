@@ -3,8 +3,7 @@ import random
 import pygame
 
 from seagulls.pygame import WindowSurface
-from seagulls.rendering import Color, Position, Size, SizeDict
-from seagulls.rendering._camera import Camera
+from seagulls.rendering import Color, IPrinter, Position, Size, SizeDict
 from seagulls.rendering._position import IUpdatePosition
 from seagulls.rendering._renderable_component import IProvideRenderables
 from seagulls.scene import IGameScene, IProvideGameScenes
@@ -14,7 +13,7 @@ from seagulls.session import IProvideGameSessions
 class MyScene(IGameScene):
 
     _session: IProvideGameSessions
-    _camera: Camera
+    _printer: IPrinter
     _renderables: IProvideRenderables
     _resoution_settings: WindowSurface
     _scene_size: SizeDict
@@ -23,20 +22,20 @@ class MyScene(IGameScene):
     def __init__(
             self,
             session: IProvideGameSessions,
-            camera: Camera,
+            printer: IPrinter,
             renderables: IProvideRenderables,
             window: WindowSurface,
             scene_size: SizeDict,
             camera_position: IUpdatePosition):
         self._session = session
-        self._camera = camera
+        self._printer = printer
         self._renderables = renderables
         self._window = window
         self._scene_size = scene_size
         self._camera_position = camera_position
 
     def tick(self) -> None:
-        self._camera.clear()
+        self._printer.clear()
 
         # How do we move this logic out of scenes?
         for event in pygame.event.get():
@@ -63,10 +62,10 @@ class MyScene(IGameScene):
         for component in self._renderables.get():
             component.render()
 
-        self._camera.commit()
+        self._printer.commit()
 
     def _set_scene_background(self) -> None:
-        self._camera.print_square(Color({
+        self._printer.print_square(Color({
             "r": 50,
             "g": 0,
             "b": 0}),

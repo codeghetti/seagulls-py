@@ -7,20 +7,15 @@ from seagulls.engine import (
     EmptyScene,
     GameClock,
     GameControls,
-    SurfaceRenderer,
+    SurfaceRenderer
 )
+from seagulls.pygame import PygamePrinter, WindowSurface
 from seagulls.seagulls_cli import (
     SeagullsAppDiContainer,
     SeagullsCliApplication,
     SeagullsRuntimeClient
 )
-
-from seagulls.session import (
-    BlockingGameSession, NullGameSession
-)
-from ._pygame_screen import PygameScreen
-
-from ._screen_provider import ScreenProvider
+from seagulls.session import BlockingGameSession, NullGameSession
 
 from ._character import Character
 from ._cli_command import GameCliCommand
@@ -28,10 +23,11 @@ from ._cli_plugin import RpgDemoCliPlugin
 from ._debug_hud import DebugHud
 from ._fit_to_screen import FitToScreen
 from ._homes_and_trees import HomesAndTrees
+from ._pygame_screen import PygameScreen
 from ._rpg_background import SimpleRpgBackground
-from ._session import RpgSessionProvider
 from ._rpg_scene_2 import RpgScene2, SceneProvider
-from seagulls.pygame import WindowSurface, PygamePrinter
+from ._screen_provider import ScreenProvider
+from ._session import RpgSessionProvider
 
 
 class RpgDemoDiContainer:

@@ -2,7 +2,15 @@ import logging
 from pathlib import Path
 
 from seagulls.pygame import WindowSurface
-from seagulls.rendering import IPrinter, Color, Position, Size, SpriteComponent, Sprite, SpriteSheet
+from seagulls.rendering import (
+    Color,
+    IPrinter,
+    Position,
+    Size,
+    Sprite,
+    SpriteComponent,
+    SpriteSheet
+)
 from seagulls.scene import IGameScene, IProvideGameScenes
 from seagulls.session import IProvideGameSessions
 

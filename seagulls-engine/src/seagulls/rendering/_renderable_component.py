@@ -19,6 +19,7 @@ class IProvideRenderables(Protocol):
     def get(self) -> Tuple[RenderableComponent, ...]:
         """"""
 
+
 class SpriteComponent(RenderableComponent):
 
     _sprite: Sprite

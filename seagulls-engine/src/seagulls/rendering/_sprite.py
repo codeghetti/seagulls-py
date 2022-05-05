@@ -43,3 +43,4 @@ class Sprite:
 
     def resolution(self) -> Size:
         return self.sprite_grid.unit_resolution()
+

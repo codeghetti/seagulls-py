@@ -4,20 +4,23 @@ from pathlib import Path
 
 from seagulls.assets import AssetManager
 from seagulls.engine import (
-    ActiveSceneClient,
-    BasicSceneManager,
-    BlockingGameSession,
     EmptyScene,
     GameClock,
     GameControls,
     SurfaceRenderer,
-    WindowScene
 )
 from seagulls.seagulls_cli import (
     SeagullsAppDiContainer,
     SeagullsCliApplication,
     SeagullsRuntimeClient
 )
+
+from seagulls.session import (
+    BlockingGameSession, NullGameSession
+)
+from ._pygame_screen import PygameScreen
+
+from ._screen_provider import ScreenProvider
 
 from ._character import Character
 from ._cli_command import GameCliCommand
@@ -26,7 +29,9 @@ from ._debug_hud import DebugHud
 from ._fit_to_screen import FitToScreen
 from ._homes_and_trees import HomesAndTrees
 from ._rpg_background import SimpleRpgBackground
-from ._rpg_scene import RpgScene
+from ._session import RpgSessionProvider
+from ._rpg_scene_2 import RpgScene2, SceneProvider
+from seagulls.pygame import WindowSurface, PygamePrinter
 
 
 class RpgDemoDiContainer:
@@ -35,50 +40,79 @@ class RpgDemoDiContainer:
     def __init__(self, application: SeagullsCliApplication):
         self._application = application
 
+    @lru_cache()
     def plugin(self) -> RpgDemoCliPlugin:
         return RpgDemoCliPlugin(
             application=self._application,
             command=self._command(),
         )
 
+    @lru_cache()
     def _command(self) -> GameCliCommand:
         return GameCliCommand(
             game_session=self._blocking_game_session(),
-            active_scene_manager=self._active_scene_client(),
             scene=self._rpg_scene(),
+            window=self._window()
         )
 
     @lru_cache()
     def _blocking_game_session(self) -> BlockingGameSession:
         return BlockingGameSession(
-            scene_manager=BasicSceneManager(scene=self._window_scene()))
-
-    @lru_cache()
-    def _window_scene(self) -> WindowScene:
-        return WindowScene(
-            active_scene_provider=self._active_scene_client(),
+            screen_provider=self._screen_provider()
         )
 
     @lru_cache()
-    def _active_scene_client(self) -> ActiveSceneClient:
-        return ActiveSceneClient(scene=self._empty_scene())
+    def _screen_provider(self) -> ScreenProvider:
+        return ScreenProvider(
+            screen=self._screen()
+        )
+
+    @lru_cache()
+    def _screen(self) -> PygameScreen:
+        return PygameScreen(
+            scene=self._scene_provider()
+        )
+
+    @lru_cache()
+    def _scene_provider(self) -> SceneProvider:
+        return SceneProvider(
+            scene=self._rpg_scene()
+        )
 
     @lru_cache()
     def _empty_scene(self) -> EmptyScene:
         return EmptyScene()
 
-    def _rpg_scene(self) -> RpgScene:
-        return RpgScene(
-            surface_renderer=self._surface_renderer(),
-            clock=self._clock(),
-            debug_hud=self._debug_hud(),
-            asset_manager=self._asset_manager(),
-            background=self._background(),
-            homes_and_trees=self._homes_and_trees(),
-            character=self._character(),
-            game_controls=self._game_controls(),
-            fit_to_screen=self._fit_to_screen()
+    @lru_cache()
+    def _rpg_scene(self) -> RpgScene2:
+        return RpgScene2(
+            session=self._rpg_session_provider(),
+            printer=self._printer(),
+            window=self._window()
         )
+
+    @lru_cache()
+    def _printer(self) -> PygamePrinter:
+        return PygamePrinter(
+            surface=self._window()
+        )
+
+    @lru_cache()
+    def _window(self) -> WindowSurface:
+        return WindowSurface(
+            resolution_setting={"height": 600, "width": 1000},
+            camera_setting={"height": 600, "width": 1000}
+        )
+
+    @lru_cache()
+    def _rpg_session_provider(self) -> RpgSessionProvider:
+        return RpgSessionProvider(
+            session=self._null_game_session()
+        )
+
+    @lru_cache()
+    def _null_game_session(self) -> NullGameSession:
+        return NullGameSession()
 
     @lru_cache()
     def _background(self) -> SimpleRpgBackground:
@@ -123,6 +157,7 @@ class RpgDemoDiContainer:
     def _asset_manager(self) -> AssetManager:
         return AssetManager(assets_path=self._find_assets_path())
 
+    @lru_cache()
     def _find_assets_path(self) -> Path:
         if self._runtime_client().is_bundled():
             return Path(f"{getattr(sys, '_MEIPASS')}/seagulls_assets")
@@ -134,8 +169,10 @@ class RpgDemoDiContainer:
 
         return Path("seagulls_assets")
 
+    @lru_cache()
     def _runtime_client(self) -> SeagullsRuntimeClient:
         return self._seagulls_app_container().runtime_client()
 
+    @lru_cache()
     def _seagulls_app_container(self) -> SeagullsAppDiContainer:
         return self._application.get_container(SeagullsAppDiContainer)

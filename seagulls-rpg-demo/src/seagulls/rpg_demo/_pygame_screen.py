@@ -1,4 +1,4 @@
-from seagulls.rendering._example._scene import SceneProvider
+from ._rpg_scene_2 import SceneProvider
 
 
 class PygameScreen:

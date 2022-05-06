@@ -1,10 +1,10 @@
 from abc import abstractmethod
 from typing import Protocol, Tuple
 
-from ._sprite import Sprite
+from ._position import Position
 from ._printer import IPrinter
 from ._size import Size
-from ._position import Position
+from ._sprite import Sprite
 
 
 class RenderableComponent(Protocol):

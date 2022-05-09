@@ -24,7 +24,7 @@ from ._rpg_scene_2 import RpgScene2, SceneProvider
 from ._rpg_sprites import PixelShmupSpriteSheets
 from ._screen_provider import ScreenProvider
 from ._session import RpgSessionProvider
-from ._sprites_client import SpriteSheetLocator, SpriteSheetClient
+from ._sprites_client import SpriteSheetClient, SpriteSheetLocator
 
 
 class RpgDemoDiContainer:

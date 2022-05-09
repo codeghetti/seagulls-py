@@ -1,8 +1,10 @@
 from pathlib import Path
 
 from ._sprites_client import (
+    SpriteConfig,
+    SpriteEnum,
     SpriteSheetConfig,
-    SpriteConfig, SpriteSheetEnum, SpriteEnum
+    SpriteSheetEnum
 )
 
 

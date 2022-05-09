@@ -4,14 +4,12 @@ from functools import lru_cache
 from typing import List
 
 from seagulls.pygame import WindowSurface
-from seagulls.rendering import (
-    IPrinter,
-    Position,
-)
-from ._sprites_client import SpriteSheetClient, SpriteClient
-from ._rpg_sprites import PixelShmupTileSprites
+from seagulls.rendering import IPrinter, Position
 from seagulls.scene import IGameScene, IProvideGameScenes
 from seagulls.session import IProvideGameSessions
+
+from ._rpg_sprites import PixelShmupTileSprites
+from ._sprites_client import SpriteClient, SpriteSheetClient
 
 logger = logging.getLogger(__name__)
 

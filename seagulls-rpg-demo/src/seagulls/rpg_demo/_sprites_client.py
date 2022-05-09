@@ -2,14 +2,14 @@ from dataclasses import dataclass
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
 from seagulls.rendering import (
     IPrinter,
     Position,
-    SpriteComponent,
-    Sprite,
     Size,
+    Sprite,
+    SpriteComponent,
     SpriteSheet
 )
 

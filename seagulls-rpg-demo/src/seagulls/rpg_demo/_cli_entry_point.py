@@ -19,8 +19,8 @@ class RpgDemoCliPluginEntryPoint(
 def _main():
     di_container = SeagullsAppDiContainer(tuple(["seagulls", "launch"]))
     app = di_container.application()
-    rpg_demo_di_container = RpgDemoDiContainer(application=app)
-    app.register_plugin(rpg_demo_di_container.plugin())
+    # rpg_demo_di_container = RpgDemoDiContainer(application=app)
+    # app.register_plugin(rpg_demo_di_container.plugin())
     app.execute()
 
 

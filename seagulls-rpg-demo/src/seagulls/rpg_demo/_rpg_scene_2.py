@@ -8,8 +8,8 @@ from seagulls.rendering import (
     IPrinter,
     Position,
 )
-from ._sprites_client import SpriteSheetLocator, SpriteSheetClient, SpriteClient
-from ._rpg_sprites import PixelShmupSpriteSheets, PixelShmupTileSprites, PixelShmupShipSprites
+from ._sprites_client import SpriteSheetClient, SpriteClient
+from ._rpg_sprites import PixelShmupTileSprites
 from seagulls.scene import IGameScene, IProvideGameScenes
 from seagulls.session import IProvideGameSessions
 

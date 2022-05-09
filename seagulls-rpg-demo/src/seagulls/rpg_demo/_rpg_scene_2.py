@@ -44,10 +44,10 @@ class RpgScene2(IGameScene):
         grass_tree_2 = tiles.get_sprite(PixelShmupTileSprites.TREE_GRASS_2)
 
         grass_tree_1.render_sprite(Position({"x": 100, "y": 100}))
-        grass_tree_1.render_sprite(Position({"x": 200, "y": 100}), scale=2.0)
+        grass_tree_1.render_sprite(Position({"x": 200, "y": 100}))
         grass_tree_1.render_sprite(Position({"x": 300, "y": 100}))
 
-        grass_tree_2.render_sprite(Position({"x": 300, "y": 300}), scale=3.0)
+        grass_tree_2.render_sprite(Position({"x": 300, "y": 300}))
 
         large_blue.render_sprite(Position({"x": 300, "y": 500}))
 

@@ -1,16 +1,12 @@
 import logging
-from pathlib import Path
 
 from seagulls.pygame import WindowSurface
 from seagulls.rendering import (
-    Color,
     IPrinter,
     Position,
-    Size,
-    Sprite,
-    SpriteComponent,
-    SpriteSheet
 )
+from ._sprites_client import SpriteSheetLocator
+from ._rpg_sprites import PixelShmupSpriteSheets, PixelShmupTileSprites, PixelShmupShipSprites
 from seagulls.scene import IGameScene, IProvideGameScenes
 from seagulls.session import IProvideGameSessions
 
@@ -33,47 +29,27 @@ class RpgScene2(IGameScene):
         pass
 
     def tick(self) -> None:
-        tree_sprite = SpriteComponent(
-            sprite=Sprite(
-                sprite_grid=SpriteSheet(
-                    file_path=Path(
-                        "seagulls_assets/sprites/environment/"
-                        "rpg-environment/island-tree.png"),
-                    resolution=Size({"height": 16, "width": 16}),
-                    grid_size=Size({"height": 1, "width": 1}),
-                ),
-                coordinates=Position({"x": 0, "y": 0}),
-            ),
-            size=Size({"height": 64, "width": 64}),
-            position=Position({"x": 200, "y": 50}),
-            printer=self._printer,
+        sprite_sheet_locator = SpriteSheetLocator(printer=self._printer)
+
+        tiles = sprite_sheet_locator.get_sprite_sheet(
+            sprite_sheet_id=PixelShmupSpriteSheets.TILES
+        )
+        ships = sprite_sheet_locator.get_sprite_sheet(
+            sprite_sheet_id=PixelShmupSpriteSheets.SHIPS
         )
 
-        tree_sprite.render()
+        large_blue = ships.get_sprite(PixelShmupShipSprites.MODEL_1_LARGE_BLUE)
 
-        red_house_sprite = SpriteComponent(
-            sprite=Sprite(
-                sprite_grid=SpriteSheet(
-                    file_path=Path(
-                        "seagulls_assets/sprites/environment/"
-                        "rpg-environment/island-red-home.png"),
-                    resolution=Size({"height": 16, "width": 16}),
-                    grid_size=Size({"height": 1, "width": 1}),
-                ),
-                coordinates=Position({"x": 0, "y": 0}),
-            ),
-            size=Size({"height": 64, "width": 64}),
-            position=Position({"x": 264, "y": 50}),
-            printer=self._printer,
-        )
+        grass_tree_1 = tiles.get_sprite(PixelShmupTileSprites.TREE_GRASS_1)
+        grass_tree_2 = tiles.get_sprite(PixelShmupTileSprites.TREE_GRASS_2)
 
-        red_house_sprite.render()
+        grass_tree_1.render_sprite(Position({"x": 100, "y": 100}))
+        grass_tree_1.render_sprite(Position({"x": 200, "y": 100}), scale=2.0)
+        grass_tree_1.render_sprite(Position({"x": 300, "y": 100}))
 
-        self._printer.print_square(
-            Color({"r": 155, "g": 155, "b": 155}),
-            Size({"height": 100, "width": 100}),
-            Position({"x": 10, "y": 10})
-        )
+        grass_tree_2.render_sprite(Position({"x": 300, "y": 300}), scale=3.0)
+
+        large_blue.render_sprite(Position({"x": 300, "y": 500}))
 
         self._printer.commit()
 

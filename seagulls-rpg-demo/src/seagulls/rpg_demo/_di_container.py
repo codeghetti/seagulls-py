@@ -17,14 +17,9 @@ from seagulls.seagulls_cli import (
 )
 from seagulls.session import BlockingGameSession, NullGameSession
 
-from ._character import Character
 from ._cli_command import GameCliCommand
 from ._cli_plugin import RpgDemoCliPlugin
-from ._debug_hud import DebugHud
-from ._fit_to_screen import FitToScreen
-from ._homes_and_trees import HomesAndTrees
 from ._pygame_screen import PygameScreen
-from ._rpg_background import SimpleRpgBackground
 from ._rpg_scene_2 import RpgScene2, SceneProvider
 from ._screen_provider import ScreenProvider
 from ._session import RpgSessionProvider
@@ -111,35 +106,8 @@ class RpgDemoDiContainer:
         return NullGameSession()
 
     @lru_cache()
-    def _background(self) -> SimpleRpgBackground:
-        return SimpleRpgBackground(asset_manager=self._asset_manager())
-
-    @lru_cache()
-    def _character(self) -> Character:
-        return Character(
-            clock=self._clock(),
-            asset_manager=self._asset_manager(),
-            game_controls=self._game_controls(),
-            homes_and_trees=self._homes_and_trees(),
-        )
-
-    @lru_cache()
-    def _homes_and_trees(self) -> HomesAndTrees:
-        return HomesAndTrees(
-            asset_manager=self._asset_manager()
-        )
-
-    @lru_cache()
-    def _fit_to_screen(self) -> FitToScreen:
-        return FitToScreen()
-
-    @lru_cache()
     def _surface_renderer(self) -> SurfaceRenderer:
         return SurfaceRenderer()
-
-    @lru_cache()
-    def _debug_hud(self) -> DebugHud:
-        return DebugHud(asset_manager=self._asset_manager(), game_clock=self._clock())
 
     @lru_cache()
     def _clock(self) -> GameClock:

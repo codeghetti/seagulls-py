@@ -30,6 +30,14 @@ class PixelShmupTileSprites(SpriteEnum):
     TREE_DIRT_1 = SpriteConfig(x=7, y=4)
     TREE_DIRT_2 = SpriteConfig(x=7, y=5)
 
+    HOME_RED_GRASS_1 = SpriteConfig(x=0, y=6)
+    HOME_RED_GRASS_AFRAME = SpriteConfig(x=0, y=7)
+
+    FLAG_RED_GRASS = SpriteConfig(x=0, y=8)
+
+    GRASS_1 = SpriteConfig(x=2, y=4)
+    GRASS_2 = SpriteConfig(x=2, y=9)
+
 
 class PixelShmupShipSprites(SpriteEnum):
     MODEL_1_LARGE_BLUE = SpriteConfig(x=0, y=0)

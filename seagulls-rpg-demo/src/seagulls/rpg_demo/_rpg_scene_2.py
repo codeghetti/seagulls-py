@@ -1,11 +1,14 @@
 import logging
+import random
+from functools import lru_cache
+from typing import List
 
 from seagulls.pygame import WindowSurface
 from seagulls.rendering import (
     IPrinter,
     Position,
 )
-from ._sprites_client import SpriteSheetLocator
+from ._sprites_client import SpriteSheetLocator, SpriteSheetClient, SpriteClient
 from ._rpg_sprites import PixelShmupSpriteSheets, PixelShmupTileSprites, PixelShmupShipSprites
 from seagulls.scene import IGameScene, IProvideGameScenes
 from seagulls.session import IProvideGameSessions
@@ -17,41 +20,58 @@ class RpgScene2(IGameScene):
 
     _session: IProvideGameSessions
     _printer: IPrinter
+    _tiles_client: SpriteSheetClient
 
     def __init__(
             self,
             session: IProvideGameSessions,
             printer: IPrinter,
-            window: WindowSurface):
+            window: WindowSurface,
+            tiles_client: SpriteSheetClient):
         self._session = session
         self._printer = printer
         self._window = window
-        pass
+        self._tiles_client = tiles_client
 
     def tick(self) -> None:
-        sprite_sheet_locator = SpriteSheetLocator(printer=self._printer)
-
-        tiles = sprite_sheet_locator.get_sprite_sheet(
-            sprite_sheet_id=PixelShmupSpriteSheets.TILES
-        )
-        ships = sprite_sheet_locator.get_sprite_sheet(
-            sprite_sheet_id=PixelShmupSpriteSheets.SHIPS
-        )
-
-        large_blue = ships.get_sprite(PixelShmupShipSprites.MODEL_1_LARGE_BLUE)
-
-        grass_tree_1 = tiles.get_sprite(PixelShmupTileSprites.TREE_GRASS_1)
-        grass_tree_2 = tiles.get_sprite(PixelShmupTileSprites.TREE_GRASS_2)
-
-        grass_tree_1.render_sprite(Position({"x": 100, "y": 100}))
-        grass_tree_1.render_sprite(Position({"x": 200, "y": 100}))
-        grass_tree_1.render_sprite(Position({"x": 300, "y": 100}))
-
-        grass_tree_2.render_sprite(Position({"x": 300, "y": 300}))
-
-        large_blue.render_sprite(Position({"x": 300, "y": 500}))
+        mapping = self._tile_mapping()
+        for row in range(60):
+            for column in range(100):
+                x = column * 16
+                y = row * 16
+                pos = Position({"x": x, "y": y})
+                mapping[row][column].render_sprite(pos)
 
         self._printer.commit()
+
+    @lru_cache()
+    def _tile_mapping(self) -> List[List[SpriteClient]]:
+        result = []
+        for row in range(60):
+            row_items = []
+            for column in range(100):
+                rnd = random.randint(1, 100)
+                row_items.append(self._select_sprite(rnd))
+            result.append(row_items)
+
+        return result
+
+    def _select_sprite(self, rnd: int) -> SpriteClient:
+        options = {
+            0: PixelShmupTileSprites.TREE_GRASS_1,
+            3: PixelShmupTileSprites.TREE_GRASS_2,
+            6: PixelShmupTileSprites.HOME_RED_GRASS_1,
+            7: PixelShmupTileSprites.HOME_RED_GRASS_AFRAME,
+            8: PixelShmupTileSprites.FLAG_RED_GRASS,
+            9: PixelShmupTileSprites.GRASS_1,
+            71: PixelShmupTileSprites.GRASS_2,
+        }
+        matching = 0
+        for lower_bound in options.keys():
+            if lower_bound < rnd:
+                matching = lower_bound
+
+        return self._tiles_client.get_sprite(options[matching])
 
 
 class SceneProvider(IProvideGameScenes):

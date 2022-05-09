@@ -21,8 +21,10 @@ from ._cli_command import GameCliCommand
 from ._cli_plugin import RpgDemoCliPlugin
 from ._pygame_screen import PygameScreen
 from ._rpg_scene_2 import RpgScene2, SceneProvider
+from ._rpg_sprites import PixelShmupSpriteSheets
 from ._screen_provider import ScreenProvider
 from ._session import RpgSessionProvider
+from ._sprites_client import SpriteSheetLocator, SpriteSheetClient
 
 
 class RpgDemoDiContainer:
@@ -79,8 +81,17 @@ class RpgDemoDiContainer:
         return RpgScene2(
             session=self._rpg_session_provider(),
             printer=self._printer(),
-            window=self._window()
+            window=self._window(),
+            tiles_client=self._tiles_sprite_sheet_client(),
         )
+
+    @lru_cache()
+    def _tiles_sprite_sheet_client(self) -> SpriteSheetClient:
+        return self._sprite_sheet_locator().get_sprite_sheet(PixelShmupSpriteSheets.TILES)
+
+    @lru_cache()
+    def _sprite_sheet_locator(self) -> SpriteSheetLocator:
+        return SpriteSheetLocator(printer=self._printer())
 
     @lru_cache()
     def _printer(self) -> PygamePrinter:
@@ -91,8 +102,8 @@ class RpgDemoDiContainer:
     @lru_cache()
     def _window(self) -> WindowSurface:
         return WindowSurface(
-            resolution_setting={"height": 600, "width": 1000},
-            camera_setting={"height": 600, "width": 1000}
+            resolution_setting={"height": 16 * 60, "width": 16 * 100},
+            camera_setting={"height": 16 * 60, "width": 16 * 100},
         )
 
     @lru_cache()

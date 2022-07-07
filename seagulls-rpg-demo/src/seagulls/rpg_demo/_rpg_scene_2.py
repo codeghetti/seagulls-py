@@ -1,9 +1,10 @@
 import logging
 from pathlib import Path
 
+import pygame.mouse
 from seagulls.pygame import WindowSurface
 from seagulls.rendering import (
-    Color,
+    Camera,
     IPrinter,
     Position,
     Size,
@@ -21,18 +22,22 @@ class RpgScene2(IGameScene):
 
     _session: IProvideGameSessions
     _printer: IPrinter
+    _camera: Camera
 
     def __init__(
             self,
             session: IProvideGameSessions,
             printer: IPrinter,
-            window: WindowSurface):
+            window: WindowSurface,
+            camera: Camera):
         self._session = session
         self._printer = printer
         self._window = window
-        pass
+        self._camera = camera
 
     def tick(self) -> None:
+        self._printer.clear()
+
         tree_sprite = SpriteComponent(
             sprite=Sprite(
                 sprite_grid=SpriteSheet(
@@ -69,11 +74,33 @@ class RpgScene2(IGameScene):
 
         red_house_sprite.render()
 
-        self._printer.print_square(
-            Color({"r": 155, "g": 155, "b": 155}),
-            Size({"height": 100, "width": 100}),
-            Position({"x": 10, "y": 10})
+        pygame.event.get()
+
+        adjusted_position = self._camera.adjust_position(
+            Position(
+                {"x": pygame.mouse.get_pos()[0],
+                 "y": pygame.mouse.get_pos()[1]}))
+
+        cursor_sprite = SpriteComponent(
+            sprite=Sprite(
+                sprite_grid=SpriteSheet(
+                    file_path=Path(
+                        "seagulls_assets/sprites/environment/"
+                        "rpg-environment/cursor-sword-bronze.png"),
+                    resolution=Size({"height": 37, "width": 34}),
+                    grid_size=Size({"height": 1, "width": 1}),
+                ),
+                coordinates=Position({"x": 0, "y": 0}),
+            ),
+            size=Size({"height": 64, "width": 64}),
+            position=adjusted_position,
+            printer=self._printer,
         )
+
+        cursor_sprite.render()
+
+        logger.warning(f"{pygame.mouse.get_pos()}")
+        logger.warning(f"adjusted position: {adjusted_position.get()}")
 
         self._printer.commit()
 

@@ -9,7 +9,8 @@ from seagulls.engine import (
     GameControls,
     SurfaceRenderer
 )
-from seagulls.pygame import PygamePrinter, WindowSurface
+from seagulls.pygame import PygameCameraPrinter, WindowSurface
+from seagulls.rendering import Camera, Position, Size
 from seagulls.seagulls_cli import (
     SeagullsAppDiContainer,
     SeagullsCliApplication,
@@ -84,20 +85,35 @@ class RpgDemoDiContainer:
         return RpgScene2(
             session=self._rpg_session_provider(),
             printer=self._printer(),
-            window=self._window()
+            window=self._window(),
+            camera=self._camera()
         )
 
     @lru_cache()
-    def _printer(self) -> PygamePrinter:
-        return PygamePrinter(
-            surface=self._window()
+    def _printer(self) -> PygameCameraPrinter:
+        return PygameCameraPrinter(
+            surface=self._window(),
+            camera=self._camera()
         )
 
     @lru_cache()
     def _window(self) -> WindowSurface:
         return WindowSurface(
             resolution_setting={"height": 600, "width": 1000},
-            camera_setting={"height": 600, "width": 1000}
+            camera_setting=self._camera_size().get()
+        )
+
+    @lru_cache()
+    def _camera(self) -> Camera:
+        return Camera(
+            size=self._camera_size(),
+            position=Position({"x": 0, "y": 0})
+        )
+
+    @lru_cache()
+    def _camera_size(self) -> Size:
+        return Size(
+            size={"height": 600, "width": 1000}
         )
 
     @lru_cache()

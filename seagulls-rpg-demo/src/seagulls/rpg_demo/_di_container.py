@@ -29,6 +29,7 @@ from ._rpg_background import SimpleRpgBackground
 from ._rpg_scene_2 import RpgScene2, SceneProvider
 from ._screen_provider import ScreenProvider
 from ._session import RpgSessionProvider
+from ._sprite_client import SpriteClient
 
 
 class RpgDemoDiContainer:
@@ -86,7 +87,14 @@ class RpgDemoDiContainer:
             session=self._rpg_session_provider(),
             printer=self._printer(),
             window=self._window(),
-            camera=self._camera()
+            camera=self._camera(),
+            sprite_client=self._sprite_client(),
+        )
+
+    @lru_cache()
+    def _sprite_client(self) -> SpriteClient:
+        return SpriteClient(
+            printer=self._printer(),
         )
 
     @lru_cache()

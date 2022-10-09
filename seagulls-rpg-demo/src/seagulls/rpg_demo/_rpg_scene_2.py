@@ -1,19 +1,12 @@
 import logging
-from pathlib import Path
 
 import pygame.mouse
 from seagulls.pygame import WindowSurface
-from seagulls.rendering import (
-    Camera,
-    IPrinter,
-    Position,
-    Size,
-    Sprite,
-    SpriteComponent,
-    SpriteSheet
-)
+from seagulls.rendering import Camera, IPrinter, Position
 from seagulls.scene import IGameScene, IProvideGameScenes
 from seagulls.session import IProvideGameSessions
+
+from seagulls.rpg_demo._sprite_client import SpriteClient, Sprites
 
 logger = logging.getLogger(__name__)
 
@@ -29,50 +22,30 @@ class RpgScene2(IGameScene):
             session: IProvideGameSessions,
             printer: IPrinter,
             window: WindowSurface,
-            camera: Camera):
+            camera: Camera,
+            sprite_client: SpriteClient):
         self._session = session
         self._printer = printer
         self._window = window
         self._camera = camera
+        self._sprite_client = sprite_client
 
     def tick(self) -> None:
         self._printer.clear()
 
-        tree_sprite = SpriteComponent(
-            sprite=Sprite(
-                sprite_grid=SpriteSheet(
-                    file_path=Path(
-                        "seagulls_assets/sprites/environment/"
-                        "rpg-environment/island-tree.png"),
-                    resolution=Size({"height": 16, "width": 16}),
-                    grid_size=Size({"height": 1, "width": 1}),
-                ),
-                coordinates=Position({"x": 0, "y": 0}),
-            ),
-            size=Size({"height": 64, "width": 64}),
-            position=Position({"x": 200, "y": 50}),
-            printer=self._printer,
+        self._sprite_client.render_sprite(
+            Sprites.island_water,
+            Position({"x": 0, "y": 0})
         )
 
-        tree_sprite.render()
+        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 200, "y": 50}))
+        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 100, "y": 50}))
+        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 400, "y": 50}))
+        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 200, "y": 150}))
 
-        red_house_sprite = SpriteComponent(
-            sprite=Sprite(
-                sprite_grid=SpriteSheet(
-                    file_path=Path(
-                        "seagulls_assets/sprites/environment/"
-                        "rpg-environment/island-red-home.png"),
-                    resolution=Size({"height": 16, "width": 16}),
-                    grid_size=Size({"height": 1, "width": 1}),
-                ),
-                coordinates=Position({"x": 0, "y": 0}),
-            ),
-            size=Size({"height": 64, "width": 64}),
-            position=Position({"x": 264, "y": 50}),
-            printer=self._printer,
-        )
+        self._sprite_client.render_sprite(Sprites.island_red_home, Position({"x": 264, "y": 50}))
 
-        red_house_sprite.render()
+        self._sprite_client.render_sprite(Sprites.jeffrey_standing, Position({"x": 350, "y": 60}))
 
         pygame.event.get()
 
@@ -81,26 +54,9 @@ class RpgScene2(IGameScene):
                 {"x": pygame.mouse.get_pos()[0],
                  "y": pygame.mouse.get_pos()[1]}))
 
-        cursor_sprite = SpriteComponent(
-            sprite=Sprite(
-                sprite_grid=SpriteSheet(
-                    file_path=Path(
-                        "seagulls_assets/sprites/environment/"
-                        "rpg-environment/cursor-sword-bronze.png"),
-                    resolution=Size({"height": 37, "width": 34}),
-                    grid_size=Size({"height": 1, "width": 1}),
-                ),
-                coordinates=Position({"x": 0, "y": 0}),
-            ),
-            size=Size({"height": 64, "width": 64}),
-            position=adjusted_position,
-            printer=self._printer,
-        )
-
-        cursor_sprite.render()
-
-        logger.warning(f"{pygame.mouse.get_pos()}")
-        logger.warning(f"adjusted position: {adjusted_position.get()}")
+        self._sprite_client.render_sprite(
+            Sprites.cursor_sword_bronze,
+            adjusted_position)
 
         self._printer.commit()
 

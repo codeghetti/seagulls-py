@@ -27,6 +27,8 @@ class GameCliCommand(ICliCommand):
 
     def execute(self) -> None:
         pygame.init()
+        pygame.mouse.set_visible(False)
+
         self._window.initialize()
         try:
             self._game_session.start()

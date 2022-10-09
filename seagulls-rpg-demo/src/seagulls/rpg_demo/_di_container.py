@@ -1,6 +1,7 @@
 import sys
 from functools import lru_cache
 from pathlib import Path
+from typing import Dict
 
 from seagulls.assets import AssetManager
 from seagulls.engine import (
@@ -10,7 +11,14 @@ from seagulls.engine import (
     SurfaceRenderer
 )
 from seagulls.pygame import PygameCameraPrinter, WindowSurface
-from seagulls.rendering import Camera, Position, Size
+from seagulls.rendering import (
+    Camera,
+    Position,
+    Size,
+    SpriteClient,
+    SpriteInfo,
+    Sprites
+)
 from seagulls.seagulls_cli import (
     SeagullsAppDiContainer,
     SeagullsCliApplication,
@@ -29,7 +37,6 @@ from ._rpg_background import SimpleRpgBackground
 from ._rpg_scene_2 import RpgScene2, SceneProvider
 from ._screen_provider import ScreenProvider
 from ._session import RpgSessionProvider
-from ._sprite_client import SpriteClient
 
 
 class RpgDemoDiContainer:
@@ -95,7 +102,48 @@ class RpgDemoDiContainer:
     def _sprite_client(self) -> SpriteClient:
         return SpriteClient(
             printer=self._printer(),
+            sprite_mapping=self._sprite_mapping(),
         )
+
+    @lru_cache()
+    def _sprite_mapping(self) -> Dict[Sprites, SpriteInfo]:
+        return {
+            Sprites.island_tree: SpriteInfo(
+                path="seagulls_assets/sprites/environment/rpg-environment/island-tree.png",
+                resolution=(16, 16),
+                size=(64, 64),
+                grid_size=(1, 1),
+                coordinates=(0, 0),
+            ),
+            Sprites.island_red_home: SpriteInfo(
+                path="seagulls_assets/sprites/environment/rpg-environment/island-red-home.png",
+                resolution=(16, 16),
+                size=(64, 64),
+                grid_size=(1, 1),
+                coordinates=(0, 0),
+            ),
+            Sprites.cursor_sword_bronze: SpriteInfo(
+                path="seagulls_assets/sprites/environment/rpg-environment/cursor-sword-bronze.png",
+                resolution=(37, 34),
+                size=(64, 64),
+                grid_size=(1, 1),
+                coordinates=(0, 0),
+            ),
+            Sprites.island_water: SpriteInfo(
+                path="seagulls_assets/sprites/environment/rpg-environment/island-water.png",
+                resolution=(16, 16),
+                size=(500, 500),
+                grid_size=(1, 1),
+                coordinates=(0, 0),
+            ),
+            Sprites.jeffrey_standing: SpriteInfo(
+                path="seagulls_assets/sprites/rpg/rpg-urban-tilemap.packed.png",
+                resolution=(288, 432),
+                size=(32, 32),
+                grid_size=(18, 27),
+                coordinates=(24, 0),
+            )
+        }
 
     @lru_cache()
     def _printer(self) -> PygameCameraPrinter:

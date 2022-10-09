@@ -2,11 +2,15 @@ import logging
 
 import pygame.mouse
 from seagulls.pygame import WindowSurface
-from seagulls.rendering import Camera, IPrinter, Position
+from seagulls.rendering import (
+    Camera,
+    IPrinter,
+    Position,
+    SpriteClient,
+    Sprites
+)
 from seagulls.scene import IGameScene, IProvideGameScenes
 from seagulls.session import IProvideGameSessions
-
-from seagulls.rpg_demo._sprite_client import SpriteClient, Sprites
 
 logger = logging.getLogger(__name__)
 

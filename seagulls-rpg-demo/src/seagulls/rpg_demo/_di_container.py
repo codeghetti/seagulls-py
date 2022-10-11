@@ -17,7 +17,7 @@ from seagulls.rendering import (
     Size,
     SpriteClient,
     SpriteInfo,
-    Sprites
+    SpritesType
 )
 from seagulls.seagulls_cli import (
     SeagullsAppDiContainer,
@@ -34,7 +34,7 @@ from ._fit_to_screen import FitToScreen
 from ._homes_and_trees import HomesAndTrees
 from ._pygame_screen import PygameScreen
 from ._rpg_background import SimpleRpgBackground
-from ._rpg_scene_2 import RpgScene2, SceneProvider
+from ._rpg_scene_2 import RpgScene2, SceneProvider, Sprites
 from ._screen_provider import ScreenProvider
 from ._session import RpgSessionProvider
 
@@ -106,7 +106,7 @@ class RpgDemoDiContainer:
         )
 
     @lru_cache()
-    def _sprite_mapping(self) -> Dict[Sprites, SpriteInfo]:
+    def _sprite_mapping(self) -> Dict[SpritesType, SpriteInfo]:
         return {
             Sprites.island_tree: SpriteInfo(
                 path="seagulls_assets/sprites/environment/rpg-environment/island-tree.png",

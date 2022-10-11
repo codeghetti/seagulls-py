@@ -1,3 +1,4 @@
+from abc import ABC
 from enum import Enum
 from pathlib import Path
 from typing import Dict, NamedTuple, Tuple
@@ -12,12 +13,8 @@ from seagulls.rendering import (
 )
 
 
-class Sprites(Enum):
-    island_tree = "island-tree"
-    island_red_home = "island-red-home"
-    jeffrey_standing = "jeffrey-standing"
-    cursor_sword_bronze = "cursor-sword-bronze"
-    island_water = "island-water"
+class SpritesType(Enum, ABC):
+    pass
 
 
 class SpriteInfo(NamedTuple):
@@ -31,11 +28,11 @@ class SpriteInfo(NamedTuple):
 class SpriteClient:
     def __init__(self,
                  printer: IPrinter,
-                 sprite_mapping: Dict[Sprites, SpriteInfo]):
+                 sprite_mapping: Dict[SpritesType, SpriteInfo]):
         self._printer = printer
         self._sprite_mapping = sprite_mapping
 
-    def render_sprite(self, sprite_name: Sprites, position: Position) -> None:
+    def render_sprite(self, sprite_name: SpritesType, position: Position) -> None:
         sprite_info = self._sprite_mapping[sprite_name]
 
         sprite = SpriteComponent(

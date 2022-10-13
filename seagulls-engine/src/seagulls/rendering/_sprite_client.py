@@ -13,7 +13,7 @@ from seagulls.rendering import (
 )
 
 
-class SpritesType(Enum, ABC):
+class SpritesType(Enum):
     pass
 
 

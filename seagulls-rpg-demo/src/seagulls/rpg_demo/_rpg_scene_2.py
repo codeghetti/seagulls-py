@@ -2,13 +2,25 @@ import logging
 
 import pygame.mouse
 from seagulls.pygame import WindowSurface
-from seagulls.rendering import Camera, IPrinter, Position
+from seagulls.rendering import (
+    Camera,
+    IPrinter,
+    Position,
+    SpriteClient,
+    SpritesType
+)
 from seagulls.scene import IGameScene, IProvideGameScenes
 from seagulls.session import IProvideGameSessions
 
-from seagulls.rpg_demo._sprite_client import SpriteClient, Sprites
-
 logger = logging.getLogger(__name__)
+
+
+class Sprites(SpritesType):
+    island_tree = "island-tree"
+    island_red_home = "island-red-home"
+    jeffrey_standing = "jeffrey-standing"
+    cursor_sword_bronze = "cursor-sword-bronze"
+    island_water = "island-water"
 
 
 class RpgScene2(IGameScene):

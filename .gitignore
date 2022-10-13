@@ -9,3 +9,6 @@ dist/
 .idea/
 
 .DS_Store
+
+# Random backup files from some programs
+*~

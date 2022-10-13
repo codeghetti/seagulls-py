@@ -19,6 +19,11 @@ class AssetManager:
     def load_sprite(self, name: str) -> Surface:
         return self.load_png(f"sprites/{name}")
 
+    def load_jpg(self, name: str) -> Surface:
+        path = self.get_path(f"{name}.jpg")
+        loaded_sprite = load(path.resolve())
+        return loaded_sprite.convert()
+
     def load_png(self, name: str) -> Surface:
         path = self.get_path(f"{name}.png")
         loaded_sprite = load(path.resolve())

@@ -22,10 +22,10 @@ flake8 = "*"
 flake8-isort = "*"
 mypy = "*"
 pyinstaller = "*"
-seagulls-cli = { version = "", allow-prereleases = true}
-seagulls-engine = { version = "", allow-prereleases = true}
+seagulls-cli = { version = "*", allow-prereleases = true}
+seagulls-engine = { version = "*", allow-prereleases = true}
 toml = "^0.10.2"
-types-toml = { version = "", optional = true }
+types-toml = { version = "*", optional = true }
 
 [tool.poetry.extras]
 dev = ["types-toml"]

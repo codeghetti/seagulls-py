@@ -1,0 +1,53 @@
+[tool.seagulls]
+name = "seagulls-where-in-the-world-demo"
+entry_point_path = "src/seagulls/where_in_the_world_demo/_cli_entry_point.py"
+
+[tool.poetry]
+name = "seagulls-where-in-the-world-demo"
+version = "0.0.0"
+description = ""
+authors = ["Lorenzo Pisani <zeelot3k@gmail.com>"]
+license = "MIT"
+packages = [
+    {include = "seagulls", from = "src"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pygame = "*"
+# We want the version of the game engine that includes the `seagulls` cli :)
+seagulls-engine = { version = "*", allow-prereleases = true, extras = ["cli"] }
+
+[tool.poetry.dev-dependencies]
+seagulls-cli = { path = "../seagulls-cli/", develop = true }
+seagulls-engine = { path = "../seagulls-engine/", develop = true, extras = ["cli"] }
+seagulls-devtools = { path = "../seagulls-devtools/", develop = true }
+
+[tool.poetry.plugins."seagulls.plugins"]
+"seagulls-where-in-the-world-demo" = "seagulls.where_in_the_world_demo:WhereInTheWorldDemoCliPluginEntryPoint"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+multi_line_output = 3
+
+[tool.pytest.ini_options]
+cache_dir = "../.tmp/seagulls-where-in-the-world-demo/.pytest_cache"
+testpaths = ["test"]
+addopts = "-s --cache-clear --cov --cov-report=term-missing --cov-report=xml --junit-xml ../.tmp/seagulls-where-in-the-world-demo/junit.xml"
+
+[tool.coverage.run]
+branch = true
+data_file = "../.tmp/seagulls-where-in-the-world-demo/.coverage"
+source = ["src/seagulls"]
+relative_files = true
+
+[tool.coverage.xml]
+output = "../.tmp/seagulls-where-in-the-world-demo/coverage.xml"
+
+[tool.mypy]
+cache_dir = "../.tmp/seagulls-where-in-the-world-demo/.mypy_cache"
+namespace_packages = true
+mypy_path = "src/:test/"

@@ -69,23 +69,16 @@ class RpgScene2(IGameScene):
             Position({"x": 950, "y": 550})
         )
 
-        if self._game_controls.is_right_moving():
-            if self._pumpkin_position <= 955:
-                self._pumpkin_position += 10 * delta / 25
-                self._sprite_client.render_sprite(
-                    Sprites.pumpkin,
-                    Position({"x": self._pumpkin_position, "y": 515})
-                )
-            else:
-                self._sprite_client.render_sprite(
-                    Sprites.pumpkin,
-                    Position({"x": self._pumpkin_position, "y": 515})
-                )
-        else:
-            self._sprite_client.render_sprite(
-                Sprites.pumpkin,
-                Position({"x": self._pumpkin_position, "y": 515})
-            )
+        if self._game_controls.is_right_moving() and self._pumpkin_position <= 955:
+            self._pumpkin_position += 10 * delta / 25
+
+        elif self._game_controls.is_left_moving() and self._pumpkin_position > 5:
+            self._pumpkin_position -= 10 * delta / 25
+
+        self._sprite_client.render_sprite(
+            Sprites.pumpkin,
+            Position({"x": self._pumpkin_position, "y": 515})
+        )
 
         self._printer.commit()
 

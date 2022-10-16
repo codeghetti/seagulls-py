@@ -96,6 +96,8 @@ class RpgDemoDiContainer:
             window=self._window(),
             camera=self._camera(),
             sprite_client=self._sprite_client(),
+            game_controls=self._game_controls(),
+            clock=self._clock(),
         )
 
     @lru_cache()
@@ -131,6 +133,15 @@ class RpgDemoDiContainer:
                 size=(50, 50),
                 grid_size=(16, 7),
                 coordinates=(3, 0),
+            ),
+
+            Sprites.pumpkin: SpriteInfo(
+                path=
+                "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png",
+                resolution=(288, 126),
+                size=(35, 35),
+                grid_size=(16, 7),
+                coordinates=(5, 0),
             ),
         }
 

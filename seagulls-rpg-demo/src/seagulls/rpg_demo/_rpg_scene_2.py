@@ -1,6 +1,6 @@
 import logging
 
-from seagulls.engine import GameControls, GameClock
+from seagulls.engine import GameClock, GameControls
 from seagulls.pygame import WindowSurface
 from seagulls.rendering import (
     Camera,
@@ -70,10 +70,10 @@ class RpgScene2(IGameScene):
         )
 
         if self._game_controls.is_right_moving() and self._pumpkin_position <= 955:
-            self._pumpkin_position += 10 * delta / 25
+            self._pumpkin_position += int(10 * delta / 25)
 
         elif self._game_controls.is_left_moving() and self._pumpkin_position > 5:
-            self._pumpkin_position -= 10 * delta / 25
+            self._pumpkin_position -= int(10 * delta / 25)
 
         self._sprite_client.render_sprite(
             Sprites.pumpkin,

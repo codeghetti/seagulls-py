@@ -1,6 +1,6 @@
 import logging
 
-import pygame.mouse
+from seagulls.engine import GameControls, GameClock
 from seagulls.pygame import WindowSurface
 from seagulls.rendering import (
     Camera,
@@ -16,11 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 class Sprites(SpritesType):
-    island_tree = "island-tree"
-    island_red_home = "island-red-home"
-    jeffrey_standing = "jeffrey-standing"
-    cursor_sword_bronze = "cursor-sword-bronze"
-    island_water = "island-water"
+    floor_left_corner = "floor-left-corner"
+    floor_middle = "floor-middle"
+    floor_right_corner = "floor-right-corner"
+    pumpkin = "pumpkin"
 
 
 class RpgScene2(IGameScene):
@@ -35,40 +34,51 @@ class RpgScene2(IGameScene):
             printer: IPrinter,
             window: WindowSurface,
             camera: Camera,
-            sprite_client: SpriteClient):
+            sprite_client: SpriteClient,
+            game_controls: GameControls,
+            clock: GameClock):
         self._session = session
         self._printer = printer
         self._window = window
         self._camera = camera
         self._sprite_client = sprite_client
+        self._game_controls = game_controls
+        self._clock = clock
+        self._pumpkin_position = 10
+        self._counter = 1
 
     def tick(self) -> None:
         self._printer.clear()
+        self._game_controls.tick()
+        self._clock.tick()
+        delta = self._clock.get_time()
 
         self._sprite_client.render_sprite(
-            Sprites.island_water,
-            Position({"x": 0, "y": 0})
+            Sprites.floor_left_corner,
+            Position({"x": 0, "y": 550})
         )
 
-        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 200, "y": 50}))
-        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 100, "y": 50}))
-        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 400, "y": 50}))
-        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 200, "y": 150}))
-
-        self._sprite_client.render_sprite(Sprites.island_red_home, Position({"x": 264, "y": 50}))
-
-        self._sprite_client.render_sprite(Sprites.jeffrey_standing, Position({"x": 350, "y": 60}))
-
-        pygame.event.get()
-
-        adjusted_position = self._camera.adjust_position(
-            Position(
-                {"x": pygame.mouse.get_pos()[0],
-                 "y": pygame.mouse.get_pos()[1]}))
+        for x in range(int(900/50)):
+            self._sprite_client.render_sprite(
+                Sprites.floor_middle,
+                Position({"x": 50+x*50, "y": 550})
+            )
 
         self._sprite_client.render_sprite(
-            Sprites.cursor_sword_bronze,
-            adjusted_position)
+            Sprites.floor_right_corner,
+            Position({"x": 950, "y": 550})
+        )
+
+        if self._game_controls.is_right_moving() and self._pumpkin_position <= 955:
+            self._pumpkin_position += 10 * delta / 25
+
+        elif self._game_controls.is_left_moving() and self._pumpkin_position > 5:
+            self._pumpkin_position -= 10 * delta / 25
+
+        self._sprite_client.render_sprite(
+            Sprites.pumpkin,
+            Position({"x": self._pumpkin_position, "y": 515})
+        )
 
         self._printer.commit()
 

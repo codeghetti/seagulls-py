@@ -96,6 +96,8 @@ class RpgDemoDiContainer:
             window=self._window(),
             camera=self._camera(),
             sprite_client=self._sprite_client(),
+            game_controls=self._game_controls(),
+            clock=self._clock(),
         )
 
     @lru_cache()
@@ -108,41 +110,39 @@ class RpgDemoDiContainer:
     @lru_cache()
     def _sprite_mapping(self) -> Dict[SpritesType, SpriteInfo]:
         return {
-            Sprites.island_tree: SpriteInfo(
-                path="seagulls_assets/sprites/environment/rpg-environment/island-tree.png",
-                resolution=(16, 16),
-                size=(64, 64),
-                grid_size=(1, 1),
-                coordinates=(0, 0),
+            Sprites.floor_left_corner: SpriteInfo(
+                path=
+                "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png",
+                resolution=(288, 126),
+                size=(50, 50),
+                grid_size=(16, 7),
+                coordinates=(1, 0),
             ),
-            Sprites.island_red_home: SpriteInfo(
-                path="seagulls_assets/sprites/environment/rpg-environment/island-red-home.png",
-                resolution=(16, 16),
-                size=(64, 64),
-                grid_size=(1, 1),
-                coordinates=(0, 0),
+            Sprites.floor_middle: SpriteInfo(
+                path=
+                "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png",
+                resolution=(288, 126),
+                size=(50, 50),
+                grid_size=(16, 7),
+                coordinates=(2, 0),
             ),
-            Sprites.cursor_sword_bronze: SpriteInfo(
-                path="seagulls_assets/sprites/environment/rpg-environment/cursor-sword-bronze.png",
-                resolution=(37, 34),
-                size=(64, 64),
-                grid_size=(1, 1),
-                coordinates=(0, 0),
+            Sprites.floor_right_corner: SpriteInfo(
+                path=
+                "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png",
+                resolution=(288, 126),
+                size=(50, 50),
+                grid_size=(16, 7),
+                coordinates=(3, 0),
             ),
-            Sprites.island_water: SpriteInfo(
-                path="seagulls_assets/sprites/environment/rpg-environment/island-water.png",
-                resolution=(16, 16),
-                size=(500, 500),
-                grid_size=(1, 1),
-                coordinates=(0, 0),
+
+            Sprites.pumpkin: SpriteInfo(
+                path=
+                "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png",
+                resolution=(288, 126),
+                size=(35, 35),
+                grid_size=(16, 7),
+                coordinates=(5, 0),
             ),
-            Sprites.jeffrey_standing: SpriteInfo(
-                path="seagulls_assets/sprites/rpg/rpg-urban-tilemap.packed.png",
-                resolution=(288, 432),
-                size=(32, 32),
-                grid_size=(18, 27),
-                coordinates=(24, 0),
-            )
         }
 
     @lru_cache()

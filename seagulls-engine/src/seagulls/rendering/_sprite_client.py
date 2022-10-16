@@ -40,14 +40,14 @@ class SpriteClient:
                 sprite_grid=SpriteSheet(
                     file_path=Path(sprite_info.path),
                     resolution=Size(
-                        {"height": sprite_info.resolution[0], "width": sprite_info.resolution[1]}),
+                        {"width": sprite_info.resolution[0], "height": sprite_info.resolution[1]}),
                     grid_size=Size(
-                        {"height": sprite_info.grid_size[0], "width": sprite_info.grid_size[1]}),
+                        {"width": sprite_info.grid_size[0], "height": sprite_info.grid_size[1]}),
                 ),
                 coordinates=Position(
                     {"x": sprite_info.coordinates[0], "y": sprite_info.coordinates[1]}),
             ),
-            size=Size({"height": sprite_info.size[0], "width": sprite_info.size[1]}),
+            size=Size({"width": sprite_info.size[0], "height": sprite_info.size[1]}),
             position=position,
             printer=self._printer,
         )

@@ -16,11 +16,9 @@ logger = logging.getLogger(__name__)
 
 
 class Sprites(SpritesType):
-    island_tree = "island-tree"
-    island_red_home = "island-red-home"
-    jeffrey_standing = "jeffrey-standing"
-    cursor_sword_bronze = "cursor-sword-bronze"
-    island_water = "island-water"
+    floor_left_corner = "floor-left-corner"
+    floor_middle = "floor-middle"
+    floor_right_corner = "floor-right-corner"
 
 
 class RpgScene2(IGameScene):
@@ -46,18 +44,17 @@ class RpgScene2(IGameScene):
         self._printer.clear()
 
         self._sprite_client.render_sprite(
-            Sprites.island_water,
-            Position({"x": 0, "y": 0})
-        )
+            Sprites.floor_left_corner,
+            Position({"x": 0, "y": 550}))
 
-        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 200, "y": 50}))
-        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 100, "y": 50}))
-        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 400, "y": 50}))
-        self._sprite_client.render_sprite(Sprites.island_tree, Position({"x": 200, "y": 150}))
+        for x in range(int(900/50)):
+            self._sprite_client.render_sprite(
+                Sprites.floor_middle,
+                Position({"x": 50+x*50, "y": 550}))
 
-        self._sprite_client.render_sprite(Sprites.island_red_home, Position({"x": 264, "y": 50}))
-
-        self._sprite_client.render_sprite(Sprites.jeffrey_standing, Position({"x": 350, "y": 60}))
+        self._sprite_client.render_sprite(
+            Sprites.floor_right_corner,
+            Position({"x": 950, "y": 550}))
 
         pygame.event.get()
 
@@ -65,10 +62,6 @@ class RpgScene2(IGameScene):
             Position(
                 {"x": pygame.mouse.get_pos()[0],
                  "y": pygame.mouse.get_pos()[1]}))
-
-        self._sprite_client.render_sprite(
-            Sprites.cursor_sword_bronze,
-            adjusted_position)
 
         self._printer.commit()
 

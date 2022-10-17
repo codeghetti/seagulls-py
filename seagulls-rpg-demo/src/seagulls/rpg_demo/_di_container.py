@@ -110,6 +110,7 @@ class RpgDemoDiContainer:
     @lru_cache()
     def _sprite_mapping(self) -> Dict[SpritesType, SpriteInfo]:
         assets = "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png"
+        ghost = "seagulls_assets/kenney.tiny-dungeon/Tilemap/tilemap-packed.png"
         return {
             Sprites.floor_left_corner: SpriteInfo(
                 path=assets,
@@ -140,6 +141,14 @@ class RpgDemoDiContainer:
                 grid_size=(16, 7),
                 coordinates=(5, 0),
             ),
+
+            Sprites.ghost: SpriteInfo(
+                path=ghost,
+                resolution=(192, 176),
+                size=(50, 50),
+                grid_size=(12, 11),
+                coordinates=(1, 10),
+            )
         }
 
     @lru_cache()

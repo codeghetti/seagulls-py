@@ -20,6 +20,7 @@ class Sprites(SpritesType):
     floor_middle = "floor-middle"
     floor_right_corner = "floor-right-corner"
     pumpkin = "pumpkin"
+    ghost = "ghost"
 
 
 class RpgScene2(IGameScene):
@@ -45,6 +46,9 @@ class RpgScene2(IGameScene):
         self._game_controls = game_controls
         self._clock = clock
         self._pumpkin_position = 10
+        self._ghost_position = 400
+        self._ghost_steps = 0
+        self._ghost_moves_right = True
         self._counter = 1
 
     def tick(self) -> None:
@@ -68,6 +72,27 @@ class RpgScene2(IGameScene):
             Sprites.floor_right_corner,
             Position({"x": 950, "y": 550})
         )
+
+        if self._ghost_moves_right:
+            self._ghost_position += int(5 * delta / 25)
+            self._sprite_client.render_sprite(
+                Sprites.ghost,
+                Position({"x": self._ghost_position, "y": 500})
+            )
+            self._ghost_steps += 1
+            if self._ghost_steps == 100:
+                self._ghost_moves_right = False
+
+        if not self._ghost_moves_right:
+            self._ghost_position -= int(5 * delta / 25)
+            self._sprite_client.render_sprite(
+                Sprites.ghost,
+                Position(
+                    {"x": self._ghost_position, "y": 500})
+            )
+            self._ghost_steps -= 1
+            if self._ghost_steps == 0:
+                self._ghost_moves_right = True
 
         if self._game_controls.is_right_moving() and self._pumpkin_position <= 955:
             self._pumpkin_position += int(10 * delta / 25)

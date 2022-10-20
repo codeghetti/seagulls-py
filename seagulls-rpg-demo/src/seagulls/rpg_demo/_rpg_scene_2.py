@@ -48,9 +48,7 @@ class RpgScene2(IGameScene):
         self._clock = clock
         self._pumpkin_position = 10
         self._ghost_position = 400
-        self._ghost_steps = 0
         self._ghost_moves_right = True
-        self._counter = 1
         self._is_sword_out = False
 
     def tick(self) -> None:
@@ -76,14 +74,14 @@ class RpgScene2(IGameScene):
         )
 
         if self._ghost_moves_right:
-            self._ghost_position += int(5 * delta / 25)
-            self._ghost_steps += 1
+            new_position = self._ghost_position + int(5 * delta / 25)
+            self._ghost_position = new_position if new_position <= 800 else 800
 
         if not self._ghost_moves_right:
-            self._ghost_position -= int(5 * delta / 25)
-            self._ghost_steps -= 1
+            new_position = self._ghost_position - int(5 * delta / 25)
+            self._ghost_position = new_position if new_position >= 400 else 400
 
-        if self._ghost_steps == 100 or self._ghost_steps == 0:
+        if self._ghost_position == 400 or self._ghost_position == 800:
             self._ghost_moves_right = not self._ghost_moves_right
 
         self._sprite_client.render_sprite(

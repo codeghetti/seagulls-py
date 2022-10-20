@@ -90,6 +90,7 @@ class RpgScene2(IGameScene):
             Sprites.ghost,
             Position({"x": self._ghost_position, "y": 500})
         )
+
         if self._game_controls.is_right_moving() and self._pumpkin_position <= 955:
             self._pumpkin_position += int(10 * delta / 25)
 

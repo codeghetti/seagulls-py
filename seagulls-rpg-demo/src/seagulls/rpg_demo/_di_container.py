@@ -142,6 +142,14 @@ class RpgDemoDiContainer:
                 coordinates=(5, 0),
             ),
 
+            Sprites.dead_pumpkin: SpriteInfo(
+                path=assets,
+                resolution=(288, 126),
+                size=(35, 35),
+                grid_size=(16, 7),
+                coordinates=(4, 0)
+            ),
+
             Sprites.ghost: SpriteInfo(
                 path=ghost,
                 resolution=(192, 176),

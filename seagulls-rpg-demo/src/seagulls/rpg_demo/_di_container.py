@@ -148,6 +148,14 @@ class RpgDemoDiContainer:
                 size=(50, 50),
                 grid_size=(12, 11),
                 coordinates=(1, 10),
+            ),
+
+            Sprites.sword: SpriteInfo(
+                path=ghost,
+                resolution=(192, 176),
+                size=(35, 35),
+                grid_size=(12, 11),
+                coordinates=(7, 8)
             )
         }
 

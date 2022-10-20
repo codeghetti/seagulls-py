@@ -21,6 +21,7 @@ class Sprites(SpritesType):
     floor_right_corner = "floor-right-corner"
     pumpkin = "pumpkin"
     ghost = "ghost"
+    sword = "sword"
 
 
 class RpgScene2(IGameScene):
@@ -50,6 +51,7 @@ class RpgScene2(IGameScene):
         self._ghost_steps = 0
         self._ghost_moves_right = True
         self._counter = 1
+        self._is_sword_out = False
 
     def tick(self) -> None:
         self._printer.clear()
@@ -75,24 +77,19 @@ class RpgScene2(IGameScene):
 
         if self._ghost_moves_right:
             self._ghost_position += int(5 * delta / 25)
-            self._sprite_client.render_sprite(
-                Sprites.ghost,
-                Position({"x": self._ghost_position, "y": 500})
-            )
             self._ghost_steps += 1
-            if self._ghost_steps == 100:
-                self._ghost_moves_right = False
 
         if not self._ghost_moves_right:
             self._ghost_position -= int(5 * delta / 25)
-            self._sprite_client.render_sprite(
-                Sprites.ghost,
-                Position(
-                    {"x": self._ghost_position, "y": 500})
-            )
             self._ghost_steps -= 1
-            if self._ghost_steps == 0:
-                self._ghost_moves_right = True
+
+        if self._ghost_steps == 100 or self._ghost_steps == 0:
+            self._ghost_moves_right = not self._ghost_moves_right
+
+        self._sprite_client.render_sprite(
+            Sprites.ghost,
+            Position({"x": self._ghost_position, "y": 500})
+        )
 
         if self._game_controls.is_right_moving() and self._pumpkin_position <= 955:
             self._pumpkin_position += int(10 * delta / 25)
@@ -104,6 +101,15 @@ class RpgScene2(IGameScene):
             Sprites.pumpkin,
             Position({"x": self._pumpkin_position, "y": 515})
         )
+
+        if self._game_controls.should_fire():
+            self._is_sword_out = not self._is_sword_out
+
+        if self._is_sword_out:
+            self._sprite_client.render_sprite(
+                Sprites.sword,
+                Position({"x": self._pumpkin_position + 25, "y": 515})
+            )
 
         self._printer.commit()
 

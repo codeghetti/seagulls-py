@@ -53,9 +53,12 @@ class RpgScene2(IGameScene):
         self._game_controls = game_controls
         self._clock = clock
         self._pumpkin_position = 10
+        self._y_position = 515
+        self._vertical_velocity = 0
         self._ghost_position = 400
         self._ghost_moves_right = True
         self._is_sword_out = False
+        self._is_jumping = False
         self._is_game_over = False
         self._health_points = 2
         self._damage_taken_buffer = 0
@@ -82,11 +85,24 @@ class RpgScene2(IGameScene):
             )
 
         if not self._is_game_over:
+            if self._game_controls.should_jump():
+                if not self._is_jumping:
+                    self._jump()
+
             self.pumpkin_movement(delta)
+
+            self._y_position = self._y_position + (self._vertical_velocity * 10)
+
+            self.gravity_action()
+
+            if (self._y_position > 515):
+                self._y_position = 515
+                self._vertical_velocity = 0
+                self._is_jumping = False
 
             self._sprite_client.render_sprite(
                 Sprites.pumpkin,
-                Position({"x": self._pumpkin_position, "y": 515})
+                Position({"x": self._pumpkin_position, "y": int(self._y_position)})
             )
 
             if self._game_controls.should_fire():
@@ -95,10 +111,10 @@ class RpgScene2(IGameScene):
             if self._is_sword_out:
                 self._sprite_client.render_sprite(
                     Sprites.sword,
-                    Position({"x": self._pumpkin_position + 25, "y": 515})
+                    Position({"x": self._pumpkin_position + 25, "y": self._y_position})
                 )
 
-            pumpkin_rect = pygame.Rect((self._pumpkin_position, 515), (35, 35))
+            pumpkin_rect = pygame.Rect((self._pumpkin_position, self._y_position), (35, 35))
             ghost_rect = pygame.Rect((self._ghost_position, 500), (50, 50))
             collision = pygame.Rect.colliderect(pumpkin_rect, ghost_rect)
 
@@ -109,6 +125,13 @@ class RpgScene2(IGameScene):
                 self._damage_taken_buffer = 0
 
         self._printer.commit()
+
+    def _jump(self):
+        self._is_jumping = True
+        self._vertical_velocity = -2.5
+
+    def gravity_action(self):
+        self._vertical_velocity += 0.3
 
     def heart_health(self, health_points):
         if health_points == 2:

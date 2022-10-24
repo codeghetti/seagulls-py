@@ -95,7 +95,7 @@ class RpgScene2(IGameScene):
 
             self.gravity_action()
 
-            if (self._y_position > 515):
+            if self._y_position > 515:
                 self._y_position = 515
                 self._vertical_velocity = 0
                 self._is_jumping = False

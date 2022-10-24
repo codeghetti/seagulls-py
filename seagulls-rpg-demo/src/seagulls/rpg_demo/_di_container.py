@@ -110,6 +110,8 @@ class RpgDemoDiContainer:
     @lru_cache()
     def _sprite_mapping(self) -> Dict[SpritesType, SpriteInfo]:
         assets = "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png"
+        ghost = "seagulls_assets/kenney.tiny-dungeon/Tilemap/tilemap-packed.png"
+        game_over = "seagulls_assets/kenney.shooting-gallery-pack/PNG/HUD/text_gameover.png"
         return {
             Sprites.floor_left_corner: SpriteInfo(
                 path=assets,
@@ -139,6 +141,38 @@ class RpgDemoDiContainer:
                 size=(35, 35),
                 grid_size=(16, 7),
                 coordinates=(5, 0),
+            ),
+
+            Sprites.dead_pumpkin: SpriteInfo(
+                path=assets,
+                resolution=(288, 126),
+                size=(35, 35),
+                grid_size=(16, 7),
+                coordinates=(4, 0)
+            ),
+
+            Sprites.ghost: SpriteInfo(
+                path=ghost,
+                resolution=(192, 176),
+                size=(50, 50),
+                grid_size=(12, 11),
+                coordinates=(1, 10),
+            ),
+
+            Sprites.sword: SpriteInfo(
+                path=ghost,
+                resolution=(192, 176),
+                size=(35, 35),
+                grid_size=(12, 11),
+                coordinates=(7, 8)
+            ),
+
+            Sprites.game_over: SpriteInfo(
+                path=game_over,
+                resolution=(349, 72),
+                size=(100, 100),
+                grid_size=(1, 1),
+                coordinates=(0, 0)
             ),
         }
 

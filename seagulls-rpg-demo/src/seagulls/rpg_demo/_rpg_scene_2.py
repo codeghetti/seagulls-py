@@ -53,8 +53,8 @@ class RpgScene2(IGameScene):
         self._game_controls = game_controls
         self._clock = clock
         self._pumpkin_position = 10
-        self._y_position = 515
-        self._vertical_velocity = 0
+        self._y_position = 515.0
+        self._vertical_velocity = 0.0
         self._ghost_position = 400
         self._ghost_moves_right = True
         self._is_sword_out = False
@@ -93,7 +93,7 @@ class RpgScene2(IGameScene):
 
             self._y_position = self._y_position + (self._vertical_velocity * delta / 1.5)
 
-            self._vertical_velocity += 0.1 * delta / 15
+            self.gravity_action(delta)
 
             if self._y_position > 515:
                 self._y_position = 515
@@ -111,7 +111,7 @@ class RpgScene2(IGameScene):
             if self._is_sword_out:
                 self._sprite_client.render_sprite(
                     Sprites.sword,
-                    Position({"x": self._pumpkin_position + 25, "y": self._y_position})
+                    Position({"x": self._pumpkin_position + 25, "y": int(self._y_position)})
                 )
 
             pumpkin_rect = pygame.Rect((self._pumpkin_position, self._y_position), (35, 35))
@@ -130,8 +130,8 @@ class RpgScene2(IGameScene):
         self._is_jumping = True
         self._vertical_velocity = -1.5
 
-    def gravity_action(self):
-        self._vertical_velocity += 0.3
+    def gravity_action(self, delta: int):
+        self._vertical_velocity += 0.1 * delta / 15
 
     def heart_health(self, health_points):
         if health_points == 2:

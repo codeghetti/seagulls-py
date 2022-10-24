@@ -2,6 +2,7 @@ import logging
 from typing import Optional, Tuple
 
 import pygame
+from pygame import SRCALPHA
 
 from seagulls.engine import Surface
 from seagulls.rendering import SizeDict
@@ -57,7 +58,7 @@ class WindowSurface(IProvideSurfaces):
             # Total of padding
             empty_space = abs(needed_width - camera_width)
             # We make a fully filled in surface matching the padding color
-            final_surface = Surface((needed_width, camera_height))
+            final_surface = Surface((needed_width, camera_height), SRCALPHA, 32)
             final_surface.fill(self._padding_color)
             # And then print the camera image in the middle
             final_surface.blit(surface, (empty_space / 2, 0))
@@ -67,7 +68,7 @@ class WindowSurface(IProvideSurfaces):
             # Total of padding
             empty_space = needed_height - camera_height
             # We make a fully filled in surface matching the padding color
-            final_surface = Surface((camera_width, needed_height))
+            final_surface = Surface((camera_width, needed_height), SRCALPHA, 32)
             final_surface.fill(self._padding_color)
             # And then print the camera image in the middle
             final_surface.blit(surface, (0, empty_space / 2))

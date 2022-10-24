@@ -2,6 +2,8 @@ import logging
 from abc import abstractmethod
 from typing import Protocol, Tuple
 
+from pygame import SRCALPHA
+
 from seagulls.engine import Surface
 from seagulls.rendering import SizeDict
 
@@ -34,7 +36,7 @@ class PygameSurface(IProvideSurfaces):
         self._background_color = background_color
 
     def get(self) -> Surface:
-        surface = Surface((self._size["width"], self._size["height"]))
+        surface = Surface((self._size["width"], self._size["height"]), SRCALPHA, 32)
         surface.fill(self._background_color)
         return surface
 

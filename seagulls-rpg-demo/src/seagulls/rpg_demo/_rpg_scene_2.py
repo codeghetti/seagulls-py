@@ -27,6 +27,7 @@ class Sprites(SpritesType):
     full_health = "full-health"
     half_health = "half-health"
     zero_health = "zero-health"
+    game_over = "game-over"
 
 
 class RpgScene2(IGameScene):
@@ -74,6 +75,10 @@ class RpgScene2(IGameScene):
             self._sprite_client.render_sprite(
                 Sprites.dead_pumpkin,
                 Position({"x": self._pumpkin_position, "y": 515})
+            )
+            self._sprite_client.render_sprite(
+                Sprites.game_over,
+                Position({"x": 500, "y": 300})
             )
 
         if not self._is_game_over:

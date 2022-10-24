@@ -91,9 +91,9 @@ class RpgScene2(IGameScene):
 
             self.pumpkin_movement(delta)
 
-            self._y_position = self._y_position + (self._vertical_velocity * delta) / 1.5
+            self._y_position = self._y_position + (self._vertical_velocity * 10)
 
-            self.gravity_action()
+            self._vertical_velocity += 0.1 * delta / 15
 
             if self._y_position > 515:
                 self._y_position = 515
@@ -128,7 +128,7 @@ class RpgScene2(IGameScene):
 
     def _jump(self):
         self._is_jumping = True
-        self._vertical_velocity = -2.5
+        self._vertical_velocity = -1.5
 
     def gravity_action(self):
         self._vertical_velocity += 0.3

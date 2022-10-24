@@ -91,7 +91,7 @@ class RpgScene2(IGameScene):
 
             self.pumpkin_movement(delta)
 
-            self._y_position = self._y_position + (self._vertical_velocity * 10)
+            self._y_position = self._y_position + (self._vertical_velocity * delta) / 1.5
 
             self.gravity_action()
 

@@ -1,4 +1,3 @@
-from abc import ABC
 from enum import Enum
 from pathlib import Path
 from typing import Dict, NamedTuple, Tuple

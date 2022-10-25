@@ -111,6 +111,7 @@ class RpgDemoDiContainer:
     def _sprite_mapping(self) -> Dict[SpritesType, SpriteInfo]:
         assets = "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png"
         ghost = "seagulls_assets/kenney.tiny-dungeon/Tilemap/tilemap-packed.png"
+        hearts = "seagulls_assets/kenney.pixel-platformer/Tilemap/tiles_packed.png"
         game_over = "seagulls_assets/kenney.shooting-gallery-pack/PNG/HUD/text_gameover.png"
         return {
             Sprites.floor_left_corner: SpriteInfo(
@@ -148,7 +149,7 @@ class RpgDemoDiContainer:
                 resolution=(288, 126),
                 size=(35, 35),
                 grid_size=(16, 7),
-                coordinates=(4, 0)
+                coordinates=(4, 0),
             ),
 
             Sprites.ghost: SpriteInfo(
@@ -164,15 +165,39 @@ class RpgDemoDiContainer:
                 resolution=(192, 176),
                 size=(35, 35),
                 grid_size=(12, 11),
-                coordinates=(7, 8)
+                coordinates=(7, 8),
+            ),
+
+            Sprites.full_health: SpriteInfo(
+                path=hearts,
+                resolution=(360, 162),
+                size=(50, 50),
+                grid_size=(20, 9),
+                coordinates=(4, 2),
+            ),
+
+            Sprites.half_health: SpriteInfo(
+                path=hearts,
+                resolution=(360, 162),
+                size=(50, 50),
+                grid_size=(20, 9),
+                coordinates=(5, 2),
+            ),
+
+            Sprites.zero_health: SpriteInfo(
+                path=hearts,
+                resolution=(360, 162),
+                size=(50, 50),
+                grid_size=(20, 9),
+                coordinates=(6, 2),
             ),
 
             Sprites.game_over: SpriteInfo(
                 path=game_over,
                 resolution=(349, 72),
-                size=(100, 100),
+                size=(484, 100),
                 grid_size=(1, 1),
-                coordinates=(0, 0)
+                coordinates=(0, 0),
             ),
         }
 

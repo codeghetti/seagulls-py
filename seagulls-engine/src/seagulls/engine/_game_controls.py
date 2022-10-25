@@ -34,6 +34,13 @@ class GameControls(GameObject):
 
         return False
 
+    def should_jump(self) -> bool:
+        for event in self._events:
+            if self._is_key_down_event(event, pygame.K_LALT):
+                return True
+
+        return False
+
     def is_left_moving(self) -> bool:
         return pygame.key.get_pressed()[pygame.K_LEFT]
 

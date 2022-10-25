@@ -3,6 +3,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import pygame.display
+from pygame import SRCALPHA
 from pygame.font import Font
 
 from seagulls.engine import Surface
@@ -63,11 +64,11 @@ class PygamePrinter(IPrinter):
         s = size.get()
         p = self._get_adjusted_position(position).get()
 
-        square = Surface((s["width"], s["height"]))
+        square = Surface((s["width"], s["height"]), SRCALPHA, 32)
         square.fill((c["r"], c["g"], c["b"]))
 
         center = Surface(
-            (s["width"] - border_size * 2, s["height"] - border_size * 2))
+            (s["width"] - border_size * 2, s["height"] - border_size * 2), SRCALPHA, 32)
 
         square.blit(center, (border_size, border_size))
         square.set_colorkey((0, 0, 0))
@@ -84,7 +85,7 @@ class PygamePrinter(IPrinter):
         s = size.get()
         p = self._get_adjusted_position(position).get()
 
-        square = Surface((s["width"], s["height"]))
+        square = Surface((s["width"], s["height"]), SRCALPHA, 32)
         square.fill((c["r"], c["g"], c["b"]))
         self._get_frame().blit(square, (p["x"], p["y"]))
 
@@ -102,8 +103,7 @@ class PygamePrinter(IPrinter):
 
         sprite_surface = self._load_png(sprite.sprite_grid.file_path)
 
-        unit_surface = Surface((rez["width"], rez["height"]))
-        unit_surface.set_colorkey((0, 0, 0))
+        unit_surface = Surface((rez["width"], rez["height"]), SRCALPHA, 32)
         unit_surface.blit(
             sprite_surface, (0, 0), (pos["x"], pos["y"], rez["width"], rez["height"]))
         scaled_surface = pygame.transform.scale(unit_surface, (s["width"], s["height"]))

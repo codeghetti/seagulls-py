@@ -6,7 +6,7 @@ from ._printer import IPrinter
 from ._renderable_component import SpriteComponent
 from ._size import Size, SizeDict
 from ._sprite import Sprite, SpriteSheet
-from ._sprite_client import SpriteClient, SpritesType, SpriteInfo
+from ._sprite_client import SpriteClient, SpriteInfo, SpritesType
 
 __all__ = [
     "IGameScreen",

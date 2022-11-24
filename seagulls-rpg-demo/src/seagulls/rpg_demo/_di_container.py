@@ -164,7 +164,6 @@ class RpgDemoDiContainer:
                 resolution=(192, 176),
                 size=(16, 16),
                 game_size=(35, 35),
-                # grid_size=(12, 11),
                 coordinates=(112, 128),
             ),
 

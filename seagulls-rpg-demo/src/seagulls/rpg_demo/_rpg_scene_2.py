@@ -57,11 +57,14 @@ class RpgScene2(IGameScene):
         self._vertical_velocity = 0.0
         self._ghost_position = 400
         self._ghost_moves_right = True
-        self._is_sword_out = False
+        self._is_weapon_out = False
         self._is_jumping = False
         self._is_game_over = False
         self._health_points = 2
         self._damage_taken_buffer = 0
+        self._weapon_offset = 0
+        self._ghost_alive = True
+        self._sword_initial_position = 0
 
     def tick(self) -> None:
         self._printer.clear()
@@ -71,7 +74,8 @@ class RpgScene2(IGameScene):
 
         self._damage_taken_buffer += delta
         self.make_floor()
-        self.walking_ghost(delta)
+        if self._ghost_alive:
+            self.walking_ghost(delta)
         self.heart_health(self._health_points)
 
         if self._is_game_over:
@@ -106,21 +110,44 @@ class RpgScene2(IGameScene):
             )
 
             if self._game_controls.should_fire():
-                self._is_sword_out = not self._is_sword_out
+                self._is_weapon_out = True
+                self._sword_initial_position = self._pumpkin_position + 25
 
-            if self._is_sword_out:
-                self._sprite_client.render_sprite(
-                    Sprites.sword,
-                    Position({"x": self._pumpkin_position + 25, "y": int(self._y_position)})
-                )
+            if self._is_weapon_out:
+                if self._weapon_offset < 60:
+                    self._weapon_offset += 1
+                    self._sprite_client.render_sprite(
+                        Sprites.sword,
+                        Position(
+                            {
+                                "x": self._sword_initial_position + self._weapon_offset,
+                                "y": int(self._y_position)
+                            }
+                        )
+                    )
+                if self._weapon_offset >= 60:
+                    self._weapon_offset = 0
+                    self._is_weapon_out = False
 
             pumpkin_rect = pygame.Rect((self._pumpkin_position, self._y_position), (35, 35))
             ghost_rect = pygame.Rect((self._ghost_position, 500), (50, 50))
-            collision = pygame.Rect.colliderect(pumpkin_rect, ghost_rect)
 
-            if collision and self._health_points == 0:
+            if pygame.Rect.colliderect(pumpkin_rect, ghost_rect) and self._ghost_alive:
+                pumpkin_ghost_collision = True
+            else:
+                pumpkin_ghost_collision = False
+
+            sword_rect = pygame.Rect(
+                    (self._sword_initial_position + self._weapon_offset, self._y_position), (35, 35)
+                )
+            sword_ghost_collision = pygame.Rect.colliderect(sword_rect, ghost_rect)
+
+            if sword_ghost_collision:
+                self._ghost_alive = False
+
+            if pumpkin_ghost_collision and self._health_points == 0:
                 self._is_game_over = True
-            elif collision and self._damage_taken_buffer > 1000:
+            elif pumpkin_ghost_collision and self._damage_taken_buffer > 1000:
                 self._health_points -= 1
                 self._damage_taken_buffer = 0
 

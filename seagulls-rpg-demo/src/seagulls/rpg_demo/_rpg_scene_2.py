@@ -91,7 +91,7 @@ class RpgScene2(IGameScene):
         if not self._is_game_over:
             if self._game_controls.should_jump():
                 if not self._is_jumping:
-                    self._jump()
+                    self._pumpkin_jump()
 
             self.pumpkin_movement(delta)
 
@@ -114,46 +114,63 @@ class RpgScene2(IGameScene):
                 self._sword_initial_position = self._pumpkin_position + 25
 
             if self._is_weapon_out:
-                if self._weapon_offset < 60:
-                    self._weapon_offset += 1
-                    self._sprite_client.render_sprite(
-                        Sprites.sword,
-                        Position(
-                            {
-                                "x": self._sword_initial_position + self._weapon_offset,
-                                "y": int(self._y_position)
-                            }
-                        )
-                    )
-                if self._weapon_offset >= 60:
-                    self._weapon_offset = 0
-                    self._is_weapon_out = False
+                self._fire_weapon()
 
-            pumpkin_rect = pygame.Rect((self._pumpkin_position, self._y_position), (35, 35))
-            ghost_rect = pygame.Rect((self._ghost_position, 500), (50, 50))
-
-            if pygame.Rect.colliderect(pumpkin_rect, ghost_rect) and self._ghost_alive:
-                pumpkin_ghost_collision = True
-            else:
-                pumpkin_ghost_collision = False
-
-            sword_rect = pygame.Rect(
-                    (self._sword_initial_position + self._weapon_offset, self._y_position), (35, 35)
-                )
-            sword_ghost_collision = pygame.Rect.colliderect(sword_rect, ghost_rect)
-
-            if sword_ghost_collision:
-                self._ghost_alive = False
-
-            if pumpkin_ghost_collision and self._health_points == 0:
-                self._is_game_over = True
-            elif pumpkin_ghost_collision and self._damage_taken_buffer > 1000:
-                self._health_points -= 1
-                self._damage_taken_buffer = 0
+            self._check_collisions()
 
         self._printer.commit()
 
-    def _jump(self):
+    def _check_collisions(self):
+        pumpkin_rect = pygame.Rect((self._pumpkin_position, self._y_position), (35, 35))
+        ghost_rect = pygame.Rect((self._ghost_position, 500), (50, 50))
+        sword_rect = pygame.Rect(
+            (self._sword_initial_position + self._weapon_offset, self._y_position), (35, 35)
+        )
+        sword_ghost_collision = self._sword_ghost_collision(sword_rect, ghost_rect)
+        pumpkin_ghost_collision = self._pumpkin_ghost_collision(ghost_rect, pumpkin_rect)
+
+        if sword_ghost_collision:
+            self._ghost_alive = False
+        if pumpkin_ghost_collision and self._health_points == 0:
+            self._is_game_over = True
+        elif pumpkin_ghost_collision and self._damage_taken_buffer > 1000:
+            self._health_points -= 1
+            self._damage_taken_buffer = 0
+
+    def _sword_ghost_collision(self, sword_rect, ghost_rect):
+        return pygame.Rect.colliderect(sword_rect, ghost_rect)
+
+    def _pumpkin_ghost_collision(self, ghost_rect, pumpkin_rect):
+        if pygame.Rect.colliderect(pumpkin_rect, ghost_rect) and self._ghost_alive:
+            pumpkin_ghost_collision = True
+        else:
+            pumpkin_ghost_collision = False
+        return pumpkin_ghost_collision
+
+    def _fire_weapon(self):
+        if self._weapon_offset < 60:
+            self._weapon_offset += 1
+            self._sprite_client.render_sprite(
+                Sprites.sword,
+                Position(
+                    {
+                        "x": self._sword_initial_position + self._weapon_offset,
+                        "y": int(self._y_position)
+                    }
+                )
+            )
+        if self._weapon_offset >= 60:
+            self._weapon_offset = 0
+            self._is_weapon_out = False
+
+    def pumpkin_movement(self, delta):
+        if self._game_controls.is_right_moving() and self._pumpkin_position <= 955:
+            self._pumpkin_position += int(10 * delta / 25)
+
+        elif self._game_controls.is_left_moving() and self._pumpkin_position > 5:
+            self._pumpkin_position -= int(10 * delta / 25)
+
+    def _pumpkin_jump(self):
         self._is_jumping = True
         self._vertical_velocity = -1.5
 
@@ -176,13 +193,6 @@ class RpgScene2(IGameScene):
                 Sprites.zero_health,
                 Position({"x": 900, "y": 100})
             )
-
-    def pumpkin_movement(self, delta):
-        if self._game_controls.is_right_moving() and self._pumpkin_position <= 955:
-            self._pumpkin_position += int(10 * delta / 25)
-
-        elif self._game_controls.is_left_moving() and self._pumpkin_position > 5:
-            self._pumpkin_position -= int(10 * delta / 25)
 
     def walking_ghost(self, delta):
         if self._ghost_moves_right:

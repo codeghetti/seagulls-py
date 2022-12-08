@@ -117,6 +117,7 @@ class RpgScene2(IGameScene):
                 self._is_game_over = True
 
             elif pygame.Rect.colliderect(pumpkin_rect, ghost_rect) \
+                    and self._ghost_alive \
                     and self._damage_taken_buffer > 1000:
                 self._health_points -= 1
                 self._damage_taken_buffer = 0

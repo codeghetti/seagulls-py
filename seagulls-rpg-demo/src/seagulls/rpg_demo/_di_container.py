@@ -110,9 +110,11 @@ class RpgDemoDiContainer:
     @lru_cache()
     def _sprite_mapping(self) -> Dict[SpritesType, SpriteInfo]:
         assets = "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png"
+        medieval = "seagulls_assets/kenney.medieval-pack/medieval-packed.png"
         ghost = "seagulls_assets/kenney.tiny-dungeon/Tilemap/tilemap-packed.png"
         hearts = "seagulls_assets/kenney.pixel-platformer/Tilemap/tiles_packed.png"
         game_over = "seagulls_assets/kenney.shooting-gallery-pack/PNG/HUD/text_gameover.png"
+        you_win = "seagulls_assets/customs/you_win.png"
         return {
             Sprites.floor_left_corner: SpriteInfo(
                 path=assets,
@@ -197,6 +199,27 @@ class RpgDemoDiContainer:
                 size=(349, 72),
                 game_size=(484, 100),
                 coordinates=(0, 0),
+            ),
+            Sprites.flag_banner: SpriteInfo(
+                path=medieval,
+                resolution=(1024, 2048),
+                size=(70, 70),
+                game_size=(50, 50),
+                coordinates=(280, 420),
+            ),
+            Sprites.flag_pole: SpriteInfo(
+                path=medieval,
+                resolution=(1024, 2048),
+                size=(70, 70),
+                game_size=(50, 50),
+                coordinates=(140, 1260),
+            ),
+            Sprites.you_win: SpriteInfo(
+                path=you_win,
+                resolution=(600, 200),
+                size=(371, 52),
+                game_size=(484, 100),
+                coordinates=(7, 27),
             ),
         }
 

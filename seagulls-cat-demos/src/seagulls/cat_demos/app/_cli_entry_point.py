@@ -4,7 +4,7 @@ from seagulls.seagulls_cli import (
     SeagullsCliApplication
 )
 
-from seagulls.cat_demos._di_container import CatDemosDiContainer
+from seagulls.cat_demos.app._di_container import CatDemosDiContainer
 
 
 class CatDemosCliPluginEntryPoint(

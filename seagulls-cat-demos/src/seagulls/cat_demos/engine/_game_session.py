@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from typing import Tuple, Iterable
 
 from ._executables import IExecutable
@@ -26,9 +24,3 @@ class GameSession:
     def run(self) -> None:
         for stage in self._session_stages.stages():
             stage.execute()
-
-
-class GameSessionBuilder:
-
-    def build(self) -> GameSession:
-        return GameSession(session_stages=GameSessionStages(tuple([])))

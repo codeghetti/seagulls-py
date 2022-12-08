@@ -28,7 +28,7 @@ seagulls-engine = { path = "../seagulls-engine/", develop = true, extras = ["cli
 seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional = true }
 
 [tool.poetry.plugins."seagulls.plugins"]
-"seagulls-cat-demos" = "seagulls.cat_demos:CatDemosCliPluginEntryPoint"
+"seagulls-cat-demos" = "seagulls.cat_demos.app:CatDemosCliPluginEntryPoint"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

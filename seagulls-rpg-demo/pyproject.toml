@@ -13,7 +13,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8,<3.12"
 pygame = "*"
 # We want the version of the game engine that includes the `seagulls` cli :)
 seagulls-engine = { version = "*", allow-prereleases = true, extras = ["cli"] }

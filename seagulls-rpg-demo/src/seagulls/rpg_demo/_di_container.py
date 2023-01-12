@@ -109,12 +109,17 @@ class RpgDemoDiContainer:
 
     @lru_cache()
     def _sprite_mapping(self) -> Dict[SpritesType, SpriteInfo]:
-        assets = "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png"
-        medieval = "seagulls_assets/kenney.medieval-pack/medieval-packed.png"
-        ghost = "seagulls_assets/kenney.tiny-dungeon/Tilemap/tilemap-packed.png"
-        hearts = "seagulls_assets/kenney.pixel-platformer/Tilemap/tiles_packed.png"
-        game_over = "seagulls_assets/kenney.shooting-gallery-pack/PNG/HUD/text_gameover.png"
-        you_win = "seagulls_assets/customs/you_win.png"
+        asset_client = self._asset_manager()
+        assets = str(asset_client.get_path(
+            "kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png").resolve())
+        medieval = str(asset_client.get_path("kenney.medieval-pack/medieval-packed.png").resolve())
+        ghost = str(
+            asset_client.get_path("kenney.tiny-dungeon/Tilemap/tilemap-packed.png").resolve())
+        hearts = str(
+            asset_client.get_path("kenney.pixel-platformer/Tilemap/tiles_packed.png").resolve())
+        game_over = str(asset_client.get_path(
+            "kenney.shooting-gallery-pack/PNG/HUD/text_gameover.png").resolve())
+        you_win = str(asset_client.get_path("customs/you_win.png").resolve())
         return {
             Sprites.floor_left_corner: SpriteInfo(
                 path=assets,

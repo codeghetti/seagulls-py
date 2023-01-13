@@ -109,95 +109,122 @@ class RpgDemoDiContainer:
 
     @lru_cache()
     def _sprite_mapping(self) -> Dict[SpritesType, SpriteInfo]:
-        assets = "seagulls_assets/kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png"
-        ghost = "seagulls_assets/kenney.tiny-dungeon/Tilemap/tilemap-packed.png"
-        hearts = "seagulls_assets/kenney.pixel-platformer/Tilemap/tiles_packed.png"
-        game_over = "seagulls_assets/kenney.shooting-gallery-pack/PNG/HUD/text_gameover.png"
+        asset_client = self._asset_manager()
+        assets = str(asset_client.get_path(
+            "kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png").resolve())
+        medieval = str(asset_client.get_path("kenney.medieval-pack/medieval-packed.png").resolve())
+        ghost = str(
+            asset_client.get_path("kenney.tiny-dungeon/Tilemap/tilemap-packed.png").resolve())
+        hearts = str(
+            asset_client.get_path("kenney.pixel-platformer/Tilemap/tiles_packed.png").resolve())
+        game_over = str(asset_client.get_path(
+            "kenney.shooting-gallery-pack/PNG/HUD/text_gameover.png").resolve())
+        you_win = str(asset_client.get_path("customs/you_win.png").resolve())
         return {
             Sprites.floor_left_corner: SpriteInfo(
                 path=assets,
                 resolution=(288, 126),
-                size=(50, 50),
-                grid_size=(16, 7),
-                coordinates=(1, 0),
+                size=(18, 18),
+                game_size=(50, 50),
+                coordinates=(18, 0),
             ),
             Sprites.floor_middle: SpriteInfo(
                 path=assets,
                 resolution=(288, 126),
-                size=(50, 50),
-                grid_size=(16, 7),
-                coordinates=(2, 0),
+                size=(18, 18),
+                game_size=(50, 50),
+                coordinates=(36, 0),
             ),
             Sprites.floor_right_corner: SpriteInfo(
                 path=assets,
                 resolution=(288, 126),
-                size=(50, 50),
-                grid_size=(16, 7),
-                coordinates=(3, 0),
+                size=(18, 18),
+                game_size=(50, 50),
+                coordinates=(54, 0),
             ),
-
             Sprites.pumpkin: SpriteInfo(
                 path=assets,
                 resolution=(288, 126),
-                size=(35, 35),
-                grid_size=(16, 7),
-                coordinates=(5, 0),
+                size=(18, 18),
+                game_size=(35, 35),
+                coordinates=(90, 0),
             ),
 
             Sprites.dead_pumpkin: SpriteInfo(
                 path=assets,
                 resolution=(288, 126),
-                size=(35, 35),
-                grid_size=(16, 7),
-                coordinates=(4, 0),
+                size=(18, 18),
+                game_size=(35, 35),
+                coordinates=(72, 0),
             ),
 
             Sprites.ghost: SpriteInfo(
                 path=ghost,
                 resolution=(192, 176),
-                size=(50, 50),
-                grid_size=(12, 11),
-                coordinates=(1, 10),
+                size=(16, 16),
+                game_size=(50, 50),
+                coordinates=(16, 160),
             ),
 
             Sprites.sword: SpriteInfo(
                 path=ghost,
                 resolution=(192, 176),
-                size=(35, 35),
-                grid_size=(12, 11),
-                coordinates=(7, 8),
+                size=(16, 16),
+                game_size=(35, 35),
+                coordinates=(112, 128),
             ),
 
             Sprites.full_health: SpriteInfo(
                 path=hearts,
                 resolution=(360, 162),
-                size=(50, 50),
-                grid_size=(20, 9),
-                coordinates=(4, 2),
+                size=(18, 18),
+                game_size=(50, 50),
+                coordinates=(72, 36),
             ),
 
             Sprites.half_health: SpriteInfo(
                 path=hearts,
                 resolution=(360, 162),
-                size=(50, 50),
-                grid_size=(20, 9),
-                coordinates=(5, 2),
+                size=(18, 18),
+                game_size=(50, 50),
+                coordinates=(90, 36),
             ),
 
             Sprites.zero_health: SpriteInfo(
                 path=hearts,
                 resolution=(360, 162),
-                size=(50, 50),
-                grid_size=(20, 9),
-                coordinates=(6, 2),
+                size=(18, 18),
+                game_size=(50, 50),
+                coordinates=(108, 36),
             ),
 
             Sprites.game_over: SpriteInfo(
                 path=game_over,
                 resolution=(349, 72),
-                size=(484, 100),
-                grid_size=(1, 1),
+                size=(349, 72),
+                game_size=(484, 100),
                 coordinates=(0, 0),
+            ),
+            Sprites.flag_banner: SpriteInfo(
+                path=medieval,
+                resolution=(1024, 2048),
+                size=(70, 70),
+                game_size=(50, 50),
+                coordinates=(280, 420),
+            ),
+            Sprites.flag_pole: SpriteInfo(
+                path=medieval,
+                resolution=(1024, 2048),
+                size=(70, 70),
+                game_size=(50, 50),
+                coordinates=(140, 1260),
+            ),
+            Sprites.you_win: SpriteInfo(
+                path=you_win,
+                resolution=(600, 200),
+                size=(371, 52),
+                game_size=(484, 100),
+                coordinates=(7, 27),
             ),
         }
 

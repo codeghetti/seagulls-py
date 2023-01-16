@@ -4,7 +4,8 @@ from ._game_session import (
     IProvideGameSessions,
     IStartGameSessions,
     IStopGameSessions,
-    NullGameSession
+    NullGameSession,
+    NullGameSessionError,
 )
 
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
     "IProvideGameSessions",
     "NullGameSession",
     "BlockingGameSession",
+    "NullGameSessionError",
 ]

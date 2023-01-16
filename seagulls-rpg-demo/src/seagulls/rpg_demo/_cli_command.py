@@ -4,7 +4,7 @@ import pygame
 from seagulls.cli import ICliCommand
 from seagulls.pygame import WindowSurface
 from seagulls.scene import IGameScene
-from seagulls.session import BlockingGameSession
+from seagulls.session import BlockingGameSession, NullGameSessionError
 
 
 class GameCliCommand(ICliCommand):
@@ -34,3 +34,5 @@ class GameCliCommand(ICliCommand):
             self._game_session.start()
         except KeyboardInterrupt:
             self._game_session.stop()
+        except NullGameSessionError:
+            pass

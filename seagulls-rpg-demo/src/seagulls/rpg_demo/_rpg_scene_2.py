@@ -78,6 +78,7 @@ class RpgScene2(IGameScene):
     def tick(self) -> None:
         self._printer.clear()
         self._game_controls.tick()
+
         self._clock.tick()
         delta = self._clock.get_time()
         self._damage_taken_buffer += delta
@@ -153,6 +154,9 @@ class RpgScene2(IGameScene):
                 self._damage_taken_buffer = 0
 
         self._printer.commit()
+
+        if self._game_controls.should_quit():
+            self._session.get().stop()
 
     def weapon_firing(self, delta):
         if self._game_controls.should_fire() and not self._is_weapon_out:

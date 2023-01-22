@@ -19,7 +19,7 @@ class IUpdate(Protocol):
         pass
 
 
-class GameScene(ITick):
+class GameSceneObjects(ITick):
 
     _window: GameWindowClient
     _objects: Set[GameObject]
@@ -66,7 +66,6 @@ class GameScene(ITick):
         self._component_objects[game_component].add(game_object)
 
     def tick(self) -> None:
-        self._window.get_surface().fill((20, 50, 20))
         for component, handler in self._components.items():
             handler.tick()
             for game_object in self._component_objects.get(component, set()):

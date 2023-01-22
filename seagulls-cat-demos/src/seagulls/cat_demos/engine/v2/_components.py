@@ -5,7 +5,7 @@ from pygame.constants import SRCALPHA
 from pygame.image import load
 from pygame.surface import Surface
 
-from typing import Dict, NamedTuple, Set, Tuple
+from typing import Dict, NamedTuple, Tuple, TypeAlias
 
 from ._entities import GameObject, GameSprite
 from ._resources import ResourceClient
@@ -15,19 +15,23 @@ from ._window import GameWindowClient
 logger = logging.getLogger(__name__)
 
 
-class Position(NamedTuple):
+class Point(NamedTuple):
     x: float
     y: float
 
-    def __add__(self, other: Tuple[float, float]) -> Position:
-        return Position(x=self.x + other[0], y=self.y + other[1])
+    def __add__(self, other: Tuple[float, float]) -> Point:
+        return Point(x=self.x + other[0], y=self.y + other[1])
 
-    def __sub__(self, other: Tuple[float, float]) -> Position:
-        return Position(x=self.x - other[0], y=self.y - other[1])
+    def __sub__(self, other: Tuple[float, float]) -> Point:
+        return Point(x=self.x - other[0], y=self.y - other[1])
 
-    @staticmethod
-    def zero() -> Position:
-        return Position(0, 0)
+    @classmethod
+    def zero(cls) -> Point:
+        return cls(0, 0)
+
+
+Position: TypeAlias = Point
+Direction: TypeAlias = Point
 
 
 class Size(NamedTuple):
@@ -70,7 +74,7 @@ class MobControlsComponent(ITick, IUpdate):
     def update(self, game_object: GameObject) -> None:
         logger.error(f"mob controls component update: {game_object}")
         current = self._position_component.get_position(game_object)
-        # self._position_component.set_position(game_object, current + Position(1, 1))
+        self._position_component.set_position(game_object, current + Position(1, 0))
 
 
 class _SpriteConfig(NamedTuple):

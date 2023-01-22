@@ -9,7 +9,7 @@ from seagulls.cat_demos.engine.v2._components import (
 )
 from seagulls.cat_demos.engine.v2._entities import GameComponent, GameObject, GameSprite
 from seagulls.cat_demos.engine.v2._resources import ResourceClient
-from seagulls.cat_demos.engine.v2._scene import GameScene
+from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
 from seagulls.cat_demos.engine.v2._window import GameWindowClient
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ window = GameWindowClient()
 window.open()
 player = GameObject("player")
 player_sprite = GameSprite("player.idle")
-scene = GameScene(window)
+scene = GameSceneObjects(window)
 scene.create_object(player)
 
 positionizer = PositionComponent()

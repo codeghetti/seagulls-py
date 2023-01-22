@@ -1,4 +1,5 @@
 import pygame
+from pygame import Surface
 
 
 class GameWindowClient:
@@ -9,7 +10,7 @@ class GameWindowClient:
         pygame.mouse.set_visible(False)
         pygame.font.init()
 
-    def get_surface(self) -> pygame.Surface:
+    def get_surface(self) -> Surface:
         return pygame.display.get_surface()
 
     def commit(self) -> None:

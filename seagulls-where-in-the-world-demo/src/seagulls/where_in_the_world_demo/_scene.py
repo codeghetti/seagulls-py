@@ -16,7 +16,7 @@ from ._session_window_client import GameSessionWindowClient
 
 from ._animals import animal_names
 from ._countries_client import CountriesClient
-from ._dishes_client import DishesClient
+from ._dishes_client import IDishesClient
 from ._position import Position
 from ._state import GameState
 from ._size import Size
@@ -30,7 +30,7 @@ class MainScene:
     _asset_manager: AssetManager
     _shots_client: ShotsClient
     _countries_client: CountriesClient
-    _dishes_client: DishesClient
+    _dishes_client: IDishesClient
     _players: Tuple[str, ...]
     _player_scores: List[int]
 
@@ -56,7 +56,7 @@ class MainScene:
             asset_manager: AssetManager,
             shots_client: ShotsClient,
             countries_client: CountriesClient,
-            dishes_client: DishesClient,
+            dishes_client: IDishesClient,
             players: Tuple[str, ...]) -> None:
         self._game_input_client = game_input_client
         self._session_window_client = session_window_client
@@ -175,6 +175,8 @@ class MainScene:
         window.blit(self._fired_shots(), (0, 0))
         window.blit(self._menu(), (0, 0))
         window.blit(self._character(), (0, 0))
+        window.blit(self._dish_clue(), (0, 0))
+        window.blit(self._dish_image(), (0, 0))
         window.blit(self._cursor(), pygame.mouse.get_pos())
 
     def _menu(self) -> Surface:
@@ -250,8 +252,10 @@ class MainScene:
             ])
         elif self._is_state(GameState.LEVEL_END):
             dish = self._dishes_client.get_level(self._current_level)
-            dialog.blit(title_font.render(f"{dish.name}!", True, (80, 80, 80)), (10, 10))
+            dialog.blit(title_font.render(
+                f"{dish.name} from {dish.country}!", True, (80, 80, 80)), (10, 10))
             render_multi_line(dish.description)
+
         elif self._is_state(GameState.GAME_END):
             dialog.blit(title_font.render(f"Bye!", True, (80, 80, 80)), (10, 10))
             render_multi_line([
@@ -320,6 +324,71 @@ class MainScene:
             animal_names[self._current_player], self._players[self._current_player])
 
         surface.blit(card, (873, 970))
+
+        return surface
+
+    def _dish_clue(self) -> Surface:
+        surface = self._make_layer()
+        if not self._is_state(GameState.LEVEL):
+            return surface
+
+        ui = self._get_pixel_ui()
+
+        dialog = self._make_box(
+            grid=BoxSurfaces(
+                top_left=ui.panel_top_left_light_grey,
+                top=ui.panel_top_light_grey,
+                top_right=ui.panel_top_right_light_grey,
+                left=ui.panel_left_light_grey,
+                center=ui.panel_center_light_grey,
+                right=ui.panel_right_light_grey,
+                bottom_left=ui.panel_bottom_left_light_grey,
+                bottom=ui.panel_bottom_light_grey,
+                bottom_right=ui.panel_bottom_right_light_grey,
+            ),
+            size=Size(411, 200)
+        )
+
+        def render_multi_line(lines: List[str]) -> None:
+            for y, line in enumerate(lines):
+                dialog.blit(
+                    text_font.render(line, True, (80, 80, 80)), (10, 35 + (y * 20)))
+
+        dish = self._dishes_client.get_level(self._current_level)
+
+        title_font = pygame.font.SysFont("Ubuntu Mono", 24)
+        text_font = pygame.font.SysFont("Ubuntu Mono", 16)
+
+        dialog.blit(title_font.render("Clue!", True, (80, 80, 80)), (10, 10))
+        render_multi_line(dish.description)
+
+        surface.blit(dialog, (10, 870))
+
+        return surface
+
+    def _dish_image(self) -> Surface:
+        surface = self._make_layer()
+        if not self._is_state(GameState.LEVEL_END):
+            return surface
+
+        ui = self._get_pixel_ui()
+        dialog_dish = self._make_box(
+            grid=BoxSurfaces(
+                top_left=ui.panel_top_left_light_brown,
+                top=ui.panel_top_light_brown,
+                top_right=ui.panel_top_right_light_brown,
+                left=ui.panel_left_light_brown,
+                center=ui.panel_center_light_brown,
+                right=ui.panel_right_light_brown,
+                bottom_left=ui.panel_bottom_left_light_brown,
+                bottom=ui.panel_bottom_light_brown,
+                bottom_right=ui.panel_bottom_right_light_brown,
+            ),
+            size=Size(170, 170)
+        )
+
+        dialog_dish.blit(self._dishes_client.get_dish_image(self._current_level), (10, 10))
+        surface.blit(dialog_dish, (558, 560))
 
         return surface
 

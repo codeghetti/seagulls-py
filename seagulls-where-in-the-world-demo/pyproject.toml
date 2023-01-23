@@ -17,6 +17,9 @@ python = "^3.8"
 pygame = "*"
 # We want the version of the game engine that includes the `seagulls` cli :)
 seagulls-engine = { version = "*", allow-prereleases = true, extras = ["cli"] }
+openai = "^0.26.1"
+stability-sdk = "^0.3.1"
+pillow = "^9.4.0"
 
 [tool.poetry.dev-dependencies]
 seagulls-cli = { path = "../seagulls-cli/", develop = true }

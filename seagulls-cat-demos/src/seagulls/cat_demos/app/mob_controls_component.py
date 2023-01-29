@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from math import sqrt
+
 import logging
 
 from functools import lru_cache
@@ -8,7 +10,7 @@ from seagulls.cat_demos.engine.v2._entities import GameComponent, GameObject
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
 from seagulls.cat_demos.engine.v2._movement import MovementClient
 from seagulls.cat_demos.engine.v2._position_component import PositionComponent, \
-    PositionComponentClient
+    PositionComponentClient, Vector
 from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
 
 logger = logging.getLogger(__name__)
@@ -35,6 +37,22 @@ class MobControlsComponent:
 
     def tick(self) -> None:
         delta = self._clock.get_delta()
+        me = self._position_component.get()
+        target = self._target_position_component.get()
+        movement = target - me
+        normalized = self._clamp(Vector(movement.x * delta / 10, movement.y * delta / 10), 0.1)
+        self._position_component.update(
+            self._position_component.get() + normalized,
+        )
+
+    def _clamp(self, vector: Vector, max_distance: float) -> Vector:
+        n = sqrt(vector.x ** 2 + vector.y ** 2)
+        if n == 0:
+            return vector
+
+        f = min(n, max_distance) / n
+        return Vector(f * vector.x, f * vector.y)
+
         # normalized = Vector(vector.x * delta / 10, vector.y * delta / 10)
         # if vector != Vector.zero():
         #     logger.debug(f"move: {self._object} + {normalized} delta={delta}")

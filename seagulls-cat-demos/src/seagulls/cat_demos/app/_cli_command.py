@@ -5,6 +5,8 @@ from pygame import Surface
 
 from seagulls.cat_demos.app._events import GameInputs, QuitGameEvent, PlayerMoveEvent
 from seagulls.cat_demos.app._scene import MainScene
+from seagulls.cat_demos.app.mob_controls_component import MobControlsComponentClient, \
+    MobControlsComponentId
 from seagulls.cat_demos.engine import (
     executable,
     GameSession,
@@ -80,6 +82,10 @@ class GameCliCommand(ICliCommand):
             self._clock,
             position_client,
         )
+        mob_controls_client = MobControlsComponentClient(
+            self._clock,
+            position_client,
+        )
         sprite_client = SpriteComponentClient(
             window_client=self._session_window_client,
             resources_client=resource_client,
@@ -88,6 +94,7 @@ class GameCliCommand(ICliCommand):
 
         self._scene_objects.create_component(PositionComponentId, position_client)
         self._scene_objects.create_component(PlayerControlsComponentId, player_controls_client)
+        self._scene_objects.create_component(MobControlsComponentId, mob_controls_client)
         self._scene_objects.create_component(SpriteComponentId, sprite_client)
 
         sprite_client.register_sprite(

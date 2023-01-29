@@ -70,6 +70,9 @@ class SpriteComponent:
         self._game_object = game_object
         self._sprite = GameSprite("enemy.idle")
 
+    def set_sprite(self, sprite: GameSprite) -> None:
+        self._sprite = sprite
+
     def tick(self) -> None:
         position = self._position_component.get()
         sprite = self._sprite

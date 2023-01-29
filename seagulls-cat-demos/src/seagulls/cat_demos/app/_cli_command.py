@@ -93,13 +93,13 @@ class GameCliCommand(ICliCommand):
         sprite_client.register_sprite(
             sprite=GameSprite("player.idle"),
             resource="/kenney.tiny-dungeon/tilemap-packed.png",
-            position=Position(x=0, y=0),
-            size=Size(height=50, width=50),
+            position=Position(x=16, y=16*7),
+            size=Size(height=16, width=16),
         )
         sprite_client.register_sprite(
             sprite=GameSprite("enemy.idle"),
             resource="/kenney.tiny-dungeon/tilemap-packed.png",
-            position=Position(x=16, y=145),
+            position=Position(x=16, y=16*9),
             size=Size(height=16, width=16),
         )
 

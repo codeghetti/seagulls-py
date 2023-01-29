@@ -4,35 +4,19 @@ import logging
 
 from functools import lru_cache
 
-from typing import TypeAlias
-
 from seagulls.cat_demos.app._events import GameInputs, PlayerMoveEvent
 from seagulls.cat_demos.engine.v2._entities import ComponentType, GameComponent, GameObject
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
 from seagulls.cat_demos.engine.v2._input_client import EventType, InputEventDispatcher
-from seagulls.cat_demos.engine.v2._point import Point
-from seagulls.cat_demos.engine.v2._position_component import PositionComponent, PositionComponentClient, Vector
+from seagulls.cat_demos.engine.v2._movement import MovementClient
+from seagulls.cat_demos.engine.v2._position_component import (
+    PositionComponent,
+    PositionComponentClient,
+    Vector,
+)
 from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
 
 logger = logging.getLogger(__name__)
-Position: TypeAlias = Point
-
-
-class MovementClient:
-
-    _frame_vector: Vector
-
-    def __init__(self) -> None:
-        self._frame_vector = Vector.zero()
-
-    def reset(self) -> None:
-        self._frame_vector = Vector.zero()
-
-    def move(self, vector: Vector) -> None:
-        self._frame_vector += vector
-
-    def get_vector(self) -> Vector:
-        return self._frame_vector
 
 
 class PlayerControlsComponent:

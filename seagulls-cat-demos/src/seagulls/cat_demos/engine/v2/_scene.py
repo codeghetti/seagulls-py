@@ -129,6 +129,9 @@ class GameSceneObjects(ITick):
 
         self._object_components[game_object].add(component)
 
+    def get_object_components(self, game_object: GameObject) -> GameObjectComponents:
+        return self._object_components[game_object]
+
     def tick(self) -> None:
         for component_id in self._components.get_ids():
             for game_object, components in self._object_components.items():

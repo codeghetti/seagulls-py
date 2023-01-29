@@ -1,5 +1,4 @@
 import pygame
-from typing import Dict, Tuple
 
 from argparse import ArgumentParser
 from pygame import Surface
@@ -17,16 +16,31 @@ from seagulls.cat_demos.engine._rendering import (
     IProvideGameObjects,
     IProvideObjectSprites,
     IProvideObjectPositions,
-    IProvideSurfaces,
-    IProvidePositions
 )
-from seagulls.cat_demos.engine.v2._components import MobControlsComponent, Position, \
-    PositionComponent, \
-    Size, SpriteComponent
-from seagulls.cat_demos.engine.v2._entities import GameComponent, GameSprite
+from seagulls.cat_demos.engine.v2._game_clock import GameClock
+from seagulls.cat_demos.engine.v2._input_client import (
+    EventTogglesClient, GameInputClient,
+    GameInputRouter, InputEvent,
+    EventPayloadType,
+    InputEventDispatcher, PygameEvents, PygameInputEvent, PygameKeyboardInputPublisher,
+)
+from seagulls.cat_demos.engine.v2._position_component import (
+    Position, PositionComponentClient,
+    PositionComponentId, Vector,
+)
 from seagulls.cat_demos.engine.v2._resources import ResourceClient
 from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
+from seagulls.cat_demos.engine.v2._size import Size
+from seagulls.cat_demos.engine.v2._sprite_component import (
+    GameSprite,
+    SpriteComponentClient,
+    SpriteComponentId,
+)
 from seagulls.cat_demos.engine.v2._window import GameWindowClient
+from seagulls.cat_demos.app.player_controls_component import (
+    PlayerControlsComponentClient,
+    PlayerControlsComponentId,
+)
 from seagulls.cli import ICliCommand
 
 
@@ -71,68 +85,87 @@ class GameCliCommand(ICliCommand):
         session.run()
 
     def _init_session(self) -> None:
-        print("init")
         self._session_state_client = GameSessionStateClient()
         self._session_window_client = GameWindowClient()
-        self._session_input_client = GameSessionInputClient()
         self._session_window_client.open()
         self._window = self._session_window_client.get_surface()
+        self._clock = GameClock()
 
-        self._session_input_client.publisher(executable(self._check_quit))
-        self._session_input_client.publisher(executable(self._check_move))
-        self._session_input_client.subscribe(GameInputs.QUIT, self._on_quit)
-        self._session_input_client.subscribe(GameInputs.MOVE, self._on_move)
+        self._scene_objects = GameSceneObjects(window=self._session_window_client)
+
+        self._input_v2 = GameInputClient(handlers=tuple([
+            self._on_input_v2,
+        ]))
+        self._pygame_input_v2 = PygameKeyboardInputPublisher(self._input_v2)
+        self._input_v2_routing = GameInputRouter({
+            PygameEvents.KEYBOARD: tuple([self._on_keyboard]),
+            GameInputs.QUIT: tuple([self._on_quit]),
+        })
+        self._event_dispatcher = InputEventDispatcher()
+        self._event_toggles = EventTogglesClient(self._input_v2)
 
         resource_client = ResourceClient()
-        positionizer = PositionComponent()
-        mob_controls = MobControlsComponent(positionizer)
-        sprites = SpriteComponent(self._session_window_client, resource_client, positionizer)
-        sprites.register_sprite(
+        position_client = PositionComponentClient()
+        player_controls_client = PlayerControlsComponentClient(
+            self._event_dispatcher,
+            self._clock,
+            position_client,
+        )
+        sprite_client = SpriteComponentClient(
+            window_client=self._session_window_client,
+            resources_client=resource_client,
+            position_client=position_client,
+        )
+
+        self._scene_objects.create_component(PositionComponentId, position_client)
+        self._scene_objects.create_component(PlayerControlsComponentId, player_controls_client)
+        self._scene_objects.create_component(SpriteComponentId, sprite_client)
+
+        sprite_client.register_sprite(
             sprite=GameSprite("player.idle"),
             resource="/kenney.tiny-dungeon/tilemap-packed.png",
             position=Position(x=0, y=0),
             size=Size(height=50, width=50),
         )
-        sprites.register_sprite(
+        sprite_client.register_sprite(
             sprite=GameSprite("enemy.idle"),
             resource="/kenney.tiny-dungeon/tilemap-packed.png",
             position=Position(x=16, y=145),
             size=Size(height=16, width=16),
         )
 
-        self._scene_objects = GameSceneObjects(window=self._session_window_client)
-
-        self._scene_objects.create_component(
-            GameComponent[PositionComponent]("position"), positionizer)
-        self._scene_objects.create_component(
-            GameComponent[MobControlsComponent]("mob-controls"), mob_controls)
-        self._scene_objects.create_component(
-            GameComponent[SpriteComponent]("sprites"), sprites)
-
         self._scene = MainScene(
             scene_objects=self._scene_objects,
-            sprites=sprites,
         )
 
-    def _check_quit(self) -> None:
-        if self._session_input_client.was_key_pressed(pygame.K_ESCAPE):
-            self._session_input_client.publish(GameInputs.QUIT, QuitGameEvent())
+    def _on_input_v2(self, event: InputEvent[EventPayloadType], payload: EventPayloadType) -> None:
+        self._input_v2_routing.route(event, payload)
+        self._event_dispatcher.trigger(event, payload)
 
-    def _check_move(self) -> None:
-        if self._session_input_client.was_key_pressed(pygame.K_LEFT):
-            self._session_input_client.publish(GameInputs.MOVE, PlayerMoveEvent(
-                direction=(-1, 0),
-            ))
-        if self._session_input_client.was_key_pressed(pygame.K_RIGHT):
-            self._session_input_client.publish(GameInputs.MOVE, PlayerMoveEvent(
-                direction=(1, 0),
-            ))
+    def _on_keyboard(self, event: InputEvent[PygameInputEvent], payload: PygameInputEvent) -> None:
+        if payload.type == pygame.KEYDOWN:
+            if payload.key == pygame.K_a:
+                self._event_toggles.on(GameInputs.MOVE_LEFT, PlayerMoveEvent(Vector(-1, 0)))
+            if payload.key == pygame.K_d:
+                self._event_toggles.on(GameInputs.MOVE_RIGHT, PlayerMoveEvent(Vector(1, 0)))
+            if payload.key == pygame.K_w:
+                self._event_toggles.on(GameInputs.MOVE_UP, PlayerMoveEvent(Vector(0, -1)))
+            if payload.key == pygame.K_s:
+                self._event_toggles.on(GameInputs.MOVE_DOWN, PlayerMoveEvent(Vector(0, 1)))
+            if payload.key == pygame.K_ESCAPE:
+                self._input_v2.trigger(GameInputs.QUIT, QuitGameEvent())
+        if payload.type == pygame.KEYUP:
+            if payload.key == pygame.K_a:
+                self._event_toggles.off(GameInputs.MOVE_LEFT)
+            if payload.key == pygame.K_d:
+                self._event_toggles.off(GameInputs.MOVE_RIGHT)
+            if payload.key == pygame.K_w:
+                self._event_toggles.off(GameInputs.MOVE_UP)
+            if payload.key == pygame.K_s:
+                self._event_toggles.off(GameInputs.MOVE_DOWN)
 
-    def _on_move(self, event: PlayerMoveEvent) -> None:
-        print(event)
-
-    def _on_quit(self, event: QuitGameEvent) -> None:
-        exit()
+    def _on_quit(self, event: GameInputs.QUIT, payload: QuitGameEvent) -> None:
+        quit()
 
     def _run_session(self) -> None:
         try:
@@ -143,8 +176,10 @@ class GameCliCommand(ICliCommand):
             pass
 
     def _tick(self) -> None:
+        self._clock.tick()
         self._window.fill((100, 120, 20))
-        self._session_input_client.tick()
+        self._pygame_input_v2.tick()
+        self._event_toggles.tick()
         self._scene_objects.tick()
         self._scene.tick()
         self._session_window_client.commit()

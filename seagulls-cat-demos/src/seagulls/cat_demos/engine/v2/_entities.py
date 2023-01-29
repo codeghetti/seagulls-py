@@ -21,7 +21,3 @@ class GameObject(_IdentityObject):
 
 class GameComponent(_IdentityObject, Generic[ComponentType]):
     pass
-
-
-class GameSprite(_IdentityObject, Generic[ComponentType]):
-    pass

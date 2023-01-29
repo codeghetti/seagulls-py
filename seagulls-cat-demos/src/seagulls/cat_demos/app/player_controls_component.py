@@ -1,0 +1,119 @@
+from __future__ import annotations
+
+import logging
+
+from functools import lru_cache
+
+from typing import TypeAlias
+
+from seagulls.cat_demos.app._events import GameInputs, PlayerMoveEvent
+from seagulls.cat_demos.engine.v2._entities import ComponentType, GameComponent, GameObject
+from seagulls.cat_demos.engine.v2._game_clock import GameClock
+from seagulls.cat_demos.engine.v2._input_client import EventType, InputEventDispatcher
+from seagulls.cat_demos.engine.v2._point import Point
+from seagulls.cat_demos.engine.v2._position_component import PositionComponent, PositionComponentClient, Vector
+from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
+
+logger = logging.getLogger(__name__)
+Position: TypeAlias = Point
+
+
+class MovementClient:
+
+    _frame_vector: Vector
+
+    def __init__(self) -> None:
+        self._frame_vector = Vector.zero()
+
+    def reset(self) -> None:
+        self._frame_vector = Vector.zero()
+
+    def move(self, vector: Vector) -> None:
+        self._frame_vector += vector
+
+    def get_vector(self) -> Vector:
+        return self._frame_vector
+
+
+class PlayerControlsComponent:
+
+    _position_component: PositionComponent
+    _movement_client: MovementClient
+    _clock: GameClock
+    _object: GameObject
+
+    def __init__(
+        self,
+        position_component: PositionComponent,
+        movement_client: MovementClient,
+        clock: GameClock,
+        game_object: GameObject,
+    ) -> None:
+        self._position_component = position_component
+        self._movement_client = movement_client
+        self._clock = clock
+        self._object = game_object
+
+    def tick(self) -> None:
+        vector = self._movement_client.get_vector()
+        delta = self._clock.get_delta()
+        normalized = Vector(vector.x * delta / 10, vector.y * delta / 10)
+        if vector != Vector.zero():
+            logger.debug(f"move: {self._object} + {normalized} delta={delta}")
+        self._position_component.update(
+            self._position_component.get() + normalized,
+        )
+        self._movement_client.reset()
+
+
+PlayerControlsComponentId = GameComponent[PlayerControlsComponent]("player-controls")
+
+
+class PlayerControlsComponentClient(IProvideGameObjectComponent[PlayerControlsComponent]):
+
+    _input_event_dispatcher: InputEventDispatcher
+    _clock: GameClock
+    _position_client: PositionComponentClient
+
+    def __init__(
+        self,
+        input_event_dispatcher: InputEventDispatcher,
+        clock: GameClock,
+        position_client: PositionComponentClient,
+    ) -> None:
+        self._input_event_dispatcher = input_event_dispatcher
+        self._clock = clock
+        self._position_client = position_client
+
+    def tick(self, game_object: GameObject) -> None:
+        self.get(game_object).tick()
+
+    @lru_cache()
+    def get(self, game_object: GameObject) -> ComponentType:
+        movement_client = MovementClient()
+
+        def _on_move(event: EventType, payload: PlayerMoveEvent) -> None:
+            movement_client.move(payload.direction)
+
+        self._input_event_dispatcher.subscribe(
+            event=GameInputs.MOVE_UP,
+            callback=_on_move,
+        )
+        self._input_event_dispatcher.subscribe(
+            event=GameInputs.MOVE_DOWN,
+            callback=_on_move,
+        )
+        self._input_event_dispatcher.subscribe(
+            event=GameInputs.MOVE_LEFT,
+            callback=_on_move,
+        )
+        self._input_event_dispatcher.subscribe(
+            event=GameInputs.MOVE_RIGHT,
+            callback=_on_move,
+        )
+        return PlayerControlsComponent(
+            position_component=self._position_client.get(game_object),
+            movement_client=movement_client,
+            clock=self._clock,
+            game_object=game_object
+        )

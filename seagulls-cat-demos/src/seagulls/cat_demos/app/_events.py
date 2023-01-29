@@ -1,8 +1,6 @@
-from typing import Tuple
-
 from dataclasses import dataclass
 
-from seagulls.cat_demos.engine._input import InputEvent
+from seagulls.cat_demos.engine.v2._input_client import InputEvent
 from seagulls.cat_demos.engine.v2._position_component import Vector
 
 
@@ -32,9 +30,9 @@ class GameInputs:
     didn't seem to infer the type of these variables from the assignment of the values. So I had
     to copy the type signature to both sides of the assignment.
     """
-    QUIT: InputEvent[QuitGameEvent] = InputEvent[QuitGameEvent]("quit-game")
-    MOVE: InputEvent[PlayerMoveEvent] = InputEvent[PlayerMoveEvent]("player-move")
-    MOVE_UP: InputEvent[PlayerMoveEvent] = InputEvent[PlayerMoveEvent]("player-move[up]")
-    MOVE_DOWN: InputEvent[PlayerMoveEvent] = InputEvent[PlayerMoveEvent]("player-move[down]")
-    MOVE_LEFT: InputEvent[PlayerMoveEvent] = InputEvent[PlayerMoveEvent]("player-move[left]")
-    MOVE_RIGHT: InputEvent[PlayerMoveEvent] = InputEvent[PlayerMoveEvent]("player-move[right]")
+    QUIT = InputEvent[QuitGameEvent]("quit-game")
+    MOVE = InputEvent[PlayerMoveEvent]("player-move")
+    MOVE_UP = InputEvent[PlayerMoveEvent]("player-move[up]")
+    MOVE_DOWN = InputEvent[PlayerMoveEvent]("player-move[down]")
+    MOVE_LEFT = InputEvent[PlayerMoveEvent]("player-move[left]")
+    MOVE_RIGHT = InputEvent[PlayerMoveEvent]("player-move[right]")

@@ -14,7 +14,7 @@ class GameSceneStages:
         return self._stages
 
 
-class GameSession:
+class GameScene:
 
     _scene_stages: GameSceneStages
 

@@ -9,14 +9,8 @@ from seagulls.cat_demos.engine import (
     executable,
     GameSession,
     GameSessionStages,
-    GameSessionStateClient,
 )
-from seagulls.cat_demos.engine._input import GameSessionInputClient
-from seagulls.cat_demos.engine._rendering import (
-    IProvideGameObjects,
-    IProvideObjectSprites,
-    IProvideObjectPositions,
-)
+
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
 from seagulls.cat_demos.engine.v2._input_client import (
     EventTogglesClient, GameInputClient,
@@ -44,33 +38,9 @@ from seagulls.cat_demos.app.player_controls_component import (
 from seagulls.cli import ICliCommand
 
 
-class SceneObjects(IProvideGameObjects, IProvideObjectSprites, IProvideObjectPositions):
-
-    # _surface_providers: Dict[GameObject, IProvideSurfaces]
-    # _position_providers: Dict[GameObject, IProvidePositions]
-
-    def __init__(self) -> None:
-        pass
-
-    # def get_game_objects(self) -> Tuple[GameObject, ...]:
-    #     return tuple(self._surface_providers.keys())
-
-    # def get_sprite(self, game_object: GameObject) -> Surface:
-    #     return self._surface_providers[game_object].get_surface()
-
-    # def get_position(self, game_object: GameObject) -> Position:
-    #     return self._position_providers[game_object].get_position()
-
-
-class SceneObjectContext:
-    pass
-
-
 class GameCliCommand(ICliCommand):
 
-    _session_state_client: GameSessionStateClient
     _session_window_client: GameWindowClient
-    _session_input_client: GameSessionInputClient
     _window: Surface
 
     def configure_parser(self, parser: ArgumentParser) -> None:
@@ -85,7 +55,6 @@ class GameCliCommand(ICliCommand):
         session.run()
 
     def _init_session(self) -> None:
-        self._session_state_client = GameSessionStateClient()
         self._session_window_client = GameWindowClient()
         self._session_window_client.open()
         self._window = self._session_window_client.get_surface()

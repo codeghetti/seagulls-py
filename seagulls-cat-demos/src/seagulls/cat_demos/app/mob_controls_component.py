@@ -8,9 +8,11 @@ from functools import lru_cache
 
 from seagulls.cat_demos.engine.v2._entities import GameComponent, GameObject
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
-from seagulls.cat_demos.engine.v2._movement import MovementClient
-from seagulls.cat_demos.engine.v2._position_component import PositionComponent, \
-    PositionComponentClient, Vector
+from seagulls.cat_demos.engine.v2._position_component import (
+    PositionComponent,
+    PositionComponentClient,
+    Vector,
+)
 from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
 
 logger = logging.getLogger(__name__)

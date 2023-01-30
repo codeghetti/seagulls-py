@@ -78,6 +78,36 @@ class GameObjectComponents:
         self._components.remove(component)
 
 
+class GameObjectsRegistry:
+
+    _objects: Set[GameObject]
+
+    def __init__(self) -> None:
+        self._objects = set()
+
+    def add(self, game_object: GameObject) -> None:
+        if game_object in self._objects:
+            raise RuntimeError(f"Duplicate game object found: {game_object}")
+
+        self._objects.add(game_object)
+
+    def remove(self, game_object: GameObject) -> None:
+        if game_object not in self._objects:
+            raise RuntimeError(f"Game object not found: {game_object}")
+
+    def find(self, game_object: GameObject) -> None:
+        """
+        If this method exists then it might return a standard game object component client.
+        """
+        if game_object not in self._objects:
+            raise RuntimeError(f"Game object not found: {game_object}")
+
+        raise NotImplementedError()
+
+    def get_all(self) -> Tuple[GameObject, ...]:
+        return tuple(self._objects)
+
+
 class GameSceneObjects(ITick):
 
     _window: GameWindowClient

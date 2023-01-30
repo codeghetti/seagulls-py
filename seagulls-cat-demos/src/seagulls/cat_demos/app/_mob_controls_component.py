@@ -42,7 +42,7 @@ class MobControlsComponent:
         me = self._position_component.get()
         target = self._target_position_component.get()
         movement = target - me
-        normalized = self._clamp(Vector(movement.x * delta / 10, movement.y * delta / 10), 0.1)
+        normalized = self._clamp(Vector(movement.x * delta / 10, movement.y * delta / 10), 0.3)
         self._position_component.update(
             self._position_component.get() + normalized,
         )

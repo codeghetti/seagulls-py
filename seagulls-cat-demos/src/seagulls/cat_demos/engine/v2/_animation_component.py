@@ -1,0 +1,93 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+from datetime import datetime
+
+from typing import List, Optional, Tuple
+
+import logging
+
+from functools import lru_cache
+from ._entities import GameComponent, GameObject
+from ._scene import IProvideGameObjectComponent
+from ._sprite_component import GameSprite, SpriteComponent, SpriteComponentClient
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass(frozen=True)
+class _AnimationConfig:
+    started_at: datetime
+    frames: Tuple[GameSprite, ...]
+    duration: int
+    loop: bool
+
+
+class SpriteAnimationComponent:
+
+    _game_object: GameObject
+    _sprite_component: SpriteComponent
+    _current_animation: Optional[_AnimationConfig]
+
+    def __init__(self, game_object: GameObject, sprite_component: SpriteComponent) -> None:
+        self._game_object = game_object
+        self._sprite_component = sprite_component
+        self._current_animation = None
+
+    def tick(self) -> None:
+        config = self._current_animation
+        if config is None:
+            return
+
+        now = datetime.now()
+        time_elapsed = (now - config.started_at).total_seconds() * 1000.0  # 3120
+        if not config.loop and time_elapsed > config.duration:
+            return
+
+        self._sprite_component.set_sprite(self._get_sprite(config, time_elapsed))
+
+    def _get_sprite(self, config, time_elapsed) -> GameSprite:
+        remainder = time_elapsed % config.duration  # 1120
+        num_frames = len(config.frames)  # 2
+        ms_per_frame = config.duration / num_frames  # 1000
+        logger.debug(f"remainder: {remainder}")
+        logger.debug(f"num_frames: {num_frames}")
+        logger.debug(f"ms_per_frame: {ms_per_frame}")
+        for x in range(num_frames):
+            ms_limit = (x + 1) * ms_per_frame  # 1000
+            logger.debug(f"ms_limit: {ms_limit}")
+            if remainder <= ms_limit:
+                return config.frames[x]
+
+        raise RuntimeError("Couldn't find animation frame")
+
+    def set_animation(self, frames: Tuple[GameSprite, ...], duration: int, loop: bool) -> None:
+        self._current_animation = _AnimationConfig(
+            started_at=datetime.now(),
+            frames=frames,
+            duration=duration,
+            loop=loop,
+        )
+
+
+SpriteAnimationComponentId = GameComponent[SpriteAnimationComponent]("sprite-animation")
+
+
+class SpriteAnimationComponentClient(IProvideGameObjectComponent[SpriteAnimationComponent]):
+
+    _sprite_component_client: SpriteComponentClient
+
+    def __init__(self, sprite_component_client: SpriteComponentClient) -> None:
+        self._sprite_component_client = sprite_component_client
+
+    def tick(self, game_object: GameObject) -> None:
+        self.get(game_object).tick()
+
+    @lru_cache()
+    def get(self, game_object: GameObject) -> SpriteAnimationComponent:
+        logger.debug(f"attaching animation component to game object: {game_object}")
+        return SpriteAnimationComponent(
+            game_object=game_object,
+            sprite_component=self._sprite_component_client.get(game_object),
+        )

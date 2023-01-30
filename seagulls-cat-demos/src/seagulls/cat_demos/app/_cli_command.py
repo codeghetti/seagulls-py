@@ -5,13 +5,15 @@ from pygame import Surface
 
 from seagulls.cat_demos.app._events import GameInputs, QuitGameEvent, PlayerMoveEvent
 from seagulls.cat_demos.app._scene import MainScene
-from seagulls.cat_demos.app.mob_controls_component import MobControlsComponentClient, \
+from seagulls.cat_demos.app._mob_controls_component import MobControlsComponentClient, \
     MobControlsComponentId
 from seagulls.cat_demos.engine import (
     executable,
     GameSession,
     GameSessionStages,
 )
+from seagulls.cat_demos.engine.v2._animation_component import SpriteAnimationComponentClient, \
+    SpriteAnimationComponentId
 
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
 from seagulls.cat_demos.engine.v2._input_client import (
@@ -33,7 +35,7 @@ from seagulls.cat_demos.engine.v2._sprite_component import (
     SpriteComponentId,
 )
 from seagulls.cat_demos.engine.v2._window import GameWindowClient
-from seagulls.cat_demos.app.player_controls_component import (
+from seagulls.cat_demos.app._player_controls_component import (
     PlayerControlsComponentClient,
     PlayerControlsComponentId,
 )
@@ -62,7 +64,7 @@ class GameCliCommand(ICliCommand):
         self._window = self._session_window_client.get_surface()
         self._clock = GameClock()
 
-        self._scene_objects = GameSceneObjects(window=self._session_window_client)
+        self._scene_client = GameSceneObjects(window=self._session_window_client)
 
         self._input_v2 = GameInputClient(handlers=tuple([
             self._on_input_v2,
@@ -91,16 +93,24 @@ class GameCliCommand(ICliCommand):
             resources_client=resource_client,
             position_client=position_client,
         )
+        animation_client = SpriteAnimationComponentClient(sprite_client)
 
-        self._scene_objects.create_component(PositionComponentId, position_client)
-        self._scene_objects.create_component(PlayerControlsComponentId, player_controls_client)
-        self._scene_objects.create_component(MobControlsComponentId, mob_controls_client)
-        self._scene_objects.create_component(SpriteComponentId, sprite_client)
+        self._scene_client.create_component(PositionComponentId, position_client)
+        self._scene_client.create_component(PlayerControlsComponentId, player_controls_client)
+        self._scene_client.create_component(MobControlsComponentId, mob_controls_client)
+        self._scene_client.create_component(SpriteComponentId, sprite_client)
+        self._scene_client.create_component(SpriteAnimationComponentId, animation_client)
 
         sprite_client.register_sprite(
-            sprite=GameSprite("player.idle"),
+            sprite=GameSprite("player.idle.1"),
             resource="/kenney.tiny-dungeon/tilemap-packed.png",
-            position=Position(x=16, y=16*7),
+            position=Position(x=16, y=16 * 7),
+            size=Size(height=16, width=16),
+        )
+        sprite_client.register_sprite(
+            sprite=GameSprite("player.idle.2"),
+            resource="/kenney.tiny-dungeon/tilemap-packed.png",
+            position=Position(x=16 * 2, y=16 * 7),
             size=Size(height=16, width=16),
         )
         sprite_client.register_sprite(
@@ -111,7 +121,7 @@ class GameCliCommand(ICliCommand):
         )
 
         self._scene = MainScene(
-            scene_objects=self._scene_objects,
+            scene_objects=self._scene_client,
         )
 
     def _on_input_v2(self, event: InputEvent[EventPayloadType], payload: EventPayloadType) -> None:
@@ -156,7 +166,7 @@ class GameCliCommand(ICliCommand):
         self._window.fill((100, 120, 20))
         self._pygame_input_v2.tick()
         self._event_toggles.tick()
-        self._scene_objects.tick()
+        self._scene_client.tick()
         self._scene.tick()
         self._session_window_client.commit()
 

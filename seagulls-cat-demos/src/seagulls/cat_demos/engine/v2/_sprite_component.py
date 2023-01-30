@@ -96,9 +96,6 @@ class SpriteComponentClient(IProvideGameObjectComponent[SpriteComponent], IManag
     _resources_client: ResourceClient
     _position_client: PositionComponentClient
 
-    # _sprites: Dict[GameSprite, _SpriteConfig]
-    # _object_sprites: Dict[GameObject, GameSprite]
-
     def __init__(
         self,
         window_client: GameWindowClient,

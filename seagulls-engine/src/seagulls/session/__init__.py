@@ -5,7 +5,7 @@ from ._game_session import (
     IStartGameSessions,
     IStopGameSessions,
     NullGameSession,
-    NullGameSessionError,
+    NullGameSessionError
 )
 
 __all__ = [

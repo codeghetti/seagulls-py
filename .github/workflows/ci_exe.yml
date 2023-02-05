@@ -26,7 +26,7 @@ jobs:
           poetry install --extras dev
       - name: Build Executable
         working-directory: seagulls-rpg-demo
-        run: seagulls build-executable
+        run: poetry run seagulls build-executable
       - name: List files for now
         working-directory: .tmp/seagulls-rpg-demo/dist
         run: ls

@@ -1,6 +1,6 @@
 from typing import Tuple, Iterable
 
-from ._executables import IExecutable
+from seagulls.cat_demos.engine.v2._executables import IExecutable
 
 
 class GameSceneStages:

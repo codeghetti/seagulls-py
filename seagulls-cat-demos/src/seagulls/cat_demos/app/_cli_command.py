@@ -28,6 +28,7 @@ from seagulls.cat_demos.engine.v2._position_component import (
 )
 from seagulls.cat_demos.engine.v2._resources import ResourceClient
 from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
+from seagulls.cat_demos.engine.v2._service_provider import provider
 from seagulls.cat_demos.engine.v2._size import Size
 from seagulls.cat_demos.engine.v2._sprite_component import (
     GameSprite,
@@ -52,9 +53,9 @@ class GameCliCommand(ICliCommand):
 
     def execute(self) -> None:
         session = GameSession(session_stages=GameSessionStages(tuple([
-            executable(self._init_session),
-            executable(self._run_session),
-            executable(self._end_session),
+            provider(lambda: executable(self._init_session)),
+            provider(lambda: executable(self._run_session)),
+            provider(lambda: executable(self._end_session)),
         ])))
         session.run()
 

@@ -1,0 +1,32 @@
+name: RPG EXE CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  build-exe:
+    name: "Build"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.16"
+      - name: Install Package
+        working-directory: seagulls-rpg-demo
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pipx
+          pipx install poetry
+          poetry install --extras dev
+      - name: Build Executable
+        working-directory: seagulls-rpg-demo
+        run: seagulls build-executable
+      - name: List files for now
+        working-directory: .tmp/seagulls-rpg-demo/dist
+        run: ls

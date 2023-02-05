@@ -6,7 +6,7 @@ on:
   pull_request:
 jobs:
   build-ubuntu-executable:
-    name: "Build"
+    name: "Build ubuntu executable"
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -33,10 +33,10 @@ jobs:
       - name: Upload executable
         uses: actions/upload-artifact@v2
         with:
-          name: "Upload executable"
+          name: "Upload ubuntu executable"
           path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo"
   build-macos-executable:
-    name: "Build"
+    name: "Build macos executable"
     runs-on: macos-12
     strategy:
       fail-fast: false
@@ -63,7 +63,7 @@ jobs:
       - name: Upload executable
         uses: actions/upload-artifact@v2
         with:
-          name: "Upload macos executable"
+          name: "seagulls-rpg-demo.app"
           path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.app"
 #  build-windows-exe:
 #    name: "Build"

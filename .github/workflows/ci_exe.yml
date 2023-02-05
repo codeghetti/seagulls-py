@@ -30,3 +30,8 @@ jobs:
       - name: List files for now
         working-directory: .tmp/seagulls-rpg-demo/dist
         run: ls
+      - name: Upload EXE
+        uses: actions/upload-artifact@v2
+        with:
+          name: "Upload EXE"
+          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo"

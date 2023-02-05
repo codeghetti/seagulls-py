@@ -63,7 +63,7 @@ jobs:
       - name: Upload executable
         uses: actions/upload-artifact@v2
         with:
-          name: "Upload executable"
+          name: "Upload macos executable"
           path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.app"
 #  build-windows-exe:
 #    name: "Build"

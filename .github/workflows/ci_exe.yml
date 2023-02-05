@@ -60,11 +60,16 @@ jobs:
       - name: List files for now
         working-directory: .tmp/seagulls-rpg-demo/dist
         run: ls
+      - name: Put app in directory for upload
+        working-directory: .tmp/seagulls-rpg-demo/dist
+        run: |
+          mkdir seagulls-rpg-demo-app
+          mv seagulls-rpg-demo.app seagulls-rpg-demo-app/
       - name: Upload executable
         uses: actions/upload-artifact@v2
         with:
           name: "seagulls-rpg-demo.app"
-          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.app"
+          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo-app"
 #  build-windows-exe:
 #    name: "Build"
 #    runs-on: windows-2019

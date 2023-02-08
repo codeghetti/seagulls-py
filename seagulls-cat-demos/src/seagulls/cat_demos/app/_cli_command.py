@@ -16,6 +16,7 @@ from seagulls.cat_demos.engine.v2._animation_component import SpriteAnimationCom
     SpriteAnimationComponentId
 
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
+from seagulls.cat_demos.engine.v2._game_session import StandardSessionFrames
 from seagulls.cat_demos.engine.v2._input_client import (
     EventTogglesClient, GameInputClient,
     GameInputRouter, InputEvent,
@@ -52,11 +53,11 @@ class GameCliCommand(ICliCommand):
         pass
 
     def execute(self) -> None:
-        session = GameSession(session_stages=GameSessionStages(tuple([
-            provider(lambda: executable(self._init_session)),
-            provider(lambda: executable(self._run_session)),
-            provider(lambda: executable(self._end_session)),
-        ])))
+        session = GameSession(session_frames=StandardSessionFrames(
+            executable(self._init_session),
+            executable(self._run_session),
+            executable(self._end_session),
+        ))
         session.run()
 
     def _init_session(self) -> None:

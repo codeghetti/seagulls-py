@@ -1,71 +1,47 @@
-from typing import Tuple, Iterable
+from typing import Iterable, Protocol
 
-from seagulls.cat_demos.engine.v2._executables import IExecutable, executable
-from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider, provider
+from abc import abstractmethod
+
+from ._executables import IExecutable, executable
 
 
-class GameSessionStages:
-
-    _stages: Tuple[ServiceProvider[IExecutable], ...]
-
-    def __init__(self, stages: Tuple[ServiceProvider[IExecutable], ...]) -> None:
-        self._stages = stages
-
-    def stages(self) -> Iterable[IExecutable]:
-        for stage in self._stages:
-            yield stage.get_service()
+class IProvideSessionFrames(Protocol):
+    @abstractmethod
+    def items(self) -> Iterable[IExecutable]:
+        pass
 
 
 class GameSession:
 
-    _session_stages: GameSessionStages
+    _session_frames: IProvideSessionFrames
 
-    def __init__(self, session_stages: GameSessionStages) -> None:
-        self._session_stages = session_stages
+    def __init__(self, session_frames: IProvideSessionFrames) -> None:
+        self._session_frames = session_frames
 
     def run(self) -> None:
-        for stage in self._session_stages.stages():
+        for stage in self._session_frames.items():
             stage.execute()
 
 
-class GameClient:
+class StandardSessionFrames(IProvideSessionFrames):
 
-    _session: ServiceProvider[GameSession]
+    _open_session: IExecutable
+    _run_session: IExecutable
+    _close_session: IExecutable
 
-    def __init__(self, session: ServiceProvider[GameSession]) -> None:
-        self._session = session
+    def __init__(
+        self,
+        open_session: IExecutable,
+        run_session: IExecutable,
+        close_session: IExecutable,
+    ) -> None:
+        self._open_session = open_session
+        self._run_session = run_session
+        self._close_session = close_session
 
-    def get_session(self) -> GameSession:
-        return self._session.get_service()
-
-
-class Container:
-
-    def game_client(self) -> GameClient:
-        return GameClient(session=provider(self._game_session))
-
-    def _game_session(self) -> GameSession:
-        return GameSession(session_stages=self._session_stages())
-
-    def _session_stages(self) -> GameSessionStages:
-        return GameSessionStages(tuple([
-            provider(self._open_session),
-            provider(self._run_session),
-            provider(self._close_session),
-        ]))
-
-    def _open_session(self) -> IExecutable:
-        return executable(lambda: print("default executable: init session"))
-
-    def _run_session(self) -> IExecutable:
-        return executable(lambda: print("default executable: run session"))
-
-    def _close_session(self) -> IExecutable:
-        return executable(lambda: print("default executable: close session"))
-
-
-if __name__ == "__main__":
-    container = Container()
-    client = container.game_client()
-    session = client.get_session()
-    session.run()
+    def items(self) -> Iterable[IExecutable]:
+        return tuple([
+            self._open_session,
+            self._run_session,
+            self._close_session,
+        ])

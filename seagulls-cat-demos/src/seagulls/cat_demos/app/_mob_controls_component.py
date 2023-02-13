@@ -6,7 +6,7 @@ import logging
 
 from functools import lru_cache
 
-from seagulls.cat_demos.engine.v2._entities import GameComponent, GameObject
+from seagulls.cat_demos.engine.v2.components._identity import GameComponentId, GameObjectId
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
 from seagulls.cat_demos.engine.v2._position_component import (
     PositionComponent,
@@ -23,14 +23,14 @@ class MobControlsComponent:
     _position_component: PositionComponent
     _target_position_component: PositionComponent
     _clock: GameClock
-    _object: GameObject
+    _object: GameObjectId
 
     def __init__(
         self,
         position_component: PositionComponent,
         target_position_component: PositionComponent,
         clock: GameClock,
-        game_object: GameObject,
+        game_object: GameObjectId,
     ) -> None:
         self._position_component = position_component
         self._target_position_component = target_position_component
@@ -64,7 +64,7 @@ class MobControlsComponent:
         # self._movement_client.reset()
 
 
-MobControlsComponentId = GameComponent[MobControlsComponent]("mob-controls")
+MobControlsComponentId = GameComponentId[MobControlsComponent]("mob-controls")
 
 
 class MobControlsComponentClient(IProvideGameObjectComponent[MobControlsComponent]):
@@ -80,15 +80,15 @@ class MobControlsComponentClient(IProvideGameObjectComponent[MobControlsComponen
         self._clock = clock
         self._position_client = position_client
 
-    def tick(self, game_object: GameObject) -> None:
+    def tick(self, game_object: GameObjectId) -> None:
         self.get(game_object).tick()
 
     @lru_cache()
-    def get(self, game_object: GameObject) -> MobControlsComponent:
+    def get(self, game_object: GameObjectId) -> MobControlsComponent:
         return MobControlsComponent(
             position_component=self._position_client.get(game_object),
             # TODO: make this settable when attaching the component
-            target_position_component=self._position_client.get(GameObject("player")),
+            target_position_component=self._position_client.get(GameObjectId("player")),
             clock=self._clock,
             game_object=game_object
         )

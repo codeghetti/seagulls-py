@@ -4,7 +4,8 @@ from functools import lru_cache
 
 from typing import TypeAlias
 
-from ._entities import ComponentType, GameComponent, GameObject
+from seagulls.cat_demos.engine.v2.components._identity import EntityType, GameComponentId, \
+    GameObjectId
 from ._point import Point
 from ._scene import IProvideGameObjectComponent
 
@@ -14,10 +15,10 @@ Vector: TypeAlias = Point
 
 class PositionComponent:
 
-    _object: GameObject
+    _object: GameObjectId
     _position: Position
 
-    def __init__(self, game_object: GameObject) -> None:
+    def __init__(self, game_object: GameObjectId) -> None:
         self._object = game_object
         self._position = Position.zero()
 
@@ -28,14 +29,14 @@ class PositionComponent:
         self._position = position
 
 
-PositionComponentId = GameComponent[PositionComponent]("position")
+PositionComponentId = GameComponentId[PositionComponent]("position")
 
 
 class PositionComponentClient(IProvideGameObjectComponent[PositionComponent]):
 
-    def tick(self, game_object: GameObject) -> None:
+    def tick(self, game_object: GameObjectId) -> None:
         pass
 
     @lru_cache()
-    def get(self, game_object: GameObject) -> ComponentType:
+    def get(self, game_object: GameObjectId) -> EntityType:
         return PositionComponent(game_object=game_object)

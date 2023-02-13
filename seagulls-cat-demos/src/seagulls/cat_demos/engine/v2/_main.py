@@ -7,7 +7,7 @@ from seagulls.cat_demos.engine.v2._components import (
     SpriteComponent,
 )
 from seagulls.cat_demos.engine.v2._position_component import PositionComponent
-from seagulls.cat_demos.engine.v2._entities import GameComponent, GameObject, GameSprite
+from seagulls.cat_demos.engine.v2.components._entities import GameComponent, GameObject, GameSprite
 from seagulls.cat_demos.engine.v2._resources import ResourceClient
 from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
 from seagulls.cat_demos.engine.v2._window import GameWindowClient

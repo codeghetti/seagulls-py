@@ -4,12 +4,12 @@ from dataclasses import dataclass
 
 from datetime import datetime
 
-from typing import List, Optional, Tuple
+from typing import Optional, Tuple
 
 import logging
 
 from functools import lru_cache
-from ._entities import GameComponent, GameObject
+from seagulls.cat_demos.engine.v2.components._identity import GameComponentId, GameObjectId
 from ._scene import IProvideGameObjectComponent
 from ._sprite_component import GameSprite, SpriteComponent, SpriteComponentClient
 
@@ -26,11 +26,11 @@ class _AnimationConfig:
 
 class SpriteAnimationComponent:
 
-    _game_object: GameObject
+    _game_object: GameObjectId
     _sprite_component: SpriteComponent
     _current_animation: Optional[_AnimationConfig]
 
-    def __init__(self, game_object: GameObject, sprite_component: SpriteComponent) -> None:
+    def __init__(self, game_object: GameObjectId, sprite_component: SpriteComponent) -> None:
         self._game_object = game_object
         self._sprite_component = sprite_component
         self._current_animation = None
@@ -71,7 +71,7 @@ class SpriteAnimationComponent:
         )
 
 
-SpriteAnimationComponentId = GameComponent[SpriteAnimationComponent]("sprite-animation")
+SpriteAnimationComponentId = GameComponentId[SpriteAnimationComponent]("sprite-animation")
 
 
 class SpriteAnimationComponentClient(IProvideGameObjectComponent[SpriteAnimationComponent]):
@@ -81,11 +81,11 @@ class SpriteAnimationComponentClient(IProvideGameObjectComponent[SpriteAnimation
     def __init__(self, sprite_component_client: SpriteComponentClient) -> None:
         self._sprite_component_client = sprite_component_client
 
-    def tick(self, game_object: GameObject) -> None:
+    def tick(self, game_object: GameObjectId) -> None:
         self.get(game_object).tick()
 
     @lru_cache()
-    def get(self, game_object: GameObject) -> SpriteAnimationComponent:
+    def get(self, game_object: GameObjectId) -> SpriteAnimationComponent:
         logger.debug(f"attaching animation component to game object: {game_object}")
         return SpriteAnimationComponent(
             game_object=game_object,

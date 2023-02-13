@@ -5,7 +5,7 @@ from random import randint
 from seagulls.cat_demos.app._mob_controls_component import MobControlsComponentId
 from seagulls.cat_demos.app._sprites import MySprites
 from seagulls.cat_demos.engine.v2._animation_component import SpriteAnimationComponentId
-from seagulls.cat_demos.engine.v2._entities import GameObject
+from seagulls.cat_demos.engine.v2.components._identity import GameObjectId
 from seagulls.cat_demos.engine.v2._position_component import PositionComponentId, Vector
 from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
 from seagulls.cat_demos.engine.v2._sprite_component import SpriteComponentId
@@ -29,7 +29,7 @@ class MainScene:
         #     self._spawn_enemies()
 
     def _spawn_player(self) -> None:
-        gobject = GameObject("player")
+        gobject = GameObjectId("player")
         self._scene_client.create_object(gobject)
         self._scene_client.attach_component(gobject, PositionComponentId)
         self._scene_client.attach_component(gobject, PlayerControlsComponentId)
@@ -51,7 +51,7 @@ class MainScene:
     def _spawn_enemies(self) -> None:
         for x in range(5):
             uid = str(uuid4())
-            gobject = GameObject(f"enemy.{uid}")
+            gobject = GameObjectId(f"enemy.{uid}")
             position = Vector(x=randint(0, 1000), y=randint(0, 1000))
             self._scene_client.create_object(gobject)
             self._scene_client.attach_component(gobject, PositionComponentId)

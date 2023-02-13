@@ -23,6 +23,7 @@ from seagulls.cat_demos.engine.v2._input_client import (
     EventPayloadType,
     InputEventDispatcher, PygameEvents, PygameInputEvent, PygameKeyboardInputPublisher,
 )
+from seagulls.cat_demos.engine.v2._interactors import GameSessionInteractors
 from seagulls.cat_demos.engine.v2._position_component import (
     Position, PositionComponentClient,
     PositionComponentId, Vector,
@@ -46,17 +47,20 @@ from seagulls.cli import ICliCommand
 
 class GameCliCommand(ICliCommand):
 
-    _session_window_client: GameWindowClient
-    _window: Surface
+    _game_interactors: GameSessionInteractors
+
+    def __init__(self, game_interactors: GameSessionInteractors) -> None:
+        self._game_interactors = game_interactors
 
     def configure_parser(self, parser: ArgumentParser) -> None:
         pass
 
     def execute(self) -> None:
+        print("hello")
         session = GameSession(session_frames=StandardSessionFrames(
-            executable(self._init_session),
-            executable(self._run_session),
-            executable(self._end_session),
+            executable(self._game_interactors.open_session),
+            executable(self._game_interactors.run_session),
+            executable(self._game_interactors.close_session),
         ))
         session.run()
 

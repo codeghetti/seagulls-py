@@ -11,7 +11,7 @@ from pygame.surface import Surface
 
 from typing import Generic, NamedTuple, Protocol
 
-from ._entities import ComponentType, GameComponent, GameObject, _IdentityObject
+from seagulls.cat_demos.engine.v2.components._identity import EntityType, GameComponentId, GameObjectId, EntityId
 from ._resources import ResourceClient
 from ._scene import IProvideGameObjectComponent
 from ._size import Size
@@ -21,7 +21,7 @@ from ._window import GameWindowClient
 logger = logging.getLogger(__name__)
 
 
-class GameSprite(_IdentityObject, Generic[ComponentType]):
+class GameSprite(EntityId, Generic[EntityType]):
     @classmethod
     def none(cls) -> GameSprite:
         return cls("__none__")
@@ -54,7 +54,7 @@ class SpriteComponent:
     _sprite_manager: IManageSprites
     _window_client: GameWindowClient
     _position_component: PositionComponent
-    _game_object: GameObject
+    _game_object: GameObjectId
     _sprite: GameSprite
 
     def __init__(
@@ -62,7 +62,7 @@ class SpriteComponent:
         sprite_manager: IManageSprites,
         window_client: GameWindowClient,
         position_component: PositionComponent,
-        game_object: GameObject,
+        game_object: GameObjectId,
     ) -> None:
         self._sprite_manager = sprite_manager
         self._window_client = window_client
@@ -87,7 +87,7 @@ class SpriteComponent:
         )
 
 
-SpriteComponentId = GameComponent[SpriteComponent]("sprite")
+SpriteComponentId = GameComponentId[SpriteComponent]("sprite")
 
 
 class SpriteComponentClient(IProvideGameObjectComponent[SpriteComponent], IManageSprites):
@@ -108,11 +108,11 @@ class SpriteComponentClient(IProvideGameObjectComponent[SpriteComponent], IManag
         self._sprites = {}
         self._object_sprites = {}
 
-    def tick(self, game_object: GameObject) -> None:
+    def tick(self, game_object: GameObjectId) -> None:
         self.get(game_object).tick()
 
     @lru_cache()
-    def get(self, game_object: GameObject) -> SpriteComponent:
+    def get(self, game_object: GameObjectId) -> SpriteComponent:
         return SpriteComponent(
             sprite_manager=self,
             window_client=self._window_client,

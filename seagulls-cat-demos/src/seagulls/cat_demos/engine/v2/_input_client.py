@@ -1,14 +1,17 @@
+from abc import abstractmethod
+
 import pygame
 
-from typing import Any, Callable, Dict, Generic, List, NamedTuple, Tuple, TypeAlias, TypeVar
+from typing import Any, Callable, Dict, Generic, List, NamedTuple, Protocol, Tuple, TypeAlias, \
+    TypeVar
 
-from seagulls.cat_demos.engine.v2._entities import _IdentityObject
+from seagulls.cat_demos.engine.v2.components._identity import EntityId
 
 
 EventPayloadType = TypeVar("EventPayloadType")
 
 
-class InputEvent(_IdentityObject, Generic[EventPayloadType]):
+class InputEvent(EntityId, Generic[EventPayloadType]):
     pass
 
 
@@ -52,7 +55,13 @@ class PygameEvents:
     KEYBOARD = InputEvent[PygameInputEvent](name='seagulls.pygame-input.keyboard')
 
 
-class PygameKeyboardInputPublisher:
+class IProcessInputEvents(Protocol):
+    @abstractmethod
+    def tick(self) -> None:
+        pass
+
+
+class PygameKeyboardInputPublisher(IProcessInputEvents):
 
     _game_input_client: GameInputClient
 

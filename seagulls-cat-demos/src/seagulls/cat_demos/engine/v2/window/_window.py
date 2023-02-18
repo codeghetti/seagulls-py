@@ -2,7 +2,7 @@ import pygame
 from pygame import Surface
 
 
-class GameWindowClient:
+class WindowClient:
 
     def open(self) -> None:
         pygame.display.set_mode((800, 800))

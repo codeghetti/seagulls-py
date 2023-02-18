@@ -10,8 +10,8 @@ import logging
 
 from functools import lru_cache
 from seagulls.cat_demos.engine.v2.components._identity import GameComponentId, GameObjectId
-from ._scene import IProvideGameObjectComponent
-from ._sprite_component import GameSprite, SpriteComponent, SpriteComponentClient
+from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
+from seagulls.cat_demos.engine.v2._sprite_component import GameSprite, SpriteComponent, SpriteComponentClient
 
 logger = logging.getLogger(__name__)
 

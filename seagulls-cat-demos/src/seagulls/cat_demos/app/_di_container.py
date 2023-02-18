@@ -8,16 +8,17 @@ from ._cli_command import GameCliCommand
 from ._cli_plugin import CatDemosCliPlugin
 from seagulls.cat_demos.engine.v2._input_client import (
     EventPayloadType,
-    GameInputClient,
     InputEvent,
-    PygameKeyboardInputPublisher,
 )
-from seagulls.cat_demos.engine.v2._interactors import GameSessionInteractors, IFrame, \
+from seagulls.cat_demos.engine.v2._interactors import IFrame, \
     IProvideFrames, \
     IProvideScenes, IScene
-from seagulls.cat_demos.engine.v2._window import GameWindowClient
-from seagulls.cat_demos.engine.v2._game_clock import GameClock
-from ..engine import GameSession
+from seagulls.cat_demos.engine.v2.window._window import WindowClient
+from ..engine.v2._service_provider import ServiceProvider
+from ..engine.v2.components._identity import GameSceneId
+from ..engine.v2.frames._client import FrameClient, FrameCollection
+from ..engine.v2.scenes._client import SceneClient, SceneCollection, SceneProvider
+from ..engine.v2.sessions._client import SessionClient
 
 
 class StubbyScenes(IProvideScenes):
@@ -48,28 +49,39 @@ class CatDemosDiContainer:
     @lru_cache()
     def _command(self) -> GameCliCommand:
         return GameCliCommand(
-            game_interactors=self._game_interactors(),
+            session_client=self._session_client(),
+            scene_collection=self._scene_collection(),
         )
 
     @lru_cache()
-    def _game_session(self) -> GameSession:
-        return GameSession(
-
+    def _session_client(self) -> SessionClient:
+        return SessionClient(
+            window_client=self._window_client(),
+            scenes_collection=self._scene_collection(),
         )
 
     @lru_cache()
-    def _game_interactors(self) -> GameSessionInteractors:
-        return GameSessionInteractors(
-            window=GameWindowClient(),
-            scenes=StubbyScenes(),
-            frames=StubbyFrames(),
-            clock=GameClock(),
-            input=PygameKeyboardInputPublisher(
-                game_input_client=GameInputClient(
-                    handlers=tuple([self._on_input_v2])
-                ),
+    def _scene_collection(self) -> SceneCollection:
+        return SceneCollection((
+            SceneProvider(
+                scene_id=GameSceneId("main-menu"),
+                provider=ServiceProvider(lambda: SceneClient(
+                    frame_collection=self._frame_collection())
+                )
             ),
-        )
+        ))
+
+    @lru_cache()
+    def _frame_collection(self) -> FrameCollection:
+        return FrameCollection(frame_factory=self._frame_client_factory())
+
+    @lru_cache()
+    def _frame_client_factory(self) -> ServiceProvider[FrameClient]:
+        return ServiceProvider[FrameClient](lambda: FrameClient(self._window_client()))
+
+    @lru_cache()
+    def _window_client(self) -> WindowClient:
+        return WindowClient()
 
     def _on_input_v2(self, event: InputEvent[EventPayloadType], payload: EventPayloadType) -> None:
         # self._input_v2_routing.route(event, payload)

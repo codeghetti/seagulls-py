@@ -16,7 +16,7 @@ from ._resources import ResourceClient
 from ._scene import IProvideGameObjectComponent
 from ._size import Size
 from ._position_component import Position, PositionComponent, PositionComponentClient
-from ._window import GameWindowClient
+from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +52,7 @@ class IManageSprites(Protocol):
 
 class SpriteComponent:
     _sprite_manager: IManageSprites
-    _window_client: GameWindowClient
+    _window_client: WindowClient
     _position_component: PositionComponent
     _game_object: GameObjectId
     _sprite: GameSprite
@@ -60,7 +60,7 @@ class SpriteComponent:
     def __init__(
         self,
         sprite_manager: IManageSprites,
-        window_client: GameWindowClient,
+        window_client: WindowClient,
         position_component: PositionComponent,
         game_object: GameObjectId,
     ) -> None:
@@ -92,13 +92,13 @@ SpriteComponentId = GameComponentId[SpriteComponent]("sprite")
 
 class SpriteComponentClient(IProvideGameObjectComponent[SpriteComponent], IManageSprites):
 
-    _window_client: GameWindowClient
+    _window_client: WindowClient
     _resources_client: ResourceClient
     _position_client: PositionComponentClient
 
     def __init__(
         self,
-        window_client: GameWindowClient,
+        window_client: WindowClient,
         resources_client: ResourceClient,
         position_client: PositionComponentClient,
     ) -> None:

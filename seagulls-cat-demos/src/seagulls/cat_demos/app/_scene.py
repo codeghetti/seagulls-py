@@ -4,7 +4,7 @@ from random import randint
 
 from seagulls.cat_demos.app._mob_controls_component import MobControlsComponentId
 from seagulls.cat_demos.app._sprites import MySprites
-from seagulls.cat_demos.engine.v2._animation_component import SpriteAnimationComponentId
+from seagulls.cat_demos.engine.v2.animation._animation_component import SpriteAnimationComponentId
 from seagulls.cat_demos.engine.v2.components._identity import GameObjectId
 from seagulls.cat_demos.engine.v2._position_component import PositionComponentId, Vector
 from seagulls.cat_demos.engine.v2._scene import GameSceneObjects

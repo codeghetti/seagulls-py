@@ -1,43 +1,38 @@
 import pygame
 
 from argparse import ArgumentParser
-from pygame import Surface
 
 from seagulls.cat_demos.app._events import GameInputs, QuitGameEvent, PlayerMoveEvent
 from seagulls.cat_demos.app._scene import MainScene
 from seagulls.cat_demos.app._mob_controls_component import MobControlsComponentClient, \
     MobControlsComponentId
-from seagulls.cat_demos.engine import (
-    executable,
-    GameSession,
-    GameSessionStages,
-)
-from seagulls.cat_demos.engine.v2._animation_component import SpriteAnimationComponentClient, \
+
+from seagulls.cat_demos.engine.v2.animation._animation_component import SpriteAnimationComponentClient, \
     SpriteAnimationComponentId
 
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
-from seagulls.cat_demos.engine.v2._game_session import StandardSessionFrames
 from seagulls.cat_demos.engine.v2._input_client import (
     EventTogglesClient, GameInputClient,
     GameInputRouter, InputEvent,
     EventPayloadType,
     InputEventDispatcher, PygameEvents, PygameInputEvent, PygameKeyboardInputPublisher,
 )
-from seagulls.cat_demos.engine.v2._interactors import GameSessionInteractors
 from seagulls.cat_demos.engine.v2._position_component import (
     Position, PositionComponentClient,
     PositionComponentId, Vector,
 )
 from seagulls.cat_demos.engine.v2._resources import ResourceClient
 from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
-from seagulls.cat_demos.engine.v2._service_provider import provider
 from seagulls.cat_demos.engine.v2._size import Size
 from seagulls.cat_demos.engine.v2._sprite_component import (
     GameSprite,
     SpriteComponentClient,
     SpriteComponentId,
 )
-from seagulls.cat_demos.engine.v2._window import GameWindowClient
+from seagulls.cat_demos.engine.v2.components._identity import GameSceneId
+from seagulls.cat_demos.engine.v2.scenes._client import SceneCollection
+from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
+from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from seagulls.cat_demos.app._player_controls_component import (
     PlayerControlsComponentClient,
     PlayerControlsComponentId,
@@ -47,25 +42,25 @@ from seagulls.cli import ICliCommand
 
 class GameCliCommand(ICliCommand):
 
-    _game_interactors: GameSessionInteractors
+    _session_client: SessionClient
+    _scene_collection: SceneCollection
 
-    def __init__(self, game_interactors: GameSessionInteractors) -> None:
-        self._game_interactors = game_interactors
+    def __init__(self, session_client: SessionClient, scene_collection: SceneCollection) -> None:
+        self._session_client = session_client
+        self._scene_collection = scene_collection
 
     def configure_parser(self, parser: ArgumentParser) -> None:
         pass
 
     def execute(self) -> None:
         print("hello")
-        session = GameSession(session_frames=StandardSessionFrames(
-            executable(self._game_interactors.open_session),
-            executable(self._game_interactors.run_session),
-            executable(self._game_interactors.close_session),
-        ))
-        session.run()
+        self._scene_collection.load_scene(GameSceneId("main-menu"))
+        self._session_client.open_session()
+        self._session_client.run_session()
+        self._session_client.close_session()
 
     def _init_session(self) -> None:
-        self._session_window_client = GameWindowClient()
+        self._session_window_client = WindowClient()
         self._session_window_client.open()
         self._window = self._session_window_client.get_surface()
         self._clock = GameClock()

@@ -10,11 +10,11 @@ from seagulls.cat_demos.engine.v2._position_component import PositionComponent
 from seagulls.cat_demos.engine.v2.components._entities import GameComponent, GameObject, GameSprite
 from seagulls.cat_demos.engine.v2._resources import ResourceClient
 from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
-from seagulls.cat_demos.engine.v2._window import GameWindowClient
+from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 logger = logging.getLogger(__name__)
 
-window = GameWindowClient()
+window = WindowClient()
 window.open()
 player = GameObject("player")
 player_sprite = GameSprite("player.idle")

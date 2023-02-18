@@ -4,7 +4,7 @@ from typing import Any, Dict, Protocol, Set, Tuple
 
 from ._component_registry import GameComponentRegistry, IProvideGameObjectComponent
 from seagulls.cat_demos.engine.v2.components._identity import EntityType, GameComponentId, GameObjectId
-from ._window import GameWindowClient
+from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 
 class ITick(Protocol):
@@ -46,12 +46,12 @@ class GameObjectComponents:
 
 class GameSceneObjects(ITick):
 
-    _window: GameWindowClient
+    _window: WindowClient
     _objects: Set[GameObjectId]
     _object_components: Dict[GameObjectId, GameObjectComponents]
     _components: GameComponentRegistry
 
-    def __init__(self, window: GameWindowClient) -> None:
+    def __init__(self, window: WindowClient) -> None:
         self._window = window
         self._objects = set()
         self._components = GameComponentRegistry()

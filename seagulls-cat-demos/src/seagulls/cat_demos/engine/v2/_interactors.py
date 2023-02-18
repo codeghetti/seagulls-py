@@ -5,24 +5,10 @@ from typing import Iterable, Protocol
 
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
 from seagulls.cat_demos.engine.v2._input_client import IProcessInputEvents
-from seagulls.cat_demos.engine.v2._window import GameWindowClient
+from seagulls.cat_demos.engine.v2.window._window import WindowClient
+from seagulls.cat_demos.engine.v2.scenes._client import IProvideScenes, IScene
 
 logger = logging.getLogger(__name__)
-
-
-class IScene(Protocol):
-
-    @abstractmethod
-    def open_scene(self) -> None:
-        pass
-
-    @abstractmethod
-    def run_scene(self) -> None:
-        pass
-
-    @abstractmethod
-    def close_scene(self) -> None:
-        pass
 
 
 class IFrame(Protocol):
@@ -40,13 +26,6 @@ class IFrame(Protocol):
         pass
 
 
-class IProvideScenes(Protocol):
-
-    @abstractmethod
-    def items(self) -> Iterable[IScene]:
-        pass
-
-
 class IProvideFrames(Protocol):
 
     @abstractmethod
@@ -56,7 +35,7 @@ class IProvideFrames(Protocol):
 
 class GameSessionInteractors(IScene, IFrame):
 
-    _window: GameWindowClient
+    _window: WindowClient
     _scenes: IProvideScenes
     _frames: IProvideFrames
     _clock: GameClock
@@ -64,7 +43,7 @@ class GameSessionInteractors(IScene, IFrame):
 
     def __init__(
         self,
-        window: GameWindowClient,
+        window: WindowClient,
         scenes: IProvideScenes,
         frames: IProvideFrames,
         clock: GameClock,

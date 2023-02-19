@@ -83,22 +83,27 @@ jobs:
           python-version: "3.9.13"
       - name: Install Poetry
         working-directory: seagulls-rpg-demo
+        shell: cmd
         run: |
           powershell -command "(Invoke-WebRequest -Verbose -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -"
       - name: Check where APPDATA is
         working-directory: seagulls-rpg-demo
+        shell: cmd
         run: |
-          echo $APPDATA
+          echo %APPDATA%
       - name: Install Package
         working-directory: seagulls-rpg-demo
+        shell: cmd
         run: |
-          $APPDATA\pypoetry\venv\Scripts\poetry install --extras dev
+          %APPDATA%\pypoetry\venv\Scripts\poetry install --extras dev
       - name: Build Executable
         working-directory: seagulls-rpg-demo
+        shell: cmd
         run: |
-          $APPDATA\pypoetry\venv\Scripts\poetry run seagulls build-executable
+          %APPDATA%\pypoetry\venv\Scripts\poetry run seagulls build-executable
       - name: List files for now
         working-directory: .tmp/seagulls-rpg-demo/dist
+        shell: cmd
         run: dir
       - name: Upload EXE
         uses: actions/upload-artifact@v2

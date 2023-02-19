@@ -88,15 +88,15 @@ jobs:
       - name: Check where APPDATA is
         working-directory: seagulls-rpg-demo
         run: |
-          echo %APPDATA%
+          echo $APPDATA
       - name: Install Package
         working-directory: seagulls-rpg-demo
         run: |
-          %APPDATA%\pypoetry\venv\Scripts\poetry install --extras dev
+          $APPDATA\pypoetry\venv\Scripts\poetry install --extras dev
       - name: Build Executable
         working-directory: seagulls-rpg-demo
         run: |
-          %APPDATA%\pypoetry\venv\Scripts\poetry run seagulls build-executable
+          $APPDATA\pypoetry\venv\Scripts\poetry run seagulls build-executable
       - name: List files for now
         working-directory: .tmp/seagulls-rpg-demo/dist
         run: dir

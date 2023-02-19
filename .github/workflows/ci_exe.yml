@@ -5,70 +5,70 @@ on:
       - main
   pull_request:
 jobs:
-#  build-ubuntu-executable:
-#    name: "Build ubuntu executable"
-#    runs-on: ubuntu-20.04
-#    strategy:
-#      fail-fast: false
-#    steps:
-#      - name: Git Checkout
-#        uses: actions/checkout@v2
-#      - name: Setup Python
-#        uses: actions/setup-python@v2
-#        with:
-#          python-version: "3.9.16"
-#      - name: Install Package
-#        working-directory: seagulls-rpg-demo
-#        run: |
-#          python3 -m pip install --upgrade pip
-#          pip install pipx
-#          pipx install poetry
-#          poetry install --extras dev
-#      - name: Build Executable
-#        working-directory: seagulls-rpg-demo
-#        run: poetry run seagulls build-executable
-#      - name: List files for now
-#        working-directory: .tmp/seagulls-rpg-demo/dist
-#        run: ls
-#      - name: Upload executable
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: "Upload ubuntu executable"
-#          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo"
-#  build-macos-executable:
-#    name: "Build macos executable"
-#    runs-on: macos-12
-#    strategy:
-#      fail-fast: false
-#    steps:
-#      - name: Git Checkout
-#        uses: actions/checkout@v2
-#      - name: Setup Python
-#        uses: actions/setup-python@v2
-#        with:
-#          python-version: "3.9.16"
-#      - name: Install Package
-#        working-directory: seagulls-rpg-demo
-#        run: |
-#          python3 -m pip install --upgrade pip
-#          pip install pipx
-#          pipx install poetry
-#          poetry install --extras dev
-#      - name: Build Executable
-#        working-directory: seagulls-rpg-demo
-#        run: poetry run seagulls build-executable
-#      - name: List files for now
-#        working-directory: .tmp/seagulls-rpg-demo/dist
-#        run: ls
-#      - name: Zip app to upload
-#        working-directory: .tmp/seagulls-rpg-demo/dist
-#        run: |
-#          tar -cvf seagulls-rpg-demo.tar seagulls-rpg-demo.app
-#      - name: Upload executable
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: "seagulls-rpg-demo.tar"
-#          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.tar"
+  build-ubuntu-executable:
+    name: "Build ubuntu executable"
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.16"
+      - name: Install Package
+        working-directory: seagulls-rpg-demo
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pipx
+          pipx install poetry
+          poetry install --extras dev
+      - name: Build Executable
+        working-directory: seagulls-rpg-demo
+        run: poetry run seagulls build-executable
+      - name: List files for now
+        working-directory: .tmp/seagulls-rpg-demo/dist
+        run: ls
+      - name: Upload executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: "Upload ubuntu executable"
+          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo"
+  build-macos-executable:
+    name: "Build macos executable"
+    runs-on: macos-12
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.16"
+      - name: Install Package
+        working-directory: seagulls-rpg-demo
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pipx
+          pipx install poetry
+          poetry install --extras dev
+      - name: Build Executable
+        working-directory: seagulls-rpg-demo
+        run: poetry run seagulls build-executable
+      - name: List files for now
+        working-directory: .tmp/seagulls-rpg-demo/dist
+        run: ls
+      - name: Zip app to upload
+        working-directory: .tmp/seagulls-rpg-demo/dist
+        run: |
+          tar -cvf seagulls-rpg-demo.tar seagulls-rpg-demo.app
+      - name: Upload executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: "seagulls-rpg-demo.tar"
+          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.tar"
   build-windows-exe:
     name: "Build Windows executable"
     runs-on: windows-2019

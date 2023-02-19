@@ -13,7 +13,7 @@ class GameSessionStages:
 
     def stages(self) -> Iterable[IExecutable]:
         for stage in self._stages:
-            yield stage.get_service()
+            yield stage.get()
 
 
 class SceneStages:
@@ -35,7 +35,7 @@ class GameSceneStages:
 
     def stages(self) -> Iterable[IExecutable]:
         for stage in self._stages:
-            yield stage.get_service()
+            yield stage.get()
 
 
 class GameStages:

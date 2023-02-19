@@ -71,4 +71,4 @@ class FrameCollection(IProvideFrames):
     def items(self) -> Iterable[IFrame]:
         # while self._scene_state.is_open():
         while True:
-            yield self._frame_factory.get_service()
+            yield self._frame_factory.get()

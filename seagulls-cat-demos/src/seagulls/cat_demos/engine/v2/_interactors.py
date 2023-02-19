@@ -60,7 +60,7 @@ class GameSessionInteractors(IScene, IFrame):
 
     def run_session(self) -> None:
         logger.warning(f"running session")
-        for scene in self._scenes.items():
+        for scene in self._scenes.get_scenes():
             logger.warning(f"processing scene: {scene}")
             scene.open_scene()
             scene.run_scene()

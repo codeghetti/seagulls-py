@@ -41,7 +41,7 @@ class SessionClient(ISession):
 
     def run_session(self) -> None:
         logger.warning(f"running session")
-        for scene in self._scenes_collection.items():
+        for scene in self._scenes_collection.get_scenes():
             logger.warning(f"processing scene: {scene}")
             scene.open_scene()
             scene.run_scene()

@@ -17,13 +17,13 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ..engine.v2._service_provider import ServiceProvider
 from ..engine.v2.components._identity import GameSceneId
 from ..engine.v2.frames._client import FrameClient, FrameCollection
-from ..engine.v2.scenes._client import SceneClient, SceneCollection, SceneProvider
+from ..engine.v2.scenes._client import SceneComponent, SceneClient, SceneProvider, SceneRegistry
 from ..engine.v2.sessions._client import SessionClient
 
 
 class StubbyScenes(IProvideScenes):
 
-    def items(self) -> Iterable[IScene]:
+    def get_scenes(self) -> Iterable[IScene]:
         return []
 
 
@@ -61,15 +61,19 @@ class CatDemosDiContainer:
         )
 
     @lru_cache()
-    def _scene_collection(self) -> SceneCollection:
-        return SceneCollection((
+    def _scene_collection(self) -> SceneClient:
+        return SceneClient(self._scene_registry())
+
+    @lru_cache()
+    def _scene_registry(self) -> SceneRegistry:
+        return SceneRegistry.with_providers(
             SceneProvider(
                 scene_id=GameSceneId("main-menu"),
-                provider=ServiceProvider(lambda: SceneClient(
+                provider=ServiceProvider(lambda: SceneComponent(
                     frame_collection=self._frame_collection())
-                )
+                                         )
             ),
-        ))
+        )
 
     @lru_cache()
     def _frame_collection(self) -> FrameCollection:

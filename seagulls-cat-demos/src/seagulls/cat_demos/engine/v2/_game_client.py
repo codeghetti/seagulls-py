@@ -12,7 +12,7 @@ class GameClient:
         self._session = session
 
     def get_session(self) -> GameSession:
-        return self._session.get_service()
+        return self._session.get()
 
 
 class Container:

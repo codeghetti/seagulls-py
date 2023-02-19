@@ -10,7 +10,7 @@ class ServiceProvider(Generic[T]):
     def __init__(self, callback: Callable[[], T]) -> None:
         self._callback = callback
 
-    def get_service(self) -> T:
+    def get(self) -> T:
         return self._callback()
 
 

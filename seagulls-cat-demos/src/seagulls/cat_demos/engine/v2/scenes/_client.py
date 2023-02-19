@@ -1,3 +1,4 @@
+from __future__ import annotations
 from abc import abstractmethod
 from queue import Empty, Queue
 from typing import Dict, Iterable, NamedTuple, Protocol, Tuple
@@ -25,7 +26,7 @@ class IScene(Protocol):
 class IProvideScenes(Protocol):
 
     @abstractmethod
-    def items(self) -> Iterable[IScene]:
+    def get_scenes(self) -> Iterable[IScene]:
         pass
 
 
@@ -35,7 +36,7 @@ class IProvideSessionState(Protocol):
         pass
 
 
-class SceneClient(IScene):
+class SceneComponent(IScene):
 
     _frame_collection: IProvideFrames
 
@@ -55,26 +56,59 @@ class SceneClient(IScene):
         pass
 
 
+class IManageScenes(Protocol):
+
+    @abstractmethod
+    def register(self, scene_id: GameSceneId, provider: ServiceProvider[IScene]) -> None:
+        pass
+
+    @abstractmethod
+    def get(self, scene_id: GameSceneId) -> IScene:
+        pass
+
+
+class SceneRegistry(IManageScenes):
+
+    _providers: Dict[GameSceneId, ServiceProvider[IScene]]
+
+    def __init__(self) -> None:
+        self._providers = {}
+
+    def register(self, scene_id: GameSceneId, provider: ServiceProvider[IScene]) -> None:
+        self._providers[scene_id] = provider
+
+    def get(self, scene_id: GameSceneId) -> IScene:
+        return self._providers[scene_id].get()
+
+    @staticmethod
+    def with_providers(*providers: SceneProvider) -> SceneRegistry:
+        client = SceneRegistry()
+        for p in providers:
+            client.register(scene_id=p.scene_id, provider=p.provider)
+
+        return client
+
+
 class SceneProvider(NamedTuple):
     scene_id: GameSceneId
     provider: ServiceProvider[IScene]
 
 
-class SceneCollection(IProvideScenes):
+class SceneClient(IProvideScenes):
 
     _next_scene: Queue[GameSceneId]
-    _scene_providers: Dict[GameSceneId, ServiceProvider[IScene]]
+    _scene_registry: IManageScenes
 
-    def __init__(self, scene_providers: Tuple[SceneProvider, ...]) -> None:
+    def __init__(self, scene_registry: IManageScenes) -> None:
         self._next_scene = Queue(maxsize=1)
-        self._scene_providers = {p.scene_id: p.provider for p in scene_providers}
+        self._scene_registry = scene_registry
 
     def load_scene(self, scene_id: GameSceneId) -> None:
         self._next_scene.put_nowait(scene_id)
 
-    def items(self) -> Iterable[IScene]:
+    def get_scenes(self) -> Iterable[IScene]:
         try:
             while True:
-                yield self._scene_providers[self._next_scene.get_nowait()].get_service()
+                yield self._scene_registry.get(self._next_scene.get_nowait())
         except Empty:
             pass

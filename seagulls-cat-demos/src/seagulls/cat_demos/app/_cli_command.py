@@ -30,7 +30,7 @@ from seagulls.cat_demos.engine.v2._sprite_component import (
     SpriteComponentId,
 )
 from seagulls.cat_demos.engine.v2.components._identity import GameSceneId
-from seagulls.cat_demos.engine.v2.scenes._client import SceneCollection
+from seagulls.cat_demos.engine.v2.scenes._client import SceneClient
 from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from seagulls.cat_demos.app._player_controls_component import (
@@ -43,9 +43,9 @@ from seagulls.cli import ICliCommand
 class GameCliCommand(ICliCommand):
 
     _session_client: SessionClient
-    _scene_collection: SceneCollection
+    _scene_collection: SceneClient
 
-    def __init__(self, session_client: SessionClient, scene_collection: SceneCollection) -> None:
+    def __init__(self, session_client: SessionClient, scene_collection: SceneClient) -> None:
         self._session_client = session_client
         self._scene_collection = scene_collection
 

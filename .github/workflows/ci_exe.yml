@@ -85,6 +85,10 @@ jobs:
         working-directory: seagulls-rpg-demo
         run: |
           powershell -command "(Invoke-WebRequest -Verbose -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -"
+      - name: Check where APPDATA is
+        working-directory: seagulls-rpg-demo
+        run: |
+          echo %APPDATA%
       - name: Install Package
         working-directory: seagulls-rpg-demo
         run: |

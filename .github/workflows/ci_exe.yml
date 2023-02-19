@@ -81,10 +81,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.9.13"
+      - name: Install Poetry
+        working-directory: seagulls-rpg-demo
+        run: |
+          powershell -command "(Invoke-WebRequest -Verbose -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -"
       - name: Install Package
         working-directory: seagulls-rpg-demo
         run: |
-          powershell.exe Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
           poetry install --extras dev
       - name: Build Executable
         working-directory: seagulls-rpg-demo

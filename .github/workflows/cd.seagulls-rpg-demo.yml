@@ -59,7 +59,7 @@ jobs:
         run: |
           tar -cvf seagulls-rpg-demo.tar seagulls-rpg-demo.app
       - name: Upload Executable
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "seagulls-rpg-demo.macos-12.tar"
           path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.tar"

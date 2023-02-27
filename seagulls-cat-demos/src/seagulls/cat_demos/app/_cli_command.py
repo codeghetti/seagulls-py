@@ -17,7 +17,7 @@ from seagulls.cat_demos.engine.v2._input_client import (
     EventPayloadType,
     InputEventDispatcher, PygameEvents, PygameInputEvent, PygameKeyboardInputPublisher,
 )
-from seagulls.cat_demos.engine.v2._position_component import (
+from seagulls.cat_demos.engine.v2.position._position_component import (
     Position, PositionComponentClient,
     PositionComponentId, Vector,
 )

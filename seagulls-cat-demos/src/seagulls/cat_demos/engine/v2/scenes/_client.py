@@ -3,6 +3,7 @@ from abc import abstractmethod
 from queue import Empty, Queue
 from typing import Dict, Iterable, NamedTuple, Protocol, Tuple
 
+from seagulls.cat_demos.engine import IExecutable
 from seagulls.cat_demos.engine.v2.components._identity import GameSceneId
 from seagulls.cat_demos.engine.v2.frames._client import IProvideFrames
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
@@ -38,13 +39,22 @@ class IProvideSessionState(Protocol):
 
 class SceneComponent(IScene):
 
+    _open_callback: IExecutable
+    _close_callback: IExecutable
     _frame_collection: IProvideFrames
 
-    def __init__(self, frame_collection: IProvideFrames) -> None:
+    def __init__(
+        self,
+        open_callback: IExecutable,
+        close_callback: IExecutable,
+        frame_collection: IProvideFrames,
+    ) -> None:
+        self._open_callback = open_callback
+        self._close_callback = close_callback
         self._frame_collection = frame_collection
 
     def open_scene(self) -> None:
-        pass
+        self._open_callback.execute()
 
     def run_scene(self) -> None:
         for frame in self._frame_collection.items():
@@ -53,7 +63,7 @@ class SceneComponent(IScene):
             frame.close_frame()
 
     def close_scene(self) -> None:
-        pass
+        self._close_callback.execute()
 
 
 class IManageScenes(Protocol):

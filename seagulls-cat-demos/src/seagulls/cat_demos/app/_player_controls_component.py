@@ -9,7 +9,7 @@ from seagulls.cat_demos.engine.v2.components._identity import EntityType, GameCo
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
 from seagulls.cat_demos.engine.v2._input_client import EventType, InputEventDispatcher
 from seagulls.cat_demos.engine.v2._movement import MovementClient
-from seagulls.cat_demos.engine.v2._position_component import (
+from seagulls.cat_demos.engine.v2.position._position_component import (
     PositionComponent,
     PositionComponentClient,
     Vector,

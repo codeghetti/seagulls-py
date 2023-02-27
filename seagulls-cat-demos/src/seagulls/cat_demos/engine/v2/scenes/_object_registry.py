@@ -3,7 +3,7 @@ from typing import Set, Tuple
 from seagulls.cat_demos.engine.v2.components._identity import GameObjectId
 
 
-class GameObjectsRegistry:
+class GameObjectRegistry:
 
     _objects: Set[GameObjectId]
 

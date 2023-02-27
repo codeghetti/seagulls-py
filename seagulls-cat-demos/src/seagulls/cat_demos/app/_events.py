@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from seagulls.cat_demos.engine.v2._input_client import InputEvent
-from seagulls.cat_demos.engine.v2._position_component import Vector
+from seagulls.cat_demos.engine.v2.position._position_component import Vector
 
 
 class QuitGameEvent:

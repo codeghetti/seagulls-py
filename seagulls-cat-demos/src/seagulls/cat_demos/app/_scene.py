@@ -6,7 +6,7 @@ from seagulls.cat_demos.app._mob_controls_component import MobControlsComponentI
 from seagulls.cat_demos.app._sprites import MySprites
 from seagulls.cat_demos.engine.v2.animation._animation_component import SpriteAnimationComponentId
 from seagulls.cat_demos.engine.v2.components._identity import GameObjectId
-from seagulls.cat_demos.engine.v2._position_component import PositionComponentId, Vector
+from seagulls.cat_demos.engine.v2.position._position_component import PositionComponentId, Vector
 from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
 from seagulls.cat_demos.engine.v2._sprite_component import SpriteComponentId
 from seagulls.cat_demos.app._player_controls_component import PlayerControlsComponentId

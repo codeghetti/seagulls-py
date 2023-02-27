@@ -8,16 +8,18 @@ from ._cli_command import GameCliCommand
 from ._cli_plugin import CatDemosCliPlugin
 from seagulls.cat_demos.engine.v2._input_client import (
     EventPayloadType,
-    InputEvent,
+    GameInputClient, InputEvent,
 )
 from seagulls.cat_demos.engine.v2._interactors import IFrame, \
     IProvideFrames, \
     IProvideScenes, IScene
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
+from ._main_menu import CloseMainMenuScene, OpenMainMenuScene
 from ..engine.v2._service_provider import ServiceProvider
 from ..engine.v2.components._identity import GameSceneId
 from ..engine.v2.frames._client import FrameClient, FrameCollection
 from ..engine.v2.scenes._client import SceneComponent, SceneClient, SceneProvider, SceneRegistry
+from ..engine.v2.scenes._object_registry import GameObjectRegistry
 from ..engine.v2.sessions._client import SessionClient
 
 
@@ -50,18 +52,18 @@ class CatDemosDiContainer:
     def _command(self) -> GameCliCommand:
         return GameCliCommand(
             session_client=self._session_client(),
-            scene_collection=self._scene_collection(),
+            scene_collection=self._scene_client(),
         )
 
     @lru_cache()
     def _session_client(self) -> SessionClient:
         return SessionClient(
             window_client=self._window_client(),
-            scenes_collection=self._scene_collection(),
+            scenes_collection=self._scene_client(),
         )
 
     @lru_cache()
-    def _scene_collection(self) -> SceneClient:
+    def _scene_client(self) -> SceneClient:
         return SceneClient(self._scene_registry())
 
     @lru_cache()
@@ -69,9 +71,13 @@ class CatDemosDiContainer:
         return SceneRegistry.with_providers(
             SceneProvider(
                 scene_id=GameSceneId("main-menu"),
-                provider=ServiceProvider(lambda: SceneComponent(
-                    frame_collection=self._frame_collection())
-                                         )
+                provider=ServiceProvider(
+                    lambda: SceneComponent(
+                        open_callback=OpenMainMenuScene(self._object_registry()),
+                        close_callback=CloseMainMenuScene(),
+                        frame_collection=self._frame_collection(),
+                    ),
+                ),
             ),
         )
 
@@ -81,7 +87,16 @@ class CatDemosDiContainer:
 
     @lru_cache()
     def _frame_client_factory(self) -> ServiceProvider[FrameClient]:
-        return ServiceProvider[FrameClient](lambda: FrameClient(self._window_client()))
+        return ServiceProvider[FrameClient](lambda: FrameClient(
+            window_client=self._window_client(),
+            input_client=self._
+        ))
+
+    @lru_cache()
+    def _game_input_client(self) -> GameInputClient:
+        return GameInputClient(handlers=tuple([
+            self._on_input_v2,
+        ]))
 
     @lru_cache()
     def _window_client(self) -> WindowClient:
@@ -91,3 +106,6 @@ class CatDemosDiContainer:
         # self._input_v2_routing.route(event, payload)
         # self._event_dispatcher.trigger(event, payload)
         pass
+
+    def _object_registry(self) -> GameObjectRegistry:
+        return GameObjectRegistry()

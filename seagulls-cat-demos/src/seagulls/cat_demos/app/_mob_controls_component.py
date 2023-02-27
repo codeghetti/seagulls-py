@@ -8,7 +8,7 @@ from functools import lru_cache
 
 from seagulls.cat_demos.engine.v2.components._identity import GameComponentId, GameObjectId
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
-from seagulls.cat_demos.engine.v2._position_component import (
+from seagulls.cat_demos.engine.v2.position._position_component import (
     PositionComponent,
     PositionComponentClient,
     Vector,

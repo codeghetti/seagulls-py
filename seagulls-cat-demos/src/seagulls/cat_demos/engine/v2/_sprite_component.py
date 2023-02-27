@@ -15,7 +15,7 @@ from seagulls.cat_demos.engine.v2.components._identity import EntityType, GameCo
 from ._resources import ResourceClient
 from ._scene import IProvideGameObjectComponent
 from ._size import Size
-from ._position_component import Position, PositionComponent, PositionComponentClient
+from seagulls.cat_demos.engine.v2.position._position_component import Position, PositionComponent, PositionComponentClient
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 logger = logging.getLogger(__name__)

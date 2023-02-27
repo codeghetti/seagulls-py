@@ -4,10 +4,13 @@ from functools import lru_cache
 
 from typing import TypeAlias
 
-from seagulls.cat_demos.engine.v2.components._identity import EntityType, GameComponentId, \
-    GameObjectId
+from seagulls.cat_demos.engine.v2.components._identity import (
+    EntityType,
+    GameComponentId,
+    GameObjectId,
+)
 from ._point import Point
-from ._scene import IProvideGameObjectComponent
+from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
 
 Position: TypeAlias = Point
 Vector: TypeAlias = Point

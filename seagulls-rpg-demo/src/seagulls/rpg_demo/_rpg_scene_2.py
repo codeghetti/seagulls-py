@@ -89,7 +89,8 @@ class RpgScene2(IGameScene):
         if self._is_game_won:
             self._sprite_client.render_sprite(
                 Sprites.you_win,
-                Position({"x": 500, "y": 300})
+                self._camera.relative_position(
+                    Position({"x": 225, "y": 225}))
             )
 
         if self._ghost_alive:
@@ -102,11 +103,14 @@ class RpgScene2(IGameScene):
             )
             self._sprite_client.render_sprite(
                 Sprites.game_over,
-                Position({"x": 500, "y": 300})
+                self._camera.relative_position(
+                    Position({"x": 225, "y": 225}))
             )
         else:
             self.pumpkin_x_axis_movement(delta)
             self.pumpkin_y_axis_movement(delta)
+            self._camera.update_position(Position(
+                {"x": self._x_pumpkin_position-100, "y": 0}))
 
             self._sprite_client.render_sprite(
                 Sprites.flag_banner,
@@ -207,21 +211,15 @@ class RpgScene2(IGameScene):
         self._vertical_velocity += 0.1 * delta / 15
 
     def heart_health(self, health_points):
-        if health_points == 2:
-            self._sprite_client.render_sprite(
-                Sprites.full_health,
-                Position({"x": 900, "y": 100})
-            )
-        elif health_points == 1:
-            self._sprite_client.render_sprite(
-                Sprites.half_health,
-                Position({"x": 900, "y": 100})
-            )
-        else:
-            self._sprite_client.render_sprite(
-                Sprites.zero_health,
-                Position({"x": 900, "y": 100})
-            )
+        health_point_list = [
+            Sprites.zero_health,
+            Sprites.half_health,
+            Sprites.full_health]
+
+        self._sprite_client.render_sprite(
+            health_point_list[health_points],
+            self._camera.relative_position(Position({"x": 900, "y": 100}))
+        )
 
     def walking_ghost(self, delta):
         if not self._is_game_won:

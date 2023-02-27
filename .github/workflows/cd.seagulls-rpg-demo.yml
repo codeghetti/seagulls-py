@@ -67,7 +67,7 @@ jobs:
           name: "seagulls-rpg-demo.macos-12.tar"
           path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.tar"
   build-windows-exe:
-    name: "Build Windows Executable"
+    name: "Build Executable: Windows 2019"
     runs-on: windows-2019
     strategy:
       fail-fast: true

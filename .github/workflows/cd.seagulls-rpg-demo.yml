@@ -1,4 +1,4 @@
-name: RPG EXE CI
+name: "Seagulls CD: seagulls-rpg-demo"
 on:
   push:
     branches:
@@ -6,18 +6,18 @@ on:
   pull_request:
 jobs:
   build-ubuntu-executable:
-    name: "Build ubuntu executable"
+    name: "Build Executable: Ubuntu 20.04"
     runs-on: ubuntu-20.04
     strategy:
-      fail-fast: false
+      fail-fast: true
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: "3.9.16"
-      - name: Install Package
+      - name: Install Packages
         working-directory: seagulls-rpg-demo
         run: |
           python3 -m pip install --upgrade pip
@@ -27,24 +27,21 @@ jobs:
       - name: Build Executable
         working-directory: seagulls-rpg-demo
         run: poetry run seagulls build-executable
-      - name: List files for now
-        working-directory: .tmp/seagulls-rpg-demo/dist
-        run: ls
-      - name: Upload executable
-        uses: actions/upload-artifact@v2
+      - name: Upload Executable
+        uses: actions/upload-artifact@v3
         with:
-          name: "Upload ubuntu executable"
+          name: "seagulls-rpg-demo.ubuntu-20.04.x64"
           path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo"
   build-macos-executable:
-    name: "Build macos executable"
+    name: "Build Executable: MacOS 12"
     runs-on: macos-12
     strategy:
-      fail-fast: false
+      fail-fast: true
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: "3.9.16"
       - name: Install Package
@@ -64,21 +61,21 @@ jobs:
         working-directory: .tmp/seagulls-rpg-demo/dist
         run: |
           tar -cvf seagulls-rpg-demo.tar seagulls-rpg-demo.app
-      - name: Upload executable
+      - name: Upload Executable
         uses: actions/upload-artifact@v2
         with:
-          name: "seagulls-rpg-demo.tar"
+          name: "seagulls-rpg-demo.macos-12.tar"
           path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.tar"
   build-windows-exe:
-    name: "Build Windows executable"
+    name: "Build Windows Executable"
     runs-on: windows-2019
     strategy:
-      fail-fast: false
+      fail-fast: true
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: "3.9.13"
       - name: Install Poetry
@@ -91,7 +88,7 @@ jobs:
         shell: cmd
         run: |
           echo %APPDATA%
-      - name: Install Package
+      - name: Install Packages
         working-directory: seagulls-rpg-demo
         shell: cmd
         run: |
@@ -101,13 +98,8 @@ jobs:
         shell: cmd
         run: |
           %APPDATA%\pypoetry\venv\Scripts\poetry run seagulls build-executable
-      - name: List files for now
-        working-directory: .tmp/seagulls-rpg-demo/dist
-        shell: cmd
-        run: dir
-      - name: Upload EXE
-        uses: actions/upload-artifact@v2
+      - name: Upload Executable
+        uses: actions/upload-artifact@v3
         with:
-          name: "Upload EXE"
+          name: "seagulls-rpg-demo.windows-2019.exe"
           path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.exe"
-

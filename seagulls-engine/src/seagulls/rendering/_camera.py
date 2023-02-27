@@ -38,6 +38,15 @@ class Camera(IUpdatePosition):
             "y": object_position["y"] - camera_position["y"],
         })
 
+    def relative_position(self, original: Position) -> Position:
+        object_position = original.get()
+        camera_position = self._position.get()
+
+        return Position({
+            "x": object_position["x"] + camera_position["x"],
+            "y": object_position["y"] + camera_position["y"],
+        })
+
     def assert_visible(self, size: Size, position: Position) -> None:
         object_position = position.get()
         object_size = size.get()

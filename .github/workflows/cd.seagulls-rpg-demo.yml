@@ -1,0 +1,98 @@
+name: "Seagulls CD: seagulls-rpg-demo"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  build-ubuntu-executable:
+    name: "Build Executable: Ubuntu 20.04"
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: true
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9.16"
+      - name: Install Packages
+        working-directory: seagulls-rpg-demo
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pipx
+          pipx install poetry
+          poetry install --extras dev
+      - name: Build Executable
+        working-directory: seagulls-rpg-demo
+        run: poetry run seagulls build-executable
+      - name: Upload Executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: "seagulls-rpg-demo.ubuntu-20.04.x64"
+          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo"
+  build-macos-executable:
+    name: "Build Executable: MacOS 12"
+    runs-on: macos-12
+    strategy:
+      fail-fast: true
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9.16"
+      - name: Install Package
+        working-directory: seagulls-rpg-demo
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pipx
+          pipx install poetry
+          poetry install --extras dev
+      - name: Build Executable
+        working-directory: seagulls-rpg-demo
+        run: poetry run seagulls build-executable
+      - name: Create Tar File
+        working-directory: .tmp/seagulls-rpg-demo/dist
+        run: |
+          tar -cvf seagulls-rpg-demo.tar seagulls-rpg-demo.app
+      - name: Upload Executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: "seagulls-rpg-demo.macos-12.tar"
+          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.tar"
+  build-windows-exe:
+    name: "Build Executable: Windows 2019"
+    runs-on: windows-2019
+    strategy:
+      fail-fast: true
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9.13"
+      - name: Install Poetry
+        working-directory: seagulls-rpg-demo
+        shell: cmd
+        run: |
+          echo %APPDATA%
+          powershell -command "(Invoke-WebRequest -Verbose -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -"
+      - name: Install Packages
+        working-directory: seagulls-rpg-demo
+        shell: cmd
+        run: |
+          %APPDATA%\pypoetry\venv\Scripts\poetry install --extras dev
+      - name: Build Executable
+        working-directory: seagulls-rpg-demo
+        shell: cmd
+        run: |
+          %APPDATA%\pypoetry\venv\Scripts\poetry run seagulls build-executable
+      - name: Upload Executable
+        uses: actions/upload-artifact@v3
+        with:
+          name: "seagulls-rpg-demo.windows-2019.exe"
+          path: ".tmp/seagulls-rpg-demo/dist/seagulls-rpg-demo.exe"

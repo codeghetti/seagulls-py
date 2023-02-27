@@ -54,10 +54,7 @@ jobs:
       - name: Build Executable
         working-directory: seagulls-rpg-demo
         run: poetry run seagulls build-executable
-      - name: List files for now
-        working-directory: .tmp/seagulls-rpg-demo/dist
-        run: ls
-      - name: Zip app to upload
+      - name: Create Tar File
         working-directory: .tmp/seagulls-rpg-demo/dist
         run: |
           tar -cvf seagulls-rpg-demo.tar seagulls-rpg-demo.app
@@ -82,12 +79,8 @@ jobs:
         working-directory: seagulls-rpg-demo
         shell: cmd
         run: |
-          powershell -command "(Invoke-WebRequest -Verbose -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -"
-      - name: Check where APPDATA is
-        working-directory: seagulls-rpg-demo
-        shell: cmd
-        run: |
           echo %APPDATA%
+          powershell -command "(Invoke-WebRequest -Verbose -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -"
       - name: Install Packages
         working-directory: seagulls-rpg-demo
         shell: cmd

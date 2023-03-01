@@ -1,11 +1,9 @@
-from typing import Set, Tuple, TypeAlias
+from typing import Set, Tuple
 
-from ._identity import EntityId
-
-GameObjectId: TypeAlias = EntityId
+from ._game_objects import GameObjectId, IManageGameObjects
 
 
-class SceneObjects:
+class SceneObjects(IManageGameObjects):
 
     _entities: Set[GameObjectId]
 

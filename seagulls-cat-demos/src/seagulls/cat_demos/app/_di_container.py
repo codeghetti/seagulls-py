@@ -1,7 +1,7 @@
 from functools import lru_cache
 
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
-from seagulls.cat_demos.engine.v2.components._identity import GameSceneId
+from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameCollection
 from seagulls.cat_demos.engine.v2.input._eventing import EventPayloadType, InputEvent
 from seagulls.cat_demos.engine.v2.input._input_client import GameInputClient

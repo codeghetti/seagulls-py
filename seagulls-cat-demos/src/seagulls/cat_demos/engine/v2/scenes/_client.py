@@ -1,12 +1,13 @@
 from __future__ import annotations
+
 from abc import abstractmethod
 from queue import Empty, Queue
-from typing import Dict, Iterable, NamedTuple, Protocol, Tuple
+from typing import Dict, Iterable, NamedTuple, Protocol
 
 from seagulls.cat_demos.engine import IExecutable
-from seagulls.cat_demos.engine.v2.components._identity import GameSceneId
-from seagulls.cat_demos.engine.v2.frames._client import IProvideFrames
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
+from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
+from seagulls.cat_demos.engine.v2.frames._client import IProvideFrames
 
 
 class IScene(Protocol):

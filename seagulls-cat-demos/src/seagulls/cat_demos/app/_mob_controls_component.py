@@ -7,7 +7,7 @@ from math import sqrt
 
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
 from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
-from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
+from seagulls.cat_demos.engine.v2.components._game_components import GameComponentId
 from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
 from seagulls.cat_demos.engine.v2.position._position_component import (
     PositionComponent,

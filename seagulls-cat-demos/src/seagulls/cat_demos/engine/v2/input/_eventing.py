@@ -1,6 +1,6 @@
 from typing import Callable, Dict, Generic, List, TypeAlias, TypeVar
 
-from seagulls.cat_demos.engine.v2.components._identity import EntityId
+from seagulls.cat_demos.engine.v2.components._entities import EntityId
 
 EventPayloadType = TypeVar("EventPayloadType")
 

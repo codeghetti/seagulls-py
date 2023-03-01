@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from typing import Any, Dict, Protocol, Tuple
 
-from seagulls.cat_demos.engine.v2.components._identity import EntityType
-from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
+from seagulls.cat_demos.engine.v2.components._entities import EntityType
+from seagulls.cat_demos.engine.v2.components._game_components import GameComponentId
 from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
 
 

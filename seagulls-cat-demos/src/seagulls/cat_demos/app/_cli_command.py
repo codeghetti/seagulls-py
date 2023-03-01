@@ -1,16 +1,27 @@
-import pygame
-
 from argparse import ArgumentParser
 
-from seagulls.cat_demos.app._events import GameInputs, QuitGameEvent, PlayerMoveEvent
-from seagulls.cat_demos.app._scene import MainScene
+import pygame
+
+from seagulls.cat_demos.app._events import GameInputs, PlayerMoveEvent, QuitGameEvent
 from seagulls.cat_demos.app._mob_controls_component import MobControlsComponentClient, \
     MobControlsComponentId
-
+from seagulls.cat_demos.app._player_controls_component import (
+    PlayerControlsComponentClient,
+    PlayerControlsComponentId,
+)
+from seagulls.cat_demos.app._scene import MainScene
+from seagulls.cat_demos.engine.v2._game_clock import GameClock
+from seagulls.cat_demos.engine.v2._resources import ResourceClient
+from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
+from seagulls.cat_demos.engine.v2._size import Size
+from seagulls.cat_demos.engine.v2._sprite_component import (
+    GameSprite,
+    SpriteComponentClient,
+    SpriteComponentId,
+)
 from seagulls.cat_demos.engine.v2.animation._animation_component import SpriteAnimationComponentClient, \
     SpriteAnimationComponentId
-
-from seagulls.cat_demos.engine.v2._game_clock import GameClock
+from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.input._eventing import EventPayloadType, InputEvent, \
     InputEventDispatcher
 from seagulls.cat_demos.engine.v2.input._input_client import GameInputClient
@@ -22,22 +33,9 @@ from seagulls.cat_demos.engine.v2.position._position_component import (
     Position, PositionComponentClient,
     PositionComponentId, Vector,
 )
-from seagulls.cat_demos.engine.v2._resources import ResourceClient
-from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
-from seagulls.cat_demos.engine.v2._size import Size
-from seagulls.cat_demos.engine.v2._sprite_component import (
-    GameSprite,
-    SpriteComponentClient,
-    SpriteComponentId,
-)
-from seagulls.cat_demos.engine.v2.components._identity import GameSceneId
 from seagulls.cat_demos.engine.v2.scenes._client import SceneClient
 from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
-from seagulls.cat_demos.app._player_controls_component import (
-    PlayerControlsComponentClient,
-    PlayerControlsComponentId,
-)
 from seagulls.cli import ICliCommand
 
 

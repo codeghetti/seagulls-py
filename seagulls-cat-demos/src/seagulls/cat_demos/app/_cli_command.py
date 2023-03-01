@@ -11,12 +11,13 @@ from seagulls.cat_demos.engine.v2.animation._animation_component import SpriteAn
     SpriteAnimationComponentId
 
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
-from seagulls.cat_demos.engine.v2._input_client import (
-    EventTogglesClient, GameInputClient,
-    GameInputRouter, InputEvent,
-    EventPayloadType,
-    InputEventDispatcher, PygameEvents, PygameInputEvent, PygameKeyboardInputPublisher,
-)
+from seagulls.cat_demos.engine.v2.input._eventing import EventPayloadType, InputEvent, \
+    InputEventDispatcher
+from seagulls.cat_demos.engine.v2.input._input_client import GameInputClient
+from seagulls.cat_demos.engine.v2.input._input_router import GameInputRouter
+from seagulls.cat_demos.engine.v2.input._input_toggles import InputTogglesClient
+from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameInputEvent, \
+    PygameKeyboardInputPublisher
 from seagulls.cat_demos.engine.v2.position._position_component import (
     Position, PositionComponentClient,
     PositionComponentId, Vector,
@@ -76,7 +77,7 @@ class GameCliCommand(ICliCommand):
             GameInputs.QUIT: tuple([self._on_quit]),
         })
         self._event_dispatcher = InputEventDispatcher()
-        self._event_toggles = EventTogglesClient(self._input_v2)
+        self._event_toggles = InputTogglesClient(self._input_v2)
 
         resource_client = ResourceClient()
         position_client = PositionComponentClient()

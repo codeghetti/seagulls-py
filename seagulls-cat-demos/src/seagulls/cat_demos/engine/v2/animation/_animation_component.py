@@ -1,17 +1,15 @@
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
-
 from datetime import datetime
-
+from functools import lru_cache
 from typing import Optional, Tuple
 
-import logging
-
-from functools import lru_cache
-from seagulls.cat_demos.engine.v2.components._identity import GameComponentId, GameObjectId
 from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
 from seagulls.cat_demos.engine.v2._sprite_component import GameSprite, SpriteComponent, SpriteComponentClient
+from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
+from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
 
 logger = logging.getLogger(__name__)
 

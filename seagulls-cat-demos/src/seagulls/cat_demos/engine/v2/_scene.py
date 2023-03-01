@@ -1,10 +1,11 @@
 from abc import abstractmethod
-
 from typing import Any, Dict, Protocol, Set, Tuple
 
-from ._component_registry import GameComponentRegistry, IProvideGameObjectComponent
-from seagulls.cat_demos.engine.v2.components._identity import EntityType, GameComponentId, GameObjectId
+from seagulls.cat_demos.engine.v2.components._identity import EntityType
+from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
+from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
+from ._component_registry import GameComponentRegistry, IProvideGameObjectComponent
 
 
 class ITick(Protocol):

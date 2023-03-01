@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from seagulls.cat_demos.engine.v2._input_client import InputEvent
+from seagulls.cat_demos.engine.v2.input._eventing import InputEvent
 from seagulls.cat_demos.engine.v2.position._position_component import Vector
 
 

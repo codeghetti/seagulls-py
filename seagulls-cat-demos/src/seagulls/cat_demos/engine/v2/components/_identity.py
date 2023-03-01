@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Generic, TypeAlias, TypeVar
 
@@ -49,6 +50,4 @@ class TypedEntityId(EntityId, Generic[EntityType]):
     """
 
 
-GameObjectId: TypeAlias = EntityId
-GameComponentId: TypeAlias = TypedEntityId
 GameSceneId: TypeAlias = EntityId

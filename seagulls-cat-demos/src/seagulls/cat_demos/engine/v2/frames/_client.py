@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from typing import Iterable, Protocol
 
-from seagulls.cat_demos.engine.v2._input_client import IProcessInputEvents
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
@@ -32,18 +31,15 @@ class FrameClient(IFrame):
 
     # _frame_collection: IProvideFrames
     _window_client: WindowClient
-    _input_client: IProcessInputEvents
 
-    def __init__(self, window_client: WindowClient, input_client: IProcessInputEvents) -> None:
+    def __init__(self, window_client: WindowClient) -> None:
         self._window_client = window_client
-        self._input_client = input_client
 
     def open_frame(self) -> None:
         self._window_client.commit()
 
     def run_frame(self) -> None:
         self._window_client.get_surface().fill((20, 20, 40))
-        self._input_client.tick()
         # for frame in self._frame_collection.items():
         #     frame.open_frame()
         #     frame.run_frame()

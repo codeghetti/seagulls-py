@@ -1,22 +1,23 @@
 from __future__ import annotations
 
-from abc import abstractmethod
-
 import logging
-
+from abc import abstractmethod
 from functools import lru_cache
+from typing import Generic, NamedTuple, Protocol
+
 from pygame.constants import SRCALPHA
 from pygame.image import load
 from pygame.surface import Surface
 
-from typing import Generic, NamedTuple, Protocol
-
-from seagulls.cat_demos.engine.v2.components._identity import EntityType, GameComponentId, GameObjectId, EntityId
+from seagulls.cat_demos.engine.v2.components._identity import EntityId, EntityType
+from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
+from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
+from seagulls.cat_demos.engine.v2.position._position_component import Position, PositionComponent, \
+    PositionComponentClient
+from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._resources import ResourceClient
 from ._scene import IProvideGameObjectComponent
 from ._size import Size
-from seagulls.cat_demos.engine.v2.position._position_component import Position, PositionComponent, PositionComponentClient
-from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 logger = logging.getLogger(__name__)
 

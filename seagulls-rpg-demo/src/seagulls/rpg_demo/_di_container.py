@@ -226,6 +226,13 @@ class RpgDemoDiContainer:
                 game_size=(484, 100),
                 coordinates=(7, 27),
             ),
+            Sprites.green_ghost: SpriteInfo(
+                path=ghost,
+                resolution=(192, 176),
+                size=(16, 16),
+                game_size=(35, 35),
+                coordinates=(0, 144)
+            )
         }
 
     @lru_cache()

@@ -20,6 +20,7 @@ class Sprites(SpritesType):
     floor_left_corner = "floor-left-corner"
     floor_middle = "floor-middle"
     floor_right_corner = "floor-right-corner"
+    floor_single_piece = "floor-single-piece"
     pumpkin = "pumpkin"
     dead_pumpkin = "dead-pumpkin"
     ghost = "ghost"
@@ -57,16 +58,17 @@ class RpgScene2(IGameScene):
         self._sprite_client = sprite_client
         self._game_controls = game_controls
         self._clock = clock
-        self._scene_right_limit = 2800
+        self._scene_right_limit = 3200
         self._x_pumpkin_position = 10
         self._y_position_pumpkin = 515.0
-        self._x_position_flag_banner = self._scene_right_limit - 100
+        self._x_position_flag_banner = self._scene_right_limit - 200
         self._y_position_flag_banner = 450
-        self._x_position_flag_pole = self._scene_right_limit - 100
+        self._x_position_flag_pole = self._scene_right_limit - 200
         self._y_position_flag_pole = 500
         self._vertical_velocity = 0.0
         self._ghost_position = 400
         self._green_ghost_position = 1200
+        self._hole_position = 2800
         self._ghost_moves_right = True
         self._green_ghost_moves_right = True
         self._is_weapon_out = False
@@ -80,6 +82,7 @@ class RpgScene2(IGameScene):
         self._green_ghost_alive = True
         self._x_sword_position = 0
         self._y_position_sword = 0
+        self._lava = pygame.Rect((0, 600), (self._scene_right_limit, 50))
 
     def tick(self) -> None:
         self._printer.clear()
@@ -108,7 +111,7 @@ class RpgScene2(IGameScene):
         if self._is_game_over:
             self._sprite_client.render_sprite(
                 Sprites.dead_pumpkin,
-                Position({"x": self._x_pumpkin_position, "y": 515})
+                Position({"x": self._x_pumpkin_position, "y": int(self._y_position_pumpkin)})
             )
             self._sprite_client.render_sprite(
                 Sprites.game_over,
@@ -162,8 +165,8 @@ class RpgScene2(IGameScene):
                 self._green_ghost_alive = False
 
             if (
-                    pygame.Rect.colliderect(pumpkin_rect, ghost_rect)
-                    or pygame.Rect.colliderect(pumpkin_rect, green_ghost_rect)
+                    (pygame.Rect.colliderect(pumpkin_rect, ghost_rect)
+                        or pygame.Rect.colliderect(pumpkin_rect, green_ghost_rect))
                     and self._health_points == 0
             ):
                 self._is_game_over = True
@@ -229,10 +232,20 @@ class RpgScene2(IGameScene):
 
             self.gravity(delta)
 
-            if self._y_position_pumpkin > 515:
+            pumpkin_rect = pygame.Rect((self._x_pumpkin_position, self._y_position_pumpkin),
+                                       (35, 35))
+
+            hole_rect = pygame.Rect((self._hole_position, 550), (
+                self._scene_right_limit - 125 - self._hole_position, 50))
+
+            if (self._y_position_pumpkin > 515
+                    and not pygame.Rect.colliderect(pumpkin_rect, hole_rect)):
                 self._y_position_pumpkin = 515
                 self._vertical_velocity = 0
                 self._is_jumping = False
+
+            if pygame.Rect.colliderect(self._lava, pumpkin_rect):
+                self._is_game_over = True
 
     def gravity(self, delta: int):
         self._vertical_velocity += 0.1 * delta / 15
@@ -294,8 +307,11 @@ class RpgScene2(IGameScene):
 
         self._sprite_client.render_sprite(
             Sprites.floor_right_corner,
-            Position({"x": 2750, "y": 550})
-        )
+            Position({"x": 2750, "y": 550}))
+
+        self._sprite_client.render_sprite(
+            Sprites.floor_single_piece,
+            Position({"x": self._scene_right_limit - 225, "y": 550}))
 
 
 class SceneProvider(IProvideGameScenes):

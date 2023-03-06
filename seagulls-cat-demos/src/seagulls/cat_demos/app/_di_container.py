@@ -12,7 +12,9 @@ from seagulls.seagulls_cli import SeagullsCliApplication
 from ._cli_command import GameCliCommand
 from ._cli_plugin import CatDemosCliPlugin
 from ._main_menu import CloseMainMenuScene, OpenMainMenuScene
+from ..engine.v2.components._game_components import GameComponentRegistry, ObjectComponentRegistry
 from ..engine.v2.components._scene_objects import SceneObjects
+from ..engine.v2.position._position_component import PositionComponent, PositionComponentId, PositionObjectComponentId
 
 
 class CatDemosDiContainer:
@@ -88,4 +90,20 @@ class CatDemosDiContainer:
 
     @lru_cache()
     def _scene_objects(self) -> SceneObjects:
-        return SceneObjects()
+        return SceneObjects(self._object_component_registry())
+
+    @lru_cache()
+    def _object_component_registry(self) -> ObjectComponentRegistry:
+        registry = ObjectComponentRegistry(self._component_registry())
+        registry.register(PositionObjectComponentId, PositionComponentId)
+        return registry
+
+    @lru_cache()
+    def _component_registry(self) -> GameComponentRegistry:
+        registry = GameComponentRegistry()
+        registry.register(PositionComponentId, self._position_component)
+        return registry
+
+    @lru_cache()
+    def _position_component(self) -> PositionComponent:
+        return PositionComponent()

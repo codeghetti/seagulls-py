@@ -1,4 +1,5 @@
 from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId, SceneObjects
+from seagulls.cat_demos.engine.v2.position._position_component import PositionObjectComponentId
 
 
 class OpenMainMenuScene:
@@ -11,6 +12,10 @@ class OpenMainMenuScene:
     def execute(self) -> None:
         print("open scene")
         self._scene_objects.add(GameObjectId("title"))
+        self._scene_objects.attach_component(GameObjectId("title"), PositionObjectComponentId)
+        p = self._scene_objects.get_component(GameObjectId("title"), PositionObjectComponentId)
+        print(f"title location: {p.get()}")
+
         self._scene_objects.add(GameObjectId("game.a"))
         self._scene_objects.add(GameObjectId("game.b"))
         self._scene_objects.add(GameObjectId("game.c"))

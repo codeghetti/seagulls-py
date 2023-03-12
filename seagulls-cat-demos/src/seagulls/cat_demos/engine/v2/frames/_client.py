@@ -1,22 +1,15 @@
 from abc import abstractmethod
+from threading import Event
 from typing import Iterable, Protocol
 
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
-from seagulls.cat_demos.engine.v2.window._window import WindowClient
+from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
 
 
 class IFrame(Protocol):
 
     @abstractmethod
-    def open_frame(self) -> None:
-        pass
-
-    @abstractmethod
-    def run_frame(self) -> None:
-        pass
-
-    @abstractmethod
-    def close_frame(self) -> None:
+    def process(self) -> None:
         pass
 
 
@@ -27,26 +20,23 @@ class IProvideFrames(Protocol):
         pass
 
 
+class FrameEvents:
+    OPEN: GameEventId[None] = GameEventId[None]("seagulls:frame.open")
+    EXECUTE: GameEventId[None] = GameEventId[None]("seagulls:frame.execute")
+    CLOSE: GameEventId[None] = GameEventId[None]("seagulls:frame.close")
+
+
 class FrameClient(IFrame):
 
-    # _frame_collection: IProvideFrames
-    _window_client: WindowClient
+    _event_client: GameEventDispatcher
 
-    def __init__(self, window_client: WindowClient) -> None:
-        self._window_client = window_client
+    def __init__(self, event_client: GameEventDispatcher) -> None:
+        self._event_client = event_client
 
-    def open_frame(self) -> None:
-        self._window_client.commit()
-
-    def run_frame(self) -> None:
-        self._window_client.get_surface().fill((20, 20, 40))
-        # for frame in self._frame_collection.items():
-        #     frame.open_frame()
-        #     frame.run_frame()
-        #     frame.close_frame()
-
-    def close_frame(self) -> None:
-        self._window_client.commit()
+    def process(self) -> None:
+        self._event_client.trigger(GameEvent(FrameEvents.OPEN, None))
+        self._event_client.trigger(GameEvent(FrameEvents.EXECUTE, None))
+        self._event_client.trigger(GameEvent(FrameEvents.CLOSE, None))
 
 
 class IProvideSceneState(Protocol):
@@ -55,20 +45,21 @@ class IProvideSceneState(Protocol):
         pass
 
 
-class FrameCollection(IProvideFrames):
+class FramesProvider(IProvideFrames):
 
     _frame_factory: ServiceProvider[IFrame]
-    # _scene_state: IProvideSceneState
+    _stop: Event
 
     def __init__(
         self,
         frame_factory: ServiceProvider[IFrame],
-        # scene_state: IProvideSceneState,
     ) -> None:
         self._frame_factory = frame_factory
-        # self._scene_state = scene_state
+        self._stop = Event()
+
+    def stop(self) -> None:
+        self._stop.set()
 
     def items(self) -> Iterable[IFrame]:
-        # while self._scene_state.is_open():
-        while True:
+        while not self._stop.is_set():
             yield self._frame_factory.get()

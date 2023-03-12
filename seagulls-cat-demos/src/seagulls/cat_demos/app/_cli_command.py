@@ -1,6 +1,9 @@
 from argparse import ArgumentParser
 
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
+from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
+from seagulls.cat_demos.engine.v2.frames._client import FramesProvider
+from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents
 from seagulls.cat_demos.engine.v2.scenes._client import SceneClient
 from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
 from seagulls.cli import ICliCommand
@@ -9,20 +12,39 @@ from seagulls.cli import ICliCommand
 class GameCliCommand(ICliCommand):
 
     _session_client: SessionClient
-    _scene_collection: SceneClient
+    _scene_client: SceneClient
+    _frames_provider: FramesProvider
+    _event_dispatcher: GameEventDispatcher
 
-    def __init__(self, session_client: SessionClient, scene_collection: SceneClient) -> None:
+    def __init__(
+        self,
+        session_client: SessionClient,
+        scene_client: SceneClient,
+        frames_provider: FramesProvider,
+        event_dispatcher: GameEventDispatcher,
+    ) -> None:
         self._session_client = session_client
-        self._scene_collection = scene_collection
+        self._scene_client = scene_client
+        self._frames_provider = frames_provider
+        self._event_dispatcher = event_dispatcher
 
     def configure_parser(self, parser: ArgumentParser) -> None:
         pass
 
     def execute(self) -> None:
-        self._scene_collection.load_scene(GameSceneId("main-menu"))
-        self._session_client.open_session()
-        self._session_client.run_session()
-        self._session_client.close_session()
+        self._scene_client.load_scene(GameSceneId("main-menu"))
+        self._event_dispatcher.register(PygameEvents.QUIT, self._quit)
+
+        try:
+            self._session_client.open_session()
+            self._session_client.run_session()
+            self._session_client.close_session()
+        except KeyboardInterrupt:
+            pass
+
+    def _quit(self) -> None:
+        # looks like a terrible interface to end a scene
+        self._frames_provider.stop()
 
     # def _init_session(self) -> None:
     #     self._session_window_client = WindowClient()

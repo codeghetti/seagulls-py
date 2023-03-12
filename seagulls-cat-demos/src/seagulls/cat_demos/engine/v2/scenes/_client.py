@@ -42,26 +42,24 @@ class SceneComponent(IScene):
 
     _open_callback: IExecutable
     _close_callback: IExecutable
-    _frame_collection: IProvideFrames
+    _frames_provider: IProvideFrames
 
     def __init__(
         self,
         open_callback: IExecutable,
         close_callback: IExecutable,
-        frame_collection: IProvideFrames,
+        frames_provider: IProvideFrames,
     ) -> None:
         self._open_callback = open_callback
         self._close_callback = close_callback
-        self._frame_collection = frame_collection
+        self._frames_provider = frames_provider
 
     def open_scene(self) -> None:
         self._open_callback.execute()
 
     def run_scene(self) -> None:
-        for frame in self._frame_collection.items():
-            frame.open_frame()
-            frame.run_frame()
-            frame.close_frame()
+        for frame in self._frames_provider.items():
+            frame.process()
 
     def close_scene(self) -> None:
         self._close_callback.execute()
@@ -85,12 +83,6 @@ class SceneRegistry(IManageScenes):
     def __init__(self) -> None:
         self._providers = {}
 
-    def register(self, scene_id: GameSceneId, provider: ServiceProvider[IScene]) -> None:
-        self._providers[scene_id] = provider
-
-    def get(self, scene_id: GameSceneId) -> IScene:
-        return self._providers[scene_id].get()
-
     @staticmethod
     def with_providers(*providers: SceneProvider) -> SceneRegistry:
         client = SceneRegistry()
@@ -98,6 +90,12 @@ class SceneRegistry(IManageScenes):
             client.register(scene_id=p.scene_id, provider=p.provider)
 
         return client
+
+    def register(self, scene_id: GameSceneId, provider: ServiceProvider[IScene]) -> None:
+        self._providers[scene_id] = provider
+
+    def get(self, scene_id: GameSceneId) -> IScene:
+        return self._providers[scene_id].get()
 
 
 class SceneProvider(NamedTuple):
@@ -123,3 +121,7 @@ class SceneClient(IProvideScenes):
                 yield self._scene_registry.get(self._next_scene.get_nowait())
         except Empty:
             pass
+
+
+class GameSceneObjects:
+    pass

@@ -2,9 +2,14 @@ from functools import lru_cache
 
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameCollection
-from seagulls.cat_demos.engine.v2.input._eventing import EventPayloadType, InputEvent
-from seagulls.cat_demos.engine.v2.input._input_client import GameInputClient
+from seagulls.cat_demos.engine.v2.components._game_components import GameComponentRegistry, ObjectComponentRegistry
+from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
+from seagulls.cat_demos.engine.v2.debugging._component import DebugComponent, DebugComponentId
+from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
+from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameEvents, FramesProvider
+from seagulls.cat_demos.engine.v2.input._pygame import PygameKeyboardInputPublisher
+from seagulls.cat_demos.engine.v2.position._position_component import PositionComponent, PositionComponentId, \
+    PositionObjectComponentId
 from seagulls.cat_demos.engine.v2.scenes._client import SceneClient, SceneComponent, SceneProvider, SceneRegistry
 from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
@@ -12,9 +17,6 @@ from seagulls.seagulls_cli import SeagullsCliApplication
 from ._cli_command import GameCliCommand
 from ._cli_plugin import CatDemosCliPlugin
 from ._main_menu import CloseMainMenuScene, OpenMainMenuScene
-from ..engine.v2.components._game_components import GameComponentRegistry, ObjectComponentRegistry
-from ..engine.v2.components._scene_objects import SceneObjects
-from ..engine.v2.position._position_component import PositionComponent, PositionComponentId, PositionObjectComponentId
 
 
 class CatDemosDiContainer:
@@ -34,7 +36,9 @@ class CatDemosDiContainer:
     def _command(self) -> GameCliCommand:
         return GameCliCommand(
             session_client=self._session_client(),
-            scene_collection=self._scene_client(),
+            scene_client=self._scene_client(),
+            frames_provider=self._frames_provider(),
+            event_dispatcher=self._event_dispatcher(),
         )
 
     @lru_cache()
@@ -57,36 +61,43 @@ class CatDemosDiContainer:
                     lambda: SceneComponent(
                         open_callback=OpenMainMenuScene(self._scene_objects()),
                         close_callback=CloseMainMenuScene(),
-                        frame_collection=self._frame_collection(),
+                        frames_provider=self._frames_provider(),
                     ),
                 ),
             ),
         )
 
     @lru_cache()
-    def _frame_collection(self) -> FrameCollection:
-        return FrameCollection(frame_factory=self._frame_client_factory())
+    def _frames_provider(self) -> FramesProvider:
+        return FramesProvider(frame_factory=self._frame_client_factory())
 
     @lru_cache()
     def _frame_client_factory(self) -> ServiceProvider[FrameClient]:
-        return ServiceProvider[FrameClient](lambda: FrameClient(
-            window_client=self._window_client(),
-        ))
+        return ServiceProvider[FrameClient](lambda: FrameClient(event_client=self._event_dispatcher()))
 
     @lru_cache()
-    def _game_input_client(self) -> GameInputClient:
-        return GameInputClient(handlers=tuple([
-            self._on_input_v2,
-        ]))
+    def _event_dispatcher(self) -> GameEventDispatcher:
+        def open_frame() -> None:
+            self._pygame_input().tick()
+
+        def execute_frame() -> None:
+            self._window_client().get_surface().fill((20, 20, 20))
+            self._debug_component().tick()
+
+        def close_frame() -> None:
+            self._window_client().commit()
+
+        return GameEventDispatcher.with_callbacks(
+            (FrameEvents.OPEN, open_frame),
+            (FrameEvents.EXECUTE, execute_frame),
+            (FrameEvents.CLOSE, close_frame),
+        )
 
     @lru_cache()
-    def _window_client(self) -> WindowClient:
-        return WindowClient()
-
-    def _on_input_v2(self, event: InputEvent[EventPayloadType], payload: EventPayloadType) -> None:
-        # self._input_v2_routing.route(event, payload)
-        # self._event_dispatcher.trigger(event, payload)
-        pass
+    def _pygame_input(self) -> PygameKeyboardInputPublisher:
+        return PygameKeyboardInputPublisher(
+            event_dispatcher=self._event_dispatcher(),
+        )
 
     @lru_cache()
     def _scene_objects(self) -> SceneObjects:
@@ -102,8 +113,17 @@ class CatDemosDiContainer:
     def _component_registry(self) -> GameComponentRegistry:
         registry = GameComponentRegistry()
         registry.register(PositionComponentId, self._position_component)
+        registry.register(DebugComponentId, self._debug_component)
         return registry
+
+    @lru_cache()
+    def _debug_component(self) -> DebugComponent:
+        return DebugComponent(window_client=self._window_client())
 
     @lru_cache()
     def _position_component(self) -> PositionComponent:
         return PositionComponent()
+
+    @lru_cache()
+    def _window_client(self) -> WindowClient:
+        return WindowClient()

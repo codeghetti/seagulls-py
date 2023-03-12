@@ -2,8 +2,7 @@ from typing import NamedTuple
 
 import pygame
 
-from ._eventing import InputEvent
-from ._input_client import GameInputClient
+from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
 
 
 class PygameInputEvent(NamedTuple):
@@ -12,21 +11,26 @@ class PygameInputEvent(NamedTuple):
 
 
 class PygameEvents:
-    KEYBOARD = InputEvent[PygameInputEvent](name='seagulls.pygame-input.keyboard')
+    KEYBOARD = GameEventId[PygameInputEvent](name='seagulls:pygame-input.keyboard')
+    QUIT = GameEventId[None](name='seagulls:pygame-input.quit')
 
 
 class PygameKeyboardInputPublisher:
 
-    _game_input_client: GameInputClient
+    _event_dispatcher: GameEventDispatcher
 
-    def __init__(self, game_input_client: GameInputClient) -> None:
-        self._game_input_client = game_input_client
+    def __init__(self, event_dispatcher: GameEventDispatcher) -> None:
+        self._event_dispatcher = event_dispatcher
 
     def tick(self) -> None:
         events = pygame.event.get()
         for event in events:
             if event.type in [pygame.KEYDOWN, pygame.KEYUP]:
-                self._game_input_client.trigger(
-                    event=PygameEvents.KEYBOARD,
-                    payload=PygameInputEvent(type=event.type, key=event.key),
-                )
+                self._event_dispatcher.trigger(GameEvent(
+                    PygameEvents.KEYBOARD,
+                    PygameInputEvent(type=event.type, key=event.key),
+                ))
+            if event.type == pygame.QUIT:
+                self._event_dispatcher.trigger(GameEvent(PygameEvents.QUIT, None))
+            else:
+                print(f"unknown: {event}")

@@ -4,11 +4,11 @@ from uuid import uuid4
 from seagulls.cat_demos.app._mob_controls_component import MobControlsComponentId
 from seagulls.cat_demos.app._player_controls_component import PlayerControlsComponentId
 from seagulls.cat_demos.app._sprites import MySprites
-from seagulls.cat_demos.engine.v2._scene import GameSceneObjects
 from seagulls.cat_demos.engine.v2._sprite_component import SpriteComponentId
 from seagulls.cat_demos.engine.v2.animation._animation_component import SpriteAnimationComponentId
 from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
 from seagulls.cat_demos.engine.v2.position._position_component import PositionComponentId, Vector
+from seagulls.cat_demos.engine.v2.scenes._client import GameSceneObjects
 
 
 class MainScene:

@@ -1,8 +1,10 @@
 from functools import lru_cache
 
+from seagulls.seagulls_cli import SeagullsCliApplication
+
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.components._game_components import GameComponentRegistry, ObjectComponentRegistry
+from seagulls.cat_demos.engine.v2.components._object_components import ObjectComponentRegistry
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.debugging._component import DebugComponent, DebugComponentId
 from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
@@ -13,10 +15,10 @@ from seagulls.cat_demos.engine.v2.position._position_component import PositionCo
 from seagulls.cat_demos.engine.v2.scenes._client import SceneClient, SceneComponent, SceneProvider, SceneRegistry
 from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
-from seagulls.seagulls_cli import SeagullsCliApplication
 from ._cli_command import GameCliCommand
 from ._cli_plugin import CatDemosCliPlugin
 from ._main_menu import CloseMainMenuScene, OpenMainMenuScene
+from ..engine.v2.components._component_registry import GameComponentRegistry
 
 
 class CatDemosDiContainer:
@@ -111,10 +113,10 @@ class CatDemosDiContainer:
 
     @lru_cache()
     def _component_registry(self) -> GameComponentRegistry:
-        registry = GameComponentRegistry()
-        registry.register(PositionComponentId, self._position_component)
-        registry.register(DebugComponentId, self._debug_component)
-        return registry
+        return GameComponentRegistry.with_providers(
+            (PositionComponentId, self._position_component),
+            (DebugComponentId, self._debug_component),
+        )
 
     @lru_cache()
     def _debug_component(self) -> DebugComponent:

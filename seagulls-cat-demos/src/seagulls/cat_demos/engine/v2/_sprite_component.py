@@ -10,7 +10,7 @@ from pygame.image import load
 from pygame.surface import Surface
 
 from seagulls.cat_demos.engine.v2.components._entities import EntityId, EntityType
-from seagulls.cat_demos.engine.v2.components._game_components import GameComponentId
+from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
 from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
 from seagulls.cat_demos.engine.v2.position._position_component import Position, PositionComponent, \
     PositionComponentClient

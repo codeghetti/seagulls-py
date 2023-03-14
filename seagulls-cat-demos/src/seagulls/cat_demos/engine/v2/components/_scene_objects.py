@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from typing import Dict, Protocol, Set, Tuple
 
-from ._game_components import GameComponentId, GameComponentType, ObjectComponentRegistry
 from ._game_objects import GameObjectId, IManageGameObjects
+from ._object_components import GameComponentId, GameComponentType, ObjectComponentRegistry
 
 
 class IManageGameObjectComponents(Protocol):

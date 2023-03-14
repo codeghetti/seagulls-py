@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Dict, TypeAlias
 
-from seagulls.cat_demos.engine.v2.components._game_components import GameComponentId
+from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
 from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
 from ._point import Point
 

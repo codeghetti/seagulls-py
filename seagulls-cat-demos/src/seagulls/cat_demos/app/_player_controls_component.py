@@ -3,14 +3,15 @@ from __future__ import annotations
 import logging
 from functools import lru_cache
 
+from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
+from seagulls.cat_demos.engine.v2.input._eventing import EventType, InputEventDispatcher
+
 from seagulls.cat_demos.app._events import GameInputs, PlayerMoveEvent
 from seagulls.cat_demos.engine.v2._game_clock import GameClock
 from seagulls.cat_demos.engine.v2._movement import MovementClient
-from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
 from seagulls.cat_demos.engine.v2.components._entities import EntityType
-from seagulls.cat_demos.engine.v2.components._game_components import GameComponentId
+from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
 from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
-from seagulls.cat_demos.engine.v2.input._eventing import EventType, InputEventDispatcher
 from seagulls.cat_demos.engine.v2.position._position_component import (
     PositionComponent,
     PositionComponentClient,

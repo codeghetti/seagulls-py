@@ -1,14 +1,13 @@
 from abc import abstractmethod
-from typing import Any, Dict, Protocol, Tuple
+from typing import Any, Dict, Protocol, Tuple, TypeVar
 
 from seagulls.cat_demos.engine.v2.components._entities import EntityType, TypedEntityId
 
 
-class GameComponentId(TypedEntityId[EntityType]):
-    pass
+GameComponentType = TypeVar("GameComponentType")
 
 
-class GameComponentType(EntityType):
+class GameComponentId(TypedEntityId[GameComponentType]):
     pass
 
 

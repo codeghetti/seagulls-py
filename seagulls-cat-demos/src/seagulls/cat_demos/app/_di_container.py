@@ -61,7 +61,10 @@ class CatDemosDiContainer:
                 scene_id=GameSceneId("main-menu"),
                 provider=ServiceProvider(
                     lambda: SceneComponent(
-                        open_callback=OpenMainMenuScene(self._scene_objects()),
+                        open_callback=OpenMainMenuScene(
+                            scene_components=self._scene_components(),
+                            scene_objects=self._scene_objects(),
+                        ),
                         close_callback=CloseMainMenuScene(),
                         frames_provider=self._frames_provider(),
                     ),

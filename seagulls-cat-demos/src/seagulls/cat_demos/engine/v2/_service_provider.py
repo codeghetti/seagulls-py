@@ -1,18 +1,25 @@
-from typing import Callable, Generic, TypeVar
+from abc import abstractmethod
+from typing import Callable, Protocol, TypeAlias, TypeVar
 
 T = TypeVar("T")
 
 
-class ServiceProvider(Generic[T]):
+class ServiceProvider(Protocol[T]):
+
+    @abstractmethod
+    def __call__(self) -> T:
+        pass
+
+
+class Provider(ServiceProvider):
 
     _callback: Callable[[], T]
 
     def __init__(self, callback: Callable[[], T]) -> None:
         self._callback = callback
 
-    def get(self) -> T:
+    def __call__(self) -> T:
         return self._callback()
 
 
-def provider(callback: Callable[[], T]) -> ServiceProvider[T]:
-    return ServiceProvider(callback)
+provider: TypeAlias = Provider

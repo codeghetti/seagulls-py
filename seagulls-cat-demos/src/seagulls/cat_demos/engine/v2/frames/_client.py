@@ -4,6 +4,8 @@ from typing import Iterable, Protocol
 
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.input._pygame import PygameKeyboardInputPublisher
+from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 
 class IFrame(Protocol):
@@ -13,7 +15,7 @@ class IFrame(Protocol):
         pass
 
 
-class IProvideFrames(Protocol):
+class IFrameCollection(Protocol):
 
     @abstractmethod
     def items(self) -> Iterable[IFrame]:
@@ -29,14 +31,35 @@ class FrameEvents:
 class FrameClient(IFrame):
 
     _event_client: GameEventDispatcher
+    _window_client: WindowClient
+    _pygame_input_client: PygameKeyboardInputPublisher
 
-    def __init__(self, event_client: GameEventDispatcher) -> None:
+    def __init__(
+        self,
+        event_client: GameEventDispatcher,
+        window_client: WindowClient,
+        pygame_input_client: PygameKeyboardInputPublisher,
+    ) -> None:
         self._event_client = event_client
+        self._window_client = window_client
+        self._pygame_input_client = pygame_input_client
 
     def process(self) -> None:
+        self._open_frame()
+        self._execute_frame()
+        self._close_frame()
+
+    def _open_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.OPEN, None))
+        self._pygame_input_client.tick()
+
+    def _execute_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.EXECUTE, None))
+        self._window_client.get_surface().fill((20, 120, 20))
+
+    def _close_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.CLOSE, None))
+        self._window_client.commit()
 
 
 class IProvideSceneState(Protocol):
@@ -45,7 +68,7 @@ class IProvideSceneState(Protocol):
         pass
 
 
-class FramesProvider(IProvideFrames):
+class FrameCollection(IFrameCollection):
 
     _frame_factory: ServiceProvider[IFrame]
     _stop: Event
@@ -62,4 +85,4 @@ class FramesProvider(IProvideFrames):
 
     def items(self) -> Iterable[IFrame]:
         while not self._stop.is_set():
-            yield self._frame_factory.get()
+            yield self._frame_factory()

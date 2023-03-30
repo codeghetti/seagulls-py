@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+import logging
 from abc import abstractmethod
 from queue import Empty, Queue
-from typing import Dict, Iterable, NamedTuple, Protocol
+from typing import Dict, Iterable, NamedTuple, Optional, Protocol
 
 from seagulls.cat_demos.engine import IExecutable
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.frames._client import IProvideFrames
+from seagulls.cat_demos.engine.v2.frames._client import IFrameCollection
+
+logger = logging.getLogger(__name__)
 
 
 class IScene(Protocol):
@@ -31,6 +34,10 @@ class IProvideScenes(Protocol):
     def get_scenes(self) -> Iterable[IScene]:
         pass
 
+    @abstractmethod
+    def load_scene(self, scene_id: GameSceneId) -> None:
+        pass
+
 
 class IProvideSessionState(Protocol):
     @abstractmethod
@@ -38,31 +45,52 @@ class IProvideSessionState(Protocol):
         pass
 
 
+class SceneContext:
+
+    _current: Optional[GameSceneId]
+
+    def __init__(self) -> None:
+        self._current = None
+
+    def __call__(self) -> GameSceneId:
+        return self.get()
+
+    def set(self, scene_id: GameSceneId) -> None:
+        self._current = scene_id
+
+    def get(self) -> GameSceneId:
+        if self._current is None:
+            raise RuntimeError("No active scene found")
+
+        logger.warning(f"active scene: {self._current}")
+        return self._current
+
+
 class SceneComponent(IScene):
 
     _open_callback: IExecutable
     _close_callback: IExecutable
-    _frames_provider: IProvideFrames
+    _frame_collection: IFrameCollection
 
     def __init__(
         self,
         open_callback: IExecutable,
         close_callback: IExecutable,
-        frames_provider: IProvideFrames,
+        frame_collection: IFrameCollection,
     ) -> None:
         self._open_callback = open_callback
         self._close_callback = close_callback
-        self._frames_provider = frames_provider
+        self._frame_collection = frame_collection
 
     def open_scene(self) -> None:
-        self._open_callback.execute()
+        self._open_callback()
 
     def run_scene(self) -> None:
-        for frame in self._frames_provider.items():
+        for frame in self._frame_collection.items():
             frame.process()
 
     def close_scene(self) -> None:
-        self._close_callback.execute()
+        self._close_callback()
 
 
 class IManageScenes(Protocol):
@@ -95,7 +123,7 @@ class SceneRegistry(IManageScenes):
         self._providers[scene_id] = provider
 
     def get(self, scene_id: GameSceneId) -> IScene:
-        return self._providers[scene_id].get()
+        return self._providers[scene_id]()
 
 
 class SceneProvider(NamedTuple):
@@ -107,10 +135,12 @@ class SceneClient(IProvideScenes):
 
     _next_scene: Queue[GameSceneId]
     _scene_registry: IManageScenes
+    _scene_context: SceneContext
 
-    def __init__(self, scene_registry: IManageScenes) -> None:
+    def __init__(self, scene_registry: IManageScenes, scene_context: SceneContext) -> None:
         self._next_scene = Queue(maxsize=1)
         self._scene_registry = scene_registry
+        self._scene_context = scene_context
 
     def load_scene(self, scene_id: GameSceneId) -> None:
         self._next_scene.put_nowait(scene_id)
@@ -118,7 +148,9 @@ class SceneClient(IProvideScenes):
     def get_scenes(self) -> Iterable[IScene]:
         try:
             while True:
-                yield self._scene_registry.get(self._next_scene.get_nowait())
+                scene_id = self._next_scene.get_nowait()
+                self._scene_context.set(scene_id)
+                yield self._scene_registry.get(scene_id)
         except Empty:
             pass
 

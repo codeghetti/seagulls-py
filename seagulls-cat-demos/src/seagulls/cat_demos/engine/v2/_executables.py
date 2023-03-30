@@ -1,11 +1,10 @@
 from abc import abstractmethod
-
-from typing import Protocol, Callable
+from typing import Callable, Protocol
 
 
 class IExecutable(Protocol):
     @abstractmethod
-    def execute(self) -> None:
+    def __call__(self) -> None:
         pass
 
 
@@ -16,7 +15,7 @@ class Executable(IExecutable):
     def __init__(self, cb: Callable[[], None]) -> None:
         self._cb = cb
 
-    def execute(self) -> None:
+    def __call__(self) -> None:
         self._cb()
 
 

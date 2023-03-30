@@ -1,8 +1,11 @@
+import logging
 from abc import abstractmethod
 from typing import Dict, Protocol, Set, Tuple
 
 from ._game_objects import GameObjectId, IManageGameObjects
 from ._object_components import GameComponentId, GameComponentType, ObjectComponentRegistry
+
+logger = logging.getLogger(__name__)
 
 
 class IManageGameObjectComponents(Protocol):
@@ -28,6 +31,8 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
     def add(self, entity_id: GameObjectId) -> None:
         if entity_id in self._entities:
             raise RuntimeError(f"duplicate entity found: {entity_id}")
+
+        logger.warning(f"adding object to scene: {entity_id}")
 
         self._entities[entity_id] = set()
 

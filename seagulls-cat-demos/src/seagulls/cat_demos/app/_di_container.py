@@ -1,24 +1,23 @@
 from functools import lru_cache
 
-from seagulls.seagulls_cli import SeagullsCliApplication
-
 from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._object_components import ObjectComponentRegistry
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.debugging._component import DebugComponent, DebugComponentId
 from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
-from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameEvents, FramesProvider
+from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameCollection, FrameEvents
 from seagulls.cat_demos.engine.v2.input._pygame import PygameKeyboardInputPublisher
 from seagulls.cat_demos.engine.v2.position._position_component import PositionComponent, PositionComponentId, \
     PositionObjectComponentId
 from seagulls.cat_demos.engine.v2.scenes._client import SceneClient, SceneComponent, SceneProvider, SceneRegistry
 from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
+from seagulls.seagulls_cli import SeagullsCliApplication
 from ._cli_command import GameCliCommand
 from ._cli_plugin import CatDemosCliPlugin
 from ._main_menu import CloseMainMenuScene, OpenMainMenuScene
-from ..engine.v2.components._component_registry import GameComponentRegistry
+from ..engine.v2.components._component_registry import GameComponentFactory
 
 
 class CatDemosDiContainer:
@@ -47,7 +46,7 @@ class CatDemosDiContainer:
     def _session_client(self) -> SessionClient:
         return SessionClient(
             window_client=self._window_client(),
-            scenes_collection=self._scene_client(),
+            scene_client=self._scene_client(),
         )
 
     @lru_cache()
@@ -66,15 +65,15 @@ class CatDemosDiContainer:
                             scene_objects=self._scene_objects(),
                         ),
                         close_callback=CloseMainMenuScene(),
-                        frames_provider=self._frames_provider(),
+                        frame_collection=self._frames_provider(),
                     ),
                 ),
             ),
         )
 
     @lru_cache()
-    def _frames_provider(self) -> FramesProvider:
-        return FramesProvider(frame_factory=self._frame_client_factory())
+    def _frames_provider(self) -> FrameCollection:
+        return FrameCollection(frame_factory=self._frame_client_factory())
 
     @lru_cache()
     def _frame_client_factory(self) -> ServiceProvider[FrameClient]:
@@ -115,8 +114,8 @@ class CatDemosDiContainer:
         return registry
 
     @lru_cache()
-    def _component_registry(self) -> GameComponentRegistry:
-        return GameComponentRegistry.with_providers(
+    def _component_registry(self) -> GameComponentFactory:
+        return GameComponentFactory.with_providers(
             (PositionComponentId, self._position_component),
             (DebugComponentId, self._debug_component),
         )

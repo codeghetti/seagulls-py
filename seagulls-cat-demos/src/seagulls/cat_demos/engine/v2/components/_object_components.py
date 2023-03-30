@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Any, Dict, Protocol
 
-from ._component_registry import GameComponentId, GameComponentRegistry, GameComponentType
+from ._component_registry import GameComponentFactory, GameComponentId, GameComponentType
 from ._game_objects import GameObjectId
 
 
@@ -23,10 +23,10 @@ class IObjectComponentClient(Protocol[GameComponentType]):
 
 class ObjectComponentRegistry:
 
-    _registry: GameComponentRegistry
+    _registry: GameComponentFactory
     _providers: Dict[GameComponentId[Any], GameComponentId[IObjectComponentClient]]
 
-    def __init__(self, registry: GameComponentRegistry) -> None:
+    def __init__(self, registry: GameComponentFactory) -> None:
         self._registry = registry
         self._components = {}
 
@@ -45,4 +45,4 @@ class ObjectComponentRegistry:
             print(self._components)
             raise RuntimeError(f"entity not found: {entity_id}")
 
-        return self._registry.get(self._components[entity_id])
+        return self._registry.create(self._components[entity_id])

@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
-from seagulls.cat_demos.engine.v2.frames._client import FramesProvider
+from seagulls.cat_demos.engine.v2.frames._client import FrameCollection
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents
 from seagulls.cat_demos.engine.v2.scenes._client import SceneClient
 from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
@@ -13,14 +13,14 @@ class GameCliCommand(ICliCommand):
 
     _session_client: SessionClient
     _scene_client: SceneClient
-    _frames_provider: FramesProvider
+    _frames_provider: FrameCollection
     _event_dispatcher: GameEventDispatcher
 
     def __init__(
         self,
         session_client: SessionClient,
         scene_client: SceneClient,
-        frames_provider: FramesProvider,
+        frames_provider: FrameCollection,
         event_dispatcher: GameEventDispatcher,
     ) -> None:
         self._session_client = session_client

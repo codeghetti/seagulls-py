@@ -1,12 +1,12 @@
 import logging
 from abc import abstractmethod
-from typing import Protocol
+from typing import Protocol, Tuple
 
 from seagulls.cat_demos.engine import IExecutable
 from seagulls.cat_demos.engine.v2._service_provider import provider
 from seagulls.cat_demos.engine.v2.components._component_registry import ContextualGameComponentRegistry, \
     GameComponentFactory, GameComponentId, \
-    GameComponentRegistry
+    GameComponentProvider, GameComponentRegistry, GameComponentType
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
 from seagulls.cat_demos.engine.v2.components._object_components import ObjectComponentRegistry
@@ -102,36 +102,29 @@ class OpenIndexScene(IExecutable):
 
 class Seagulls:
 
-    def create(self, config: GameComponentFactory) -> Game:
+    def create(
+        self,
+        *providers: Tuple[GameComponentId[GameComponentType], GameComponentProvider[GameComponentType]],
+    ) -> Game:
+        component_factory = GameComponentFactory.with_providers(*providers)
+
+        # Components built by this class are cached for the duration of the session
         session_components = GameComponentRegistry(
-            factory=config,
+            factory=component_factory,
         )
+        # Components built by this class are cached for the duration of the scene
         scene_components = ContextualGameComponentRegistry(
-            factory=config,
-            # Replace with call to active scene
+            factory=component_factory,
             context_provider=lambda: session_components.get(GameComponentId[SceneContext]("scene-context"))(),
         )
 
-        def open_frame() -> None:
-            print("open frame")
-            # self._pygame_input().tick()
-
-        def execute_frame() -> None:
-            print("execute frame")
-            session_components.get(GameComponentId[SceneContext]("scene-context"))()
-            # self._window_client().get_surface().fill((20, 20, 20))
-            # self._debug_component().tick()
-
-        def close_frame() -> None:
-            print("close frame")
-            # self._window_client().commit()
-        config.set_defaults(
+        component_factory.set_missing(
             (GameComponentId[SessionClient]("session-client"), lambda: SessionClient(
                 window_client=session_components.get(GameComponentId[WindowClient]("window-client")),
                 scene_client=SceneClient(
                     scene_registry=SceneRegistry.with_providers(SceneProvider(
                         GameSceneId("index"),
-                        lambda: config.get(GameComponentId[IScene]("index.scene")),
+                        lambda: component_factory.get(GameComponentId[IScene]("index.scene")),
                     )),
                     scene_context=session_components.get(GameComponentId[SceneContext]("scene-context")),
                 ),
@@ -141,9 +134,9 @@ class Seagulls:
                 close_callback=lambda: logger.warning("index scene close"),
                 frame_collection=FrameCollection(
                     provider(lambda: FrameClient(
-                        event_client=config.get(GameComponentId[GameEventDispatcher]("event-client")),
+                        event_client=component_factory.get(GameComponentId[GameEventDispatcher]("event-client")),
                         window_client=session_components.get(GameComponentId[WindowClient]("window-client")),
-                        pygame_input_client=config.get(GameComponentId[PygameKeyboardInputPublisher]("pygame-input-client")),
+                        pygame_input_client=component_factory.get(GameComponentId[PygameKeyboardInputPublisher]("pygame-input-client")),
                     ))
                 ),
             )),
@@ -159,10 +152,10 @@ class Seagulls:
                 scene_objects=scene_components.get(GameComponentId[SceneObjects]("scene-objects")),
             )),
             (GameComponentId(name='pygame-input-client'), lambda: PygameKeyboardInputPublisher(
-                event_dispatcher=config.get(GameComponentId[GameEventDispatcher]("event-client")),
+                event_dispatcher=component_factory.get(GameComponentId[GameEventDispatcher]("event-client")),
             )),
             (GameComponentId(name='scene-objects'), lambda: SceneObjects(
-                object_component_registry=config.get(
+                object_component_registry=component_factory.get(
                     GameComponentId[ObjectComponentRegistry]("object-component-registry")),
             )),
             (GameComponentId(name='window-client'), lambda: WindowClient()),
@@ -172,4 +165,4 @@ class Seagulls:
             )),
         )
 
-        return Game(config)
+        return Game(component_factory)

@@ -35,10 +35,13 @@ class GameComponentFactory:
     def __init__(self) -> None:
         self._providers = {}
 
-    def set_defaults(
+    def set_missing(
         self,
         *provider: Tuple[GameComponentId[GameComponentType], GameComponentProvider[GameComponentType]],
     ) -> None:
+        """
+
+        """
         for p in provider:
             if p[0] not in self._providers:
                 self.set(p[0], p[1])

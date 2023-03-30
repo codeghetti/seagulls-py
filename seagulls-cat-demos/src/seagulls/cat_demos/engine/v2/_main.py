@@ -1,6 +1,5 @@
 import logging
 
-from seagulls.cat_demos.engine.v2.components._component_registry import GameComponentFactory
 from seagulls.cat_demos.engine.v2.sessions._client import Seagulls
 
 # from seagulls.cat_demos.engine.v2._components import (
@@ -47,6 +46,5 @@ logger = logging.getLogger(__name__)
 #     logger.error(positionizer.get_position(player))
 
 s = Seagulls()
-c = GameComponentFactory.with_providers()
-game = s.create(c)
+game = s.create()
 game.run()

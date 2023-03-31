@@ -4,7 +4,6 @@ from typing import Protocol, Tuple
 
 import pygame
 
-from seagulls.cat_demos.engine import IExecutable
 from seagulls.cat_demos.engine.v2.components._component_registry import ContextualGameComponentRegistry, \
     GameComponentFactory, GameComponentId, \
     GameComponentProvider, GameComponentRegistry, GameComponentType
@@ -23,6 +22,7 @@ from seagulls.cat_demos.engine.v2.scenes._client import (
     SceneRegistry,
 )
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
+from ._executables import IExecutable
 
 logger = logging.getLogger(__name__)
 

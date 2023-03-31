@@ -1,9 +1,11 @@
 from functools import lru_cache
 
-from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
+from seagulls.seagulls_cli import SeagullsCliApplication
+
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._object_components import ObjectComponentRegistry
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
+from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.debugging._component import DebugComponent, DebugComponentId
 from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
 from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameCollection, FrameEvents
@@ -13,7 +15,6 @@ from seagulls.cat_demos.engine.v2.position._position_component import PositionCo
 from seagulls.cat_demos.engine.v2.scenes._client import SceneClient, SceneComponent, SceneProvider, SceneRegistry
 from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
-from seagulls.seagulls_cli import SeagullsCliApplication
 from ._cli_command import GameCliCommand
 from ._cli_plugin import CatDemosCliPlugin
 from ._main_menu import CloseMainMenuScene, OpenMainMenuScene

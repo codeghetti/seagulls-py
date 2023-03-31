@@ -2,7 +2,7 @@ from abc import abstractmethod
 from threading import Event
 from typing import Iterable, Protocol
 
-from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
+from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
 from seagulls.cat_demos.engine.v2.input._pygame import PygameKeyboardInputPublisher
 from seagulls.cat_demos.engine.v2.window._window import WindowClient

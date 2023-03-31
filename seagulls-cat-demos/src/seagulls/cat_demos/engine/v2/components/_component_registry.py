@@ -2,8 +2,8 @@ from abc import abstractmethod
 from functools import lru_cache
 from typing import Any, Dict, Generic, Protocol, Tuple, TypeVar
 
-from seagulls.cat_demos.engine.v2._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._entities import TypedEntityId
+from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 
 GameComponentType = TypeVar("GameComponentType")
 

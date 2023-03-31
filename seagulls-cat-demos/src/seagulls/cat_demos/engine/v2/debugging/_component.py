@@ -5,8 +5,8 @@ from typing import Iterable, Protocol
 
 from pygame import SRCALPHA, Surface
 
-from seagulls.cat_demos.engine.v2._size import Size
 from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
+from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.position._position_component import Position
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 

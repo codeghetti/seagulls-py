@@ -1,6 +1,6 @@
 import logging
 
-from seagulls.cat_demos.engine.v2.sessions._client import Seagulls
+from seagulls.cat_demos.engine.v2.sessions._client import SeagullsApp
 
 # from seagulls.cat_demos.engine.v2._components import (
 #     MobControlsComponent,
@@ -45,6 +45,5 @@ logger = logging.getLogger(__name__)
 #     scene.tick()
 #     logger.error(positionizer.get_position(player))
 
-s = Seagulls()
-game = s.create()
-game.run()
+app = SeagullsApp()
+app.run()

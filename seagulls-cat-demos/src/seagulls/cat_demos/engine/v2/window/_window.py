@@ -8,9 +8,6 @@ logger = logging.getLogger(__name__)
 
 class WindowClient:
 
-    def __init__(self) -> None:
-        logger.warning("init window")
-
     def open(self) -> None:
         pygame.display.set_mode((800, 800))
         pygame.display.set_caption("Cats!?")

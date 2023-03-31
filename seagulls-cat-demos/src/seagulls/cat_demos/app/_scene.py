@@ -35,9 +35,9 @@ class MainScene:
         self._scene_client.attach_component(gobject, SpriteComponentId)
         self._scene_client.attach_component(gobject, SpriteAnimationComponentId)
         components = self._scene_client.get_object_components(gobject)
-        components.create(SpriteComponentId).set_sprite(MySprites.PLAYER_IDLE_1)
+        components.run(SpriteComponentId).set_sprite(MySprites.PLAYER_IDLE_1)
 
-        animation_component = components.create(SpriteAnimationComponentId)
+        animation_component = components.run(SpriteAnimationComponentId)
         animation_component.set_animation(
             frames=[
                 MySprites.PLAYER_IDLE_1,
@@ -57,5 +57,5 @@ class MainScene:
             self._scene_client.attach_component(gobject, SpriteComponentId)
             self._scene_client.attach_component(gobject, MobControlsComponentId)
             components = self._scene_client.get_object_components(gobject)
-            components.create(SpriteComponentId).set_sprite(MySprites.ENEMY_IDLE)
-            components.create(PositionComponentId).update(position)
+            components.run(SpriteComponentId).set_sprite(MySprites.ENEMY_IDLE)
+            components.run(PositionComponentId).update(position)

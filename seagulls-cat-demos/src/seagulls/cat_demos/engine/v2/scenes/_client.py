@@ -62,7 +62,6 @@ class SceneContext:
         if self._current is None:
             raise RuntimeError("No active scene found")
 
-        logger.warning(f"active scene: {self._current}")
         return self._current
 
 

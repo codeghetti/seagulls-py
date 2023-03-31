@@ -27,7 +27,7 @@ class OpenMainMenuScene:
         self._scene_objects.add(GameObjectId("title"))
         self._scene_objects.attach_component(GameObjectId("title"), PositionObjectComponentId)
         p = self._scene_objects.get_component(GameObjectId("title"), PositionObjectComponentId)
-        print(f"title location: {p.create()}")
+        print(f"title location: {p.run()}")
 
         self._scene_objects.add(GameObjectId("game.a"))
         self._scene_objects.add(GameObjectId("game.b"))

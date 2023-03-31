@@ -98,7 +98,7 @@ class PlayerControlsComponentClient(IProvideGameObjectComponent[PlayerControlsCo
             callback=_on_move,
         )
         return PlayerControlsComponent(
-            position_component=self._position_client.create(game_object),
+            position_component=self._position_client.run(game_object),
             movement_client=movement_client,
             clock=self._clock,
             game_object=game_object

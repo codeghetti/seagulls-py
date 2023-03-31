@@ -32,7 +32,7 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
         if entity_id in self._entities:
             raise RuntimeError(f"duplicate entity found: {entity_id}")
 
-        logger.warning(f"adding object to scene: {entity_id}")
+        logger.debug(f"adding object to scene: {entity_id}")
 
         self._entities[entity_id] = set()
 

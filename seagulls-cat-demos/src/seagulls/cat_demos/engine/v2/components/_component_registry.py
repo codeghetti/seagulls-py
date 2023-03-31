@@ -19,6 +19,13 @@ class GameComponentProvider(Protocol[GameComponentType]):
         pass
 
 
+class GameComponentContainer(Protocol):
+
+    @abstractmethod
+    def get(self, entity_id: GameComponentId[GameComponentType]) -> GameComponentType:
+        pass
+
+
 class GameComponentFactory:
 
     _providers: Dict[GameComponentId[Any], GameComponentProvider[Any]]
@@ -40,7 +47,7 @@ class GameComponentFactory:
         *provider: Tuple[GameComponentId[GameComponentType], GameComponentProvider[GameComponentType]],
     ) -> None:
         """
-
+        Merge the providers into the current instance, ignoring any duplicates.
         """
         for p in provider:
             if p[0] not in self._providers:
@@ -63,7 +70,7 @@ class GameComponentFactory:
         return self._providers[entity_id]()
 
 
-class GameComponentRegistry:
+class GameComponentRegistry(GameComponentContainer):
 
     _factory: GameComponentFactory
 

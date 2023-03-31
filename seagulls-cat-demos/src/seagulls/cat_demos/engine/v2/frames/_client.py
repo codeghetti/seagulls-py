@@ -55,20 +55,20 @@ class FrameClient(IFrame):
 
     def _execute_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.EXECUTE, None))
-        self._window_client.get_surface().fill((20, 120, 20))
 
     def _close_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.CLOSE, None))
         self._window_client.commit()
 
 
-class IProvideSceneState(Protocol):
+class IStopScenes(Protocol):
+
     @abstractmethod
-    def is_open(self) -> bool:
+    def stop(self) -> None:
         pass
 
 
-class FrameCollection(IFrameCollection):
+class FrameCollection(IFrameCollection, IStopScenes):
 
     _frame_factory: ServiceProvider[IFrame]
     _stop: Event

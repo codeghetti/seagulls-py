@@ -1,4 +1,5 @@
-from typing import Any, Callable, Dict, List, NamedTuple, Optional, Tuple
+from abc import abstractmethod
+from typing import Any, Callable, Dict, List, NamedTuple, Optional, Protocol, Tuple
 
 from seagulls.cat_demos.engine.v2.components._entities import EntityType, TypedEntityId
 
@@ -12,7 +13,21 @@ class GameEvent(NamedTuple):
     payload: EntityType
 
 
-class GameEventDispatcher:
+class IGameEventDispatcher(Protocol):
+    @abstractmethod
+    def register(self, event: GameEventId[Any], callback: Callable[[], None]) -> None:
+        pass
+
+    @abstractmethod
+    def trigger(self, event: GameEvent[Any]) -> None:
+        pass
+
+    @abstractmethod
+    def event(self) -> EntityType:
+        pass
+
+
+class GameEventDispatcher(IGameEventDispatcher):
 
     _active_event: Optional[GameEvent[Any]]
     """

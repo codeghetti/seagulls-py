@@ -117,7 +117,7 @@ class SpriteComponentClient(IProvideGameObjectComponent[SpriteComponent], IManag
         return SpriteComponent(
             sprite_manager=self,
             window_client=self._window_client,
-            position_component=self._position_client.create(game_object),
+            position_component=self._position_client.run(game_object),
             game_object=game_object,
         )
 

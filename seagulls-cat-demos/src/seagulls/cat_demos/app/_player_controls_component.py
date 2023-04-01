@@ -3,11 +3,11 @@ from __future__ import annotations
 import logging
 from functools import lru_cache
 
+from seagulls.cat_demos.engine.v2._movement import MovementClient
 from seagulls.cat_demos.engine.v2._scene import IProvideGameObjectComponent
 from seagulls.cat_demos.engine.v2.input._eventing import EventType, InputEventDispatcher
 
 from seagulls.cat_demos.app._events import GameInputs, PlayerMoveEvent
-from seagulls.cat_demos.engine.v2._movement import MovementClient
 from seagulls.cat_demos.engine.v2.components._entities import EntityType
 from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
 from seagulls.cat_demos.engine.v2.components._scene_objects import GameObjectId
@@ -98,7 +98,7 @@ class PlayerControlsComponentClient(IProvideGameObjectComponent[PlayerControlsCo
             callback=_on_move,
         )
         return PlayerControlsComponent(
-            position_component=self._position_client.run(game_object),
+            position_component=self._position_client.execute(game_object),
             movement_client=movement_client,
             clock=self._clock,
             game_object=game_object

@@ -1,7 +1,8 @@
-from typing import Tuple
+from functools import lru_cache
+from typing import Any, NamedTuple, Tuple
 
 from seagulls.cat_demos.engine.v2.components._component_registry import ContextualGameComponentRegistry, \
-    GameComponentFactory, GameComponentId, \
+    GameComponentContainer, GameComponentFactory, GameComponentId, \
     GameComponentProvider, \
     GameComponentRegistry, GameComponentType
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
@@ -42,23 +43,25 @@ class SessionComponents:
     WINDOW_CLIENT = GameComponentId[WindowClient]("window-client")
 
 
+class SeagullsAppProvider(NamedTuple):
+    id: GameComponentId[Any]
+    provider: GameComponentProvider[Any]
+
+
 class SeagullsApp:
 
     def run(
         self,
         *providers: Tuple[GameComponentId[GameComponentType], GameComponentProvider[GameComponentType]],
     ) -> None:
-        component_factory = GameComponentFactory.with_providers(*providers)
-
+        component_factory = self._factory()
         # Components built by this class are cached for the duration of the session
-        session_components = GameComponentRegistry(
-            factory=component_factory,
-        )
+        session_components = self.session_components()
         # Components built by this class are cached for the duration of the scene
-        scene_components = ContextualGameComponentRegistry(
-            factory=component_factory,
-            context_provider=lambda: session_components.get(SessionComponents.SCENE_CONTEXT)(),
-        )
+        scene_components = self.scene_components()
+
+        for p in providers:
+            component_factory.set(p[0], p[1])
 
         component_factory.set_missing(
             (SessionComponents.SESSION_CLIENT, lambda: SessionClient(
@@ -109,3 +112,23 @@ class SeagullsApp:
         )
 
         session_components.get(SessionComponents.SESSION_CLIENT).execute()
+
+    @lru_cache()
+    def scene_components(self) -> GameComponentContainer:
+        return ContextualGameComponentRegistry(
+            factory=self.component_factory(),
+            context_provider=lambda: self.session_components().get(SessionComponents.SCENE_CONTEXT)(),
+        )
+
+    @lru_cache()
+    def session_components(self) -> GameComponentContainer:
+        return GameComponentRegistry(
+            factory=self.component_factory(),
+        )
+
+    def component_factory(self) -> GameComponentContainer:
+        return self._factory()
+
+    @lru_cache()
+    def _factory(self) -> GameComponentFactory:
+        return GameComponentFactory()

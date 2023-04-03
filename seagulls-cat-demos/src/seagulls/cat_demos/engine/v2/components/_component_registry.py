@@ -72,9 +72,9 @@ class GameComponentFactory:
 
 class GameComponentRegistry(GameComponentContainer):
 
-    _factory: GameComponentFactory
+    _factory: GameComponentContainer
 
-    def __init__(self, factory: GameComponentFactory) -> None:
+    def __init__(self, factory: GameComponentContainer) -> None:
         self._factory = factory
 
     @lru_cache()
@@ -87,10 +87,10 @@ T = TypeVar("T")
 
 class ContextualGameComponentRegistry(Generic[T]):
 
-    _factory: GameComponentFactory
+    _factory: GameComponentContainer
     _context_provider: ServiceProvider[T]
 
-    def __init__(self, factory: GameComponentFactory, context_provider: ServiceProvider[T]) -> None:
+    def __init__(self, factory: GameComponentContainer, context_provider: ServiceProvider[T]) -> None:
         self._factory = factory
         self._context_provider = context_provider
 

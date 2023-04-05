@@ -1,9 +1,11 @@
 import logging
 from abc import abstractmethod
-from typing import Dict, Protocol, Set, Tuple
+from functools import lru_cache
+from typing import Dict, Generic, NamedTuple, Protocol, Set, Tuple, TypeVar
 
+from ._component_containers import GameComponentContainer, GameComponentId, TypedGameComponentContainer
 from ._game_objects import GameObjectId, IManageGameObjects
-from ._object_components import GameComponentId, GameComponentType, ObjectComponentRegistry
+from ._service_provider import ServiceProvider
 
 logger = logging.getLogger(__name__)
 
@@ -18,21 +20,45 @@ class IManageGameObjectComponents(Protocol):
     def detach_component(self, entity_id: GameObjectId, component_id: GameComponentId) -> None:
         pass
 
+    @abstractmethod
+    def find_by_component(self, component_id: GameComponentId) -> Tuple[GameObjectId, ...]:
+        pass
+
+
+ComponentConfigType = TypeVar("ComponentConfigType", bound=NamedTuple)
+
+
+class ObjectComponent(Generic[ComponentConfigType]):
+
+    _context: ServiceProvider[GameObjectId]
+    _configs: Dict[GameObjectId, ComponentConfigType]
+
+    def __init__(
+        self,
+        context: ServiceProvider[GameObjectId],
+    ) -> None:
+        self._context = context
+        self._configs = {}
+
+    def get(self) -> ComponentConfigType:
+        return self._configs[self._context()]
+
+    def set(self, config: ComponentConfigType) -> None:
+        self._configs[self._context()] = config
+
 
 class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
 
-    _object_component_registry: ObjectComponentRegistry
+    _container: TypedGameComponentContainer[ObjectComponent]
     _entities: Dict[GameObjectId, Set[GameComponentId]]
 
-    def __init__(self, object_component_registry: ObjectComponentRegistry) -> None:
-        self._object_component_registry = object_component_registry
+    def __init__(self, container: GameComponentContainer) -> None:
+        self._container = container
         self._entities = {}
 
     def add(self, entity_id: GameObjectId) -> None:
         if entity_id in self._entities:
             raise RuntimeError(f"duplicate entity found: {entity_id}")
-
-        logger.debug(f"adding object to scene: {entity_id}")
 
         self._entities[entity_id] = set()
 
@@ -41,9 +67,6 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
             raise RuntimeError(f"entity not found: {entity_id}")
 
         del self._entities[entity_id]
-
-    def clear(self) -> None:
-        self._entities.clear()
 
     def get(self) -> Tuple[GameObjectId, ...]:
         return tuple(self._entities.keys())
@@ -56,7 +79,6 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
             raise RuntimeError(f"duplicate component found: {component_id}")
 
         self._entities[entity_id].add(component_id)
-        self._object_component_registry.get(component_id).attach_object_component(entity_id)
 
     def detach_component(self, entity_id: GameObjectId, component_id: GameComponentId) -> None:
         if entity_id not in self._entities:
@@ -66,11 +88,19 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
             raise RuntimeError(f"component not found: {component_id}")
 
         self._entities[entity_id].remove(component_id)
-        self._object_component_registry.get(component_id).detach_object_component(entity_id)
 
-    def get_component(
+    @lru_cache()
+    def open_component(
         self,
         entity_id: GameObjectId,
-        component_id: GameComponentId[GameComponentType],
-    ) -> GameComponentType:
-        return self._object_component_registry.get(component_id).get_object_component(entity_id)
+        component_id: GameComponentId[ComponentConfigType],
+    ) -> ObjectComponent[ComponentConfigType]:
+        return ObjectComponent(context=lambda: entity_id)
+
+    def find_by_component(self, component_id: GameComponentId) -> Tuple[GameObjectId, ...]:
+        result = []
+        for e, cs in self._entities.items():
+            if component_id in cs:
+                result.append(e)
+
+        return tuple(result)

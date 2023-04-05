@@ -1,13 +1,13 @@
 import logging
 
-import pygame
-
+from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
-from seagulls.cat_demos.engine.v2.frames._client import FrameEvents
+from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp, SessionComponents
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
+from seagulls.cat_demos.engine.v2.text._component import Text
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 logger = logging.getLogger(__name__)
@@ -30,19 +30,32 @@ class OpenScene(IExecutable):
 
     def __call__(self) -> None:
         logger.debug("index scene open")
-        self._scene_event_client.register(FrameEvents.EXECUTE, self._tick)
         self._scene_objects.add(GameObjectId("hello-world"))
-        # self._scene_objects.attach_component(
-        #     GameObjectId("hello-world"),
-        #     GameComponentId("text.scene-component"),
-        # )
 
-    def _tick(self) -> None:
-        f = pygame.font.SysFont("monospace", 75)
-        text = f.render("Hello, New World!", True, (0, 0, 0))
-        surface = self._window_client.get_surface()
-        surface.fill((20, 120, 20))
-        surface.blit(text, (20, 20))
+        self._add_position()
+        self._add_text()
+
+    def _add_position(self):
+        self._scene_objects.attach_component(
+            GameObjectId("hello-world"),
+            GameComponentId[Position]("position.object-component"),
+        )
+        component = self._scene_objects.open_component(
+            GameObjectId("hello-world"),
+            GameComponentId[Position]("position.object-component"),
+        )
+        component.set(Position(x=5, y=20))
+
+    def _add_text(self):
+        self._scene_objects.attach_component(
+            GameObjectId("hello-world"),
+            GameComponentId[Text]("text.object-component"),
+        )
+        component = self._scene_objects.open_component(
+            GameObjectId("hello-world"),
+            GameComponentId[Text]("text.object-component"),
+        )
+        component.set(Text("Hello, Hello, Hello!"))
 
 
 app = SeagullsApp()
@@ -53,7 +66,7 @@ scene_components = app.scene_components()
 
 app.run(
     (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenScene(
-        scene_objects=scene_components.get(SessionComponents.SESSION_OBJECTS),
+        scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
         scene_event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
         window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
     ))

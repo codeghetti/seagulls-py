@@ -1,15 +1,14 @@
 from functools import lru_cache
 from typing import Any, NamedTuple, Tuple
 
-from seagulls.cat_demos.engine.v2.components._component_registry import ContextualGameComponentRegistry, \
-    GameComponentContainer, GameComponentFactory, GameComponentId, \
+from seagulls.cat_demos.engine.v2.components._component_containers import ContextualGameComponentRegistry, \
+    FilteredGameComponentRegistry, GameComponentContainer, GameComponentFactory, GameComponentId, \
     GameComponentProvider, \
     GameComponentRegistry, GameComponentType
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.components._object_components import ObjectComponentRegistry
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
-from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameCollection
+from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameCollection, FrameEvents
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameKeyboardInputPublisher
 from seagulls.cat_demos.engine.v2.scenes._client import IScene, SceneClient, SceneComponent, SceneContext, \
     SceneProvider, SceneRegistry
@@ -17,6 +16,7 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
+from ..text._component import TextComponent
 
 
 class SessionComponents:
@@ -28,7 +28,7 @@ class SessionComponents:
     INDEX_OPEN_EXECUTABLE = GameComponentId[OpenIndexScene]("index-scene:open.executable")
     INDEX_CLOSE_EXECUTABLE = GameComponentId[OpenIndexScene]("index-scene:close.executable")
 
-    OBJECT_COMPONENT_REGISTRY = GameComponentId[ObjectComponentRegistry]("object-component-registry")
+    OBJECT_COMPONENT_CONTAINER = GameComponentId[GameComponentContainer]("object-component-registry")
 
     PYGAME_INPUT_CLIENT = GameComponentId[PygameKeyboardInputPublisher]("pygame-input-client")
 
@@ -38,9 +38,10 @@ class SessionComponents:
     SCENE_OBJECTS = GameComponentId[SceneObjects]("scene-objects")
 
     SESSION_CLIENT = GameComponentId[SessionClient]("session-client")
-    SESSION_OBJECTS = GameComponentId[SceneObjects]("scene-objects")
 
     WINDOW_CLIENT = GameComponentId[WindowClient]("window-client")
+
+    TEXT_COMPONENT = GameComponentId[TextComponent]("text-component")
 
 
 class SeagullsAppProvider(NamedTuple):
@@ -86,7 +87,7 @@ class SeagullsApp:
                 pygame_input_client=component_factory.get(SessionComponents.PYGAME_INPUT_CLIENT),
             ))),
             (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenIndexScene(
-                scene_objects=scene_components.get(SessionComponents.SESSION_OBJECTS),
+                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
                 scene_event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                 window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
             )),
@@ -94,17 +95,26 @@ class SeagullsApp:
             (SessionComponents.PYGAME_INPUT_CLIENT, lambda: PygameKeyboardInputPublisher(
                 event_dispatcher=component_factory.get(SessionComponents.EVENT_CLIENT),
             )),
-            (SessionComponents.SESSION_OBJECTS, lambda: SceneObjects(
-                object_component_registry=component_factory.get(
-                    SessionComponents.OBJECT_COMPONENT_REGISTRY),
+            (SessionComponents.TEXT_COMPONENT, lambda: TextComponent(
+                objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+                window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
+            )),
+            (SessionComponents.SCENE_OBJECTS, lambda: SceneObjects(
+                container=component_factory.get(
+                    SessionComponents.OBJECT_COMPONENT_CONTAINER),
             )),
             (SessionComponents.WINDOW_CLIENT, lambda: WindowClient()),
             (SessionComponents.SCENE_CONTEXT, lambda: SceneContext()),
-            (SessionComponents.OBJECT_COMPONENT_REGISTRY, lambda: ObjectComponentRegistry(
-                registry=GameComponentFactory(),
+            # TODO: add a filter to this container
+            (SessionComponents.OBJECT_COMPONENT_CONTAINER, lambda: FilteredGameComponentRegistry(
+                container=scene_components,
+                context=lambda: [
+                    GameComponentId("object-position"),
+                ],
             )),
             (SessionComponents.EVENT_CLIENT, lambda: GameEventDispatcher.with_callbacks(
                 (PygameEvents.QUIT, session_components.get(SessionComponents.QUIT_GAME_EXECUTABLE)),
+                (FrameEvents.CLOSE, scene_components.get(SessionComponents.TEXT_COMPONENT).render_objects),
             )),
             (SessionComponents.QUIT_GAME_EXECUTABLE, lambda: QuitGameExecutable(
                 stop=scene_components.get(SessionComponents.FRAME_COLLECTION)
@@ -116,8 +126,8 @@ class SeagullsApp:
     @lru_cache()
     def scene_components(self) -> GameComponentContainer:
         return ContextualGameComponentRegistry(
-            factory=self.component_factory(),
-            context_provider=lambda: self.session_components().get(SessionComponents.SCENE_CONTEXT)(),
+            container=self.component_factory(),
+            context=lambda: self.session_components().get(SessionComponents.SCENE_CONTEXT)(),
         )
 
     @lru_cache()

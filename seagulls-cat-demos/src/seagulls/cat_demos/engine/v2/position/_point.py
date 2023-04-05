@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import NamedTuple
+from typing import NamedTuple, TypeAlias
 
 
 class Point(NamedTuple):
@@ -16,3 +16,6 @@ class Point(NamedTuple):
     @classmethod
     def zero(cls) -> Point:
         return cls(0.0, 0.0)
+
+
+Position: TypeAlias = Point

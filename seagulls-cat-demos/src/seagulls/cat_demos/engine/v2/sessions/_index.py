@@ -32,10 +32,6 @@ class OpenIndexScene(IExecutable):
         logger.debug("index scene open")
         self._scene_event_client.register(FrameEvents.EXECUTE, self._tick)
         self._scene_objects.add(GameObjectId("hello-world"))
-        # self._scene_objects.attach_component(
-        #     GameObjectId("hello-world"),
-        #     GameComponentId("text.scene-component"),
-        # )
 
     def _tick(self) -> None:
         f = pygame.font.SysFont("monospace", 75)

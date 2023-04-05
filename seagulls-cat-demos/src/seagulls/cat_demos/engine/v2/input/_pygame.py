@@ -5,8 +5,7 @@ from typing import NamedTuple
 import pygame
 
 from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
-from seagulls.cat_demos.engine.v2.position._point import Point
-from seagulls.cat_demos.engine.v2.position._position_component import Position
+from seagulls.cat_demos.engine.v2.position._point import Point, Position
 
 logger = logging.getLogger(__name__)
 

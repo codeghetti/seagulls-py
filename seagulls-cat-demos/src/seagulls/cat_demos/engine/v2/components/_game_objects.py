@@ -16,9 +16,5 @@ class IManageGameObjects(Protocol):
         pass
 
     @abstractmethod
-    def clear(self) -> None:
-        pass
-
-    @abstractmethod
     def get(self) -> Iterable[GameObjectId]:
         pass

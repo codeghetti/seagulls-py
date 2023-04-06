@@ -3,7 +3,9 @@ from __future__ import annotations
 from typing import NamedTuple
 
 import pygame
+from pygame.font import Font
 
+from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -12,6 +14,9 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 class Text(NamedTuple):
     value: str
+    font: GameComponentId[Font]
+    size: int
+    color: Color
 
 
 class TextComponent:

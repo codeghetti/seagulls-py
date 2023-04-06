@@ -16,7 +16,10 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
+from ..components._prefabs import PrefabClient
+from ..position._prefab import PositionPrefab
 from ..text._component import TextComponent
+from ..text._prefab import TextPrefab
 
 
 class SessionComponents:
@@ -40,8 +43,11 @@ class SessionComponents:
     SESSION_CLIENT = GameComponentId[SessionClient]("session-client")
 
     WINDOW_CLIENT = GameComponentId[WindowClient]("window-client")
+    PREFAB_CLIENT = GameComponentId[PrefabClient]("prefab-client")
 
     TEXT_COMPONENT = GameComponentId[TextComponent]("text-component")
+    TEXT_PREFAB = GameComponentId[TextPrefab]("prefab.text-component")
+    POSITION_PREFAB = GameComponentId[PositionPrefab]("prefab.position-component")
 
 
 class SeagullsAppProvider(NamedTuple):
@@ -118,6 +124,13 @@ class SeagullsApp:
             )),
             (SessionComponents.QUIT_GAME_EXECUTABLE, lambda: QuitGameExecutable(
                 stop=scene_components.get(SessionComponents.FRAME_COLLECTION)
+            )),
+            (SessionComponents.PREFAB_CLIENT, lambda: PrefabClient(container=scene_components)),
+            (SessionComponents.TEXT_PREFAB, lambda: TextPrefab(
+                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+            )),
+            (SessionComponents.POSITION_PREFAB, lambda: PositionPrefab(
+                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
             )),
         )
 

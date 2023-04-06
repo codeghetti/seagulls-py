@@ -1,7 +1,7 @@
 import logging
 from abc import abstractmethod
 from functools import lru_cache
-from typing import Dict, Generic, NamedTuple, Protocol, Set, Tuple, TypeVar
+from typing import Any, Dict, Generic, NamedTuple, Protocol, Set, Tuple, TypeVar
 
 from ._component_containers import GameComponentContainer, GameComponentId, TypedGameComponentContainer
 from ._game_objects import GameObjectId, IManageGameObjects
@@ -51,10 +51,12 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
 
     _container: TypedGameComponentContainer[ObjectComponent]
     _entities: Dict[GameObjectId, Set[GameComponentId]]
+    _components: Dict[GameComponentId[Any], Dict[GameObjectId, ObjectComponent[Any]]]
 
     def __init__(self, container: GameComponentContainer) -> None:
         self._container = container
         self._entities = {}
+        self._components = {}
 
     def add(self, entity_id: GameObjectId) -> None:
         if entity_id in self._entities:
@@ -75,10 +77,14 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
         if entity_id not in self._entities:
             raise RuntimeError(f"entity not found: {entity_id}")
 
-        if component_id in self._entities:
+        if component_id in self._entities[entity_id]:
             raise RuntimeError(f"duplicate component found: {component_id}")
 
         self._entities[entity_id].add(component_id)
+
+        if component_id not in self._components:
+            self._components[component_id] = {}
+        self._components[component_id][entity_id] = ObjectComponent(context=lambda: entity_id)
 
     def detach_component(self, entity_id: GameObjectId, component_id: GameComponentId) -> None:
         if entity_id not in self._entities:
@@ -95,7 +101,7 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
         entity_id: GameObjectId,
         component_id: GameComponentId[ComponentConfigType],
     ) -> ObjectComponent[ComponentConfigType]:
-        return ObjectComponent(context=lambda: entity_id)
+        return self._components[component_id][entity_id]
 
     def find_by_component(self, component_id: GameComponentId) -> Tuple[GameObjectId, ...]:
         result = []

@@ -18,6 +18,8 @@ from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
 from ..components._prefabs import PrefabClient
 from ..position._prefab import PositionPrefab
+from ..sprites._component import SpriteComponent
+from ..sprites._sprite_prefab import SpritePrefab
 from ..text._component import TextComponent
 from ..text._prefab import TextPrefab
 
@@ -48,6 +50,8 @@ class SessionComponents:
     TEXT_COMPONENT = GameComponentId[TextComponent]("text-component")
     TEXT_PREFAB = GameComponentId[TextPrefab]("prefab.text-component")
     POSITION_PREFAB = GameComponentId[PositionPrefab]("prefab.position-component")
+    SPRITE_COMPONENT = GameComponentId[SpriteComponent]("sprite-component")
+    SPRITE_PREFAB = GameComponentId[SpritePrefab]("prefab.sprite-component")
 
 
 class SeagullsAppProvider(NamedTuple):
@@ -105,6 +109,11 @@ class SeagullsApp:
                 objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
                 window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
             )),
+            (SessionComponents.SPRITE_COMPONENT, lambda: SpriteComponent(
+                objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+                container=session_components,
+                window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
+            )),
             (SessionComponents.SCENE_OBJECTS, lambda: SceneObjects(
                 container=component_factory.get(
                     SessionComponents.OBJECT_COMPONENT_CONTAINER),
@@ -121,12 +130,16 @@ class SeagullsApp:
             (SessionComponents.EVENT_CLIENT, lambda: GameEventDispatcher.with_callbacks(
                 (PygameEvents.QUIT, session_components.get(SessionComponents.QUIT_GAME_EXECUTABLE)),
                 (FrameEvents.CLOSE, scene_components.get(SessionComponents.TEXT_COMPONENT).render_objects),
+                (FrameEvents.CLOSE, scene_components.get(SessionComponents.SPRITE_COMPONENT).render_objects),
             )),
             (SessionComponents.QUIT_GAME_EXECUTABLE, lambda: QuitGameExecutable(
                 stop=scene_components.get(SessionComponents.FRAME_COLLECTION)
             )),
             (SessionComponents.PREFAB_CLIENT, lambda: PrefabClient(container=scene_components)),
             (SessionComponents.TEXT_PREFAB, lambda: TextPrefab(
+                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+            )),
+            (SessionComponents.SPRITE_PREFAB, lambda: SpritePrefab(
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
             )),
             (SessionComponents.POSITION_PREFAB, lambda: PositionPrefab(

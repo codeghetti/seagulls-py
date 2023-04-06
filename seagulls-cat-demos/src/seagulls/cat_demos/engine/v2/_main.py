@@ -1,5 +1,6 @@
 import logging
 
+from pygame import Surface
 from pygame.font import Font
 
 from seagulls.cat_demos.engine.v2.components._color import Color
@@ -7,11 +8,14 @@ from seagulls.cat_demos.engine.v2.components._component_containers import GameCo
 from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import GamePrefabId, PrefabClient
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
+from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.position._prefab import PositionConfig
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp, SessionComponents
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
+from seagulls.cat_demos.engine.v2.sprites._component import Sprite
+from seagulls.cat_demos.engine.v2.sprites._sprite_prefab import SpriteConfig
 from seagulls.cat_demos.engine.v2.text._component import Text
 from seagulls.cat_demos.engine.v2.text._prefab import TextConfig
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
@@ -47,6 +51,7 @@ class OpenScene(IExecutable):
                 object_id=hello_world,
                 position=Position(20, 400),
             ))
+
         self._prefab_client.run(
             prefab_id=GamePrefabId[TextConfig]("prefab.text-component"),
             config=TextConfig(
@@ -59,12 +64,29 @@ class OpenScene(IExecutable):
                 ),
             ))
 
+        self._prefab_client.run(
+            prefab_id=GamePrefabId[SpriteConfig]("prefab.sprite-component"),
+            config=SpriteConfig(
+                object_id=hello_world,
+                sprite=Sprite(
+                    sprite_id=GameComponentId[Surface]("sprite.player"),
+                    size=1,
+                ),
+            ))
+
 
 app = SeagullsApp()
 
 component_factory = app.component_factory()
 session_components = app.session_components()
 scene_components = app.scene_components()
+
+
+def player() -> Surface:
+    s = Surface(Size(10, 10))
+    s.fill(Color(red=100, green=100, blue=150))
+    return s
+
 
 app.run(
     (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenScene(
@@ -73,4 +95,5 @@ app.run(
         window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
         prefab_client=session_components.get(SessionComponents.PREFAB_CLIENT),
     )),
+    (GameComponentId[Surface]("sprite.player"), lambda: player()),
 )

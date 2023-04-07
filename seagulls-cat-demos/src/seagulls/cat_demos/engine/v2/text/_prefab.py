@@ -20,7 +20,7 @@ class TextPrefab(PrefabProvider[TextConfig]):
         self._scene_objects = scene_objects
 
     def __call__(self, config: TextConfig) -> None:
-        component_id = GameComponentId[Text]("text.object-component")
+        component_id = GameComponentId[Text]("object-component::text")
 
         self._scene_objects.attach_component(
             entity_id=config.object_id,

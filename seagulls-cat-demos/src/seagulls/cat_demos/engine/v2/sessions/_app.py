@@ -18,7 +18,9 @@ from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
 from ..components._prefabs import PrefabClient
 from ..position._prefab import PositionPrefab
-from ..sprites._component import SpriteComponent
+from ..resources._resources_client import ResourceClient
+from ..sprites._sprite_component import SpriteComponent
+from ..sprites._sprite_container import SpriteContainer
 from ..sprites._sprite_prefab import SpritePrefab
 from ..text._component import TextComponent
 from ..text._prefab import TextPrefab
@@ -50,6 +52,9 @@ class SessionComponents:
     TEXT_COMPONENT = GameComponentId[TextComponent]("text-component")
     TEXT_PREFAB = GameComponentId[TextPrefab]("prefab.text-component")
     POSITION_PREFAB = GameComponentId[PositionPrefab]("prefab.position-component")
+    RESOURCE_CLIENT = GameComponentId[ResourceClient]("resource-client")
+
+    SPRITE_CONTAINER = GameComponentId[SpriteContainer]("sprite-container")
     SPRITE_COMPONENT = GameComponentId[SpriteComponent]("sprite-component")
     SPRITE_PREFAB = GameComponentId[SpritePrefab]("prefab.sprite-component")
 
@@ -113,6 +118,7 @@ class SeagullsApp:
                 objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
                 container=session_components,
                 window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
+                resource_client=session_components.get(SessionComponents.RESOURCE_CLIENT),
             )),
             (SessionComponents.SCENE_OBJECTS, lambda: SceneObjects(
                 container=component_factory.get(
@@ -144,6 +150,10 @@ class SeagullsApp:
             )),
             (SessionComponents.POSITION_PREFAB, lambda: PositionPrefab(
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+            )),
+            (SessionComponents.RESOURCE_CLIENT, lambda: ResourceClient()),
+            (SessionComponents.SPRITE_CONTAINER, lambda: SpriteContainer(
+                container=session_components,
             )),
         )
 

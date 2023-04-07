@@ -20,7 +20,7 @@ class PositionPrefab(PrefabProvider[PositionConfig]):
         self._scene_objects = scene_objects
 
     def __call__(self, config: PositionConfig) -> None:
-        component_id = GameComponentId[Position]("position.object-component")
+        component_id = GameComponentId[Position]("object-component::position")
 
         self._scene_objects.attach_component(
             entity_id=config.object_id,

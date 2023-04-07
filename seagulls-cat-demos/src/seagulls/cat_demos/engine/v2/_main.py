@@ -14,8 +14,8 @@ from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.position._prefab import PositionConfig
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp, SessionComponents
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
-from seagulls.cat_demos.engine.v2.sprites._component import Sprite
-from seagulls.cat_demos.engine.v2.sprites._sprite_prefab import SpriteConfig
+from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, SpriteSource
+from seagulls.cat_demos.engine.v2.sprites._sprite_prefab import SpritePrefabRequest
 from seagulls.cat_demos.engine.v2.text._component import Text
 from seagulls.cat_demos.engine.v2.text._prefab import TextConfig
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
@@ -65,13 +65,10 @@ class OpenScene(IExecutable):
             ))
 
         self._prefab_client.run(
-            prefab_id=GamePrefabId[SpriteConfig]("prefab.sprite-component"),
-            config=SpriteConfig(
+            prefab_id=GamePrefabId[SpritePrefabRequest]("prefab.sprite-component"),
+            config=SpritePrefabRequest(
                 object_id=hello_world,
-                sprite=Sprite(
-                    sprite_id=GameComponentId[Surface]("sprite.player"),
-                    size=1,
-                ),
+                sprite=Sprite(sprite_id=GameComponentId[Surface]("sprite::player")),
             ))
 
 
@@ -95,5 +92,11 @@ app.run(
         window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
         prefab_client=session_components.get(SessionComponents.PREFAB_CLIENT),
     )),
-    (GameComponentId[Surface]("sprite.player"), lambda: player()),
+    (GameComponentId[Surface]("sprite::player"), lambda: scene_components.get(
+        SessionComponents.SPRITE_COMPONENT,
+    ).create_surface(SpriteSource(
+        image_name="kenney.tiny-dungeon/tilemap-packed",
+        coordinates=Position(x=16, y=16*7),
+        size=Size(16, 16),
+    ))),
 )

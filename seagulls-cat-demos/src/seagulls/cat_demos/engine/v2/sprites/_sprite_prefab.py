@@ -4,23 +4,24 @@ from seagulls.cat_demos.engine.v2.components._component_containers import GameCo
 from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import PrefabProvider
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
-from seagulls.cat_demos.engine.v2.sprites._component import Sprite
+from ._sprite_component import Sprite
 
 
-class SpriteConfig(NamedTuple):
+class SpritePrefabRequest(NamedTuple):
     object_id: GameObjectId
     sprite: Sprite
 
 
-class SpritePrefab(PrefabProvider[SpriteConfig]):
+class SpritePrefab(PrefabProvider[SpritePrefabRequest]):
 
     _scene_objects: SceneObjects
 
     def __init__(self, scene_objects: SceneObjects) -> None:
         self._scene_objects = scene_objects
 
-    def __call__(self, config: SpriteConfig) -> None:
-        component_id = GameComponentId[Sprite]("sprite.object-component")
+    def __call__(self, config: SpritePrefabRequest) -> None:
+        # Sprite is the component config type
+        component_id = GameComponentId[Sprite]("object-component::sprite")
 
         self._scene_objects.attach_component(
             entity_id=config.object_id,

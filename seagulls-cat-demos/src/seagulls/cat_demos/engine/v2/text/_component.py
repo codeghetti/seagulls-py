@@ -29,10 +29,10 @@ class TextComponent:
         self._window_client = window_client
 
     def render_objects(self) -> None:
-        for object_id in self._objects.find_by_component(GameComponentId[Text]("text.object-component")):
-            text_component = self._objects.open_component(object_id, GameComponentId[Text]("text.object-component"))
+        for object_id in self._objects.find_by_component(GameComponentId[Text]("object-component::text")):
+            text_component = self._objects.open_component(object_id, GameComponentId[Text]("object-component::text"))
             position_component = self._objects.open_component(
-                object_id, GameComponentId[Position]("position.object-component"),
+                object_id, GameComponentId[Position]("object-component::position"),
             )
             f = pygame.font.SysFont("monospace", 55)
             text = f.render(text_component.get().value, True, (80, 80, 200))

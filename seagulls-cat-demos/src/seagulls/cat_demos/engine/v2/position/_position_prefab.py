@@ -2,7 +2,7 @@ from typing import NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
-from seagulls.cat_demos.engine.v2.components._prefabs import PrefabProvider
+from seagulls.cat_demos.engine.v2.components._prefabs import IExecutablePrefab
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.position._point import Position
 
@@ -12,7 +12,7 @@ class PositionConfig(NamedTuple):
     position: Position
 
 
-class PositionPrefab(PrefabProvider[PositionConfig]):
+class PositionPrefab(IExecutablePrefab[PositionConfig]):
 
     _scene_objects: SceneObjects
 

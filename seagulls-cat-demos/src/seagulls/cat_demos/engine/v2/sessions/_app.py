@@ -16,8 +16,8 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
-from ..components._prefabs import PrefabClient
-from ..position._prefab import PositionPrefab
+from ..components._prefabs import GameObjectPrefab, PrefabClient
+from ..position._position_prefab import PositionPrefab
 from ..resources._resources_client import ResourceClient
 from ..sprites._sprite_component import SpriteComponent, SpriteSource
 from ..sprites._sprite_container import SpriteContainer
@@ -57,6 +57,7 @@ class SessionComponents:
     SPRITE_CONTAINER = GameComponentId[SpriteContainer]("sprite-container")
     SPRITE_COMPONENT = GameComponentId[SpriteComponent]("sprite-component")
     SPRITE_PREFAB = GameComponentId[SpritePrefab]("prefab.sprite-component")
+    OBJECT_PREFAB = GameComponentId[GameObjectPrefab]("prefab.game-object")
 
 
 class SeagullsAppProvider(NamedTuple):
@@ -146,6 +147,9 @@ class SeagullsApp:
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
             )),
             (SessionComponents.SPRITE_PREFAB, lambda: SpritePrefab(
+                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+            )),
+            (SessionComponents.OBJECT_PREFAB, lambda: GameObjectPrefab(
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
             )),
             (SessionComponents.POSITION_PREFAB, lambda: PositionPrefab(

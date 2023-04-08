@@ -2,7 +2,7 @@ from typing import NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
-from seagulls.cat_demos.engine.v2.components._prefabs import PrefabProvider
+from seagulls.cat_demos.engine.v2.components._prefabs import IExecutablePrefab
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from ._sprite_component import Sprite
 
@@ -12,7 +12,7 @@ class SpritePrefabRequest(NamedTuple):
     sprite: Sprite
 
 
-class SpritePrefab(PrefabProvider[SpritePrefabRequest]):
+class SpritePrefab(IExecutablePrefab[SpritePrefabRequest]):
 
     _scene_objects: SceneObjects
 

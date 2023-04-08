@@ -11,7 +11,7 @@ from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp, SessionComponents
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
-from seagulls.cat_demos.engine.v2.sprites._sprite_component import SpriteId, SpriteSource
+from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, SpriteId, SpriteSource
 from seagulls.cat_demos.engine.v2.text._component import Text
 
 logger = logging.getLogger(__name__)

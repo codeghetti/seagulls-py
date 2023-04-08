@@ -19,7 +19,7 @@ from ._index import CloseIndexScene, OpenIndexScene
 from ..components._prefabs import PrefabClient
 from ..position._prefab import PositionPrefab
 from ..resources._resources_client import ResourceClient
-from ..sprites._sprite_component import SpriteComponent
+from ..sprites._sprite_component import SpriteComponent, SpriteSource
 from ..sprites._sprite_container import SpriteContainer
 from ..sprites._sprite_prefab import SpritePrefab
 from ..text._component import TextComponent
@@ -116,9 +116,9 @@ class SeagullsApp:
             )),
             (SessionComponents.SPRITE_COMPONENT, lambda: SpriteComponent(
                 objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
-                container=session_components,
                 window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
                 resource_client=session_components.get(SessionComponents.RESOURCE_CLIENT),
+                sprite_sources=session_components.get(GameComponentId[Tuple[SpriteSource, ...]]("sprite-sources")),
             )),
             (SessionComponents.SCENE_OBJECTS, lambda: SceneObjects(
                 container=component_factory.get(

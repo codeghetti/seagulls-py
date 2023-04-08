@@ -1,6 +1,6 @@
 import logging
+from typing import Tuple
 
-from pygame import Surface
 from pygame.font import Font
 
 from seagulls.cat_demos.engine.v2.components._color import Color
@@ -14,7 +14,7 @@ from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.position._prefab import PositionConfig
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp, SessionComponents
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
-from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, SpriteSource
+from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, SpriteId, SpriteSource
 from seagulls.cat_demos.engine.v2.sprites._sprite_prefab import SpritePrefabRequest
 from seagulls.cat_demos.engine.v2.text._component import Text
 from seagulls.cat_demos.engine.v2.text._prefab import TextConfig
@@ -68,7 +68,7 @@ class OpenScene(IExecutable):
             prefab_id=GamePrefabId[SpritePrefabRequest]("prefab.sprite-component"),
             config=SpritePrefabRequest(
                 object_id=hello_world,
-                sprite=Sprite(sprite_id=GameComponentId[Surface]("sprite::player")),
+                sprite=Sprite(sprite_id=SpriteId("player")),
             ))
 
 
@@ -78,13 +78,6 @@ component_factory = app.component_factory()
 session_components = app.session_components()
 scene_components = app.scene_components()
 
-
-def player() -> Surface:
-    s = Surface(Size(10, 10))
-    s.fill(Color(red=100, green=100, blue=150))
-    return s
-
-
 app.run(
     (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenScene(
         scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
@@ -92,11 +85,12 @@ app.run(
         window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
         prefab_client=session_components.get(SessionComponents.PREFAB_CLIENT),
     )),
-    (GameComponentId[Surface]("sprite::player"), lambda: scene_components.get(
-        SessionComponents.SPRITE_COMPONENT,
-    ).create_surface(SpriteSource(
-        image_name="kenney.tiny-dungeon/tilemap-packed",
-        coordinates=Position(x=16, y=16*7),
-        size=Size(16, 16),
-    ))),
+    (GameComponentId[Tuple[SpriteSource, ...]]("sprite-sources"), lambda: tuple([
+        SpriteSource(
+            sprite_id=SpriteId("player"),
+            image_name="kenney.tiny-dungeon/tilemap-packed",
+            coordinates=Position(x=16, y=16*7),
+            size=Size(16, 16),
+        ),
+    ])),
 )

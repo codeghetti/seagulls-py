@@ -1,6 +1,5 @@
 import logging
 from abc import abstractmethod
-from functools import lru_cache
 from typing import Any, Dict, Generic, NamedTuple, Protocol, Set, Tuple, TypeVar
 
 from ._component_containers import GameComponentContainer, GameComponentId, TypedGameComponentContainer
@@ -95,13 +94,20 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
 
         self._entities[entity_id].remove(component_id)
 
-    @lru_cache()
-    def open_component(
-        self,
-        entity_id: GameObjectId,
-        component_id: GameComponentId[ComponentConfigType],
-    ) -> ObjectComponent[ComponentConfigType]:
-        return self._components[component_id][entity_id]
+    def set_component(
+            self,
+            entity_id: GameObjectId,
+            component_id: GameComponentId[ComponentConfigType],
+            config: ComponentConfigType,
+    ) -> None:
+        self._components[component_id][entity_id].set(config)
+
+    def get_component(
+            self,
+            entity_id: GameObjectId,
+            component_id: GameComponentId[ComponentConfigType],
+    ) -> ComponentConfigType:
+        return self._components[component_id][entity_id].get()
 
     def find_by_component(self, component_id: GameComponentId) -> Tuple[GameObjectId, ...]:
         result = []

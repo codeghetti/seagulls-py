@@ -2,6 +2,7 @@ from abc import abstractmethod
 from threading import Event
 from typing import Iterable, Protocol
 
+from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
 from seagulls.cat_demos.engine.v2.input._pygame import PygameKeyboardInputPublisher
@@ -51,6 +52,7 @@ class FrameClient(IFrame):
 
     def _open_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.OPEN, None))
+        self._window_client.get_surface().fill(Color(0, 0, 0))
         self._pygame_input_client.tick()
 
     def _execute_frame(self) -> None:

@@ -4,7 +4,7 @@ from seagulls.cat_demos.engine.v2.components._component_containers import GameCo
 from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import IExecutablePrefab
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
-from seagulls.cat_demos.engine.v2.text._component import Text
+from seagulls.cat_demos.engine.v2.text._text_component import Text
 
 
 class TextConfig(NamedTuple):

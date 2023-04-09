@@ -54,8 +54,8 @@ class GameObjectPrefab(IExecutablePrefab[GameObjectConfig]):
                 component_id=component_config.component_id,
             )
 
-            component = self._scene_objects.open_component(
+            self._scene_objects.set_component(
                 entity_id=config.object_id,
                 component_id=component_config.component_id,
+                config=component_config.config,
             )
-            component.set(component_config.config)

@@ -11,7 +11,7 @@ from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
 from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameCollection, FrameEvents
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameKeyboardInputPublisher
 from seagulls.cat_demos.engine.v2.scenes._client import IScene, SceneClient, SceneComponent, SceneContext, \
-    SceneProvider, SceneRegistry
+    SceneEvents, SceneProvider, SceneRegistry
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
@@ -22,8 +22,8 @@ from ..resources._resources_client import ResourceClient
 from ..sprites._sprite_component import SpriteComponent, SpriteSource
 from ..sprites._sprite_container import SpriteContainer
 from ..sprites._sprite_prefab import SpritePrefab
-from ..text._component import TextComponent
-from ..text._prefab import TextPrefab
+from ..text._text_component import TextComponent
+from ..text._text_prefab import TextPrefab
 
 
 class SessionComponents:
@@ -93,15 +93,15 @@ class SeagullsApp:
                 first_scene=lambda: GameSceneId("index"),
             )),
             (SessionComponents.INDEX_SCENE, lambda: SceneComponent(
-                open_callback=session_components.get(SessionComponents.INDEX_OPEN_EXECUTABLE),
-                close_callback=session_components.get(SessionComponents.INDEX_CLOSE_EXECUTABLE),
                 frame_collection=scene_components.get(SessionComponents.FRAME_COLLECTION),
+                event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
             )),
             (SessionComponents.FRAME_COLLECTION, lambda: FrameCollection(lambda: FrameClient(
                 event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                 window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
                 pygame_input_client=component_factory.get(SessionComponents.PYGAME_INPUT_CLIENT),
             ))),
+            # We're overwriting this default scene
             (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenIndexScene(
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
                 scene_event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
@@ -109,7 +109,7 @@ class SeagullsApp:
             )),
             (SessionComponents.INDEX_CLOSE_EXECUTABLE, lambda: CloseIndexScene()),
             (SessionComponents.PYGAME_INPUT_CLIENT, lambda: PygameKeyboardInputPublisher(
-                event_dispatcher=component_factory.get(SessionComponents.EVENT_CLIENT),
+                event_dispatcher=scene_components.get(SessionComponents.EVENT_CLIENT),
             )),
             (SessionComponents.TEXT_COMPONENT, lambda: TextComponent(
                 objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
@@ -135,9 +135,13 @@ class SeagullsApp:
                 ],
             )),
             (SessionComponents.EVENT_CLIENT, lambda: GameEventDispatcher.with_callbacks(
-                (PygameEvents.QUIT, session_components.get(SessionComponents.QUIT_GAME_EXECUTABLE)),
-                (FrameEvents.CLOSE, scene_components.get(SessionComponents.TEXT_COMPONENT).render_objects),
-                (FrameEvents.CLOSE, scene_components.get(SessionComponents.SPRITE_COMPONENT).render_objects),
+                (PygameEvents.QUIT, lambda: session_components.get(SessionComponents.QUIT_GAME_EXECUTABLE)()),
+
+                (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
+                (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.SPRITE_COMPONENT)()),
+
+                (SceneEvents.OPEN, lambda: scene_components.get(SessionComponents.INDEX_OPEN_EXECUTABLE)()),
+                (SceneEvents.CLOSE, lambda: scene_components.get(SessionComponents.INDEX_CLOSE_EXECUTABLE)()),
             )),
             (SessionComponents.QUIT_GAME_EXECUTABLE, lambda: QuitGameExecutable(
                 stop=scene_components.get(SessionComponents.FRAME_COLLECTION)

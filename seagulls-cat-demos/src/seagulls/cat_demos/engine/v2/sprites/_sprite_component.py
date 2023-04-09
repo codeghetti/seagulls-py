@@ -11,6 +11,7 @@ from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.resources._resources_client import ResourceClient
+from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 SpriteId: TypeAlias = EntityId
@@ -27,7 +28,7 @@ class Sprite(NamedTuple):
     sprite_id: SpriteId
 
 
-class SpriteComponent:
+class SpriteComponent(IExecutable):
 
     _objects: SceneObjects
     _window_client: WindowClient
@@ -46,21 +47,20 @@ class SpriteComponent:
         self._resource_client = resource_client
         self._sprite_sources = {source.sprite_id: source for source in sprite_sources}
 
-    def render_objects(self) -> None:
+    def __call__(self) -> None:
         for object_id in self._objects.find_by_component(GameComponentId[Sprite]("object-component::sprite")):
-            sprite_component = self._objects.open_component(
+            sprite_component = self._objects.get_component(
                 object_id,
                 GameComponentId[Sprite]("object-component::sprite"),
             )
-            sprite_config = sprite_component.get()
-            sprite_surface = self._create_surface(self._sprite_sources[sprite_config.sprite_id])
+            sprite_surface = self._create_surface(self._sprite_sources[sprite_component.sprite_id])
 
-            position_component = self._objects.open_component(
+            position_component = self._objects.get_component(
                 object_id,
                 GameComponentId[Position]("object-component::position"),
             )
             surface = self._window_client.get_surface()
-            surface.blit(sprite_surface, position_component.get())
+            surface.blit(sprite_surface, position_component)
 
     def _create_surface(self, source: SpriteSource) -> Surface:
         path = self._resource_client.get_path(f"{source.image_name}.png")

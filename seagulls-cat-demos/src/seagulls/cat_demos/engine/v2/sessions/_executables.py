@@ -5,6 +5,7 @@ from seagulls.cat_demos.engine.v2.frames._client import IStopScenes
 
 
 class IExecutable(Protocol):
+
     @abstractmethod
     def __call__(self) -> None:
         pass

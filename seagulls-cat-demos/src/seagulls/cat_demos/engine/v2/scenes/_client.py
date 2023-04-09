@@ -7,8 +7,8 @@ from typing import Dict, Iterable, NamedTuple, Optional, Protocol
 
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
+from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
 from seagulls.cat_demos.engine.v2.frames._client import IFrameCollection
-from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
 
 logger = logging.getLogger(__name__)
 
@@ -16,15 +16,7 @@ logger = logging.getLogger(__name__)
 class IScene(Protocol):
 
     @abstractmethod
-    def open_scene(self) -> None:
-        pass
-
-    @abstractmethod
-    def run_scene(self) -> None:
-        pass
-
-    @abstractmethod
-    def close_scene(self) -> None:
+    def process(self) -> None:
         pass
 
 
@@ -65,31 +57,40 @@ class SceneContext:
         return self._current
 
 
+class SceneEvents:
+    OPEN: GameEventId[None] = GameEventId[None]("session.open")
+    EXECUTE: GameEventId[None] = GameEventId[None]("session.execute")
+    CLOSE: GameEventId[None] = GameEventId[None]("session.close")
+
+
 class SceneComponent(IScene):
 
-    _open_callback: IExecutable
-    _close_callback: IExecutable
     _frame_collection: IFrameCollection
+    _event_client: GameEventDispatcher
 
     def __init__(
         self,
-        open_callback: IExecutable,
-        close_callback: IExecutable,
         frame_collection: IFrameCollection,
+        event_client: GameEventDispatcher,
     ) -> None:
-        self._open_callback = open_callback
-        self._close_callback = close_callback
         self._frame_collection = frame_collection
+        self._event_client = event_client
 
-    def open_scene(self) -> None:
-        self._open_callback()
+    def process(self) -> None:
+        self._open_scene()
+        self._execute_scene()
+        self._close_scene()
 
-    def run_scene(self) -> None:
+    def _open_scene(self) -> None:
+        self._event_client.trigger(GameEvent(SceneEvents.OPEN, None))
+
+    def _execute_scene(self) -> None:
         for frame in self._frame_collection.items():
             frame.process()
+        self._event_client.trigger(GameEvent(SceneEvents.EXECUTE, None))
 
-    def close_scene(self) -> None:
-        self._close_callback()
+    def _close_scene(self) -> None:
+        self._event_client.trigger(GameEvent(SceneEvents.CLOSE, None))
 
 
 class IManageScenes(Protocol):

@@ -70,7 +70,7 @@ class GameEventDispatcher(IGameEventDispatcher):
 
         self._active_event = prev
 
-    def event(self) -> EntityType:
+    def event(self) -> GameEvent[Any]:
         if not self._active_event:
             raise RuntimeError("No active event found")
 

@@ -39,8 +39,6 @@ class SessionClient(ISession):
         self._scene_client.load_scene(self._first_scene())
 
         for scene in self._scene_client.get_scenes():
-            scene.open_scene()
-            scene.run_scene()
-            scene.close_scene()
+            scene.process()
 
         self._window_client.close()

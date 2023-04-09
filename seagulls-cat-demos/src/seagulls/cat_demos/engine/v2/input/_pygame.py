@@ -29,6 +29,18 @@ class PygameEvents:
     MOUSE_MOTION = GameEventId[PygameMouseMotionEvent](name='seagulls:pygame-input.mouse-motion')
     QUIT = GameEventId[None](name='seagulls:pygame-input.quit')
 
+    @staticmethod
+    def key(x: int) -> GameEventId[PygameKeyboardEvent]:
+        return GameEventId[PygameKeyboardEvent](name=f'seagulls:pygame-input.keyboard:{x}')
+
+    @staticmethod
+    def key_pressed(x: int) -> GameEventId[PygameKeyboardEvent]:
+        return GameEventId[PygameKeyboardEvent](name=f'seagulls:pygame-input.keyboard:{x}:pressed')
+
+    @staticmethod
+    def key_released(x: int) -> GameEventId[PygameKeyboardEvent]:
+        return GameEventId[PygameKeyboardEvent](name=f'seagulls:pygame-input.keyboard:{x}:released')
+
 
 class PygameKeyboardInputPublisher:
 
@@ -43,6 +55,20 @@ class PygameKeyboardInputPublisher:
             if event.type in [pygame.KEYDOWN, pygame.KEYUP]:
                 self._event_dispatcher.trigger(GameEvent(
                     PygameEvents.KEYBOARD,
+                    PygameKeyboardEvent(type=event.type, key=event.key),
+                ))
+                self._event_dispatcher.trigger(GameEvent(
+                    PygameEvents.key(event.key),
+                    PygameKeyboardEvent(type=event.type, key=event.key),
+                ))
+            if event.type == pygame.KEYDOWN:
+                self._event_dispatcher.trigger(GameEvent(
+                    PygameEvents.key_pressed(event.key),
+                    PygameKeyboardEvent(type=event.type, key=event.key),
+                ))
+            if event.type == pygame.KEYUP:
+                self._event_dispatcher.trigger(GameEvent(
+                    PygameEvents.key_released(event.key),
                     PygameKeyboardEvent(type=event.type, key=event.key),
                 ))
             if event.type == pygame.QUIT:

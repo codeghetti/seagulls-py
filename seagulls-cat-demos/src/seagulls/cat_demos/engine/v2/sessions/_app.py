@@ -1,29 +1,31 @@
 from functools import lru_cache
-from typing import Any, NamedTuple, Tuple
+from typing import Any, Callable, NamedTuple, Tuple, TypeAlias
 
-from seagulls.cat_demos.engine.v2.components._component_containers import ContextualGameComponentRegistry, \
-    FilteredGameComponentRegistry, GameComponentContainer, GameComponentFactory, GameComponentId, \
-    GameComponentProvider, \
-    GameComponentRegistry, GameComponentType
+from seagulls.cat_demos.engine.v2.components._component_containers import CachedGameComponentContainer, \
+    ContextualGameComponentContainer, FilteredGameComponentRegistry, GameComponentContainer, GameComponentFactory, \
+    GameComponentId, GameComponentProvider, GameComponentType
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
+from seagulls.cat_demos.engine.v2.components._prefabs import GameObjectPrefab, PrefabClient
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
-from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher, GameEventId
 from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameCollection, FrameEvents
+from seagulls.cat_demos.engine.v2.input._input_toggles import InputTogglesClient
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameKeyboardInputPublisher
+from seagulls.cat_demos.engine.v2.position._position_prefab import PositionPrefab
+from seagulls.cat_demos.engine.v2.resources._resources_client import ResourceClient
 from seagulls.cat_demos.engine.v2.scenes._client import IScene, SceneClient, SceneComponent, SceneContext, \
     SceneEvents, SceneProvider, SceneRegistry
+from seagulls.cat_demos.engine.v2.sprites._sprite_component import SpriteComponent, SpriteSource
+from seagulls.cat_demos.engine.v2.sprites._sprite_container import SpriteContainer
+from seagulls.cat_demos.engine.v2.sprites._sprite_prefab import SpritePrefab
+from seagulls.cat_demos.engine.v2.text._text_component import TextComponent
+from seagulls.cat_demos.engine.v2.text._text_prefab import TextPrefab
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
-from ..components._prefabs import GameObjectPrefab, PrefabClient
-from ..position._position_prefab import PositionPrefab
-from ..resources._resources_client import ResourceClient
-from ..sprites._sprite_component import SpriteComponent, SpriteSource
-from ..sprites._sprite_container import SpriteContainer
-from ..sprites._sprite_prefab import SpritePrefab
-from ..text._text_component import TextComponent
-from ..text._text_prefab import TextPrefab
+
+GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
 
 
 class SessionComponents:
@@ -38,6 +40,7 @@ class SessionComponents:
     OBJECT_COMPONENT_CONTAINER = GameComponentId[GameComponentContainer]("object-component-registry")
 
     PYGAME_INPUT_CLIENT = GameComponentId[PygameKeyboardInputPublisher]("pygame-input-client")
+    INPUT_TOGGLES_CLIENT = GameComponentId[InputTogglesClient]("input-toggles-client")
 
     QUIT_GAME_EXECUTABLE = GameComponentId[QuitGameExecutable]("quit-game-executable")
 
@@ -58,6 +61,7 @@ class SessionComponents:
     SPRITE_COMPONENT = GameComponentId[SpriteComponent]("sprite-component")
     SPRITE_PREFAB = GameComponentId[SpritePrefab]("prefab.sprite-component")
     OBJECT_PREFAB = GameComponentId[GameObjectPrefab]("prefab.game-object")
+    PLUGIN_EVENT_CALLBACKS = GameComponentId[Tuple[GameEventCallback, ...]]("plugin:event-callbacks")
 
 
 class SeagullsAppProvider(NamedTuple):
@@ -95,11 +99,13 @@ class SeagullsApp:
             (SessionComponents.INDEX_SCENE, lambda: SceneComponent(
                 frame_collection=scene_components.get(SessionComponents.FRAME_COLLECTION),
                 event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+                scene_context=session_components.get(SessionComponents.SCENE_CONTEXT),
             )),
             (SessionComponents.FRAME_COLLECTION, lambda: FrameCollection(lambda: FrameClient(
                 event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                 window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
-                pygame_input_client=component_factory.get(SessionComponents.PYGAME_INPUT_CLIENT),
+                pygame_input_client=scene_components.get(SessionComponents.PYGAME_INPUT_CLIENT),
+                toggles=scene_components.get(SessionComponents.INPUT_TOGGLES_CLIENT),
             ))),
             # We're overwriting this default scene
             (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenIndexScene(
@@ -137,11 +143,14 @@ class SeagullsApp:
             (SessionComponents.EVENT_CLIENT, lambda: GameEventDispatcher.with_callbacks(
                 (PygameEvents.QUIT, lambda: session_components.get(SessionComponents.QUIT_GAME_EXECUTABLE)()),
 
+                (FrameEvents.OPEN, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.SPRITE_COMPONENT)()),
 
                 (SceneEvents.OPEN, lambda: scene_components.get(SessionComponents.INDEX_OPEN_EXECUTABLE)()),
                 (SceneEvents.CLOSE, lambda: scene_components.get(SessionComponents.INDEX_CLOSE_EXECUTABLE)()),
+                # Append any external event callbacks
+                *session_components.get(SessionComponents.PLUGIN_EVENT_CALLBACKS),
             )),
             (SessionComponents.QUIT_GAME_EXECUTABLE, lambda: QuitGameExecutable(
                 stop=scene_components.get(SessionComponents.FRAME_COLLECTION)
@@ -163,20 +172,23 @@ class SeagullsApp:
             (SessionComponents.SPRITE_CONTAINER, lambda: SpriteContainer(
                 container=session_components,
             )),
+            (SessionComponents.INPUT_TOGGLES_CLIENT, lambda: InputTogglesClient(
+                input_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+            )),
         )
 
         session_components.get(SessionComponents.SESSION_CLIENT).execute()
 
     @lru_cache()
     def scene_components(self) -> GameComponentContainer:
-        return ContextualGameComponentRegistry(
+        return ContextualGameComponentContainer(
             container=self.component_factory(),
             context=lambda: self.session_components().get(SessionComponents.SCENE_CONTEXT)(),
         )
 
     @lru_cache()
     def session_components(self) -> GameComponentContainer:
-        return GameComponentRegistry(
+        return CachedGameComponentContainer(
             factory=self.component_factory(),
         )
 

@@ -1,20 +1,20 @@
 from abc import abstractmethod
 from typing import Generic, NamedTuple, Protocol, Tuple
 
-from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId, \
-    TypedGameComponentContainer
-from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
-from seagulls.cat_demos.engine.v2.components._scene_objects import ComponentConfigType, SceneObjects
+from ._component_containers import GameComponentId, TypedGameComponentContainer
+from ._config_containers import GameConfigType
+from ._entities import GameObjectId
+from ._scene_objects import SceneObjects
 
 
-class GamePrefabId(GameComponentId, Generic[ComponentConfigType]):
+class GamePrefabId(GameComponentId, Generic[GameConfigType]):
     pass
 
 
-class IExecutablePrefab(Protocol[ComponentConfigType]):
+class IExecutablePrefab(Protocol[GameConfigType]):
 
     @abstractmethod
-    def __call__(self, config: ComponentConfigType) -> None:
+    def __call__(self, config: GameConfigType) -> None:
         pass
 
 
@@ -25,13 +25,13 @@ class PrefabClient:
     def __init__(self, container: TypedGameComponentContainer[IExecutablePrefab]) -> None:
         self._container = container
 
-    def run(self, prefab_id: GamePrefabId[ComponentConfigType], config: ComponentConfigType) -> None:
+    def run(self, prefab_id: GamePrefabId[GameConfigType], config: GameConfigType) -> None:
         self._container.get(GameComponentId(prefab_id.name))(config)
 
 
 class GameComponentConfig(NamedTuple):
-    component_id: GameComponentId[ComponentConfigType]
-    config: ComponentConfigType
+    component_id: GameComponentId[GameConfigType]
+    config: GameConfigType
 
 
 class GameObjectConfig(NamedTuple):

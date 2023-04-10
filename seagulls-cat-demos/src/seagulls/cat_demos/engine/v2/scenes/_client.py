@@ -7,7 +7,7 @@ from typing import Dict, Iterable, NamedTuple, Optional, Protocol
 
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
-from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventDispatcher, GameEventId
 from seagulls.cat_demos.engine.v2.frames._client import IFrameCollection
 
 logger = logging.getLogger(__name__)
@@ -57,24 +57,43 @@ class SceneContext:
         return self._current
 
 
+class SceneEvent(NamedTuple):
+    scene_id: GameSceneId
+
+
 class SceneEvents:
-    OPEN: GameEventId[None] = GameEventId[None]("session.open")
-    EXECUTE: GameEventId[None] = GameEventId[None]("session.execute")
-    CLOSE: GameEventId[None] = GameEventId[None]("session.close")
+    OPEN = GameEventId[SceneEvent]("scene.open")
+    EXECUTE = GameEventId[SceneEvent]("scene.execute")
+    CLOSE = GameEventId[SceneEvent]("scene.close")
+
+    @staticmethod
+    def open_scene(scene_id: GameSceneId) -> GameEventId[SceneEvent]:
+        return GameEventId[SceneEvent](f"scene.open:{scene_id.name}")
+
+    @staticmethod
+    def execute_scene(scene_id: GameSceneId) -> GameEventId[SceneEvent]:
+        return GameEventId[SceneEvent](f"scene.execute:{scene_id.name}")
+
+    @staticmethod
+    def close_scene(scene_id: GameSceneId) -> GameEventId[SceneEvent]:
+        return GameEventId[SceneEvent](f"scene.close:{scene_id.name}")
 
 
 class SceneComponent(IScene):
 
     _frame_collection: IFrameCollection
     _event_client: GameEventDispatcher
+    _scene_context: SceneContext
 
     def __init__(
         self,
         frame_collection: IFrameCollection,
         event_client: GameEventDispatcher,
+        scene_context: SceneContext,
     ) -> None:
         self._frame_collection = frame_collection
         self._event_client = event_client
+        self._scene_context = scene_context
 
     def process(self) -> None:
         self._open_scene()
@@ -82,29 +101,30 @@ class SceneComponent(IScene):
         self._close_scene()
 
     def _open_scene(self) -> None:
-        self._event_client.trigger(GameEvent(SceneEvents.OPEN, None))
+        scene_id = self._scene_context()
+        payload = SceneEvent(scene_id)
+
+        self._event_client.trigger(GameEvent(SceneEvents.open_scene(scene_id), payload))
+        self._event_client.trigger(GameEvent(SceneEvents.OPEN, payload))
 
     def _execute_scene(self) -> None:
+        scene_id = self._scene_context()
+        payload = SceneEvent(scene_id)
+
         for frame in self._frame_collection.items():
             frame.process()
-        self._event_client.trigger(GameEvent(SceneEvents.EXECUTE, None))
+        self._event_client.trigger(GameEvent(SceneEvents.execute_scene(scene_id), payload))
+        self._event_client.trigger(GameEvent(SceneEvents.EXECUTE, payload))
 
     def _close_scene(self) -> None:
-        self._event_client.trigger(GameEvent(SceneEvents.CLOSE, None))
+        scene_id = self._scene_context()
+        payload = SceneEvent(scene_id)
+
+        self._event_client.trigger(GameEvent(SceneEvents.close_scene(scene_id), payload))
+        self._event_client.trigger(GameEvent(SceneEvents.CLOSE, payload))
 
 
-class IManageScenes(Protocol):
-
-    @abstractmethod
-    def register(self, scene_id: GameSceneId, provider: ServiceProvider[IScene]) -> None:
-        pass
-
-    @abstractmethod
-    def get(self, scene_id: GameSceneId) -> IScene:
-        pass
-
-
-class SceneRegistry(IManageScenes):
+class SceneRegistry:
 
     _providers: Dict[GameSceneId, ServiceProvider[IScene]]
 
@@ -134,10 +154,10 @@ class SceneProvider(NamedTuple):
 class SceneClient(IProvideScenes):
 
     _next_scene: Queue[GameSceneId]
-    _scene_registry: IManageScenes
+    _scene_registry: SceneRegistry
     _scene_context: SceneContext
 
-    def __init__(self, scene_registry: IManageScenes, scene_context: SceneContext) -> None:
+    def __init__(self, scene_registry: SceneRegistry, scene_context: SceneContext) -> None:
         self._next_scene = Queue(maxsize=1)
         self._scene_registry = scene_registry
         self._scene_context = scene_context

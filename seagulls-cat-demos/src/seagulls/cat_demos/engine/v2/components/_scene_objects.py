@@ -1,36 +1,18 @@
 import logging
-from abc import abstractmethod
-from typing import Any, Dict, Generic, NamedTuple, Protocol, Set, Tuple, TypeVar
+from typing import Any, Dict, Generic, Set, Tuple
 
 from ._component_containers import GameComponentContainer, GameComponentId, TypedGameComponentContainer
-from ._game_objects import GameObjectId, IManageGameObjects
+from ._config_containers import GameConfigType
+from ._entities import GameObjectId
 from ._service_provider import ServiceProvider
 
 logger = logging.getLogger(__name__)
 
 
-class IManageGameObjectComponents(Protocol):
-
-    @abstractmethod
-    def attach_component(self, entity_id: GameObjectId, component_id: GameComponentId) -> None:
-        pass
-
-    @abstractmethod
-    def detach_component(self, entity_id: GameObjectId, component_id: GameComponentId) -> None:
-        pass
-
-    @abstractmethod
-    def find_by_component(self, component_id: GameComponentId) -> Tuple[GameObjectId, ...]:
-        pass
-
-
-ComponentConfigType = TypeVar("ComponentConfigType", bound=NamedTuple)
-
-
-class ObjectComponent(Generic[ComponentConfigType]):
+class ObjectComponent(Generic[GameConfigType]):
 
     _context: ServiceProvider[GameObjectId]
-    _configs: Dict[GameObjectId, ComponentConfigType]
+    _configs: Dict[GameObjectId, GameConfigType]
 
     def __init__(
         self,
@@ -39,14 +21,14 @@ class ObjectComponent(Generic[ComponentConfigType]):
         self._context = context
         self._configs = {}
 
-    def get(self) -> ComponentConfigType:
+    def get(self) -> GameConfigType:
         return self._configs[self._context()]
 
-    def set(self, config: ComponentConfigType) -> None:
+    def set(self, config: GameConfigType) -> None:
         self._configs[self._context()] = config
 
 
-class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
+class SceneObjects:
 
     _container: TypedGameComponentContainer[ObjectComponent]
     _entities: Dict[GameObjectId, Set[GameComponentId]]
@@ -97,16 +79,16 @@ class SceneObjects(IManageGameObjects, IManageGameObjectComponents):
     def set_component(
             self,
             entity_id: GameObjectId,
-            component_id: GameComponentId[ComponentConfigType],
-            config: ComponentConfigType,
+            component_id: GameComponentId[GameConfigType],
+            config: GameConfigType,
     ) -> None:
         self._components[component_id][entity_id].set(config)
 
     def get_component(
             self,
             entity_id: GameObjectId,
-            component_id: GameComponentId[ComponentConfigType],
-    ) -> ComponentConfigType:
+            component_id: GameComponentId[GameConfigType],
+    ) -> GameConfigType:
         return self._components[component_id][entity_id].get()
 
     def find_by_component(self, component_id: GameComponentId) -> Tuple[GameObjectId, ...]:

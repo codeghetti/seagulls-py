@@ -6,14 +6,16 @@ from pygame.font import Font
 
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
-from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
+from seagulls.cat_demos.engine.v2.components._entities import GameObjectId, GameSceneId
 from seagulls.cat_demos.engine.v2.components._prefabs import GameComponentConfig, GameObjectConfig, PrefabClient
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._size import Size
-from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.input._input_toggles import InputTogglesClient
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents
 from seagulls.cat_demos.engine.v2.position._point import Position
+from seagulls.cat_demos.engine.v2.scenes._client import SceneEvents
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp, SessionComponents
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, SpriteId, SpriteSource
@@ -63,16 +65,19 @@ class OpenScene(IExecutable):
     _prefab_client: PrefabClient
     _event_client: GameEventDispatcher
     _player_controls: PlayerControlsComponent
+    _toggles: InputTogglesClient
 
     def __init__(
         self,
         prefab_client: PrefabClient,
         event_client: GameEventDispatcher,
         player_controls: PlayerControlsComponent,
+        toggles: InputTogglesClient,
     ) -> None:
         self._prefab_client = prefab_client
         self._event_client = event_client
         self._player_controls = player_controls
+        self._toggles = toggles
 
     def __call__(self) -> None:
         self._spawn_player()
@@ -119,10 +124,10 @@ class OpenScene(IExecutable):
         ))
 
     def _configure_events(self) -> None:
-        self._event_client.register(PygameEvents.key_pressed(pygame.K_a), self._on_keyboard)
-        self._event_client.register(PygameEvents.key_pressed(pygame.K_s), self._on_keyboard)
-        self._event_client.register(PygameEvents.key_pressed(pygame.K_d), self._on_keyboard)
-        self._event_client.register(PygameEvents.key_pressed(pygame.K_w), self._on_keyboard)
+        self._event_client.register(PygameEvents.key(pygame.K_a), self._on_keyboard)
+        self._event_client.register(PygameEvents.key(pygame.K_s), self._on_keyboard)
+        self._event_client.register(PygameEvents.key(pygame.K_d), self._on_keyboard)
+        self._event_client.register(PygameEvents.key(pygame.K_w), self._on_keyboard)
 
         self._event_client.register(PlayerControlIds.MOVE_EVENT, self._player_controls)
 
@@ -134,13 +139,17 @@ class OpenScene(IExecutable):
             pygame.K_w: Position(0, -1),
         }
         event = self._event_client.event()
-        self._event_client.trigger(GameEvent(
+        game_event = GameEvent(
             id=PlayerControlIds.MOVE_EVENT,
             payload=PlayerMoveEvent(
                 object_id=GameObjectId("player"),
                 direction=mapping[event.payload.key],
             ),
-        ))
+        )
+        if event.payload.type == pygame.KEYDOWN:
+            self._toggles.on(game_event)
+        elif event.payload.type == pygame.KEYUP:
+            self._toggles.off(game_event)
 
 
 app = SeagullsApp()
@@ -149,16 +158,20 @@ component_factory = app.component_factory()
 session_components = app.session_components()
 scene_components = app.scene_components()
 
+
 app.run(
-    (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenScene(
-        prefab_client=session_components.get(SessionComponents.PREFAB_CLIENT),
-        event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
-        player_controls=scene_components.get(PlayerControlIds.COMPONENT),
-    )),
     (PlayerControlIds.COMPONENT, lambda: PlayerControlsComponent(
         objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
         event_provider=lambda: scene_components.get(SessionComponents.EVENT_CLIENT).event().payload,
     )),
+    (SessionComponents.PLUGIN_EVENT_CALLBACKS, lambda: tuple([
+        (SceneEvents.open_scene(GameSceneId("index")), lambda: OpenScene(
+            prefab_client=session_components.get(SessionComponents.PREFAB_CLIENT),
+            event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+            player_controls=scene_components.get(PlayerControlIds.COMPONENT),
+            toggles=scene_components.get(SessionComponents.INPUT_TOGGLES_CLIENT),
+        )()),
+    ])),
     (GameComponentId[Tuple[SpriteSource, ...]]("sprite-sources"), lambda: tuple([
         SpriteSource(
             sprite_id=SpriteId("player"),

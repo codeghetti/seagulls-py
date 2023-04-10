@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
 from seagulls.cat_demos.engine.v2.frames._client import FrameCollection
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents
 from seagulls.cat_demos.engine.v2.scenes._client import SceneClient

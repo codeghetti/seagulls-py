@@ -2,8 +2,8 @@ from abc import abstractmethod
 from functools import lru_cache
 from typing import Any, Dict, Generic, Iterable, Protocol, Tuple, TypeVar
 
-from seagulls.cat_demos.engine.v2.components._entities import TypedEntityId
-from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
+from ._entities import TypedEntityId
+from ._service_provider import ServiceProvider
 
 GameComponentType = TypeVar("GameComponentType")
 
@@ -80,7 +80,7 @@ class GameComponentFactory:
         return self._providers[component_id]()
 
 
-class GameComponentRegistry(GameComponentContainer):
+class CachedGameComponentContainer(GameComponentContainer):
 
     _factory: GameComponentContainer
 
@@ -95,7 +95,7 @@ class GameComponentRegistry(GameComponentContainer):
 T = TypeVar("T")
 
 
-class ContextualGameComponentRegistry(GameComponentContainer, Generic[T]):
+class ContextualGameComponentContainer(GameComponentContainer, Generic[T]):
 
     _container: GameComponentContainer
     _context: ServiceProvider[T]

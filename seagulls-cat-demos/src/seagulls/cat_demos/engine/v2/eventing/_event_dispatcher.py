@@ -1,33 +1,19 @@
-from abc import abstractmethod
-from typing import Any, Callable, Dict, List, NamedTuple, Optional, Protocol, Tuple
+from typing import Any, Callable, Dict, List, NamedTuple, Optional, Tuple, TypeAlias, TypeVar
 
-from seagulls.cat_demos.engine.v2.components._entities import EntityType, TypedEntityId
+from seagulls.cat_demos.engine.v2.components._entities import TypedEntityId
+
+GameEventType = TypeVar("GameEventType", bound=NamedTuple)
 
 
-class GameEventId(TypedEntityId[EntityType]):
-    pass
+GameEventId: TypeAlias = TypedEntityId[GameEventType]
 
 
 class GameEvent(NamedTuple):
-    id: GameEventId[EntityType]
-    payload: EntityType
+    id: GameEventId[GameEventType]
+    payload: GameEventType
 
 
-class IGameEventDispatcher(Protocol):
-    @abstractmethod
-    def register(self, event: GameEventId[Any], callback: Callable[[], None]) -> None:
-        pass
-
-    @abstractmethod
-    def trigger(self, event: GameEvent[Any]) -> None:
-        pass
-
-    @abstractmethod
-    def event(self) -> EntityType:
-        pass
-
-
-class GameEventDispatcher(IGameEventDispatcher):
+class GameEventDispatcher:
 
     _active_event: Optional[GameEvent[Any]]
     """

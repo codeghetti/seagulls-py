@@ -4,7 +4,8 @@ from typing import Iterable, Protocol
 
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
-from seagulls.cat_demos.engine.v2.eventing._client import GameEvent, GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.input._input_toggles import InputTogglesClient
 from seagulls.cat_demos.engine.v2.input._pygame import PygameKeyboardInputPublisher
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
@@ -34,16 +35,19 @@ class FrameClient(IFrame):
     _event_client: GameEventDispatcher
     _window_client: WindowClient
     _pygame_input_client: PygameKeyboardInputPublisher
+    _toggles: InputTogglesClient
 
     def __init__(
         self,
         event_client: GameEventDispatcher,
         window_client: WindowClient,
         pygame_input_client: PygameKeyboardInputPublisher,
+        toggles: InputTogglesClient,
     ) -> None:
         self._event_client = event_client
         self._window_client = window_client
         self._pygame_input_client = pygame_input_client
+        self._toggles = toggles
 
     def process(self) -> None:
         self._open_frame()
@@ -54,6 +58,7 @@ class FrameClient(IFrame):
         self._event_client.trigger(GameEvent(FrameEvents.OPEN, None))
         self._window_client.get_surface().fill(Color(0, 0, 0))
         self._pygame_input_client.tick()
+        self._toggles.tick()
 
     def _execute_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.EXECUTE, None))

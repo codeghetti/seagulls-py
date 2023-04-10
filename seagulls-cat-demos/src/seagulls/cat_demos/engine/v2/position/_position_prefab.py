@@ -1,7 +1,7 @@
 from typing import NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
-from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
+from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import IExecutablePrefab
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.position._point import Position

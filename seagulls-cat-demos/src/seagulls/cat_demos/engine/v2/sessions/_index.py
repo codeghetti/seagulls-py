@@ -2,9 +2,9 @@ import logging
 
 import pygame
 
-from seagulls.cat_demos.engine.v2.components._game_objects import GameObjectId
+from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
-from seagulls.cat_demos.engine.v2.eventing._client import GameEventDispatcher
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
 from seagulls.cat_demos.engine.v2.frames._client import FrameEvents
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._executables import IExecutable

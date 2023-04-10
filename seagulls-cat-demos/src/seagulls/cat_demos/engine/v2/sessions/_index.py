@@ -1,44 +1,19 @@
 import logging
 
-import pygame
-
-from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
-from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
-from seagulls.cat_demos.engine.v2.frames._client import FrameEvents
-from seagulls.cat_demos.engine.v2.window._window import WindowClient
+from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
+from seagulls.cat_demos.engine.v2.scenes._client import SceneEvents
 from ._executables import IExecutable
 
 logger = logging.getLogger(__name__)
 
 
 class OpenIndexScene(IExecutable):
-
-    _scene_objects: SceneObjects
-    _scene_event_client: GameEventDispatcher
-    _window_client: WindowClient
-
-    def __init__(
-        self,
-        scene_objects: SceneObjects,
-        scene_event_client: GameEventDispatcher,
-        window_client: WindowClient,
-    ) -> None:
-        self._scene_objects = scene_objects
-        self._scene_event_client = scene_event_client
-        self._window_client = window_client
-
     def __call__(self) -> None:
-        logger.debug("index scene open")
-        self._scene_event_client.register(FrameEvents.EXECUTE, self._tick)
-        self._scene_objects.add(GameObjectId("hello-world"))
-
-    def _tick(self) -> None:
-        f = pygame.font.SysFont("monospace", 75)
-        text = f.render("Hello, World!", True, (0, 0, 0))
-        surface = self._window_client.get_surface()
-        surface.fill((20, 120, 20))
-        surface.blit(text, (20, 20))
+        scene_id = GameSceneId("index")
+        logger.warning(f"scene loaded: {scene_id}")
+        logger.warning(f"available event: {SceneEvents.open_scene(scene_id)}")
+        logger.warning(f"available event: {SceneEvents.execute_scene(scene_id)}")
+        logger.warning(f"available event: {SceneEvents.close_scene(scene_id)}")
 
 
 class CloseIndexScene(IExecutable):

@@ -30,38 +30,29 @@ GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
 
 class SessionComponents:
     EVENT_CLIENT = GameComponentId[GameEventDispatcher]("event-client")
-
-    FRAME_COLLECTION = GameComponentId[FrameCollection]("frame-collection")
-
-    INDEX_SCENE = GameComponentId[IScene]("index.scene")
-    INDEX_OPEN_EXECUTABLE = GameComponentId[OpenIndexScene]("index-scene:open.executable")
-    INDEX_CLOSE_EXECUTABLE = GameComponentId[OpenIndexScene]("index-scene:close.executable")
-
-    OBJECT_COMPONENT_CONTAINER = GameComponentId[GameComponentContainer]("object-component-registry")
-
-    PYGAME_INPUT_CLIENT = GameComponentId[PygameKeyboardInputPublisher]("pygame-input-client")
     INPUT_TOGGLES_CLIENT = GameComponentId[InputTogglesClient]("input-toggles-client")
-
-    QUIT_GAME_EXECUTABLE = GameComponentId[QuitGameExecutable]("quit-game-executable")
-
-    SCENE_CONTEXT = GameComponentId[SceneContext]("scene-context")
     SCENE_OBJECTS = GameComponentId[SceneObjects]("scene-objects")
-
-    SESSION_CLIENT = GameComponentId[SessionClient]("session-client")
-
-    WINDOW_CLIENT = GameComponentId[WindowClient]("window-client")
     PREFAB_CLIENT = GameComponentId[PrefabClient]("prefab-client")
-
     TEXT_COMPONENT = GameComponentId[TextComponent]("text-component")
     TEXT_PREFAB = GameComponentId[TextPrefab]("prefab.text-component")
     POSITION_PREFAB = GameComponentId[PositionPrefab]("prefab.position-component")
     RESOURCE_CLIENT = GameComponentId[ResourceClient]("resource-client")
-
     SPRITE_CONTAINER = GameComponentId[SpriteContainer]("sprite-container")
     SPRITE_COMPONENT = GameComponentId[SpriteComponent]("sprite-component")
     SPRITE_PREFAB = GameComponentId[SpritePrefab]("prefab.sprite-component")
     OBJECT_PREFAB = GameComponentId[GameObjectPrefab]("prefab.game-object")
     PLUGIN_EVENT_CALLBACKS = GameComponentId[Tuple[GameEventCallback, ...]]("plugin:event-callbacks")
+    PLUGIN_SPRITE_SOURCES = GameComponentId[Tuple[SpriteSource, ...]]("sprite-sources")
+    OBJECT_COMPONENT_CONTAINER = GameComponentId[GameComponentContainer]("object-component-registry")
+    FRAME_COLLECTION = GameComponentId[FrameCollection]("frame-collection")
+    INDEX_SCENE = GameComponentId[IScene]("index.scene")
+    INDEX_OPEN_EXECUTABLE = GameComponentId[OpenIndexScene]("index-scene:open.executable")
+    INDEX_CLOSE_EXECUTABLE = GameComponentId[OpenIndexScene]("index-scene:close.executable")
+    PYGAME_INPUT_CLIENT = GameComponentId[PygameKeyboardInputPublisher]("pygame-input-client")
+    QUIT_GAME_EXECUTABLE = GameComponentId[QuitGameExecutable]("quit-game-executable")
+    SCENE_CONTEXT = GameComponentId[SceneContext]("scene-context")
+    SESSION_CLIENT = GameComponentId[SessionClient]("session-client")
+    WINDOW_CLIENT = GameComponentId[WindowClient]("window-client")
 
 
 class SeagullsAppProvider(NamedTuple):
@@ -107,12 +98,7 @@ class SeagullsApp:
                 pygame_input_client=scene_components.get(SessionComponents.PYGAME_INPUT_CLIENT),
                 toggles=scene_components.get(SessionComponents.INPUT_TOGGLES_CLIENT),
             ))),
-            # We're overwriting this default scene
-            (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenIndexScene(
-                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
-                scene_event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
-                window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
-            )),
+            (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenIndexScene()),
             (SessionComponents.INDEX_CLOSE_EXECUTABLE, lambda: CloseIndexScene()),
             (SessionComponents.PYGAME_INPUT_CLIENT, lambda: PygameKeyboardInputPublisher(
                 event_dispatcher=scene_components.get(SessionComponents.EVENT_CLIENT),

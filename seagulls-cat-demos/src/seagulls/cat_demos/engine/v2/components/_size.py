@@ -4,8 +4,8 @@ from typing import NamedTuple, Tuple
 
 
 class Size(NamedTuple):
-    height: float
     width: float
+    height: float
 
     def __add__(self, other: Tuple[float, float]) -> Size:
         return Size(height=self.height + other[0], width=self.width + other[1])

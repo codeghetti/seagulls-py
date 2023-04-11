@@ -1,162 +1,77 @@
 from argparse import ArgumentParser
+from typing import Tuple
 
+from seagulls.cat_demos.app._scene import IndexScene
+from seagulls.cat_demos.app.player._mouse_controls import MouseControlIds, MouseControlsPrefab
+from seagulls.cat_demos.app.player._player_controls import PlayerControlIds, PlayerControlsPrefab
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
-from seagulls.cat_demos.engine.v2.frames._client import FrameCollection
-from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents
-from seagulls.cat_demos.engine.v2.scenes._client import SceneClient
-from seagulls.cat_demos.engine.v2.sessions._client import SessionClient
+from seagulls.cat_demos.engine.v2.components._size import Size
+from seagulls.cat_demos.engine.v2.position._point import Position
+from seagulls.cat_demos.engine.v2.scenes._client import SceneEvents
+from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp, SessionComponents
+from seagulls.cat_demos.engine.v2.sprites._sprite_component import SpriteId, SpriteSource
 from seagulls.cli import ICliCommand
 
 
 class GameCliCommand(ICliCommand):
 
-    _session_client: SessionClient
-    _scene_client: SceneClient
-    _frames_provider: FrameCollection
-    _event_dispatcher: GameEventDispatcher
+    _app: SeagullsApp
 
-    def __init__(
-        self,
-        session_client: SessionClient,
-        scene_client: SceneClient,
-        frames_provider: FrameCollection,
-        event_dispatcher: GameEventDispatcher,
-    ) -> None:
-        self._session_client = session_client
-        self._scene_client = scene_client
-        self._frames_provider = frames_provider
-        self._event_dispatcher = event_dispatcher
+    def __init__(self, app: SeagullsApp) -> None:
+        self._app = app
 
     def configure_parser(self, parser: ArgumentParser) -> None:
         pass
 
     def execute(self) -> None:
-        self._scene_client.load_scene(GameSceneId("main-menu"))
-        self._event_dispatcher.register(PygameEvents.QUIT, self._quit)
-
         try:
-            self._session_client.open_session()
-            self._session_client.run_session()
-            self._session_client.close_session()
+            self._run()
         except KeyboardInterrupt:
             pass
 
-    def _quit(self) -> None:
-        # looks like a terrible interface to end a scene
-        self._frames_provider.stop()
+    def _run(self) -> None:
+        component_factory = self._app.component_factory()
+        session_components = self._app.session_components()
+        scene_components = self._app.scene_components()
 
-    # def _init_session(self) -> None:
-    #     self._session_window_client = WindowClient()
-    #     self._session_window_client.open()
-    #     self._window = self._session_window_client.get_surface()
-    #     self._clock = GameClock()
-    #
-    #     self._scene_client = GameSceneObjects(window=self._session_window_client)
-    #
-    #     self._input_v2 = GameInputClient(handlers=tuple([
-    #         self._on_input_v2,
-    #     ]))
-    #     self._pygame_input_v2 = PygameKeyboardInputPublisher(self._input_v2)
-    #     self._input_v2_routing = GameInputRouter({
-    #         PygameEvents.KEYBOARD: tuple([self._on_keyboard]),
-    #         GameInputs.QUIT: tuple([self._on_quit]),
-    #     })
-    #     self._event_dispatcher = InputEventDispatcher()
-    #     self._event_toggles = InputTogglesClient(self._input_v2)
-    #
-    #     resource_client = ResourceClient()
-    #     position_client = PositionComponentClient()
-    #     player_controls_client = PlayerControlsComponentClient(
-    #         self._event_dispatcher,
-    #         self._clock,
-    #         position_client,
-    #     )
-    #     mob_controls_client = MobControlsComponentClient(
-    #         self._clock,
-    #         position_client,
-    #     )
-    #     sprite_client = SpriteComponentClient(
-    #         window_client=self._session_window_client,
-    #         resources_client=resource_client,
-    #         position_client=position_client,
-    #     )
-    #     animation_client = SpriteAnimationComponentClient(sprite_client)
-    #
-    #     self._scene_client.create_component(PositionComponentId, position_client)
-    #     self._scene_client.create_component(PlayerControlsComponentId, player_controls_client)
-    #     self._scene_client.create_component(MobControlsComponentId, mob_controls_client)
-    #     self._scene_client.create_component(SpriteComponentId, sprite_client)
-    #     self._scene_client.create_component(SpriteAnimationComponentId, animation_client)
-    #
-    #     sprite_client.register_sprite(
-    #         sprite=GameSprite("player.idle.1"),
-    #         resource="/kenney.tiny-dungeon/tilemap-packed.png",
-    #         position=Position(x=16, y=16 * 7),
-    #         size=Size(height=16, width=16),
-    #     )
-    #     sprite_client.register_sprite(
-    #         sprite=GameSprite("player.idle.2"),
-    #         resource="/kenney.tiny-dungeon/tilemap-packed.png",
-    #         position=Position(x=16 * 2, y=16 * 7),
-    #         size=Size(height=16, width=16),
-    #     )
-    #     sprite_client.register_sprite(
-    #         sprite=GameSprite("enemy.idle"),
-    #         resource="/kenney.tiny-dungeon/tilemap-packed.png",
-    #         position=Position(x=16, y=16*9),
-    #         size=Size(height=16, width=16),
-    #     )
-    #
-    #     self._scene = MainScene(
-    #         scene_objects=self._scene_client,
-    #     )
-    #
-    # def _on_input_v2(self, event: InputEvent[EventPayloadType], payload: EventPayloadType) -> None:
-    #     self._input_v2_routing.route(event, payload)
-    #     self._event_dispatcher.trigger(event, payload)
-    #
-    # def _on_keyboard(self, event: InputEvent[PygameInputEvent], payload: PygameInputEvent) -> None:
-    #     if payload.type == pygame.KEYDOWN:
-    #         if payload.key == pygame.K_a:
-    #             self._event_toggles.on(GameInputs.MOVE_LEFT, PlayerMoveEvent(Vector(-1, 0)))
-    #         if payload.key == pygame.K_d:
-    #             self._event_toggles.on(GameInputs.MOVE_RIGHT, PlayerMoveEvent(Vector(1, 0)))
-    #         if payload.key == pygame.K_w:
-    #             self._event_toggles.on(GameInputs.MOVE_UP, PlayerMoveEvent(Vector(0, -1)))
-    #         if payload.key == pygame.K_s:
-    #             self._event_toggles.on(GameInputs.MOVE_DOWN, PlayerMoveEvent(Vector(0, 1)))
-    #         if payload.key == pygame.K_ESCAPE:
-    #             self._input_v2.trigger(GameInputs.QUIT, QuitGameEvent())
-    #     if payload.type == pygame.KEYUP:
-    #         if payload.key == pygame.K_a:
-    #             self._event_toggles.off(GameInputs.MOVE_LEFT)
-    #         if payload.key == pygame.K_d:
-    #             self._event_toggles.off(GameInputs.MOVE_RIGHT)
-    #         if payload.key == pygame.K_w:
-    #             self._event_toggles.off(GameInputs.MOVE_UP)
-    #         if payload.key == pygame.K_s:
-    #             self._event_toggles.off(GameInputs.MOVE_DOWN)
-    #
-    # def _on_quit(self, event: GameInputs.QUIT, payload: QuitGameEvent) -> None:
-    #     quit()
-    #
-    # def _run_session(self) -> None:
-    #     try:
-    #         self._scene.load_scene()
-    #         while True:
-    #             self._tick()
-    #     finally:
-    #         pass
-    #
-    # def _tick(self) -> None:
-    #     self._clock.tick()
-    #     self._window.fill((100, 120, 20))
-    #     self._pygame_input_v2.tick()
-    #     self._event_toggles.tick()
-    #     self._scene_client.tick()
-    #     self._scene.tick()
-    #     self._session_window_client.commit()
-    #
-    # def _end_session(self) -> None:
-    #     self._session_window_client.close()
+        self._app.run(
+            (PlayerControlIds.PREFAB_COMPONENT, lambda: PlayerControlsPrefab(
+                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+                event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+                toggles=scene_components.get(SessionComponents.INPUT_TOGGLES_CLIENT),
+                clock=scene_components.get(SessionComponents.SCENE_CLOCK),
+            )),
+            (MouseControlIds.PREFAB_COMPONENT, lambda: MouseControlsPrefab(
+                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+                event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+            )),
+            (SessionComponents.PLUGIN_EVENT_CALLBACKS, lambda: tuple([
+                (SceneEvents.open_scene(GameSceneId("index")), lambda: IndexScene(
+                    prefab_client=session_components.get(SessionComponents.PREFAB_CLIENT),
+                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+                )()),
+            ])),
+            (SessionComponents.PLUGIN_SPRITE_SOURCES, self._sprites),
+        )
+
+    def _sprites(self) -> Tuple[SpriteSource, ...]:
+        return tuple([
+            SpriteSource(
+                sprite_id=SpriteId("player"),
+                image_name="kenney.tiny-dungeon/tilemap-packed",
+                coordinates=Position(x=16, y=16 * 7),
+                size=Size(16, 16),
+            ),
+            SpriteSource(
+                sprite_id=SpriteId("mouse"),
+                image_name="kenney.ui-pack-rpg-expansion/tilemap",
+                coordinates=Position(x=30, y=482),
+                size=Size(width=30, height=30),
+            ),
+            SpriteSource(
+                sprite_id=SpriteId("menu-button"),
+                image_name="kenney.ui-pack-rpg-expansion/tilemap",
+                coordinates=Position(x=0, y=188),
+                size=Size(height=49, width=190),
+            ),
+        ])

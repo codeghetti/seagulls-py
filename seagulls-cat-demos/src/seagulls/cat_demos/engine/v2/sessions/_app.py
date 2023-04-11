@@ -24,6 +24,7 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
+from ..input._game_clock import GameClock
 
 GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
 
@@ -41,8 +42,6 @@ class SessionComponents:
     SPRITE_COMPONENT = GameComponentId[SpriteComponent]("sprite-component")
     SPRITE_PREFAB = GameComponentId[SpritePrefab]("prefab.sprite-component")
     OBJECT_PREFAB = GameComponentId[GameObjectPrefab]("prefab.game-object")
-    PLUGIN_EVENT_CALLBACKS = GameComponentId[Tuple[GameEventCallback, ...]]("plugin:event-callbacks")
-    PLUGIN_SPRITE_SOURCES = GameComponentId[Tuple[SpriteSource, ...]]("sprite-sources")
     OBJECT_COMPONENT_CONTAINER = GameComponentId[GameComponentContainer]("object-component-registry")
     FRAME_COLLECTION = GameComponentId[FrameCollection]("frame-collection")
     INDEX_SCENE = GameComponentId[IScene]("index.scene")
@@ -53,6 +52,10 @@ class SessionComponents:
     SCENE_CONTEXT = GameComponentId[SceneContext]("scene-context")
     SESSION_CLIENT = GameComponentId[SessionClient]("session-client")
     WINDOW_CLIENT = GameComponentId[WindowClient]("window-client")
+    SCENE_CLOCK = GameComponentId[GameClock]("scene-clock")
+
+    PLUGIN_EVENT_CALLBACKS = GameComponentId[Tuple[GameEventCallback, ...]]("plugin:event-callbacks")
+    PLUGIN_SPRITE_SOURCES = GameComponentId[Tuple[SpriteSource, ...]]("sprite-sources")
 
 
 class SeagullsAppProvider(NamedTuple):
@@ -111,7 +114,7 @@ class SeagullsApp:
                 objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
                 window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
                 resource_client=session_components.get(SessionComponents.RESOURCE_CLIENT),
-                sprite_sources=session_components.get(GameComponentId[Tuple[SpriteSource, ...]]("sprite-sources")),
+                sprite_sources=session_components.get(SessionComponents.PLUGIN_SPRITE_SOURCES),
             )),
             (SessionComponents.SCENE_OBJECTS, lambda: SceneObjects(
                 container=component_factory.get(
@@ -129,6 +132,7 @@ class SeagullsApp:
             (SessionComponents.EVENT_CLIENT, lambda: GameEventDispatcher.with_callbacks(
                 (PygameEvents.QUIT, lambda: session_components.get(SessionComponents.QUIT_GAME_EXECUTABLE)()),
 
+                (FrameEvents.OPEN, lambda: scene_components.get(SessionComponents.SCENE_CLOCK).tick()),
                 (FrameEvents.OPEN, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.SPRITE_COMPONENT)()),
@@ -161,6 +165,7 @@ class SeagullsApp:
             (SessionComponents.INPUT_TOGGLES_CLIENT, lambda: InputTogglesClient(
                 input_client=scene_components.get(SessionComponents.EVENT_CLIENT),
             )),
+            (SessionComponents.SCENE_CLOCK, lambda: GameClock())
         )
 
         session_components.get(SessionComponents.SESSION_CLIENT).execute()

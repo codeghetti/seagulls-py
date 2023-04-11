@@ -65,11 +65,16 @@ class SpriteComponent(IExecutable):
     def _create_surface(self, source: SpriteSource) -> Surface:
         path = self._resource_client.get_path(f"{source.image_name}.png")
         sprite_surface = pygame.image.load(path).convert_alpha()
+        print(source)
         unit_surface = Surface(source.size, SRCALPHA, 32)
+        if source.sprite_id.name == "menu-button":
+            print(unit_surface.get_width(), unit_surface.get_height())
         unit_surface.blit(
             sprite_surface,
             Position(0, 0),
-            (source.coordinates.x, source.coordinates.y, source.size.width, source.size.height),
+            (source.coordinates, source.size),
         )
+        if source.sprite_id.name == "menu-button":
+            print(unit_surface.get_width(), unit_surface.get_height())
         # scaled_surface = pygame.transform.scale(unit_surface, (s["width"], s["height"]))
-        return unit_surface
+        return unit_surface.copy()

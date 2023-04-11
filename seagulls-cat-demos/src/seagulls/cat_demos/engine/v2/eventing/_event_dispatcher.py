@@ -15,7 +15,7 @@ class GameEvent(NamedTuple):
 
 class GameEventDispatcher:
 
-    _active_event: Optional[GameEvent[Any]]
+    _active_event: Optional[GameEvent]
     """
     If we switched to using identity objects for the callbacks, we could easily add/remove listeners.
     We just need a registry of callable identities.

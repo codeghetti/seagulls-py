@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from typing import Tuple
 
-from seagulls.cat_demos.app._scene import IndexScene
+from seagulls.cat_demos.app._index_scene import IndexScene
 from seagulls.cat_demos.app.player._mouse_controls import MouseControlIds, MouseControlsPrefab
 from seagulls.cat_demos.app.player._player_controls import PlayerControlIds, PlayerControlsPrefab
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId

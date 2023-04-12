@@ -46,7 +46,7 @@ class SessionComponents:
     FRAME_COLLECTION = GameComponentId[FrameCollection]("frame-collection")
     INDEX_SCENE = GameComponentId[IScene]("index.scene")
     INDEX_OPEN_EXECUTABLE = GameComponentId[OpenIndexScene]("index-scene:open.executable")
-    INDEX_CLOSE_EXECUTABLE = GameComponentId[OpenIndexScene]("index-scene:close.executable")
+    INDEX_CLOSE_EXECUTABLE = GameComponentId[CloseIndexScene]("index-scene:close.executable")
     PYGAME_INPUT_CLIENT = GameComponentId[PygameKeyboardInputPublisher]("pygame-input-client")
     QUIT_GAME_EXECUTABLE = GameComponentId[QuitGameExecutable]("quit-game-executable")
     SCENE_CONTEXT = GameComponentId[SceneContext]("scene-context")
@@ -133,9 +133,8 @@ class SeagullsApp:
                 (PygameEvents.QUIT, lambda: session_components.get(SessionComponents.QUIT_GAME_EXECUTABLE)()),
 
                 (FrameEvents.OPEN, lambda: scene_components.get(SessionComponents.SCENE_CLOCK).tick()),
-                (FrameEvents.OPEN, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
-                (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.SPRITE_COMPONENT)()),
+                (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
 
                 (SceneEvents.OPEN, lambda: scene_components.get(SessionComponents.INDEX_OPEN_EXECUTABLE)()),
                 (SceneEvents.CLOSE, lambda: scene_components.get(SessionComponents.INDEX_CLOSE_EXECUTABLE)()),

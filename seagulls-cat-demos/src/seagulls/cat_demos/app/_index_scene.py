@@ -104,6 +104,15 @@ class IndexScene(IExecutable):
                     component_id=GameComponentId[Sprite]("object-component::sprite"),
                     config=Sprite(sprite_id=SpriteId("menu-button")),
                 ),
+                GameComponentConfig(
+                    component_id=GameComponentId[Text]("object-component::text"),
+                    config=Text(
+                        value="Quit",
+                        font=GameComponentId("default"),
+                        size=11,
+                        color=Color(red=200, blue=200, green=200),
+                    ),
+                ),
             ),
         ))
 

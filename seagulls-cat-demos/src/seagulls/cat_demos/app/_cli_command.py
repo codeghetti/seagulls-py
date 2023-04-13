@@ -2,8 +2,10 @@ from argparse import ArgumentParser
 from typing import Tuple
 
 from seagulls.cat_demos.app._index_scene import IndexScene
+from seagulls.cat_demos.app.environment._world_elements import WorldElementIds, WorldElementPrefab
 from seagulls.cat_demos.app.player._mouse_controls import MouseControlIds, MouseControlsPrefab
 from seagulls.cat_demos.app.player._player_controls import PlayerControlIds, PlayerControlsPrefab
+from seagulls.cat_demos.engine.v2.colliders._collider_component import ColliderPrefabIds
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -40,10 +42,14 @@ class GameCliCommand(ICliCommand):
                 event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                 toggles=scene_components.get(SessionComponents.INPUT_TOGGLES_CLIENT),
                 clock=scene_components.get(SessionComponents.SCENE_CLOCK),
+                collisions=scene_components.get(ColliderPrefabIds.PREFAB_COMPONENT),
             )),
             (MouseControlIds.PREFAB_COMPONENT, lambda: MouseControlsPrefab(
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
                 event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+            )),
+            (WorldElementIds.PREFAB_COMPONENT, lambda: WorldElementPrefab(
+                object_prefab=scene_components.get(SessionComponents.OBJECT_PREFAB),
             )),
             (SessionComponents.PLUGIN_EVENT_CALLBACKS, lambda: tuple([
                 (SceneEvents.open_scene(GameSceneId("index")), lambda: IndexScene(
@@ -73,5 +79,11 @@ class GameCliCommand(ICliCommand):
                 image_name="kenney.ui-pack-rpg-expansion/tilemap",
                 coordinates=Position(x=0, y=188),
                 size=Size(height=49, width=190),
+            ),
+            SpriteSource(
+                sprite_id=SpriteId("barrel"),
+                image_name="kenney.tiny-dungeon/tilemap-packed",
+                coordinates=Position(x=16 * 10, y=16 * 6),
+                size=Size(height=16, width=16),
             ),
         ])

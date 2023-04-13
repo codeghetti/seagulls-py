@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from threading import Event
-from typing import Iterable, Protocol
+from typing import Iterable, NamedTuple, Protocol
 
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
@@ -24,10 +24,14 @@ class IFrameCollection(Protocol):
         pass
 
 
+class Frame(NamedTuple):
+    id: int
+
+
 class FrameEvents:
-    OPEN: GameEventId[None] = GameEventId[None]("seagulls:frame.open")
-    EXECUTE: GameEventId[None] = GameEventId[None]("seagulls:frame.execute")
-    CLOSE: GameEventId[None] = GameEventId[None]("seagulls:frame.close")
+    OPEN = GameEventId[Frame]("seagulls:frame.open")
+    EXECUTE = GameEventId[Frame]("seagulls:frame.execute")
+    CLOSE = GameEventId[Frame]("seagulls:frame.close")
 
 
 class FrameClient(IFrame):

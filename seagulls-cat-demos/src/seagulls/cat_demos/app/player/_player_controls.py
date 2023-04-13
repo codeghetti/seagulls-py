@@ -2,6 +2,8 @@ from typing import NamedTuple
 
 import pygame
 
+from seagulls.cat_demos.engine.v2.colliders._collider_component import ColliderPrefabIds, CollisionEvent, \
+    CollisionPrefab
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import GamePrefabId, IExecutablePrefab
@@ -32,6 +34,7 @@ class PlayerControlsPrefab(IExecutablePrefab[PlayerControls]):
     _event_client: GameEventDispatcher
     _toggles: InputTogglesClient
     _clock: GameClock
+    _collisions: CollisionPrefab
 
     def __init__(
         self,
@@ -39,11 +42,13 @@ class PlayerControlsPrefab(IExecutablePrefab[PlayerControls]):
         event_client: GameEventDispatcher,
         toggles: InputTogglesClient,
         clock: GameClock,
+        collisions: CollisionPrefab,
     ) -> None:
         self._scene_objects = scene_objects
         self._event_client = event_client
         self._toggles = toggles
         self._clock = clock
+        self._collisions = collisions
 
     def __call__(self, config: PlayerControls) -> None:
         mapping = {
@@ -74,6 +79,7 @@ class PlayerControlsPrefab(IExecutablePrefab[PlayerControls]):
         self._event_client.register(PygameEvents.key(config.down_key), on_keyboard)
 
         self._event_client.register(PlayerControlIds.MOVE_EVENT, self._move_player)
+        self._event_client.register(ColliderPrefabIds.COLLISION_EVENT, self._undo_move)
 
     def _move_player(self) -> None:
         delta = self._clock.get_delta()
@@ -88,6 +94,17 @@ class PlayerControlsPrefab(IExecutablePrefab[PlayerControls]):
             entity_id=payload.object_id,
             component_id=GameComponentId[Position]("object-component::position"),
             config=current_position + adjusted_direction,
+        )
+        self._previous_position = current_position
+        self._collisions(payload.object_id)
+
+    def _undo_move(self) -> None:
+        event = self._event_client.event()
+        payload: CollisionEvent = event.payload
+        self._scene_objects.set_component(
+            entity_id=payload.source_id,
+            component_id=GameComponentId[Position]("object-component::position"),
+            config=self._previous_position,
         )
 
 

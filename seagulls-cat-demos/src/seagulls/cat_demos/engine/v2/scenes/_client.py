@@ -8,7 +8,7 @@ from typing import Dict, Iterable, NamedTuple, Optional, Protocol
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventDispatcher, GameEventId
-from seagulls.cat_demos.engine.v2.frames._client import IFrameCollection
+from seagulls.cat_demos.engine.v2.frames._frames_client import IFrameCollection
 
 logger = logging.getLogger(__name__)
 

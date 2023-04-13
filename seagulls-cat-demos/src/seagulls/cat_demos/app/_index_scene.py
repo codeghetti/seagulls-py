@@ -1,12 +1,14 @@
 import pygame
-from pygame.font import Font
 
+from seagulls.cat_demos.app.environment._world_elements import WorldElement, WorldElementId, WorldElementIds
 from seagulls.cat_demos.app.player._mouse_controls import MouseControlIds, MouseControls
 from seagulls.cat_demos.app.player._player_controls import PlayerControlIds, PlayerControls
+from seagulls.cat_demos.engine.v2.colliders._collider_component import RectCollider
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import GameComponentConfig, GameObjectConfig, PrefabClient
+from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SessionComponents
@@ -29,6 +31,7 @@ class IndexScene(IExecutable):
         self._event_client = event_client
 
     def __call__(self) -> None:
+        self._spawn_environment()
         self._spawn_player()
         self._spawn_menu()
         self._spawn_mouse()
@@ -46,13 +49,22 @@ class IndexScene(IExecutable):
                     component_id=GameComponentId[Text]("object-component::text"),
                     config=Text(
                         value="hello, fancy pants!",
-                        font=GameComponentId[Font]("font.default"),
+                        font="monospace",
                         size=5,
                         color=Color(red=200, green=150, blue=150),
                     ),
                 ),
             ),
         ))
+
+    def _spawn_environment(self):
+        for x in range(10):
+            for y in range(10):
+                self._prefab_client.run(WorldElementIds.PREFAB, WorldElement(
+                    object_id=GameObjectId(f"barrel::{x}.{y}"),
+                    sprite_id=WorldElementId.BARREL,
+                    position=Position(x=100 + (x * 48), y=200 + (y * 48)),
+                ))
 
     def _spawn_player(self):
         self._prefab_client.run(SessionComponents.OBJECT_PREFAB, GameObjectConfig(
@@ -65,6 +77,10 @@ class IndexScene(IExecutable):
                 GameComponentConfig(
                     component_id=GameComponentId[Sprite]("object-component::sprite"),
                     config=Sprite(sprite_id=SpriteId("player")),
+                ),
+                GameComponentConfig(
+                    component_id=GameComponentId[RectCollider]("object-component::rect-collider"),
+                    config=RectCollider(size=Size(width=16, height=16)),
                 ),
             ),
         ))
@@ -108,9 +124,9 @@ class IndexScene(IExecutable):
                     component_id=GameComponentId[Text]("object-component::text"),
                     config=Text(
                         value="Quit",
-                        font=GameComponentId("default"),
-                        size=11,
-                        color=Color(red=200, blue=200, green=200),
+                        font="monospace",
+                        size=40,
+                        color=Color(red=100, blue=100, green=200),
                     ),
                 ),
             ),

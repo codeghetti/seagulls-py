@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Callable, Protocol
 
-from seagulls.cat_demos.engine.v2.frames._client import IStopScenes
+from seagulls.cat_demos.engine.v2.frames._frames_client import IStopScenes
 
 
 class IExecutable(Protocol):

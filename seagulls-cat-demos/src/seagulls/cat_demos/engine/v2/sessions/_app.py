@@ -8,7 +8,7 @@ from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._prefabs import GameObjectPrefab, PrefabClient
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher, GameEventId
-from seagulls.cat_demos.engine.v2.frames._client import FrameClient, FrameCollection, FrameEvents
+from seagulls.cat_demos.engine.v2.frames._frames_client import FrameClient, FrameCollection, FrameEvents
 from seagulls.cat_demos.engine.v2.input._input_toggles import InputTogglesClient
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameKeyboardInputPublisher
 from seagulls.cat_demos.engine.v2.position._position_prefab import PositionPrefab
@@ -24,6 +24,7 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
+from ..colliders._collider_component import ColliderPrefabIds, CollisionPrefab
 from ..input._game_clock import GameClock
 
 GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
@@ -163,6 +164,10 @@ class SeagullsApp:
             )),
             (SessionComponents.INPUT_TOGGLES_CLIENT, lambda: InputTogglesClient(
                 input_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+            )),
+            (ColliderPrefabIds.PREFAB_COMPONENT, lambda: CollisionPrefab(
+                objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+                event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
             )),
             (SessionComponents.SCENE_CLOCK, lambda: GameClock())
         )

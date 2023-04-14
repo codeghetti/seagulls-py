@@ -19,9 +19,9 @@ jobs:
           - seagulls-space-shooter-demo
     steps:
       - name: Git Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: "3.9.16"
       - name: Install Package
@@ -38,14 +38,14 @@ jobs:
           poetry run seagulls mypy
           poetry run seagulls pytest
       - name: Publish Code Coverage Results
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           files: .tmp/${{ matrix.package }}/coverage.xml
           name: codecov-${{ matrix.package }}
           verbose: true
       - name: Upload JUnit Report
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "JUnit Test Results - ${{ matrix.package }}"
           path: ".tmp/${{ matrix.package }}/junit.xml"
@@ -56,7 +56,7 @@ jobs:
     if: always()
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: artifacts
       - name: Publish Unit Test Results

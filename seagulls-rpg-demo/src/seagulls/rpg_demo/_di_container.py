@@ -142,6 +142,13 @@ class RpgDemoDiContainer:
                 game_size=(50, 50),
                 coordinates=(54, 0),
             ),
+            Sprites.floor_single_piece: SpriteInfo(
+                path=assets,
+                resolution=(288, 126),
+                size=(18, 18),
+                game_size=(50, 50),
+                coordinates=(0, 0),
+            ),
             Sprites.pumpkin: SpriteInfo(
                 path=assets,
                 resolution=(288, 126),
@@ -226,6 +233,13 @@ class RpgDemoDiContainer:
                 game_size=(484, 100),
                 coordinates=(7, 27),
             ),
+            Sprites.green_ghost: SpriteInfo(
+                path=ghost,
+                resolution=(192, 176),
+                size=(16, 16),
+                game_size=(35, 35),
+                coordinates=(0, 144)
+            )
         }
 
     @lru_cache()

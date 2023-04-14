@@ -53,6 +53,7 @@ relative_files = true
 output = "../.tmp/seagulls-rpg-demo/coverage.xml"
 
 [tool.mypy]
+packages = ["seagulls"]
 cache_dir = "../.tmp/seagulls-rpg-demo/.mypy_cache"
 namespace_packages = true
 mypy_path = "src/:test/"

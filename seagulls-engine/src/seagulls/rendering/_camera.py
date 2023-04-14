@@ -57,22 +57,18 @@ class Camera(IUpdatePosition):
         # This sounds like something we could do with collision detection
         if object_position["x"] + object_size["width"] < camera_position["x"]:
             # Object is too far to the left to be visible
-            logger.warning("Object is too far to the left to be visible")
             raise ObjectDoesNotOverlapError()
 
         if object_position["y"] + object_size["height"] < camera_position["y"]:
             # Object is too far above to be visible
-            logger.warning("Object is too far above to be visible")
             raise ObjectDoesNotOverlapError()
 
         if object_position["x"] > camera_position["x"] + camera_size["width"]:
             # Object is too far to the right to be visible
-            logger.warning("# Object is too far to the right to be visible")
             raise ObjectDoesNotOverlapError()
 
         if object_position["y"] > camera_position["y"] + camera_size["height"]:
             # Object is too far below to be visible
-            logger.warning("Object is too far below to be visible")
             raise ObjectDoesNotOverlapError()
 
     def update_position(self, position: Position) -> None:

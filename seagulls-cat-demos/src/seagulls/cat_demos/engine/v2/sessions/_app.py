@@ -1,6 +1,7 @@
 from functools import lru_cache
 from typing import Any, Callable, NamedTuple, Tuple, TypeAlias
 
+from seagulls.cat_demos.engine.v2.colliders._collider_component import ColliderPrefabIds, CollisionPrefab
 from seagulls.cat_demos.engine.v2.components._component_containers import CachedGameComponentContainer, \
     ContextualGameComponentContainer, FilteredGameComponentRegistry, GameComponentContainer, GameComponentFactory, \
     GameComponentId, GameComponentProvider, GameComponentType
@@ -9,6 +10,7 @@ from seagulls.cat_demos.engine.v2.components._prefabs import GameObjectPrefab, P
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher, GameEventId
 from seagulls.cat_demos.engine.v2.frames._frames_client import FrameClient, FrameCollection, FrameEvents
+from seagulls.cat_demos.engine.v2.input._game_clock import GameClock
 from seagulls.cat_demos.engine.v2.input._input_toggles import InputTogglesClient
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameKeyboardInputPublisher
 from seagulls.cat_demos.engine.v2.position._position_prefab import PositionPrefab
@@ -24,8 +26,6 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
-from ..colliders._collider_component import ColliderPrefabIds, CollisionPrefab
-from ..input._game_clock import GameClock
 
 GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
 

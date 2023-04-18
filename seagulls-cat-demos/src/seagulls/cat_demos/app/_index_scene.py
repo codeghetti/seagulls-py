@@ -63,7 +63,7 @@ class IndexScene(IExecutable):
                 self._prefab_client.run(WorldElementIds.PREFAB, WorldElement(
                     object_id=GameObjectId(f"barrel::{x}.{y}"),
                     sprite_id=WorldElementId.BARREL,
-                    position=Position(x=100 + (x * 48), y=200 + (y * 48)),
+                    position=Position(x=48 + (x * 48), y=48 + (y * 48)),
                 ))
 
     def _spawn_player(self):

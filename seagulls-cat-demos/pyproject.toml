@@ -18,6 +18,7 @@ pygame = "*"
 seagulls-engine = { version = "*", allow-prereleases = true, extras = ["cli"] }
 # Development Packages
 seagulls-devtools = { version = "*", allow-prereleases = true, optional = true }
+numpy = "^1.24.2"
 
 [tool.poetry.extras]
 dev = ["seagulls-devtools"]

@@ -18,6 +18,8 @@ from seagulls.cat_demos.engine.v2.components._prefabs import GameComponentConfig
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._size import Size
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
+from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameMouseMotionEvent
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
@@ -37,6 +39,7 @@ class GameServer(NamedTuple):
 
 class GameServerProcess(NamedTuple):
     process_id: int
+    forward_input: bool
 
 
 class DefaultExecutable(GameSubprocessExecutable):
@@ -62,6 +65,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
     _scene_objects: SceneObjects
     _object_prefab: GameObjectPrefab
     _window_client: WindowClient
+    _event_client: GameEventDispatcher
     _executable: GameSubprocessExecutable
 
     def __init__(
@@ -69,11 +73,13 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         scene_objects: SceneObjects,
         object_prefab: GameObjectPrefab,
         window_client: WindowClient,
+        event_client: GameEventDispatcher,
         executable: GameSubprocessExecutable
     ) -> None:
         self._scene_objects = scene_objects
         self._object_prefab = object_prefab
         self._window_client = window_client
+        self._event_client = event_client
         self._executable = executable
 
     def __call__(self, config: GameServer) -> None:
@@ -98,11 +104,19 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
                         component_id=GameComponentId[GameServerProcess]("object-component::server-process"),
                         config=GameServerProcess(
                             process_id=process.pid,
+                            forward_input=True,
                         ),
                     ),
                 )
             ),
         )
+
+        def on_mouse() -> None:
+            event = self._event_client.event()
+            payload: PygameMouseMotionEvent = event.payload
+            client_connection.send((event.id, payload))
+
+        self._event_client.register(PygameEvents.MOUSE_MOTION, on_mouse)
 
     def on_frame_close(self) -> None:
         component_id = GameComponentId[GameServerProcess]("object-component::server-process")

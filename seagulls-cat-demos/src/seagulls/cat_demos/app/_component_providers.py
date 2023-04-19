@@ -100,6 +100,7 @@ class CatDemosComponentProviders:
             )),
             (SessionComponents.PLUGIN_EVENT_CALLBACKS, lambda: tuple([
                 *events_by_type[settings.process_type](),
+                ()
             ])),
             (SessionComponents.PLUGIN_SPRITE_SOURCES, self._sprites),
             (GameServerIds.PREFAB_COMPONENT, lambda: GameServerPrefab(

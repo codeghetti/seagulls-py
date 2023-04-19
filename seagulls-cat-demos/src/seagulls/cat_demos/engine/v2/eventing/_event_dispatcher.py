@@ -8,7 +8,7 @@ GameEventType = TypeVar("GameEventType", bound=NamedTuple)
 GameEventId: TypeAlias = TypedEntityId[GameEventType]
 
 
-class GameEvent(NamedTuple):
+class GameEvent(NamedTuple):  # I would like to use Generic[GameEventType] here but we cannot with NamedTuple :(
     id: GameEventId[GameEventType]
     payload: GameEventType
 

@@ -18,8 +18,8 @@ from seagulls.cat_demos.engine.v2.components._prefabs import GameComponentConfig
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._size import Size
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
-from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameMouseMotionEvent
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventDispatcher
+from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameKeyboardEvent, PygameMouseMotionEvent
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
@@ -58,6 +58,26 @@ class DefaultExecutable(GameSubprocessExecutable):
         providers.append((GameServerIds.SERVER_PROCESS_CONNECTION, lambda: connection))
 
         app.run(*providers)
+
+
+class ServerEventForwarder:
+
+    _connection: Connection
+    _event_client: GameEventDispatcher
+
+    def __init__(self, connection: Connection, event_client: GameEventDispatcher) -> None:
+        self._connection = connection
+        self._event_client = event_client
+
+    def tick(self) -> None:
+        # TODO: this feels risky if the other side of the pipe doesn't stop sending events
+        # we could use a special event to stop this loop
+        # kinda like a commit event?
+        # maybe the entire server loop can be programmed as a loop tied to the end of a frame being rendered
+        while self._connection.poll():
+            event = self._connection.recv()
+            print(event)
+            self._event_client.trigger(GameEvent(*event))
 
 
 class GameServerPrefab(IExecutablePrefab[GameServer]):
@@ -111,12 +131,41 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
             ),
         )
 
-        def on_mouse() -> None:
+        def send_mouse_event() -> None:
             event = self._event_client.event()
             payload: PygameMouseMotionEvent = event.payload
             client_connection.send((event.id, payload))
 
-        self._event_client.register(PygameEvents.MOUSE_MOTION, on_mouse)
+        def send_keyboard_event() -> None:
+            # TODO: this shouldn't be necessary here
+            event = self._event_client.event()
+            payload: PygameKeyboardEvent = event.payload
+
+            if payload.type in [pygame.KEYDOWN, pygame.KEYUP]:
+                client_connection.send((
+                    PygameEvents.KEYBOARD,
+                    PygameKeyboardEvent(type=payload.type, key=payload.key),
+                ))
+                client_connection.send((
+                    PygameEvents.key(payload.key),
+                    PygameKeyboardEvent(type=payload.type, key=payload.key),
+                ))
+            if payload.type == pygame.KEYDOWN:
+                client_connection.send((
+                    PygameEvents.key_pressed(payload.key),
+                    PygameKeyboardEvent(type=payload.type, key=payload.key),
+                ))
+            if payload.type == pygame.KEYUP:
+                client_connection.send((
+                    PygameEvents.key_released(payload.key),
+                    PygameKeyboardEvent(type=payload.type, key=payload.key),
+                ))
+
+            client_connection.send((event.id, payload))
+
+        self._event_client.register(PygameEvents.MOUSE_MOTION, send_mouse_event)
+        self._event_client.register(PygameEvents.KEYBOARD, send_keyboard_event)
+
 
     def on_frame_close(self) -> None:
         component_id = GameComponentId[GameServerProcess]("object-component::server-process")
@@ -152,3 +201,4 @@ class GameServerIds:
     PREFAB_COMPONENT = GameComponentId[GameServerPrefab]("prefab::game-server")
     SUBPROCESS_EXECUTABLE = GameComponentId[GameSubprocessExecutable]("subprocess-executable")
     SERVER_PROCESS_CONNECTION = GameComponentId[Connection]("server-subprocess-connection")
+    SERVER_MSG_HANDLER = GameComponentId[ServerEventForwarder]("server-message-handler")

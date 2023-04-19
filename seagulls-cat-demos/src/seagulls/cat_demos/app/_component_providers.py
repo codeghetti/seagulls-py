@@ -4,7 +4,8 @@ from typing import NamedTuple, Tuple
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
 from seagulls.cat_demos.app._index_scene import IndexScene
 from seagulls.cat_demos.app.dev._client_window_scene import ClientWindowScene
-from seagulls.cat_demos.app.dev._server_prefab import DefaultExecutable, GameServerIds, GameServerPrefab
+from seagulls.cat_demos.app.dev._server_prefab import DefaultExecutable, GameServerIds, GameServerPrefab, \
+    ServerEventForwarder
 from seagulls.cat_demos.app.environment._world_elements import WorldElementIds, WorldElementPrefab
 from seagulls.cat_demos.app.player._mouse_controls import MouseControlIds, MouseControlsPrefab
 from seagulls.cat_demos.app.player._player_controls import PlayerControlIds, PlayerControlsPrefab
@@ -57,6 +58,10 @@ class CatDemosComponentProviders:
                 (SessionComponents.WINDOW_CLIENT, lambda: ServerWindowClient(
                     connection=lambda: scene_components.get(GameServerIds.SERVER_PROCESS_CONNECTION),
                 )),
+                (GameServerIds.SERVER_MSG_HANDLER, lambda: ServerEventForwarder(
+                    connection=scene_components.get(GameServerIds.SERVER_PROCESS_CONNECTION),
+                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+                )),
             ),
         }
 
@@ -79,6 +84,7 @@ class CatDemosComponentProviders:
                     prefab_client=session_components.get(SessionComponents.PREFAB_CLIENT),
                     event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                 )()),
+                (FrameEvents.OPEN, lambda: scene_components.get(GameServerIds.SERVER_MSG_HANDLER).tick()),
             ),
         }
 
@@ -100,13 +106,13 @@ class CatDemosComponentProviders:
             )),
             (SessionComponents.PLUGIN_EVENT_CALLBACKS, lambda: tuple([
                 *events_by_type[settings.process_type](),
-                ()
             ])),
             (SessionComponents.PLUGIN_SPRITE_SOURCES, self._sprites),
             (GameServerIds.PREFAB_COMPONENT, lambda: GameServerPrefab(
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
                 object_prefab=scene_components.get(SessionComponents.OBJECT_PREFAB),
                 window_client=scene_components.get(SessionComponents.WINDOW_CLIENT),
+                event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                 executable=scene_components.get(GameServerIds.SUBPROCESS_EXECUTABLE),
             )),
             (GameServerIds.SUBPROCESS_EXECUTABLE, lambda: DefaultExecutable(

@@ -32,6 +32,7 @@ class GameSubprocessExecutable(Protocol):
 class GameServer(NamedTuple):
     object_id: GameObjectId
     position: Position
+    size: Size
 
 
 class GameServerProcess(NamedTuple):
@@ -87,14 +88,11 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
                 components=(
                     GameComponentConfig(
                         component_id=GameComponentId[Position]("object-component::position"),
-                        config=Position(10, 10),
+                        config=config.position,
                     ),
                     GameComponentConfig(
                         component_id=GameComponentId[Size]("object-component::size"),
-                        config=Size(
-                            width=300,
-                            height=300,
-                        ),
+                        config=config.size,
                     ),
                     GameComponentConfig(
                         component_id=GameComponentId[GameServerProcess]("object-component::server-process"),

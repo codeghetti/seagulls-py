@@ -9,26 +9,31 @@ from seagulls.cat_demos.engine.v2.components._component_containers import GameCo
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import GameComponentConfig, GameObjectConfig, PrefabClient
 from seagulls.cat_demos.engine.v2.components._size import Size
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.frames._frames_client import Frame, FrameEvents
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SessionComponents
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, SpriteId
 from seagulls.cat_demos.engine.v2.text._text_component import Text
+from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 
 class IndexScene(IExecutable):
 
     _prefab_client: PrefabClient
     _event_client: GameEventDispatcher
+    _window_client: WindowClient
 
     def __init__(
         self,
         prefab_client: PrefabClient,
         event_client: GameEventDispatcher,
+        window_client: WindowClient,
     ) -> None:
         self._prefab_client = prefab_client
         self._event_client = event_client
+        self._window_client = window_client
 
     def __call__(self) -> None:
         self._spawn_environment()
@@ -133,4 +138,8 @@ class IndexScene(IExecutable):
         ))
 
     def _configure_events(self) -> None:
-        pass
+        def _on_frame() -> None:
+            print("on frame?")
+            self._window_client.get_surface().fill(Color(30, 30, 30))
+        print("configuring on frame?")
+        self._event_client.register(GameEventId[Frame](FrameEvents.OPEN), _on_frame)

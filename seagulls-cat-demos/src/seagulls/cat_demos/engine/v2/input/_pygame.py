@@ -99,6 +99,16 @@ moves = event_dispatcher.find_payloads(EventId[Position]("move.*"))
 # can we implement collisions like this?
 # transactions that roll back some of the movement operations?
 # how do I calculate the direction and position of the collisions?
+# for the duration of this move event listen to any collision events
+
+# can we listen to collision events while a condition is true? is that a toggle instead of an event?
+# a toggle is an event that fires on every frame
+# we can turn toggles on() and off()
+# or maybe on_while(condition) and un_until(condition)?
+# what about on_during(event_id)?
+# is this just an event with before/after callbacks?
+# are we just describing a context manager?
+event_dispatcher.context_manager(event_id, set_active_object_id)
 """
 
 

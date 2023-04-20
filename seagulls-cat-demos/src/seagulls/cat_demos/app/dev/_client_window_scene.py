@@ -27,10 +27,5 @@ class ClientWindowScene(IExecutable):
         self._prefab_client.run(GameServerIds.PREFAB, GameServer(
             object_id=GameObjectId("server.1"),
             position=Position(x=0, y=0),
-            size=Size(width=400, height=400),
-        ))
-        self._prefab_client.run(GameServerIds.PREFAB, GameServer(
-            object_id=GameObjectId("server.2"),
-            position=Position(x=400, y=0),
-            size=Size(width=400, height=400),
+            size=Size(width=800, height=800),
         ))

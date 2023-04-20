@@ -5,11 +5,12 @@ from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
 from seagulls.cat_demos.app._index_scene import IndexScene
 from seagulls.cat_demos.app.dev._client_window_scene import ClientWindowScene
 from seagulls.cat_demos.app.dev._server_prefab import DefaultExecutable, GameServerIds, GameServerPrefab, \
-    ServerEventForwarder
+    GameServerProcessManager, ServerEventForwarder
 from seagulls.cat_demos.app.environment._world_elements import WorldElementIds, WorldElementPrefab
 from seagulls.cat_demos.app.player._mouse_controls import MouseControlIds, MouseControlsPrefab
 from seagulls.cat_demos.app.player._player_controls import PlayerControlIds, PlayerControlsPrefab
 from seagulls.cat_demos.engine.v2.colliders._collider_component import ColliderPrefabIds
+from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._size import Size
@@ -65,11 +66,16 @@ class CatDemosComponentProviders:
             ),
         }
 
+        def _set_background() -> None:
+            # Just a quick hack until this moves somewhere permanent
+            scene_components.get(SessionComponents.WINDOW_CLIENT).get_surface().fill(Color(20, 20, 20))
+
         events_by_type = {
             ProcessType.STANDALONE: lambda: (
                 (SceneEvents.open_scene(GameSceneId("index")), lambda: IndexScene(
                     prefab_client=session_components.get(SessionComponents.PREFAB_CLIENT),
                     event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+                    window_client=scene_components.get(SessionComponents.WINDOW_CLIENT),
                 )()),
             ),
             ProcessType.CLIENT: lambda: (
@@ -78,13 +84,16 @@ class CatDemosComponentProviders:
                     event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                 )()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(GameServerIds.PREFAB_COMPONENT).on_frame_close()),
+                (SceneEvents.OPEN, lambda: scene_components.get(GameServerIds.PREFAB_COMPONENT).on_scene_open()),
             ),
             ProcessType.SERVER: lambda: (
                 (SceneEvents.open_scene(GameSceneId("index")), lambda: IndexScene(
                     prefab_client=session_components.get(SessionComponents.PREFAB_CLIENT),
                     event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+                    window_client=scene_components.get(SessionComponents.WINDOW_CLIENT),
                 )()),
                 (FrameEvents.OPEN, lambda: scene_components.get(GameServerIds.SERVER_MSG_HANDLER).tick()),
+                (FrameEvents.OPEN, lambda: _set_background()),
             ),
         }
 
@@ -114,6 +123,7 @@ class CatDemosComponentProviders:
                 window_client=scene_components.get(SessionComponents.WINDOW_CLIENT),
                 event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                 executable=scene_components.get(GameServerIds.SUBPROCESS_EXECUTABLE),
+                process_manager=GameServerProcessManager(),
             )),
             (GameServerIds.SUBPROCESS_EXECUTABLE, lambda: DefaultExecutable(
                 app_factory=create_server,

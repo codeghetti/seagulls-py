@@ -1,9 +1,10 @@
 import multiprocessing
+import uuid
 from abc import abstractmethod
-from functools import lru_cache
+from datetime import datetime
 from multiprocessing.connection import Connection
-from multiprocessing.context import DefaultContext
-from typing import NamedTuple, Protocol, Tuple
+from multiprocessing.context import DefaultContext, Process
+from typing import Any, Callable, Dict, NamedTuple, Protocol, Tuple, TypeAlias
 
 import pygame
 from pygame import SRCALPHA, Surface
@@ -22,7 +23,7 @@ from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, G
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameKeyboardEvent, PygameMouseMotionEvent
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp
-from seagulls.cat_demos.engine.v2.window._window import WindowClient
+from seagulls.cat_demos.engine.v2.window._window import SurfaceBytes, WindowClient
 
 
 class GameSubprocessExecutable(Protocol):
@@ -40,6 +41,10 @@ class GameServer(NamedTuple):
 class GameServerProcess(NamedTuple):
     process_id: int
     forward_input: bool
+
+
+class DateTime(NamedTuple):
+    value: datetime
 
 
 class DefaultExecutable(GameSubprocessExecutable):
@@ -62,7 +67,7 @@ class DefaultExecutable(GameSubprocessExecutable):
 
 class ServerEventForwarder:
 
-    _connection: Connection
+    _connection: Connection  # The server uses this end of the pipe to send and recv data
     _event_client: GameEventDispatcher
 
     def __init__(self, connection: Connection, event_client: GameEventDispatcher) -> None:
@@ -76,8 +81,51 @@ class ServerEventForwarder:
         # maybe the entire server loop can be programmed as a loop tied to the end of a frame being rendered
         while self._connection.poll():
             event = self._connection.recv()
-            print(event)
             self._event_client.trigger(GameEvent(*event))
+
+
+class ClientConnection(Connection):
+    """
+    Type used as a way to announce you specifically want to write client code.
+
+    There is no runtime difference between using these classes and the plain multiprocessing.Connection class.
+    """
+
+
+class ServerConnection(Connection):
+    """
+    Type used as a way to announce you specifically want to write server code.
+
+    There is no runtime difference between using these classes and the plain multiprocessing.Connection class.
+    """
+
+
+Pid: TypeAlias = int
+_ProcessDict: TypeAlias = Dict[Pid, Tuple[DefaultContext, Process, ClientConnection, ServerConnection]]
+
+
+class GameServerProcessManager:
+
+    _processes: _ProcessDict
+
+    def __init__(self) -> None:
+        self._processes = {}
+
+    def start(self, target: Callable[[Any], Any]) -> Pid:
+        context = multiprocessing.get_context("forkserver")
+        client_connection, server_connection = context.Pipe()
+        process = context.Process(target=target, args=(server_connection,))
+        process.start()
+
+        self._processes[process.pid] = (context, process, client_connection, server_connection)
+
+        return process.pid
+
+    def get_client_connection(self, pid: int) -> ClientConnection:
+        return self._processes[pid][2]
+
+    def get_server_connection(self, pid: int) -> ServerConnection:
+        return self._processes[pid][3]
 
 
 class GameServerPrefab(IExecutablePrefab[GameServer]):
@@ -87,6 +135,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
     _window_client: WindowClient
     _event_client: GameEventDispatcher
     _executable: GameSubprocessExecutable
+    _process_manager: GameServerProcessManager
 
     def __init__(
         self,
@@ -94,19 +143,21 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         object_prefab: GameObjectPrefab,
         window_client: WindowClient,
         event_client: GameEventDispatcher,
-        executable: GameSubprocessExecutable
+        executable: GameSubprocessExecutable,
+        process_manager: GameServerProcessManager,
     ) -> None:
         self._scene_objects = scene_objects
         self._object_prefab = object_prefab
         self._window_client = window_client
         self._event_client = event_client
         self._executable = executable
+        self._process_manager = process_manager
 
     def __call__(self, config: GameServer) -> None:
-        ctx = self._context(config.object_id)
-        server_connection, client_connection = self._pipe(config.object_id)
-        process = ctx.Process(target=self._executable, args=(server_connection,))
-        process.start()
+        # TODO: I would like to be able to describe this scenario:
+        #       "while this process is running, listen to events to communicate with the server"
+        #       client.while(condition, game_object_context)
+        pid = self._process_manager.start(self._executable)
 
         self._object_prefab(
             GameObjectConfig(
@@ -123,53 +174,42 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
                     GameComponentConfig(
                         component_id=GameComponentId[GameServerProcess]("object-component::server-process"),
                         config=GameServerProcess(
-                            process_id=process.pid,
+                            process_id=pid,
                             forward_input=True,
                         ),
+                    ),
+                    GameComponentConfig(
+                        component_id=GameComponentId[DateTime]("object-component::created-at"),
+                        config=DateTime(datetime.now()),
                     ),
                 )
             ),
         )
 
-        def send_mouse_event() -> None:
-            event = self._event_client.event()
-            payload: PygameMouseMotionEvent = event.payload
-            client_connection.send((event.id, payload))
+    def on_scene_open(self) -> None:
+        component_id = GameComponentId[GameServerProcess]("object-component::server-process")
 
-        def send_keyboard_event() -> None:
-            # TODO: this shouldn't be necessary here
-            event = self._event_client.event()
-            payload: PygameKeyboardEvent = event.payload
+        def _on_mouse_motion() -> None:
+            for object_id in self._scene_objects.find_by_component(component_id):
+                self._send_mouse_event(object_id)
 
-            if payload.type in [pygame.KEYDOWN, pygame.KEYUP]:
-                client_connection.send((
-                    PygameEvents.KEYBOARD,
-                    PygameKeyboardEvent(type=payload.type, key=payload.key),
-                ))
-                client_connection.send((
-                    PygameEvents.key(payload.key),
-                    PygameKeyboardEvent(type=payload.type, key=payload.key),
-                ))
-            if payload.type == pygame.KEYDOWN:
-                client_connection.send((
-                    PygameEvents.key_pressed(payload.key),
-                    PygameKeyboardEvent(type=payload.type, key=payload.key),
-                ))
-            if payload.type == pygame.KEYUP:
-                client_connection.send((
-                    PygameEvents.key_released(payload.key),
-                    PygameKeyboardEvent(type=payload.type, key=payload.key),
-                ))
+        def _on_keyboard() -> None:
+            for object_id in self._scene_objects.find_by_component(component_id):
+                # print(f"forwarding event to object: {object_id}")
+                self._send_keyboard_event(object_id)
 
-            client_connection.send((event.id, payload))
-
-        self._event_client.register(PygameEvents.MOUSE_MOTION, send_mouse_event)
-        self._event_client.register(PygameEvents.KEYBOARD, send_keyboard_event)
-
+        self._event_client.register(PygameEvents.MOUSE_MOTION, _on_mouse_motion)
+        self._event_client.register(PygameEvents.KEYBOARD, _on_keyboard)
 
     def on_frame_close(self) -> None:
         component_id = GameComponentId[GameServerProcess]("object-component::server-process")
+        created_at_id = GameComponentId[DateTime]("object-component::created-at")
+
+        # TODO: make a version that returns a tuple[objectid, component]
         for object_id in self._scene_objects.find_by_component(component_id):
+            process_component = self._scene_objects.get_component(object_id, component_id)
+
+            client_connection = self._process_manager.get_client_connection(process_component.process_id)
             position_component = self._scene_objects.get_component(
                 object_id,
                 GameComponentId[Position]("object-component::position"),
@@ -178,22 +218,69 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
                 object_id,
                 GameComponentId[Size]("object-component::size"),
             )
+            created_at = self._scene_objects.get_component(object_id, created_at_id).value
 
-            server_screen = Surface(size_component, SRCALPHA, 32)
-            server_screen.fill(Color(150, 150, 250))
-            _, client_connection = self._pipe(object_id)
-            surface = pygame.surfarray.make_surface(client_connection.recv())
-            scaled_surface = pygame.transform.scale(surface, size_component - Size(width=4, height=4))
-            server_screen.blit(scaled_surface, Position(2, 2))
-            self._window_client.get_surface().blit(server_screen, position_component)
+            now = datetime.now()
+            if (now - created_at).total_seconds() > 5:
+                client_connection.send(GameEvent(PygameEvents.QUIT, None))
+                self._scene_objects.remove(object_id)
+                self(GameServer(
+                    object_id=GameObjectId(str(uuid.uuid4())),
+                    position=position_component,
+                    size=size_component,
+                ))
 
-    @lru_cache()
-    def _pipe(self, object_id: GameObjectId) -> Tuple[Connection, Connection]:
-        return self._context(object_id).Pipe()
+            if client_connection.poll():
+                event: SurfaceBytes = client_connection.recv().payload
 
-    @lru_cache()
-    def _context(self, object_id: GameObjectId) -> DefaultContext:
-        return multiprocessing.get_context("forkserver")
+                server_screen = Surface(size_component, SRCALPHA, 32)
+                server_screen.fill(Color(150, 150, 250))
+                surface = pygame.image.frombytes(event.bytes, event.size, "RGBA")
+                scaled_surface = pygame.transform.scale(surface, size_component - Size(width=4, height=4))
+                server_screen.blit(scaled_surface, Position(2, 2))
+                self._window_client.get_surface().blit(server_screen, position_component)
+
+    def _send_mouse_event(self, object_id: GameObjectId) -> None:
+        component_id = GameComponentId[GameServerProcess]("object-component::server-process")
+        process_component = self._scene_objects.get_component(object_id, component_id)
+
+        client_connection = self._process_manager.get_client_connection(process_component.process_id)
+
+        event = self._event_client.event()
+        payload: PygameMouseMotionEvent = event.payload
+        client_connection.send((event.id, payload))
+
+    def _send_keyboard_event(self, object_id: GameObjectId) -> None:
+        component_id = GameComponentId[GameServerProcess]("object-component::server-process")
+        process_component = self._scene_objects.get_component(object_id, component_id)
+
+        # TODO: this shouldn't be necessary here
+        event = self._event_client.event()
+        payload: PygameKeyboardEvent = event.payload
+
+        client_connection = self._process_manager.get_client_connection(process_component.process_id)
+
+        if payload.type in [pygame.KEYDOWN, pygame.KEYUP]:
+            client_connection.send((
+                PygameEvents.KEYBOARD,
+                PygameKeyboardEvent(type=payload.type, key=payload.key),
+            ))
+            client_connection.send((
+                PygameEvents.key(payload.key),
+                PygameKeyboardEvent(type=payload.type, key=payload.key),
+            ))
+        if payload.type == pygame.KEYDOWN:
+            client_connection.send((
+                PygameEvents.key_pressed(payload.key),
+                PygameKeyboardEvent(type=payload.type, key=payload.key),
+            ))
+        if payload.type == pygame.KEYUP:
+            client_connection.send((
+                PygameEvents.key_released(payload.key),
+                PygameKeyboardEvent(type=payload.type, key=payload.key),
+            ))
+
+        client_connection.send((event.id, payload))
 
 
 class GameServerIds:

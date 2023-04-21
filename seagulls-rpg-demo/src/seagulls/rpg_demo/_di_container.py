@@ -98,6 +98,7 @@ class RpgDemoDiContainer:
             sprite_client=self._sprite_client(),
             game_controls=self._game_controls(),
             clock=self._clock(),
+            asset_manager=self._asset_manager(),
         )
 
     @lru_cache()

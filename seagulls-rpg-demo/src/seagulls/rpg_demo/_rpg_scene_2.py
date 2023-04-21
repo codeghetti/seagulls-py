@@ -1,12 +1,14 @@
 import logging
 
 import pygame
+from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameControls
-from seagulls.pygame import WindowSurface
+from seagulls.pygame import PygamePrinter, WindowSurface
 from seagulls.rendering import (
     Camera,
-    IPrinter,
+    Color,
     Position,
+    Size,
     SpriteClient,
     SpritesType
 )
@@ -39,18 +41,20 @@ class Sprites(SpritesType):
 class RpgScene2(IGameScene):
 
     _session: IProvideGameSessions
-    _printer: IPrinter
+    _printer: PygamePrinter
     _camera: Camera
+    _asset_manager: AssetManager
 
     def __init__(
             self,
             session: IProvideGameSessions,
-            printer: IPrinter,
+            printer: PygamePrinter,
             window: WindowSurface,
             camera: Camera,
             sprite_client: SpriteClient,
             game_controls: GameControls,
-            clock: GameClock):
+            clock: GameClock,
+            asset_manager: AssetManager):
         self._session = session
         self._printer = printer
         self._window = window
@@ -58,6 +62,7 @@ class RpgScene2(IGameScene):
         self._sprite_client = sprite_client
         self._game_controls = game_controls
         self._clock = clock
+        self._asset_manager = asset_manager
         self._scene_right_limit = 3200
         self._x_pumpkin_position = 10
         self._y_position_pumpkin = 515.0
@@ -82,13 +87,18 @@ class RpgScene2(IGameScene):
         self._green_ghost_alive = True
         self._x_sword_position = 0
         self._y_position_sword = 0
-        self._lava = pygame.Rect((0, 600), (self._scene_right_limit, 50))
+        self._lava = pygame.Rect((0, 750), (self._scene_right_limit, 50))
 
     def tick(self) -> None:
         self._printer.clear()
         self._game_controls.tick()
 
         self._clock.tick()
+
+        fps = self._clock.get_fps()
+
+        self.render_fps(fps)
+
         delta = self._clock.get_time()
         self._damage_taken_buffer += delta
 
@@ -190,6 +200,15 @@ class RpgScene2(IGameScene):
 
         if self._game_controls.should_quit():
             self._session.get().stop()
+
+    def render_fps(self, fps: float) -> None:
+        self._printer.print_text(
+            str(int(fps)),
+            self._asset_manager.get_path("fonts/ubuntu-mono-v10-latin-regular.ttf"),
+            32,
+            Color({"r": 16, "g": 16, "b": 16}),
+            Size({"height": 32, "width": 64}),
+            self._camera.relative_position(Position({"x": 900, "y": 200})))
 
     def weapon_firing(self, delta):
         if self._game_controls.should_fire() and not self._is_weapon_out:

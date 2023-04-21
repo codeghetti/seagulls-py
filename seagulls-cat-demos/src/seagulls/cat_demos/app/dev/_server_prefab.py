@@ -269,7 +269,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
                 event: SurfaceBytes = client_connection.recv().payload
 
                 server_screen = Surface(size_component, SRCALPHA, 32)
-                server_screen.fill(Color(150, 150, 250))
+                server_screen.fill(Color(10, 10, 10))
                 surface = pygame.image.frombytes(event.bytes, event.size, "RGBA")
                 scaled_surface = pygame.transform.scale(surface, size_component - Size(width=4, height=4))
                 server_screen.blit(scaled_surface, Position(2, 2))

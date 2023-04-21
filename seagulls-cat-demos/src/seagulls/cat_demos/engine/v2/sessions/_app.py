@@ -26,6 +26,7 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
+from ..debugging._debug_hud_prefab import DebugHudPrefab
 
 GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
 
@@ -43,6 +44,7 @@ class SessionComponents:
     SPRITE_COMPONENT = GameComponentId[SpriteComponent]("sprite-component")
     SPRITE_PREFAB = GameComponentId[SpritePrefab]("prefab.sprite-component")
     OBJECT_PREFAB = GameComponentId[GameObjectPrefab]("prefab.game-object")
+    DEBUG_HUD_PREFAB = GameComponentId[DebugHudPrefab]("prefab.debug-hud")
     OBJECT_COMPONENT_CONTAINER = GameComponentId[GameComponentContainer]("object-component-registry")
     FRAME_COLLECTION = GameComponentId[FrameCollection]("frame-collection")
     INDEX_SCENE = GameComponentId[IScene]("index.scene")
@@ -136,6 +138,7 @@ class SeagullsApp:
                 (FrameEvents.OPEN, lambda: scene_components.get(SessionComponents.SCENE_CLOCK).tick()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.SPRITE_COMPONENT)()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
+                (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.DEBUG_HUD_PREFAB).tick()),
 
                 (SceneEvents.OPEN, lambda: scene_components.get(SessionComponents.INDEX_OPEN_EXECUTABLE)()),
                 (SceneEvents.CLOSE, lambda: scene_components.get(SessionComponents.INDEX_CLOSE_EXECUTABLE)()),
@@ -157,6 +160,11 @@ class SeagullsApp:
             )),
             (SessionComponents.POSITION_PREFAB, lambda: PositionPrefab(
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+            )),
+            (SessionComponents.DEBUG_HUD_PREFAB, lambda: DebugHudPrefab(
+                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+                object_prefab=scene_components.get(SessionComponents.OBJECT_PREFAB),
+                clock=scene_components.get(SessionComponents.SCENE_CLOCK),
             )),
             (SessionComponents.RESOURCE_CLIENT, lambda: ResourceClient()),
             (SessionComponents.SPRITE_CONTAINER, lambda: SpriteContainer(

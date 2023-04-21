@@ -9,6 +9,7 @@ from seagulls.cat_demos.engine.v2.components._component_containers import GameCo
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import GameComponentConfig, GameObjectConfig, PrefabClient
 from seagulls.cat_demos.engine.v2.components._size import Size
+from seagulls.cat_demos.engine.v2.debugging._debug_hud_prefab import DebugHud
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher, GameEventId
 from seagulls.cat_demos.engine.v2.frames._frames_client import Frame, FrameEvents
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -40,6 +41,7 @@ class IndexScene(IExecutable):
         self._spawn_player()
         self._spawn_menu()
         self._spawn_mouse()
+        self._spawn_debug_hud()
         self._configure_events()
 
     def _spawn_welcome_text(self):
@@ -63,12 +65,12 @@ class IndexScene(IExecutable):
         ))
 
     def _spawn_environment(self):
-        for x in range(10):
-            for y in range(12):
+        for x in range(5):
+            for y in range(5):
                 self._prefab_client.run(WorldElementIds.PREFAB, WorldElement(
                     object_id=GameObjectId(f"barrel::{x}.{y}"),
                     sprite_id=WorldElementId.BARREL,
-                    position=Position(x=48 + (x * 48), y=48 + (y * 48)),
+                    position=Position(x=200 + (x * 48), y=400 + (y * 48)),
                 ))
 
     def _spawn_player(self):
@@ -136,6 +138,9 @@ class IndexScene(IExecutable):
                 ),
             ),
         ))
+
+    def _spawn_debug_hud(self) -> None:
+        self._prefab_client.run(SessionComponents.DEBUG_HUD_PREFAB, DebugHud(show_fps=True))
 
     def _configure_events(self) -> None:
         def _on_frame() -> None:

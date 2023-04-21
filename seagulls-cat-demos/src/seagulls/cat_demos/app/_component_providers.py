@@ -159,6 +159,12 @@ class CatDemosComponentProviders:
                 coordinates=Position(x=16 * 10, y=16 * 6),
                 size=Size(height=16, width=16),
             ),
+            SpriteSource(
+                sprite_id=SpriteId("chest.closed"),
+                image_name="kenney.tiny-dungeon/tilemap-packed",
+                coordinates=Position(x=16 * 5, y=16 * 7),
+                size=Size(height=16, width=16),
+            ),
         ])
 
 

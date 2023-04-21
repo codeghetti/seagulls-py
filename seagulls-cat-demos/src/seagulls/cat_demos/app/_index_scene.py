@@ -44,33 +44,13 @@ class IndexScene(IExecutable):
         self._spawn_debug_hud()
         self._configure_events()
 
-    def _spawn_welcome_text(self):
-        self._prefab_client.run(SessionComponents.OBJECT_PREFAB, GameObjectConfig(
-            object_id=GameObjectId("welcome-text"),
-            components=(
-                GameComponentConfig(
-                    component_id=GameComponentId[Position]("object-component::position"),
-                    config=Position(10, 10),
-                ),
-                GameComponentConfig(
-                    component_id=GameComponentId[Text]("object-component::text"),
-                    config=Text(
-                        value="hello, fancy pants!",
-                        font="monospace",
-                        size=5,
-                        color=Color(red=200, green=150, blue=150),
-                    ),
-                ),
-            ),
-        ))
-
     def _spawn_environment(self):
         for x in range(5):
             for y in range(5):
                 self._prefab_client.run(WorldElementIds.PREFAB, WorldElement(
                     object_id=GameObjectId(f"barrel::{x}.{y}"),
                     sprite_id=WorldElementId.BARREL,
-                    position=Position(x=200 + (x * 48), y=400 + (y * 48)),
+                    position=Position(x=50 + (x * 32), y=50 + (y * 32)),
                 ))
 
     def _spawn_player(self):

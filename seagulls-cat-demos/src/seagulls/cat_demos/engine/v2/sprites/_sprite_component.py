@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import lru_cache
 from typing import Dict, NamedTuple, Tuple, TypeAlias
 
 import pygame
@@ -62,6 +63,7 @@ class SpriteComponent(IExecutable):
             surface = self._window_client.get_surface()
             surface.blit(sprite_surface, position_component)
 
+    @lru_cache()
     def _create_surface(self, source: SpriteSource) -> Surface:
         path = self._resource_client.get_path(f"{source.image_name}.png")
         sprite_surface = pygame.image.load(path).convert_alpha()

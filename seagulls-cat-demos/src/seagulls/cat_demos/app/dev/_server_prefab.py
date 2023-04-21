@@ -65,7 +65,10 @@ class DefaultExecutable(GameSubprocessExecutable):
         providers = list(component_provider())
         providers.append((GameServerIds.SERVER_PROCESS_CONNECTION, lambda: connection))
 
-        app.run(*providers)
+        try:
+            app.run(*providers)
+        except KeyboardInterrupt:
+            pass
 
 
 class ServerEventForwarder:

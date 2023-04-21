@@ -64,7 +64,7 @@ class IndexScene(IExecutable):
 
     def _spawn_environment(self):
         for x in range(10):
-            for y in range(10):
+            for y in range(12):
                 self._prefab_client.run(WorldElementIds.PREFAB, WorldElement(
                     object_id=GameObjectId(f"barrel::{x}.{y}"),
                     sprite_id=WorldElementId.BARREL,

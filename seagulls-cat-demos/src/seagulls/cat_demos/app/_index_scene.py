@@ -77,7 +77,7 @@ class IndexScene(IExecutable):
             components=(
                 GameComponentConfig(
                     component_id=GameComponentId[Position]("object-component::position"),
-                    config=Position(10, 600),
+                    config=Position(200, 700),
                 ),
                 GameComponentConfig(
                     component_id=GameComponentId[Sprite]("object-component::sprite"),
@@ -119,7 +119,7 @@ class IndexScene(IExecutable):
             components=(
                 GameComponentConfig(
                     component_id=GameComponentId[Position]("object-component::position"),
-                    config=Position(100, 100),
+                    config=Position(600, 10),
                 ),
                 GameComponentConfig(
                     component_id=GameComponentId[Sprite]("object-component::sprite"),
@@ -128,10 +128,10 @@ class IndexScene(IExecutable):
                 GameComponentConfig(
                     component_id=GameComponentId[Text]("object-component::text"),
                     config=Text(
-                        value="Quit",
+                        value="Quit!",
                         font="monospace",
                         size=40,
-                        color=Color(red=100, blue=100, green=200),
+                        color=Color(red=30, blue=30, green=30),
                     ),
                 ),
             ),

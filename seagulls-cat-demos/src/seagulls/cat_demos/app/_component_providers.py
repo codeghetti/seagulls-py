@@ -4,7 +4,8 @@ from typing import NamedTuple, Tuple
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
 from seagulls.cat_demos.app._index_scene import IndexScene
 from seagulls.cat_demos.app.dev._client_window_scene import ClientWindowScene
-from seagulls.cat_demos.app.dev._server_prefab import DefaultExecutable, GameServerIds, GameServerPrefab, \
+from seagulls.cat_demos.app.dev._server_prefab import DefaultExecutable, FilesystemMonitor, GameServerIds, \
+    GameServerPrefab, \
     GameServerProcessManager, ServerEventForwarder
 from seagulls.cat_demos.app.environment._world_elements import WorldElementIds, WorldElementPrefab
 from seagulls.cat_demos.app.player._mouse_controls import MouseControlIds, MouseControlsPrefab
@@ -77,6 +78,7 @@ class CatDemosComponentProviders:
                     event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                     window_client=scene_components.get(SessionComponents.WINDOW_CLIENT),
                 )()),
+                (FrameEvents.OPEN, lambda: _set_background()),
             ),
             ProcessType.CLIENT: lambda: (
                 (SceneEvents.open_scene(GameSceneId("index")), lambda: ClientWindowScene(
@@ -124,6 +126,7 @@ class CatDemosComponentProviders:
                 event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                 executable=scene_components.get(GameServerIds.SUBPROCESS_EXECUTABLE),
                 process_manager=GameServerProcessManager(),
+                filesystem_monitor=FilesystemMonitor(),
             )),
             (GameServerIds.SUBPROCESS_EXECUTABLE, lambda: DefaultExecutable(
                 app_factory=create_server,

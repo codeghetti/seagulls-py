@@ -4,10 +4,13 @@ from abc import abstractmethod
 from datetime import datetime
 from multiprocessing.connection import Connection
 from multiprocessing.context import DefaultContext, Process
+from threading import Event
 from typing import Any, Callable, Dict, NamedTuple, Protocol, Tuple, TypeAlias
 
 import pygame
 from pygame import SRCALPHA, Surface
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
 
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
 from seagulls.cat_demos.engine.v2.components._color import Color
@@ -128,6 +131,23 @@ class GameServerProcessManager:
         return self._processes[pid][3]
 
 
+class FilesystemMonitor(FileSystemEventHandler):
+
+    _trigger: Event
+
+    def __init__(self) -> None:
+        self._trigger = Event()
+
+    def on_modified(self, event) -> None:
+        self._trigger.set()
+
+    def toggled(self) -> bool:
+        return self._trigger.is_set()
+
+    def reset(self) -> None:
+        self._trigger.clear()
+
+
 class GameServerPrefab(IExecutablePrefab[GameServer]):
 
     _scene_objects: SceneObjects
@@ -136,6 +156,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
     _event_client: GameEventDispatcher
     _executable: GameSubprocessExecutable
     _process_manager: GameServerProcessManager
+    _filesystem_monitor: FilesystemMonitor
 
     def __init__(
         self,
@@ -145,6 +166,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         event_client: GameEventDispatcher,
         executable: GameSubprocessExecutable,
         process_manager: GameServerProcessManager,
+        filesystem_monitor: FilesystemMonitor,
     ) -> None:
         self._scene_objects = scene_objects
         self._object_prefab = object_prefab
@@ -152,6 +174,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         self._event_client = event_client
         self._executable = executable
         self._process_manager = process_manager
+        self._filesystem_monitor = filesystem_monitor
 
     def __call__(self, config: GameServer) -> None:
         # TODO: I would like to be able to describe this scenario:
@@ -201,9 +224,18 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         self._event_client.register(PygameEvents.MOUSE_MOTION, _on_mouse_motion)
         self._event_client.register(PygameEvents.KEYBOARD, _on_keyboard)
 
+        observer = Observer()
+        handler = self._filesystem_monitor
+        observer.schedule(handler, "src/", recursive=True)
+        observer.start()
+
     def on_frame_close(self) -> None:
         component_id = GameComponentId[GameServerProcess]("object-component::server-process")
         created_at_id = GameComponentId[DateTime]("object-component::created-at")
+
+        toggled = self._filesystem_monitor.toggled()
+        if toggled:
+            self._filesystem_monitor.reset()
 
         # TODO: make a version that returns a tuple[objectid, component]
         for object_id in self._scene_objects.find_by_component(component_id):
@@ -221,7 +253,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
             created_at = self._scene_objects.get_component(object_id, created_at_id).value
 
             now = datetime.now()
-            if (now - created_at).total_seconds() > 5:
+            if toggled:
                 client_connection.send(GameEvent(PygameEvents.QUIT, None))
                 self._scene_objects.remove(object_id)
                 self(GameServer(

@@ -33,7 +33,7 @@ class CatDemosDiContainer:
     @lru_cache()
     def _standalone_providers(self) -> CatDemosComponentProviders:
         return CatDemosComponentProviders(app=self.app(), settings=lambda: CatDemosAppSettings(
-            process_type=ProcessType.SERVER,
+            process_type=ProcessType.STANDALONE,
         ))
 
     @lru_cache()

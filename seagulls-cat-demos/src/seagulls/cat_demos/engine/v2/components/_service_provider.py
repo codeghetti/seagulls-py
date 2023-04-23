@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from typing import Callable, Protocol, TypeAlias, TypeVar
+from typing import Protocol, TypeAlias, TypeVar
 
-T = TypeVar("T")
+T = TypeVar("T", covariant=True)
 
 
 class ServiceProvider(Protocol[T]):
@@ -11,11 +11,11 @@ class ServiceProvider(Protocol[T]):
         pass
 
 
-class Provider(ServiceProvider):
+class Provider(ServiceProvider[T]):
 
-    _callback: Callable[[], T]
+    _callback: ServiceProvider[T]
 
-    def __init__(self, callback: Callable[[], T]) -> None:
+    def __init__(self, callback: ServiceProvider[T]) -> None:
         self._callback = callback
 
     def __call__(self) -> T:

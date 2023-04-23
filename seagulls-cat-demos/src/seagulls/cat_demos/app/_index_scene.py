@@ -37,21 +37,39 @@ class IndexScene(IExecutable):
         self._window_client = window_client
 
     def __call__(self) -> None:
-        self._spawn_environment()
-        self._spawn_player()
+        #self._spawn_environment()
+        self._spawn_sc_environment()
+        #self._spawn_player()
+        self._spawn_sc_player()
+        self._spawn_sc_one_rock()
         self._spawn_menu()
         self._spawn_mouse()
         self._spawn_debug_hud()
         self._configure_events()
 
     def _spawn_environment(self):
-        for x in range(5):
-            for y in range(5):
+        for x in range(15):
+            for y in range(15):
                 self._prefab_client.run(WorldElementIds.PREFAB, WorldElement(
                     object_id=GameObjectId(f"barrel::{x}.{y}"),
                     sprite_id=WorldElementId.BARREL,
                     position=Position(x=50 + (x * 32), y=50 + (y * 32)),
                 ))
+
+    def _spawn_sc_environment(self):
+        self._prefab_client.run(WorldElementIds.PREFAB, WorldElement(
+            object_id=GameObjectId(f"star_background"),
+            sprite_id=WorldElementId.STAR_BACKGROUND,
+            position=Position(x=0, y=0),
+        ))
+
+    def _spawn_sc_one_rock(self):
+        self._prefab_client.run(WorldElementIds.PREFAB, WorldElement(
+            object_id=GameObjectId(f"rock-large"),
+            sprite_id=WorldElementId.ROCK_LARGE,
+            position=Position(x=400, y=100),
+        ))
+
 
     def _spawn_player(self):
         self._prefab_client.run(SessionComponents.OBJECT_PREFAB, GameObjectConfig(
@@ -73,6 +91,32 @@ class IndexScene(IExecutable):
         ))
         self._prefab_client.run(PlayerControlIds.PREFAB, PlayerControls(
             object_id=GameObjectId("player"),
+            left_key=pygame.K_a,
+            right_key=pygame.K_d,
+            up_key=pygame.K_w,
+            down_key=pygame.K_s,
+        ))
+
+    def _spawn_sc_player(self):
+        self._prefab_client.run(SessionComponents.OBJECT_PREFAB, GameObjectConfig(
+            object_id=GameObjectId("spaceship"),
+            components=(
+                GameComponentConfig(
+                    component_id=GameComponentId[Position]("object-component::position"),
+                    config=Position(500, 550),
+                ),
+                GameComponentConfig(
+                    component_id=GameComponentId[Sprite]("object-component::sprite"),
+                    config=Sprite(sprite_id=SpriteId("spaceship")),
+                ),
+                GameComponentConfig(
+                    component_id=GameComponentId[RectCollider]("object-component::rect-collider"),
+                    config=RectCollider(size=Size(width=112, height=75)),
+                ),
+            ),
+        ))
+        self._prefab_client.run(PlayerControlIds.PREFAB, PlayerControls(
+            object_id=GameObjectId("spaceship"),
             left_key=pygame.K_a,
             right_key=pygame.K_d,
             up_key=pygame.K_w,

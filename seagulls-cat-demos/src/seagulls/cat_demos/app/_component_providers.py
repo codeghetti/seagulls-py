@@ -21,6 +21,8 @@ from seagulls.cat_demos.engine.v2.scenes._client import SceneEvents
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp, SessionComponents
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import SpriteId, SpriteSource
 from seagulls.cat_demos.engine.v2.window._window import ServerWindowClient, WindowClient
+from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
+from seagulls.cat_demos.app._mob_controls_component import RockManager
 
 
 class ProcessType(Enum):
@@ -96,6 +98,7 @@ class CatDemosComponentProviders:
                 )()),
                 (FrameEvents.OPEN, lambda: scene_components.get(GameServerIds.SERVER_MSG_HANDLER).tick()),
                 (FrameEvents.OPEN, lambda: _set_background()),
+                (FrameEvents.OPEN, lambda: scene_components.get(GameComponentId("RockManager")).tick())
             ),
         }
 
@@ -107,6 +110,10 @@ class CatDemosComponentProviders:
                 toggles=scene_components.get(SessionComponents.INPUT_TOGGLES_CLIENT),
                 clock=scene_components.get(SessionComponents.SCENE_CLOCK),
                 collisions=scene_components.get(ColliderPrefabIds.PREFAB_COMPONENT),
+            )),
+            (GameComponentId("RockManager"), lambda: RockManager(
+                scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+                clock=scene_components.get(SessionComponents.SCENE_CLOCK),
             )),
             (MouseControlIds.PREFAB_COMPONENT, lambda: MouseControlsPrefab(
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
@@ -164,6 +171,24 @@ class CatDemosComponentProviders:
                 image_name="kenney.tiny-dungeon/tilemap-packed",
                 coordinates=Position(x=16 * 5, y=16 * 7),
                 size=Size(height=16, width=16),
+            ),
+            SpriteSource(
+                sprite_id=SpriteId("star_background"),
+                image_name="space-shooter/environment-stars",
+                coordinates=Position(x=0, y=0),
+                size=Size(height=600, width=1024),
+            ),
+            SpriteSource(
+                sprite_id=SpriteId("spaceship"),
+                image_name="space-shooter/ship-orange",
+                coordinates=Position(x=0, y=0),
+                size=Size(112, 75),
+            ),
+            SpriteSource(
+                sprite_id=SpriteId("rock-large"),
+                image_name="space-shooter/rock-large",
+                coordinates=Position(x=0, y=0),
+                size=Size(height=120, width=98),
             ),
         ])
 

@@ -118,7 +118,7 @@ class GameServerProcessManager:
         self._processes = {}
 
     def start(self, target: Callable[[Any], Any]) -> Pid:
-        context = multiprocessing.get_context("forkserver")
+        context = multiprocessing.get_context()
         client_connection, server_connection = context.Pipe()
         process = context.Process(target=target, args=(server_connection,))
         process.start()

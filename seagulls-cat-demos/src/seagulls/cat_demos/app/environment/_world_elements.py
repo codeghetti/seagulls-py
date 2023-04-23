@@ -14,6 +14,8 @@ from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, Sprit
 class WorldElementId(Enum):
     BARREL = SpriteId("barrel")
     CHEST_CLOSED = SpriteId("chest.closed")
+    STAR_BACKGROUND = SpriteId("star_background")
+    ROCK_LARGE = SpriteId("rock-large")
 
 
 class WorldElement(NamedTuple):

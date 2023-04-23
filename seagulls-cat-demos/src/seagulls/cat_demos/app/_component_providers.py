@@ -81,6 +81,7 @@ class CatDemosComponentProviders:
                     window_client=scene_components.get(SessionComponents.WINDOW_CLIENT),
                 )()),
                 (FrameEvents.OPEN, lambda: _set_background()),
+                (FrameEvents.OPEN, lambda: scene_components.get(GameComponentId("RockManager")).tick()),
             ),
             ProcessType.CLIENT: lambda: (
                 (SceneEvents.open_scene(GameSceneId("index")), lambda: ClientWindowScene(

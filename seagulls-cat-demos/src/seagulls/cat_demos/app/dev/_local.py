@@ -15,7 +15,7 @@ class LocalDevelopment:
         self._uuid = str(uuid4())
 
     def start(self) -> None:
-        ctx = multiprocessing.get_context("forkserver")
+        ctx = multiprocessing.get_context()
         queue = ctx.Queue()
         for x in range(2):
             print(f"run #{x}")

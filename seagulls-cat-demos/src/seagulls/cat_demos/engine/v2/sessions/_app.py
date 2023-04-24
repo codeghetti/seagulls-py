@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Any, Callable, NamedTuple, Tuple, TypeAlias
 
-from seagulls.cat_demos.engine.v2.colliders._collider_component import ColliderPrefabIds, CollisionPrefab
+from seagulls.cat_demos.engine.v2.collisions._collider_component import ColliderPrefabIds, CollisionPrefab
 from seagulls.cat_demos.engine.v2.components._component_containers import CachedGameComponentContainer, \
     ContextualGameComponentContainer, FilteredGameComponentRegistry, GameComponentContainer, GameComponentFactory, \
     GameComponentId, GameComponentProvider, GameComponentType

@@ -3,6 +3,7 @@ from typing import NamedTuple, Tuple
 
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
 from seagulls.cat_demos.app._index_scene import IndexScene
+from seagulls.cat_demos.app._mob_controls_component import RockManager
 from seagulls.cat_demos.app.dev._client_window_scene import ClientWindowScene
 from seagulls.cat_demos.app.dev._server_prefab import DefaultExecutable, FilesystemMonitor, GameServerIds, \
     GameServerPrefab, \
@@ -10,8 +11,9 @@ from seagulls.cat_demos.app.dev._server_prefab import DefaultExecutable, Filesys
 from seagulls.cat_demos.app.environment._world_elements import WorldElementIds, WorldElementPrefab
 from seagulls.cat_demos.app.player._mouse_controls import MouseControlIds, MouseControlsPrefab
 from seagulls.cat_demos.app.player._player_controls import PlayerControlIds, PlayerControlsPrefab
-from seagulls.cat_demos.engine.v2.colliders._collider_component import ColliderPrefabIds
+from seagulls.cat_demos.engine.v2.collisions._collider_component import ColliderPrefabIds
 from seagulls.cat_demos.engine.v2.components._color import Color
+from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
 from seagulls.cat_demos.engine.v2.components._size import Size
@@ -21,8 +23,6 @@ from seagulls.cat_demos.engine.v2.scenes._client import SceneEvents
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp, SessionComponents
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import SpriteId, SpriteSource
 from seagulls.cat_demos.engine.v2.window._window import ServerWindowClient, WindowClient
-from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
-from seagulls.cat_demos.app._mob_controls_component import RockManager
 
 
 class ProcessType(Enum):

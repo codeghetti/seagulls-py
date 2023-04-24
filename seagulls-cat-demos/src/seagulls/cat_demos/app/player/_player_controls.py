@@ -2,7 +2,7 @@ from typing import NamedTuple
 
 import pygame
 
-from seagulls.cat_demos.engine.v2.colliders._collider_component import ColliderPrefabIds, CollisionEvent, \
+from seagulls.cat_demos.engine.v2.collisions._collider_component import ColliderPrefabIds, CollisionEvent, \
     CollisionPrefab
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId

@@ -3,7 +3,7 @@ import pygame
 from seagulls.cat_demos.app.environment._world_elements import WorldElement, WorldElementId, WorldElementIds
 from seagulls.cat_demos.app.player._mouse_controls import MouseControlIds, MouseControls
 from seagulls.cat_demos.app.player._player_controls import PlayerControlIds, PlayerControls
-from seagulls.cat_demos.engine.v2.colliders._collider_component import RectCollider
+from seagulls.cat_demos.engine.v2.collisions._collider_component import RectCollider
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId

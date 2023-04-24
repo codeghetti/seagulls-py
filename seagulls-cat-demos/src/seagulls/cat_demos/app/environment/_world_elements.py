@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import NamedTuple
 
-from seagulls.cat_demos.engine.v2.colliders._collider_component import RectCollider
+from seagulls.cat_demos.engine.v2.collisions._collider_component import RectCollider
 from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import GameComponentConfig, GameObjectConfig, GameObjectPrefab, \

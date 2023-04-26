@@ -1,3 +1,4 @@
+# flake8: noqa
 # """
 # We have two types of components. Components that are tied to a game object (GameObjectComponent) allow querying against
 # the game objects in a scene. Components that are tied to a scene (GameSceneComponent) are not related to game objects

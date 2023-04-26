@@ -8,8 +8,8 @@ from seagulls.cat_demos.app._di_container import CatDemosDiContainer
 
 
 class CatDemosCliPluginEntryPoint(
-        ISeagullsApplicationPluginRegistrant[SeagullsCliApplication]):
-
+    ISeagullsApplicationPluginRegistrant[SeagullsCliApplication]
+):
     @staticmethod
     def register_plugins(application: SeagullsCliApplication) -> None:
         di_container = CatDemosDiContainer(application=application)
@@ -24,5 +24,5 @@ def _main():
     app.execute()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     _main()

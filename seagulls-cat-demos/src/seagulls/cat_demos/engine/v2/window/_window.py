@@ -7,10 +7,17 @@ from typing import NamedTuple
 import pygame
 from pygame import SRCALPHA, Surface
 
-from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
-from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
+from seagulls.cat_demos.engine.v2.components._component_containers import (
+    GameComponentId
+)
+from seagulls.cat_demos.engine.v2.components._service_provider import (
+    ServiceProvider
+)
 from seagulls.cat_demos.engine.v2.components._size import Size
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventId
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
+    GameEvent,
+    GameEventId
+)
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +28,6 @@ class SurfaceBytes(NamedTuple):
 
 
 class WindowClient:
-
     def open(self) -> None:
         pygame.display.set_mode((800, 800))
         pygame.display.set_caption("Cats!?")
@@ -39,7 +45,6 @@ class WindowClient:
 
 
 class ServerWindowClient:
-
     _connection: ServiceProvider[Connection]
 
     def __init__(self, connection: ServiceProvider[Connection]) -> None:
@@ -72,7 +77,10 @@ class ServerWindowClient:
 
 class SeagullsWindows:
     WINDOW_CLIENT_COMPONENT = GameComponentId[WindowClient]("window-client")
-    # TODO: is this supposed to also be called window-client so the dev can choose which to initialize?
-    #       or do they both exist in every app and the dev chooses which one to pass into methods?
-    SERVER_WINDOW_CLIENT_COMPONENT = GameComponentId[WindowClient]("server-window-client")
+    # TODO: is this supposed to also be called window-client so the dev can choose which to
+    #       initialize? or do they both exist in every app and the dev chooses which one to pass
+    #       into methods?
+    SERVER_WINDOW_CLIENT_COMPONENT = GameComponentId[WindowClient](
+        "server-window-client"
+    )
     SURFACE_BYTES_EVENT = GameEventId[SurfaceBytes]("window.surface-bytes")

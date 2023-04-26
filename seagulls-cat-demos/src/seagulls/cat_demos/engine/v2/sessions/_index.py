@@ -1,6 +1,7 @@
 import logging
 
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
+
 from ._executables import IExecutable
 
 logger = logging.getLogger(__name__)
@@ -13,6 +14,5 @@ class OpenIndexScene(IExecutable):
 
 
 class CloseIndexScene(IExecutable):
-
     def __call__(self) -> None:
         print("Goodbye!")

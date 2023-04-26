@@ -1,10 +1,16 @@
 from typing import NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._color import Color
-from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
+from seagulls.cat_demos.engine.v2.components._component_containers import (
+    GameComponentId
+)
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
-from seagulls.cat_demos.engine.v2.components._prefabs import GameComponentConfig, GameObjectConfig, GameObjectPrefab, \
+from seagulls.cat_demos.engine.v2.components._prefabs import (
+    GameComponentConfig,
+    GameObjectConfig,
+    GameObjectPrefab,
     IExecutablePrefab
+)
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.input._game_clock import GameClock
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -16,39 +22,49 @@ class DebugHud(NamedTuple):
 
 
 class DebugHudPrefab(IExecutablePrefab[DebugHud]):
-
     _scene_objects: SceneObjects
     _object_prefab: GameObjectPrefab
     _clock: GameClock
 
-    def __init__(self, scene_objects: SceneObjects, object_prefab: GameObjectPrefab, clock: GameClock) -> None:
+    def __init__(
+        self,
+        scene_objects: SceneObjects,
+        object_prefab: GameObjectPrefab,
+        clock: GameClock,
+    ) -> None:
         self._scene_objects = scene_objects
         self._object_prefab = object_prefab
         self._clock = clock
 
     def __call__(self, config: DebugHud) -> None:
-        self._object_prefab(GameObjectConfig(
-            object_id=GameObjectId("debug-hud"),
-            components=(
-                GameComponentConfig(
-                    component_id=GameComponentId[Position]("object-component::position"),
-                    config=Position(350, 10),
-                ),
-                GameComponentConfig(
-                    component_id=GameComponentId[Text]("object-component::text"),
-                    config=Text(
-                        value="N/A",
-                        font="monospace",
-                        size=20,
-                        color=Color(red=230, blue=230, green=230),
+        self._object_prefab(
+            GameObjectConfig(
+                object_id=GameObjectId("debug-hud"),
+                components=(
+                    GameComponentConfig(
+                        component_id=GameComponentId[Position](
+                            "object-component::position"
+                        ),
+                        config=Position(350, 10),
+                    ),
+                    GameComponentConfig(
+                        component_id=GameComponentId[Text]("object-component::text"),
+                        config=Text(
+                            value="N/A",
+                            font="monospace",
+                            size=20,
+                            color=Color(red=230, blue=230, green=230),
+                        ),
+                    ),
+                    GameComponentConfig(
+                        component_id=GameComponentId[DebugHud](
+                            "object-component::debug-hud"
+                        ),
+                        config=config,
                     ),
                 ),
-                GameComponentConfig(
-                    component_id=GameComponentId[DebugHud]("object-component::debug-hud"),
-                    config=config,
-                ),
             )
-        ))
+        )
 
     def tick(self) -> None:
         component_id = GameComponentId[DebugHud]("object-component::debug-hud")

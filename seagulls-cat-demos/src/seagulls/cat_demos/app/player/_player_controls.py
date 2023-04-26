@@ -2,15 +2,29 @@ from typing import NamedTuple
 
 import pygame
 
-from seagulls.cat_demos.engine.v2.collisions._collider_component import ColliderPrefabIds, CollisionEvent, \
+from seagulls.cat_demos.engine.v2.collisions._collider_component import (
+    ColliderPrefabIds,
+    CollisionEvent,
     CollisionPrefab
-from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
+)
+from seagulls.cat_demos.engine.v2.components._component_containers import (
+    GameComponentId
+)
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
-from seagulls.cat_demos.engine.v2.components._prefabs import GamePrefabId, IExecutablePrefab
+from seagulls.cat_demos.engine.v2.components._prefabs import (
+    GamePrefabId,
+    IExecutablePrefab
+)
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
+    GameEvent,
+    GameEventDispatcher,
+    GameEventId
+)
 from seagulls.cat_demos.engine.v2.input._game_clock import GameClock
-from seagulls.cat_demos.engine.v2.input._input_toggles import InputTogglesClient
+from seagulls.cat_demos.engine.v2.input._input_toggles import (
+    InputTogglesClient
+)
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents
 from seagulls.cat_demos.engine.v2.position._point import Position
 
@@ -29,7 +43,6 @@ class PlayerMoveEvent(NamedTuple):
 
 
 class PlayerControlsPrefab(IExecutablePrefab[PlayerControls]):
-
     _scene_objects: SceneObjects
     _event_client: GameEventDispatcher
     _toggles: InputTogglesClient
@@ -89,7 +102,9 @@ class PlayerControlsPrefab(IExecutablePrefab[PlayerControls]):
             entity_id=payload.object_id,
             component_id=GameComponentId[Position]("object-component::position"),
         )
-        adjusted_direction = Position(x=payload.direction.x * delta / 10, y=payload.direction.y * delta / 10)
+        adjusted_direction = Position(
+            x=payload.direction.x * delta / 10, y=payload.direction.y * delta / 10
+        )
         self._scene_objects.set_component(
             entity_id=payload.object_id,
             component_id=GameComponentId[Position]("object-component::position"),

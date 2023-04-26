@@ -6,22 +6,26 @@ from queue import Empty, Queue
 from typing import Dict, Iterable, NamedTuple, Optional, Protocol
 
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.components._service_provider import (
+    ServiceProvider
+)
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
+    GameEvent,
+    GameEventDispatcher,
+    GameEventId
+)
 from seagulls.cat_demos.engine.v2.frames._frames_client import IFrameCollection
 
 logger = logging.getLogger(__name__)
 
 
 class IScene(Protocol):
-
     @abstractmethod
     def process(self) -> None:
         pass
 
 
 class IProvideScenes(Protocol):
-
     @abstractmethod
     def get_scenes(self) -> Iterable[IScene]:
         pass
@@ -38,7 +42,6 @@ class IProvideSessionState(Protocol):
 
 
 class SceneContext:
-
     _current: Optional[GameSceneId]
 
     def __init__(self) -> None:
@@ -80,7 +83,6 @@ class SceneEvents:
 
 
 class SceneComponent(IScene):
-
     _frame_collection: IFrameCollection
     _event_client: GameEventDispatcher
     _scene_context: SceneContext
@@ -113,19 +115,22 @@ class SceneComponent(IScene):
 
         for frame in self._frame_collection.items():
             frame.process()
-        self._event_client.trigger(GameEvent(SceneEvents.execute_scene(scene_id), payload))
+        self._event_client.trigger(
+            GameEvent(SceneEvents.execute_scene(scene_id), payload)
+        )
         self._event_client.trigger(GameEvent(SceneEvents.EXECUTE, payload))
 
     def _close_scene(self) -> None:
         scene_id = self._scene_context()
         payload = SceneEvent(scene_id)
 
-        self._event_client.trigger(GameEvent(SceneEvents.close_scene(scene_id), payload))
+        self._event_client.trigger(
+            GameEvent(SceneEvents.close_scene(scene_id), payload)
+        )
         self._event_client.trigger(GameEvent(SceneEvents.CLOSE, payload))
 
 
 class SceneRegistry:
-
     _providers: Dict[GameSceneId, ServiceProvider[IScene]]
 
     def __init__(self) -> None:
@@ -139,7 +144,9 @@ class SceneRegistry:
 
         return client
 
-    def register(self, scene_id: GameSceneId, provider: ServiceProvider[IScene]) -> None:
+    def register(
+        self, scene_id: GameSceneId, provider: ServiceProvider[IScene]
+    ) -> None:
         self._providers[scene_id] = provider
 
     def get(self, scene_id: GameSceneId) -> IScene:
@@ -152,12 +159,13 @@ class SceneProvider(NamedTuple):
 
 
 class SceneClient(IProvideScenes):
-
     _next_scene: Queue[GameSceneId]
     _scene_registry: SceneRegistry
     _scene_context: SceneContext
 
-    def __init__(self, scene_registry: SceneRegistry, scene_context: SceneContext) -> None:
+    def __init__(
+        self, scene_registry: SceneRegistry, scene_context: SceneContext
+    ) -> None:
         self._next_scene = Queue(maxsize=1)
         self._scene_registry = scene_registry
         self._scene_context = scene_context

@@ -5,7 +5,9 @@ from typing import NamedTuple
 import pygame
 
 from seagulls.cat_demos.engine.v2.components._color import Color
-from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
+from seagulls.cat_demos.engine.v2.components._component_containers import (
+    GameComponentId
+)
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
@@ -20,7 +22,6 @@ class Text(NamedTuple):
 
 
 class TextComponent(IExecutable):
-
     _objects: SceneObjects
     _window_client: WindowClient
 
@@ -29,10 +30,15 @@ class TextComponent(IExecutable):
         self._window_client = window_client
 
     def __call__(self) -> None:
-        for object_id in self._objects.find_by_component(GameComponentId[Text]("object-component::text")):
-            text_component = self._objects.get_component(object_id, GameComponentId[Text]("object-component::text"))
+        for object_id in self._objects.find_by_component(
+            GameComponentId[Text]("object-component::text")
+        ):
+            text_component = self._objects.get_component(
+                object_id, GameComponentId[Text]("object-component::text")
+            )
             position_component = self._objects.get_component(
-                object_id, GameComponentId[Position]("object-component::position"),
+                object_id,
+                GameComponentId[Position]("object-component::position"),
             )
             f = pygame.font.SysFont(text_component.font, text_component.size)
             text = f.render(text_component.value, True, text_component.color)

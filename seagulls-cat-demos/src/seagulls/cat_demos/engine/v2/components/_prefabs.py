@@ -14,20 +14,22 @@ GamePrefabId: TypeAlias = GameComponentId[Tco_GameConfigType]
 
 
 class IExecutablePrefab(Protocol[T_contra]):
-
     @abstractmethod
     def __call__(self, config: T_contra) -> None:
         pass
 
 
 class PrefabClient:
-
     _container: TypedGameComponentContainer[IExecutablePrefab]
 
-    def __init__(self, container: TypedGameComponentContainer[IExecutablePrefab]) -> None:
+    def __init__(
+        self, container: TypedGameComponentContainer[IExecutablePrefab]
+    ) -> None:
         self._container = container
 
-    def run(self, prefab_id: GamePrefabId[T_GameConfigType], config: T_GameConfigType) -> None:
+    def run(
+        self, prefab_id: GamePrefabId[T_GameConfigType], config: T_GameConfigType
+    ) -> None:
         self._container.get(GameComponentId(prefab_id.name))(config)
 
 
@@ -42,7 +44,6 @@ class GameObjectConfig(NamedTuple):
 
 
 class GameObjectPrefab(IExecutablePrefab[GameObjectConfig]):
-
     _scene_objects: SceneObjects
 
     def __init__(self, scene_objects: SceneObjects) -> None:

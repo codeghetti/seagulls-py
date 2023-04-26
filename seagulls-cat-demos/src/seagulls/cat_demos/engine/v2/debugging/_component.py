@@ -11,14 +11,12 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 
 class IProvideObjectPositions(Protocol):
-
     @abstractmethod
     def get_positions(self) -> Iterable[Position]:
         pass
 
 
 class DebugComponent:
-
     _window_client: WindowClient
 
     def __init__(self, window_client: WindowClient) -> None:
@@ -35,20 +33,24 @@ class DebugComponent:
         surface.blit(s1, Position(x=10, y=10))
 
 
-
 """
-We have two types of components. Components that are tied to a game object (GameObjectComponent) allow querying against
-the game objects in a scene. Components that are tied to a scene (GameSceneComponent) are not related to game objects
-and provide functionality as part of frame execution. We can think of GameSceneComponents as GameObjectComponents that
-are only tied to a single object in a scene (the scene itself).
+We have two types of components. Components that are tied to a game object (GameObjectComponent)
+allow querying against the game objects in a scene. Components that are tied to a scene (
+GameSceneComponent) are not related to game objects and provide functionality as part of frame
+execution. We can think of GameSceneComponents as GameObjectComponents that are only tied to a
+single object in a scene (the scene itself).
 
 For example:
-- a PositionComponent is attached to a game object and provides the ability to get and update the position of the game
-  object in the scene. There is no need to run any code in the scope of the frame.
-- a GunControlsComponent is attached to a game object and spawns a bullet when the firing event is triggered.
-- a UserControlsComponent is attached to a game object but also ticks every frame for each of the game objects.
+- a PositionComponent is attached to a game object and provides the ability to get and update the
+  position of the game object in the scene. There is no need to run any code in the scope of the
+  frame.
+- a GunControlsComponent is attached to a game object and spawns a bullet when the firing event is
+  triggered.
+- a UserControlsComponent is attached to a game object but also ticks every frame for each of the
+  game objects.
 - a GameInputComponent has no related game objects and updates once per frame.
-- a SpriteComponent is tied to game objects. Does it tick every frame? Depends on our display implementation.
+- a SpriteComponent is tied to game objects. Does it tick every frame? Depends on our display
+  implementation.
 - a GameDisplayComponent is tied to the scene and ticks every frame.
 
 New Notes:

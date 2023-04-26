@@ -19,6 +19,7 @@ class EntityId:
         Get the player object from the scene::
             things.get(EntityId("player"))
     """
+
     name: str
 
     @classmethod

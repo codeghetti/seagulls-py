@@ -1,4 +1,14 @@
-from typing import Any, Callable, Dict, Generic, List, Optional, Tuple, TypeAlias, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Tuple,
+    TypeAlias,
+    TypeVar
+)
 
 from typing_extensions import NamedTuple
 
@@ -16,19 +26,7 @@ class GameEvent(NamedTuple, Generic[GameEventType]):
 
 
 class GameEventDispatcher:
-
     _active_event: Optional[GameEvent]
-    """
-    If we switched to using identity objects for the callbacks, we could easily add/remove listeners.
-    We just need a registry of callable identities.
-    We could also ensure that all callables can be configured after the listener is registered.
-    We can think of that as being able to say "someone has to handle this event, but I don't know who."
-    Example: register(GameEventId("input.move-left"), CallableId("input.move-left"))
-    Is this better than a 1:1 mapping of event to callable?
-    1:1 mapping could mean requiring a callback for all events
-    A callable that allows registering proxy listeners allows for all the same functionality
-    I'm not sure if I prefer making event callbacks optional or not.
-    """
     _callbacks: Dict[GameEventId, List[Callable[[], None]]]
 
     def __init__(self) -> None:
@@ -36,7 +34,9 @@ class GameEventDispatcher:
         self._callbacks = {}
 
     @staticmethod
-    def with_callbacks(*callback: Tuple[GameEventId[Any], Callable[[], None]]) -> "GameEventDispatcher":
+    def with_callbacks(
+        *callback: Tuple[GameEventId[Any], Callable[[], None]]
+    ) -> "GameEventDispatcher":
         inst = GameEventDispatcher()
         for cb in callback:
             inst.register(cb[0], cb[1])

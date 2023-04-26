@@ -1,11 +1,21 @@
 from typing import NamedTuple
 
-from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
+from seagulls.cat_demos.engine.v2.components._component_containers import (
+    GameComponentId
+)
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
-from seagulls.cat_demos.engine.v2.components._prefabs import GamePrefabId, IExecutablePrefab
+from seagulls.cat_demos.engine.v2.components._prefabs import (
+    GamePrefabId,
+    IExecutablePrefab
+)
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
-from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameMouseMotionEvent
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
+    GameEventDispatcher
+)
+from seagulls.cat_demos.engine.v2.input._pygame import (
+    PygameEvents,
+    PygameMouseMotionEvent
+)
 from seagulls.cat_demos.engine.v2.position._point import Position
 
 
@@ -17,7 +27,6 @@ class MouseControls(NamedTuple):
 
 
 class MouseControlsPrefab(IExecutablePrefab[MouseControls]):
-
     _scene_objects: SceneObjects
     _event_client: GameEventDispatcher
 

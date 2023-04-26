@@ -3,10 +3,10 @@ from abc import abstractmethod
 from typing import Protocol
 
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
-from seagulls.cat_demos.engine.v2.scenes._client import (
-    IProvideScenes,
+from seagulls.cat_demos.engine.v2.components._service_provider import (
+    ServiceProvider
 )
+from seagulls.cat_demos.engine.v2.scenes._client import IProvideScenes
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,6 @@ class ISession(Protocol):
 
 
 class SessionClient(ISession):
-
     _window_client: WindowClient
     _scene_client: IProvideScenes
     _first_scene: ServiceProvider[GameSceneId]

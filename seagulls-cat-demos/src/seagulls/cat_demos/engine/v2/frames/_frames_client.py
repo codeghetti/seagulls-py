@@ -2,22 +2,30 @@ from abc import abstractmethod
 from threading import Event
 from typing import Iterable, NamedTuple, Protocol
 
-from seagulls.cat_demos.engine.v2.components._service_provider import ServiceProvider
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventDispatcher, GameEventId
-from seagulls.cat_demos.engine.v2.input._input_toggles import InputTogglesClient
-from seagulls.cat_demos.engine.v2.input._pygame import PygameKeyboardInputPublisher
+from seagulls.cat_demos.engine.v2.components._service_provider import (
+    ServiceProvider
+)
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
+    GameEvent,
+    GameEventDispatcher,
+    GameEventId
+)
+from seagulls.cat_demos.engine.v2.input._input_toggles import (
+    InputTogglesClient
+)
+from seagulls.cat_demos.engine.v2.input._pygame import (
+    PygameKeyboardInputPublisher
+)
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 
 class IFrame(Protocol):
-
     @abstractmethod
     def process(self) -> None:
         pass
 
 
 class IFrameCollection(Protocol):
-
     @abstractmethod
     def items(self) -> Iterable[IFrame]:
         pass
@@ -34,7 +42,6 @@ class FrameEvents:
 
 
 class FrameClient(IFrame):
-
     _event_client: GameEventDispatcher
     _window_client: WindowClient
     _pygame_input_client: PygameKeyboardInputPublisher
@@ -72,14 +79,12 @@ class FrameClient(IFrame):
 
 
 class IStopScenes(Protocol):
-
     @abstractmethod
     def stop(self) -> None:
         pass
 
 
 class FrameCollection(IFrameCollection, IStopScenes):
-
     _frame_factory: ServiceProvider[IFrame]
     _stop: Event
 

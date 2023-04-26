@@ -35,6 +35,7 @@ seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional =
 
 [tool.poetry.group.dev.dependencies]
 typing-extensions = "*"
+black = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

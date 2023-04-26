@@ -9,26 +9,25 @@ GameConfigId: TypeAlias = TypedEntityId[Tco_GameConfigType]
 
 
 class GameConfigProvider(Protocol[Tco_GameConfigType]):
-
     @abstractmethod
     def __call__(self) -> Tco_GameConfigType:
         pass
 
 
 class GameConfigContainer(Protocol):
-
     @abstractmethod
     def get(self, config_id: GameConfigId[Tco_GameConfigType]) -> Tco_GameConfigType:
         pass
 
 
 class GameConfigFactory(GameConfigContainer):
-
     _providers: Dict[GameConfigId[Any], GameConfigProvider[Any]]
 
     @staticmethod
     def with_providers(
-            *provider: Tuple[GameConfigId[Tco_GameConfigType], GameConfigProvider[Tco_GameConfigType]],
+        *provider: Tuple[
+            GameConfigId[Tco_GameConfigType], GameConfigProvider[Tco_GameConfigType]
+        ],
     ) -> "GameConfigFactory":
         i = GameConfigFactory()
         for p in provider:
@@ -40,7 +39,9 @@ class GameConfigFactory(GameConfigContainer):
 
     def set_missing(
         self,
-        *provider: Tuple[GameConfigId[Tco_GameConfigType], GameConfigProvider[Tco_GameConfigType]],
+        *provider: Tuple[
+            GameConfigId[Tco_GameConfigType], GameConfigProvider[Tco_GameConfigType]
+        ],
     ) -> None:
         """
         Merge the providers into the current instance, ignoring any duplicates.

@@ -2,12 +2,21 @@ from typing import NamedTuple, Tuple
 
 from pygame import Rect
 
-from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
+from seagulls.cat_demos.engine.v2.components._component_containers import (
+    GameComponentId
+)
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
-from seagulls.cat_demos.engine.v2.components._prefabs import GamePrefabId, IExecutablePrefab
+from seagulls.cat_demos.engine.v2.components._prefabs import (
+    GamePrefabId,
+    IExecutablePrefab
+)
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._size import Size
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEvent, GameEventDispatcher, GameEventId
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
+    GameEvent,
+    GameEventDispatcher,
+    GameEventId
+)
 from seagulls.cat_demos.engine.v2.position._point import Position
 
 
@@ -21,11 +30,12 @@ class CollisionEvent(NamedTuple):
 
 
 class CollisionPrefab(IExecutablePrefab[GameObjectId]):
-
     _objects: SceneObjects
     _event_client: GameEventDispatcher
 
-    def __init__(self, objects: SceneObjects, event_client: GameEventDispatcher) -> None:
+    def __init__(
+        self, objects: SceneObjects, event_client: GameEventDispatcher
+    ) -> None:
         self._objects = objects
         self._event_client = event_client
 
@@ -42,7 +52,9 @@ class CollisionPrefab(IExecutablePrefab[GameObjectId]):
         targets = []
         target_ids = []
 
-        for target_id in self._objects.find_by_component(GameComponentId[RectCollider]("object-component::rect-collider")):
+        for target_id in self._objects.find_by_component(
+            GameComponentId[RectCollider]("object-component::rect-collider")
+        ):
             if target_id == source_id:
                 continue
 

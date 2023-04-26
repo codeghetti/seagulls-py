@@ -6,12 +6,16 @@ from typing import Dict, NamedTuple, Tuple, TypeAlias
 import pygame
 from pygame import SRCALPHA, Surface
 
-from seagulls.cat_demos.engine.v2.components._component_containers import GameComponentId
+from seagulls.cat_demos.engine.v2.components._component_containers import (
+    GameComponentId
+)
 from seagulls.cat_demos.engine.v2.components._entities import EntityId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.position._point import Position
-from seagulls.cat_demos.engine.v2.resources._resources_client import ResourceClient
+from seagulls.cat_demos.engine.v2.resources._resources_client import (
+    ResourceClient
+)
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
@@ -30,7 +34,6 @@ class Sprite(NamedTuple):
 
 
 class SpriteComponent(IExecutable):
-
     _objects: SceneObjects
     _window_client: WindowClient
     _resource_client: ResourceClient
@@ -49,12 +52,16 @@ class SpriteComponent(IExecutable):
         self._sprite_sources = {source.sprite_id: source for source in sprite_sources}
 
     def __call__(self) -> None:
-        for object_id in self._objects.find_by_component(GameComponentId[Sprite]("object-component::sprite")):
+        for object_id in self._objects.find_by_component(
+            GameComponentId[Sprite]("object-component::sprite")
+        ):
             sprite_component = self._objects.get_component(
                 object_id,
                 GameComponentId[Sprite]("object-component::sprite"),
             )
-            sprite_surface = self._create_surface(self._sprite_sources[sprite_component.sprite_id])
+            sprite_surface = self._create_surface(
+                self._sprite_sources[sprite_component.sprite_id]
+            )
 
             position_component = self._objects.get_component(
                 object_id,

@@ -5,14 +5,12 @@ T = TypeVar("T", covariant=True)
 
 
 class ServiceProvider(Protocol[T]):
-
     @abstractmethod
     def __call__(self) -> T:
         pass
 
 
 class Provider(ServiceProvider[T]):
-
     _callback: ServiceProvider[T]
 
     def __init__(self, callback: ServiceProvider[T]) -> None:

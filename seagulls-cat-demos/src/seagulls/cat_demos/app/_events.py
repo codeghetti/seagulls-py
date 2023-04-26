@@ -11,4 +11,5 @@ class AppEvents:
     even if we used a NamedTuple, the assignment of the NamedTuple to a variable would still be
     mutable.
     """
+
     # QUIT = GameEventId[QuitGameConfig]("quit-game")

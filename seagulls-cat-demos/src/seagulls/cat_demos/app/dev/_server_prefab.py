@@ -1,3 +1,4 @@
+import logging
 import multiprocessing
 import uuid
 from abc import abstractmethod
@@ -27,6 +28,8 @@ from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents, PygameKeybo
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp
 from seagulls.cat_demos.engine.v2.window._window import SurfaceBytes, WindowClient
+
+logger = logging.getLogger(__name__)
 
 
 class GameSubprocessExecutable(Protocol):
@@ -118,7 +121,8 @@ class GameServerProcessManager:
         self._processes = {}
 
     def start(self, target: Callable[[Any], Any]) -> Pid:
-        context = multiprocessing.get_context()
+        # TODO: figure out how to support windows
+        context = multiprocessing.get_context("forkserver")
         client_connection, server_connection = context.Pipe()
         process = context.Process(target=target, args=(server_connection,))
         process.start()
@@ -184,6 +188,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         #       "while this process is running, listen to events to communicate with the server"
         #       client.while(condition, game_object_context)
         pid = self._process_manager.start(self._executable)
+        logger.debug(f"started game server: {pid}")
 
         self._object_prefab(
             GameObjectConfig(

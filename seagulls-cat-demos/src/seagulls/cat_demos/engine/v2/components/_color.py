@@ -8,8 +8,8 @@ class Color(NamedTuple):
     green: int
     blue: int
 
-    def __add__(self, other: Tuple[int, int, int]) -> Color:
+    def __add__(self, other: Tuple) -> Color:
         return Color(red=self.red + other[0], green=self.green + other[1], blue=self.blue + other[2])
 
-    def __sub__(self, other: Tuple[int, int, int]) -> Color:
+    def __sub__(self, other: Tuple) -> Color:
         return Color(red=self.red - other[0], green=self.green - other[1], blue=self.blue - other[2])

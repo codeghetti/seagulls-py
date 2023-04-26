@@ -6,7 +6,7 @@ from datetime import datetime
 from multiprocessing.connection import Connection
 from multiprocessing.context import DefaultContext, Process
 from threading import Event
-from typing import Any, Callable, Dict, NamedTuple, Protocol, Tuple, TypeAlias
+from typing import Any, Callable, Dict, NamedTuple, Protocol, Tuple, TypeAlias, cast
 
 import pygame
 from pygame import SRCALPHA, Surface
@@ -126,8 +126,15 @@ class GameServerProcessManager:
         client_connection, server_connection = context.Pipe()
         process = context.Process(target=target, args=(server_connection,))
         process.start()
+        if not process.pid:
+            raise RuntimeError("Not sure why process hasn't started yet.")
 
-        self._processes[process.pid] = (context, process, client_connection, server_connection)
+        self._processes[process.pid] = (
+            cast(DefaultContext, context),
+            cast(Process, process),
+            cast(ClientConnection, client_connection),
+            cast(ServerConnection, server_connection),
+        )
 
         return process.pid
 

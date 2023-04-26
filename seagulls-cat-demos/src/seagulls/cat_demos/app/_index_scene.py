@@ -10,8 +10,7 @@ from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import GameComponentConfig, GameObjectConfig, PrefabClient
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.debugging._debug_hud_prefab import DebugHud
-from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher, GameEventId
-from seagulls.cat_demos.engine.v2.frames._frames_client import Frame, FrameEvents
+from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SessionComponents
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
@@ -167,8 +166,4 @@ class IndexScene(IExecutable):
         self._prefab_client.run(SessionComponents.DEBUG_HUD_PREFAB, DebugHud(show_fps=True))
 
     def _configure_events(self) -> None:
-        def _on_frame() -> None:
-            print("on frame?")
-            self._window_client.get_surface().fill(Color(30, 30, 30))
-        print("configuring on frame?")
-        self._event_client.register(GameEventId[Frame](FrameEvents.OPEN), _on_frame)
+        pass

@@ -1306,7 +1306,7 @@ name = "typing-extensions"
 version = "4.5.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.7"
 files = [
     {file = "typing_extensions-4.5.0-py3-none-any.whl", hash = "sha256:fb33085c39dd998ac16d1431ebc293a8b3eedd00fd4a32de0ff79002c19511b4"},
@@ -1422,4 +1422,4 @@ dev = ["seagulls-devtools"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "d2210f59ca47c13be3d182a8397b8e91b218e2884bd723e0e1c261c7bd62240c"
+content-hash = "9d3b75e8f55d7feaa6daa8a32de2c77af0d8cab5382a9fb2d93e99f9ebd19218"

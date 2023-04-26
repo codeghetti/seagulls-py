@@ -1,20 +1,22 @@
 from abc import abstractmethod
-from typing import Generic, NamedTuple, Protocol, Tuple
+from typing import Generic, Protocol, Tuple, TypeAlias, TypeVar
+
+from typing_extensions import NamedTuple
 
 from ._component_containers import GameComponentId, TypedGameComponentContainer
-from ._config_containers import GameConfigType
+from ._config_containers import T_GameConfigType, Tco_GameConfigType
 from ._entities import GameObjectId
 from ._scene_objects import SceneObjects
 
+T = TypeVar("T")
+T_contra = TypeVar("T_contra", contravariant=True)
+GamePrefabId: TypeAlias = GameComponentId[Tco_GameConfigType]
 
-class GamePrefabId(GameComponentId, Generic[GameConfigType]):
-    pass
 
-
-class IExecutablePrefab(Protocol[GameConfigType]):
+class IExecutablePrefab(Protocol[T_contra]):
 
     @abstractmethod
-    def __call__(self, config: GameConfigType) -> None:
+    def __call__(self, config: T_contra) -> None:
         pass
 
 
@@ -25,13 +27,13 @@ class PrefabClient:
     def __init__(self, container: TypedGameComponentContainer[IExecutablePrefab]) -> None:
         self._container = container
 
-    def run(self, prefab_id: GamePrefabId[GameConfigType], config: GameConfigType) -> None:
+    def run(self, prefab_id: GamePrefabId[T_GameConfigType], config: T_GameConfigType) -> None:
         self._container.get(GameComponentId(prefab_id.name))(config)
 
 
-class GameComponentConfig(NamedTuple):
-    component_id: GameComponentId[GameConfigType]
-    config: GameConfigType
+class GameComponentConfig(NamedTuple, Generic[T_GameConfigType]):
+    component_id: GameComponentId[T_GameConfigType]
+    config: T_GameConfigType
 
 
 class GameObjectConfig(NamedTuple):

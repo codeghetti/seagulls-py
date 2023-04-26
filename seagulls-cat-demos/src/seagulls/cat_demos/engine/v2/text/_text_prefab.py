@@ -22,13 +22,8 @@ class TextPrefab(IExecutablePrefab[TextConfig]):
     def __call__(self, config: TextConfig) -> None:
         component_id = GameComponentId[Text]("object-component::text")
 
-        self._scene_objects.attach_component(
+        self._scene_objects.set_component(
             entity_id=config.object_id,
             component_id=component_id,
+            config=config.text,
         )
-
-        component = self._scene_objects.open_component(
-            entity_id=config.object_id,
-            component_id=component_id,
-        )
-        component.set(config.text)

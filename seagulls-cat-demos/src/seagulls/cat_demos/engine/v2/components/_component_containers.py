@@ -1,15 +1,13 @@
 from abc import abstractmethod
 from functools import lru_cache
-from typing import Any, Dict, Generic, Iterable, Protocol, Tuple, TypeVar
+from typing import Any, Dict, Generic, Iterable, Protocol, Tuple, TypeAlias, TypeVar
 
 from ._entities import TypedEntityId
 from ._service_provider import ServiceProvider
 
-GameComponentType = TypeVar("GameComponentType")
-
-
-class GameComponentId(TypedEntityId[GameComponentType]):
-    pass
+GameComponentType = TypeVar("GameComponentType", covariant=True)
+T = TypeVar("T")
+GameComponentId: TypeAlias = TypedEntityId[GameComponentType]
 
 
 class GameComponentProvider(Protocol[GameComponentType]):
@@ -26,13 +24,13 @@ class GameComponentContainer(Protocol):
         pass
 
 
-class TypedGameComponentContainer(Protocol[GameComponentType]):
+class TypedGameComponentContainer(Protocol[T]):
     """
     A container object that provides components of a single type.
     """
 
     @abstractmethod
-    def get(self, component_id: GameComponentId[GameComponentType]) -> GameComponentType:
+    def get(self, component_id: GameComponentId[T]) -> T:
         pass
 
 
@@ -90,9 +88,6 @@ class CachedGameComponentContainer(GameComponentContainer):
     @lru_cache()
     def get(self, component_id: GameComponentId[GameComponentType]) -> GameComponentType:
         return self._factory.get(component_id)
-
-
-T = TypeVar("T")
 
 
 class ContextualGameComponentContainer(GameComponentContainer, Generic[T]):

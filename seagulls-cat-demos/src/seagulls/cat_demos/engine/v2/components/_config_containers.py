@@ -1,26 +1,24 @@
 from abc import abstractmethod
-from typing import Any, Dict, NamedTuple, Protocol, Tuple, TypeVar
+from typing import Any, Dict, NamedTuple, Protocol, Tuple, TypeAlias, TypeVar
 
 from ._entities import TypedEntityId
 
-GameConfigType = TypeVar("GameConfigType", bound=NamedTuple)
+T_GameConfigType = TypeVar("T_GameConfigType", bound=NamedTuple)
+Tco_GameConfigType = TypeVar("Tco_GameConfigType", bound=NamedTuple, covariant=True)
+GameConfigId: TypeAlias = TypedEntityId[Tco_GameConfigType]
 
 
-class GameConfigId(TypedEntityId[GameConfigType]):
-    pass
-
-
-class GameConfigProvider(Protocol[GameConfigType]):
+class GameConfigProvider(Protocol[Tco_GameConfigType]):
 
     @abstractmethod
-    def __call__(self) -> GameConfigType:
+    def __call__(self) -> Tco_GameConfigType:
         pass
 
 
 class GameConfigContainer(Protocol):
 
     @abstractmethod
-    def get(self, config_id: GameConfigId[GameConfigType]) -> GameConfigType:
+    def get(self, config_id: GameConfigId[Tco_GameConfigType]) -> Tco_GameConfigType:
         pass
 
 
@@ -30,7 +28,7 @@ class GameConfigFactory(GameConfigContainer):
 
     @staticmethod
     def with_providers(
-            *provider: Tuple[GameConfigId[GameConfigType], GameConfigProvider[GameConfigType]],
+            *provider: Tuple[GameConfigId[Tco_GameConfigType], GameConfigProvider[Tco_GameConfigType]],
     ) -> "GameConfigFactory":
         i = GameConfigFactory()
         for p in provider:
@@ -42,7 +40,7 @@ class GameConfigFactory(GameConfigContainer):
 
     def set_missing(
         self,
-        *provider: Tuple[GameConfigId[GameConfigType], GameConfigProvider[GameConfigType]],
+        *provider: Tuple[GameConfigId[Tco_GameConfigType], GameConfigProvider[Tco_GameConfigType]],
     ) -> None:
         """
         Merge the providers into the current instance, ignoring any duplicates.
@@ -53,15 +51,15 @@ class GameConfigFactory(GameConfigContainer):
 
     def set(
         self,
-        config_id: GameConfigId[GameConfigType],
-        provider: GameConfigProvider[GameConfigType],
+        config_id: GameConfigId[Tco_GameConfigType],
+        provider: GameConfigProvider[Tco_GameConfigType],
     ) -> None:
         if config_id in self._providers:
             raise RuntimeError(f"duplicate entity found: {config_id}")
 
         self._providers[config_id] = provider
 
-    def get(self, config_id: GameConfigId[GameConfigType]) -> GameConfigType:
+    def get(self, config_id: GameConfigId[Tco_GameConfigType]) -> Tco_GameConfigType:
         if config_id not in self._providers:
             raise RuntimeError(f"entity not found: {config_id}")
 

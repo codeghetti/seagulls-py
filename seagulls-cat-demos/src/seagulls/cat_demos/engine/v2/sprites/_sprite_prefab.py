@@ -23,13 +23,8 @@ class SpritePrefab(IExecutablePrefab[SpritePrefabRequest]):
         # Sprite is the component config type
         component_id = GameComponentId[Sprite]("object-component::sprite")
 
-        self._scene_objects.attach_component(
+        self._scene_objects.set_component(
             entity_id=config.object_id,
             component_id=component_id,
+            config=config.sprite,
         )
-
-        component = self._scene_objects.open_component(
-            entity_id=config.object_id,
-            component_id=component_id,
-        )
-        component.set(config.sprite)

@@ -6,7 +6,7 @@ from seagulls.cat_demos.engine.v2.components._component_containers import Cached
     ContextualGameComponentContainer, FilteredGameComponentRegistry, GameComponentContainer, GameComponentFactory, \
     GameComponentId, GameComponentProvider, GameComponentType
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.components._prefabs import GameObjectPrefab, PrefabClient
+from seagulls.cat_demos.engine.v2.components._prefabs import GameObjectConfig, GameObjectPrefab, PrefabClient
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher, GameEventId
 from seagulls.cat_demos.engine.v2.frames._frames_client import FrameClient, FrameCollection, FrameEvents
@@ -18,7 +18,6 @@ from seagulls.cat_demos.engine.v2.resources._resources_client import ResourceCli
 from seagulls.cat_demos.engine.v2.scenes._client import IScene, SceneClient, SceneComponent, SceneContext, \
     SceneEvents, SceneProvider, SceneRegistry
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import SpriteComponent, SpriteSource
-from seagulls.cat_demos.engine.v2.sprites._sprite_container import SpriteContainer
 from seagulls.cat_demos.engine.v2.sprites._sprite_prefab import SpritePrefab
 from seagulls.cat_demos.engine.v2.text._text_component import TextComponent
 from seagulls.cat_demos.engine.v2.text._text_prefab import TextPrefab
@@ -26,7 +25,7 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._client import SessionClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
-from ..debugging._debug_hud_prefab import DebugHudPrefab
+from ..debugging._debug_hud_prefab import DebugHud, DebugHudPrefab
 
 GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
 
@@ -40,11 +39,12 @@ class SessionComponents:
     TEXT_PREFAB = GameComponentId[TextPrefab]("prefab.text-component")
     POSITION_PREFAB = GameComponentId[PositionPrefab]("prefab.position-component")
     RESOURCE_CLIENT = GameComponentId[ResourceClient]("resource-client")
-    SPRITE_CONTAINER = GameComponentId[SpriteContainer]("sprite-container")
     SPRITE_COMPONENT = GameComponentId[SpriteComponent]("sprite-component")
     SPRITE_PREFAB = GameComponentId[SpritePrefab]("prefab.sprite-component")
-    OBJECT_PREFAB = GameComponentId[GameObjectPrefab]("prefab.game-object")
-    DEBUG_HUD_PREFAB = GameComponentId[DebugHudPrefab]("prefab.debug-hud")
+    OBJECT_PREFAB = GameComponentId[GameObjectConfig]("prefab.game-object")
+    OBJECT_COMPONENT = GameComponentId[GameObjectPrefab]("prefab.game-object")
+    DEBUG_HUD_PREFAB = GameComponentId[DebugHud]("prefab.debug-hud")
+    DEBUG_HUD_COMPONENT = GameComponentId[DebugHudPrefab]("prefab.debug-hud")
     OBJECT_COMPONENT_CONTAINER = GameComponentId[GameComponentContainer]("object-component-registry")
     FRAME_COLLECTION = GameComponentId[FrameCollection]("frame-collection")
     INDEX_SCENE = GameComponentId[IScene]("index.scene")
@@ -81,7 +81,8 @@ class SeagullsApp:
         for p in providers:
             component_factory.set(p[0], p[1])
 
-        component_factory.set_missing(
+        # TODO: why do I need to type-ignore this?
+        component_factory.set_missing(  # type: ignore
             (SessionComponents.SESSION_CLIENT, lambda: SessionClient(
                 window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
                 scene_client=SceneClient(
@@ -138,7 +139,7 @@ class SeagullsApp:
                 (FrameEvents.OPEN, lambda: scene_components.get(SessionComponents.SCENE_CLOCK).tick()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.SPRITE_COMPONENT)()),
                 (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.TEXT_COMPONENT)()),
-                (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.DEBUG_HUD_PREFAB).tick()),
+                (FrameEvents.CLOSE, lambda: scene_components.get(SessionComponents.DEBUG_HUD_COMPONENT).tick()),
 
                 (SceneEvents.OPEN, lambda: scene_components.get(SessionComponents.INDEX_OPEN_EXECUTABLE)()),
                 (SceneEvents.CLOSE, lambda: scene_components.get(SessionComponents.INDEX_CLOSE_EXECUTABLE)()),
@@ -163,13 +164,10 @@ class SeagullsApp:
             )),
             (SessionComponents.DEBUG_HUD_PREFAB, lambda: DebugHudPrefab(
                 scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
-                object_prefab=scene_components.get(SessionComponents.OBJECT_PREFAB),
+                object_prefab=scene_components.get(SessionComponents.OBJECT_COMPONENT),
                 clock=scene_components.get(SessionComponents.SCENE_CLOCK),
             )),
             (SessionComponents.RESOURCE_CLIENT, lambda: ResourceClient()),
-            (SessionComponents.SPRITE_CONTAINER, lambda: SpriteContainer(
-                container=session_components,
-            )),
             (SessionComponents.INPUT_TOGGLES_CLIENT, lambda: InputTogglesClient(
                 input_client=scene_components.get(SessionComponents.EVENT_CLIENT),
             )),

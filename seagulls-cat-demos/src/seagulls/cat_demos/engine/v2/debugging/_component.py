@@ -5,9 +5,8 @@ from typing import Iterable, Protocol
 
 from pygame import SRCALPHA, Surface
 
-from seagulls.cat_demos.engine.v2.components._object_components import GameComponentId
 from seagulls.cat_demos.engine.v2.components._size import Size
-from seagulls.cat_demos.engine.v2.position._position_component import Position
+from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 
@@ -35,8 +34,6 @@ class DebugComponent:
         s1.fill((100, 100, 200))
         surface.blit(s1, Position(x=10, y=10))
 
-
-DebugComponentId = GameComponentId[DebugComponent]("debug")
 
 
 """

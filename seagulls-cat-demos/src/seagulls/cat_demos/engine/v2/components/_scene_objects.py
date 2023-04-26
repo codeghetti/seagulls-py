@@ -1,18 +1,18 @@
 import logging
-from typing import Any, Dict, Generic, Set, Tuple
+from typing import Any, Dict, Generic, Set, Tuple, TypeVar
 
 from ._component_containers import GameComponentContainer, GameComponentId, TypedGameComponentContainer
-from ._config_containers import GameConfigType
 from ._entities import GameObjectId
 from ._service_provider import ServiceProvider
 
 logger = logging.getLogger(__name__)
+T = TypeVar("T")
 
 
-class ObjectComponent(Generic[GameConfigType]):
+class ObjectComponent(Generic[T]):
 
     _context: ServiceProvider[GameObjectId]
-    _configs: Dict[GameObjectId, GameConfigType]
+    _configs: Dict[GameObjectId, T]
 
     def __init__(
         self,
@@ -21,10 +21,10 @@ class ObjectComponent(Generic[GameConfigType]):
         self._context = context
         self._configs = {}
 
-    def get(self) -> GameConfigType:
+    def get(self) -> T:
         return self._configs[self._context()]
 
-    def set(self, config: GameConfigType) -> None:
+    def set(self, config: T) -> None:
         self._configs[self._context()] = config
 
 
@@ -79,16 +79,16 @@ class SceneObjects:
     def set_component(
             self,
             entity_id: GameObjectId,
-            component_id: GameComponentId[GameConfigType],
-            config: GameConfigType,
+            component_id: GameComponentId[T],
+            config: T,
     ) -> None:
         self._components[component_id][entity_id].set(config)
 
     def get_component(
             self,
             entity_id: GameObjectId,
-            component_id: GameComponentId[GameConfigType],
-    ) -> GameConfigType:
+            component_id: GameComponentId[T],
+    ) -> T:
         return self._components[component_id][entity_id].get()
 
     def find_by_component(self, component_id: GameComponentId) -> Tuple[GameObjectId, ...]:

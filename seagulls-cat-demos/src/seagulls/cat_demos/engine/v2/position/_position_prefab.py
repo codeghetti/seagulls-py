@@ -26,9 +26,8 @@ class PositionPrefab(IExecutablePrefab[PositionConfig]):
             entity_id=config.object_id,
             component_id=component_id,
         )
-
-        component = self._scene_objects.open_component(
+        self._scene_objects.set_component(
             entity_id=config.object_id,
             component_id=component_id,
+            config=config.position,
         )
-        component.set(config.position)

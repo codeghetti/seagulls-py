@@ -32,6 +32,10 @@ seagulls-devtools = { path = "../seagulls-devtools/", develop = true, optional =
 [tool.poetry.plugins."seagulls.plugins"]
 "seagulls-cat-demos" = "seagulls.cat_demos.app:CatDemosCliPluginEntryPoint"
 
+
+[tool.poetry.group.dev.dependencies]
+typing-extensions = "*"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

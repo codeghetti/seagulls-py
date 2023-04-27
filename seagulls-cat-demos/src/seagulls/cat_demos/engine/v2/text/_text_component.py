@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from functools import lru_cache
 from typing import NamedTuple
 
 import pygame
+from pygame import Surface
 
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import (
@@ -40,7 +42,11 @@ class TextComponent(IExecutable):
                 object_id,
                 GameComponentId[Position]("object-component::position"),
             )
-            f = pygame.font.SysFont(text_component.font, text_component.size)
-            text = f.render(text_component.value, True, text_component.color)
+            text = self._create_text(text_component)
             surface = self._window_client.get_layer("ui")
             surface.blit(text, position_component)
+
+    @lru_cache()
+    def _create_text(self, text: Text) -> Surface:
+        f = pygame.font.SysFont(text.font, text.size)
+        return f.render(text.value, True, text.color)

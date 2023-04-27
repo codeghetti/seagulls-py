@@ -31,6 +31,7 @@ class SpriteSource(NamedTuple):
 
 class Sprite(NamedTuple):
     sprite_id: SpriteId
+    layer: str
 
 
 class SpriteComponent(IExecutable):
@@ -67,7 +68,7 @@ class SpriteComponent(IExecutable):
                 object_id,
                 GameComponentId[Position]("object-component::position"),
             )
-            surface = self._window_client.get_surface()
+            surface = self._window_client.get_layer(sprite_component.layer)
             surface.blit(sprite_surface, position_component)
 
     @lru_cache()

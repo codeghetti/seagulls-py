@@ -80,18 +80,26 @@ class CatDemosComponentProviders:
         settings = self._settings()
 
         print(f"settings: {settings}")
+        layers = (
+            "background",
+            "environment",
+            "units",
+            "ui",
+            "mouse",
+        )
 
         components_by_type = {
             ProcessType.STANDALONE: lambda: (
-                (SessionComponents.WINDOW_CLIENT, lambda: WindowClient()),
+                (SessionComponents.WINDOW_CLIENT, lambda: WindowClient(layers=layers)),
             ),
             ProcessType.CLIENT: lambda: (
-                (SessionComponents.WINDOW_CLIENT, lambda: WindowClient()),
+                (SessionComponents.WINDOW_CLIENT, lambda: WindowClient(layers=layers)),
             ),
             ProcessType.SERVER: lambda: (
                 (
                     SessionComponents.WINDOW_CLIENT,
                     lambda: ServerWindowClient(
+                        layers=layers,
                         connection=lambda: scene_components.get(
                             GameServerIds.SERVER_PROCESS_CONNECTION
                         ),
@@ -113,7 +121,7 @@ class CatDemosComponentProviders:
 
         def _set_background() -> None:
             # Just a quick hack until this moves somewhere permanent
-            scene_components.get(SessionComponents.WINDOW_CLIENT).get_surface().fill(
+            session_components.get(SessionComponents.WINDOW_CLIENT).get_surface().fill(
                 Color(20, 20, 20)
             )
 
@@ -128,7 +136,7 @@ class CatDemosComponentProviders:
                         event_client=scene_components.get(
                             SessionComponents.EVENT_CLIENT
                         ),
-                        window_client=scene_components.get(
+                        window_client=session_components.get(
                             SessionComponents.WINDOW_CLIENT
                         ),
                     )(),
@@ -174,7 +182,7 @@ class CatDemosComponentProviders:
                         event_client=scene_components.get(
                             SessionComponents.EVENT_CLIENT
                         ),
-                        window_client=scene_components.get(
+                        window_client=session_components.get(
                             SessionComponents.WINDOW_CLIENT
                         ),
                     )(),
@@ -241,7 +249,7 @@ class CatDemosComponentProviders:
                 lambda: GameServerPrefab(
                     scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
                     object_prefab=scene_components.get(SessionComponents.OBJECT_PREFAB),
-                    window_client=scene_components.get(SessionComponents.WINDOW_CLIENT),
+                    window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
                     event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
                     executable=scene_components.get(
                         GameServerIds.SUBPROCESS_EXECUTABLE

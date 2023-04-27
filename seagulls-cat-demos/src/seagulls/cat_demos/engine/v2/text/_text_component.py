@@ -42,5 +42,5 @@ class TextComponent(IExecutable):
             )
             f = pygame.font.SysFont(text_component.font, text_component.size)
             text = f.render(text_component.value, True, text_component.color)
-            surface = self._window_client.get_surface()
+            surface = self._window_client.get_layer("ui")
             surface.blit(text, position_component)

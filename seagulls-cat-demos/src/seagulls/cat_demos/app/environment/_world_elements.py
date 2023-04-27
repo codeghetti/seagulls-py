@@ -54,7 +54,7 @@ class WorldElementPrefab(IExecutablePrefab[WorldElement]):
                 ),
                 GameComponentConfig(
                     component_id=GameComponentId[Sprite]("object-component::sprite"),
-                    config=Sprite(sprite_id=config.sprite_id.value),
+                    config=Sprite(sprite_id=config.sprite_id.value, layer="environment"),
                 ),
                 GameComponentConfig(
                     component_id=GameComponentId[RectCollider](

@@ -154,7 +154,7 @@ class IndexScene(IExecutable):
                         component_id=GameComponentId[Sprite](
                             "object-component::sprite"
                         ),
-                        config=Sprite(sprite_id=SpriteId("spaceship")),
+                        config=Sprite(sprite_id=SpriteId("spaceship"), layer="units"),
                     ),
                     GameComponentConfig(
                         component_id=GameComponentId[RectCollider](
@@ -192,7 +192,7 @@ class IndexScene(IExecutable):
                         component_id=GameComponentId[Sprite](
                             "object-component::sprite"
                         ),
-                        config=Sprite(sprite_id=SpriteId("mouse")),
+                        config=Sprite(sprite_id=SpriteId("mouse"), layer="mouse"),
                     ),
                 ),
             ),
@@ -217,7 +217,7 @@ class IndexScene(IExecutable):
                         component_id=GameComponentId[Sprite](
                             "object-component::sprite"
                         ),
-                        config=Sprite(sprite_id=SpriteId("menu-button")),
+                        config=Sprite(sprite_id=SpriteId("menu-button"), layer="ui"),
                     ),
                     GameComponentConfig(
                         component_id=GameComponentId[Text]("object-component::text"),

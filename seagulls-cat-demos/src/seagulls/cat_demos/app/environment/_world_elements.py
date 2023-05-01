@@ -1,11 +1,11 @@
 from enum import Enum
 from typing import NamedTuple
 
-from seagulls.cat_demos.engine.v2.collisions._collider_component import (
+from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     RectCollider
 )
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import (
@@ -13,7 +13,7 @@ from seagulls.cat_demos.engine.v2.components._prefabs import (
     GameObjectConfig,
     GameObjectPrefab,
     GamePrefabId,
-    IExecutablePrefab
+    IPrefab
 )
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -36,28 +36,28 @@ class WorldElement(NamedTuple):
     position: Position
 
 
-class WorldElementPrefab(IExecutablePrefab[WorldElement]):
+class WorldElementPrefab(IPrefab[WorldElement]):
     _object_prefab: GameObjectPrefab
 
     def __init__(self, object_prefab: GameObjectPrefab) -> None:
         self._object_prefab = object_prefab
 
-    def __call__(self, config: WorldElement) -> None:
+    def execute(self, request: WorldElement) -> None:
         object_config = GameObjectConfig(
-            object_id=config.object_id,
+            object_id=request.object_id,
             components=(
                 GameComponentConfig(
-                    component_id=GameComponentId[Position](
+                    component_id=ObjectDataId[Position](
                         "object-component::position"
                     ),
-                    config=config.position,
+                    config=request.position,
                 ),
                 GameComponentConfig(
-                    component_id=GameComponentId[Sprite]("object-component::sprite"),
-                    config=Sprite(sprite_id=config.sprite_id.value, layer="environment"),
+                    component_id=ObjectDataId[Sprite]("object-component::sprite"),
+                    config=Sprite(sprite_id=request.sprite_id.value, layer="environment"),
                 ),
                 GameComponentConfig(
-                    component_id=GameComponentId[RectCollider](
+                    component_id=ObjectDataId[RectCollider](
                         "object-component::rect-collider"
                     ),
                     config=RectCollider(size=Size(width=16, height=16)),
@@ -65,9 +65,9 @@ class WorldElementPrefab(IExecutablePrefab[WorldElement]):
             ),
         )
 
-        self._object_prefab(object_config)
+        self._object_prefab.execute(object_config)
 
 
 class WorldElementIds:
     PREFAB = GamePrefabId[WorldElement]("prefab::world-element")
-    PREFAB_COMPONENT = GameComponentId[WorldElementPrefab]("prefab::world-element")
+    PREFAB_COMPONENT = ObjectDataId[WorldElementPrefab]("prefab::world-element")

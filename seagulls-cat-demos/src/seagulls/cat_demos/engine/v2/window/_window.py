@@ -1,15 +1,14 @@
 import logging
 import os
+import pygame
 from abc import abstractmethod
 from functools import lru_cache
 from multiprocessing.connection import Connection
+from pygame import SRCALPHA, Surface
 from typing import Iterable, NamedTuple, Protocol
 
-import pygame
-from pygame import SRCALPHA, Surface
-
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._service_provider import (
     ServiceProvider
@@ -142,11 +141,11 @@ class ServerWindowClient(IWindow):
 
 
 class SeagullsWindows:
-    WINDOW_CLIENT_COMPONENT = GameComponentId[WindowClient]("window-client")
+    WINDOW_CLIENT_COMPONENT = ObjectDataId[WindowClient]("window-client")
     # TODO: is this supposed to also be called window-client so the dev can choose which to
     #       initialize? or do they both exist in every app and the dev chooses which one to pass
     #       into methods?
-    SERVER_WINDOW_CLIENT_COMPONENT = GameComponentId[WindowClient](
+    SERVER_WINDOW_CLIENT_COMPONENT = ObjectDataId[WindowClient](
         "server-window-client"
     )
     SURFACE_BYTES_EVENT = GameEventId[SurfaceBytes]("window.surface-bytes")

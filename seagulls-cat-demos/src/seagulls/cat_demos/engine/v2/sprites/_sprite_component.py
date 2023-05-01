@@ -1,13 +1,12 @@
 from __future__ import annotations
 
+import pygame
 from functools import lru_cache
+from pygame import SRCALPHA, Surface
 from typing import Dict, NamedTuple, Tuple, TypeAlias
 
-import pygame
-from pygame import SRCALPHA, Surface
-
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._entities import EntityId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
@@ -53,20 +52,20 @@ class SpriteComponent(IExecutable):
         self._sprite_sources = {source.sprite_id: source for source in sprite_sources}
 
     def __call__(self) -> None:
-        for object_id in self._objects.find_by_component(
-            GameComponentId[Sprite]("object-component::sprite")
+        for object_id in self._objects.find_by_data_id(
+            ObjectDataId[Sprite]("object-component::sprite")
         ):
-            sprite_component = self._objects.get_component(
+            sprite_component = self._objects.get_data(
                 object_id,
-                GameComponentId[Sprite]("object-component::sprite"),
+                ObjectDataId[Sprite]("object-component::sprite"),
             )
             sprite_surface = self._create_surface(
                 self._sprite_sources[sprite_component.sprite_id]
             )
 
-            position_component = self._objects.get_component(
+            position_component = self._objects.get_data(
                 object_id,
-                GameComponentId[Position]("object-component::position"),
+                ObjectDataId[Position]("object-component::position"),
             )
             surface = self._window_client.get_layer(sprite_component.layer)
             surface.blit(sprite_surface, position_component)

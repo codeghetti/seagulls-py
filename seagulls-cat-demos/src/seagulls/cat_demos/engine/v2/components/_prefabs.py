@@ -1,40 +1,37 @@
 from abc import abstractmethod
-from typing import Generic, Protocol, Tuple, TypeAlias, TypeVar
+from typing import Generic, NamedTuple, Protocol, Tuple, TypeAlias, TypeVar
 
-from typing_extensions import NamedTuple
-
-from ._component_containers import GameComponentId, TypedGameComponentContainer
+from ._component_containers import ObjectDataId, TypedGameComponentContainer
 from ._config_containers import T_GameConfigType, Tco_GameConfigType
 from ._entities import GameObjectId
 from ._scene_objects import SceneObjects
 
-T = TypeVar("T")
-T_contra = TypeVar("T_contra", contravariant=True)
-GamePrefabId: TypeAlias = GameComponentId[Tco_GameConfigType]
+Tcontra_RequestType = TypeVar("Tcontra_RequestType", contravariant=True, bound=NamedTuple)
+GamePrefabId: TypeAlias = ObjectDataId[Tco_GameConfigType]
 
 
-class IExecutablePrefab(Protocol[T_contra]):
+class IPrefab(Protocol[Tcontra_RequestType]):
     @abstractmethod
-    def __call__(self, config: T_contra) -> None:
+    def execute(self, request: Tcontra_RequestType) -> None:
         pass
 
 
 class PrefabClient:
-    _container: TypedGameComponentContainer[IExecutablePrefab]
+    _container: TypedGameComponentContainer[IPrefab]
 
     def __init__(
-        self, container: TypedGameComponentContainer[IExecutablePrefab]
+        self, container: TypedGameComponentContainer[IPrefab]
     ) -> None:
         self._container = container
 
     def run(
         self, prefab_id: GamePrefabId[T_GameConfigType], config: T_GameConfigType
     ) -> None:
-        self._container.get(GameComponentId(prefab_id.name))(config)
+        self._container.get(ObjectDataId[T_GameConfigType](prefab_id.name)).execute(config)
 
 
 class GameComponentConfig(NamedTuple, Generic[T_GameConfigType]):
-    component_id: GameComponentId[T_GameConfigType]
+    component_id: ObjectDataId[T_GameConfigType]
     config: T_GameConfigType
 
 
@@ -43,22 +40,17 @@ class GameObjectConfig(NamedTuple):
     components: Tuple[GameComponentConfig, ...]
 
 
-class GameObjectPrefab(IExecutablePrefab[GameObjectConfig]):
+class GameObjectPrefab(IPrefab[GameObjectConfig]):
     _scene_objects: SceneObjects
 
     def __init__(self, scene_objects: SceneObjects) -> None:
         self._scene_objects = scene_objects
 
-    def __call__(self, config: GameObjectConfig) -> None:
-        self._scene_objects.add(config.object_id)
-        for component_config in config.components:
-            self._scene_objects.attach_component(
-                entity_id=config.object_id,
-                component_id=component_config.component_id,
-            )
-
-            self._scene_objects.set_component(
-                entity_id=config.object_id,
-                component_id=component_config.component_id,
+    def execute(self, request: GameObjectConfig) -> None:
+        self._scene_objects.add(request.object_id)
+        for component_config in request.components:
+            self._scene_objects.set_data(
+                entity_id=request.object_id,
+                data_id=component_config.component_id,
                 config=component_config.config,
             )

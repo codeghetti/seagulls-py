@@ -13,12 +13,12 @@ from seagulls.cat_demos.app.player._player_controls import (
     PlayerControlIds,
     PlayerControls
 )
-from seagulls.cat_demos.engine.v2.collisions._collider_component import (
+from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     RectCollider
 )
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import (
@@ -107,19 +107,19 @@ class IndexScene(IExecutable):
                 object_id=GameObjectId("player"),
                 components=(
                     GameComponentConfig(
-                        component_id=GameComponentId[Position](
+                        component_id=ObjectDataId[Position](
                             "object-component::position"
                         ),
                         config=Position(200, 700),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[Sprite](
+                        component_id=ObjectDataId[Sprite](
                             "object-component::sprite"
                         ),
-                        config=Sprite(sprite_id=SpriteId("player")),
+                        config=Sprite(sprite_id=SpriteId("player"), layer="units"),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[RectCollider](
+                        component_id=ObjectDataId[RectCollider](
                             "object-component::rect-collider"
                         ),
                         config=RectCollider(size=Size(width=16, height=16)),
@@ -145,19 +145,19 @@ class IndexScene(IExecutable):
                 object_id=GameObjectId("spaceship"),
                 components=(
                     GameComponentConfig(
-                        component_id=GameComponentId[Position](
+                        component_id=ObjectDataId[Position](
                             "object-component::position"
                         ),
                         config=Position(500, 550),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[Sprite](
+                        component_id=ObjectDataId[Sprite](
                             "object-component::sprite"
                         ),
                         config=Sprite(sprite_id=SpriteId("spaceship"), layer="units"),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[RectCollider](
+                        component_id=ObjectDataId[RectCollider](
                             "object-component::rect-collider"
                         ),
                         config=RectCollider(size=Size(width=112, height=75)),
@@ -183,13 +183,13 @@ class IndexScene(IExecutable):
                 object_id=GameObjectId("mouse"),
                 components=(
                     GameComponentConfig(
-                        component_id=GameComponentId[Position](
+                        component_id=ObjectDataId[Position](
                             "object-component::position"
                         ),
                         config=Position(0, 0),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[Sprite](
+                        component_id=ObjectDataId[Sprite](
                             "object-component::sprite"
                         ),
                         config=Sprite(sprite_id=SpriteId("mouse"), layer="mouse"),
@@ -208,19 +208,19 @@ class IndexScene(IExecutable):
                 object_id=GameObjectId("menu:quit"),
                 components=(
                     GameComponentConfig(
-                        component_id=GameComponentId[Position](
+                        component_id=ObjectDataId[Position](
                             "object-component::position"
                         ),
                         config=Position(600, 10),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[Sprite](
+                        component_id=ObjectDataId[Sprite](
                             "object-component::sprite"
                         ),
                         config=Sprite(sprite_id=SpriteId("menu-button"), layer="ui"),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[Text]("object-component::text"),
+                        component_id=ObjectDataId[Text]("object-component::text"),
                         config=Text(
                             value="Quit!",
                             font="monospace",

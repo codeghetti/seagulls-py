@@ -1,14 +1,13 @@
+from pygame import Rect
 from typing import NamedTuple, Tuple
 
-from pygame import Rect
-
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import (
     GamePrefabId,
-    IExecutablePrefab
+    IPrefab
 )
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._size import Size
@@ -29,7 +28,7 @@ class CollisionEvent(NamedTuple):
     target_ids: Tuple[GameObjectId, ...]
 
 
-class CollisionPrefab(IExecutablePrefab[GameObjectId]):
+class CollisionClient(IPrefab[GameObjectId]):
     _objects: SceneObjects
     _event_client: GameEventDispatcher
 
@@ -39,32 +38,32 @@ class CollisionPrefab(IExecutablePrefab[GameObjectId]):
         self._objects = objects
         self._event_client = event_client
 
-    def __call__(self, source_id: GameObjectId) -> None:
-        source_rect_collider = self._objects.get_component(
+    def execute(self, source_id: GameObjectId) -> None:
+        source_rect_collider = self._objects.get_data(
             source_id,
-            GameComponentId[RectCollider]("object-component::rect-collider"),
+            ObjectDataId[RectCollider]("object-component::rect-collider"),
         )
-        source_position = self._objects.get_component(
+        source_position = self._objects.get_data(
             source_id,
-            GameComponentId[Position]("object-component::position"),
+            ObjectDataId[Position]("object-component::position"),
         )
         source = Rect(source_position, source_rect_collider.size)
         targets = []
         target_ids = []
 
-        for target_id in self._objects.find_by_component(
-            GameComponentId[RectCollider]("object-component::rect-collider")
+        for target_id in self._objects.find_by_data_id(
+            ObjectDataId[RectCollider]("object-component::rect-collider")
         ):
             if target_id == source_id:
                 continue
 
-            target_rect_collider = self._objects.get_component(
+            target_rect_collider = self._objects.get_data(
                 target_id,
-                GameComponentId[RectCollider]("object-component::rect-collider"),
+                ObjectDataId[RectCollider]("object-component::rect-collider"),
             )
-            target_position = self._objects.get_component(
+            target_position = self._objects.get_data(
                 target_id,
-                GameComponentId[Position]("object-component::position"),
+                ObjectDataId[Position]("object-component::position"),
             )
 
             # We need these two lists to be in sync :(
@@ -78,9 +77,9 @@ class CollisionPrefab(IExecutablePrefab[GameObjectId]):
 
         if len(collisions) > 0:
             self._event_client.trigger(
-                GameEvent(
-                    ColliderPrefabIds.COLLISION_EVENT,
-                    CollisionEvent(source_id=source_id, target_ids=tuple(target_ids)),
+                event=GameEvent(
+                    id=ColliderPrefabIds.COLLISION_EVENT,
+                    payload=CollisionEvent(source_id=source_id, target_ids=tuple(target_ids)),
                 ),
             )
 
@@ -88,4 +87,4 @@ class CollisionPrefab(IExecutablePrefab[GameObjectId]):
 class ColliderPrefabIds:
     COLLISION_EVENT = GameEventId[CollisionEvent]("object-collisions")
     PREFAB = GamePrefabId[GameObjectId]("prefab::object-collisions")
-    PREFAB_COMPONENT = GameComponentId[CollisionPrefab]("prefab::object-collisions")
+    PREFAB_COMPONENT = ObjectDataId[CollisionClient]("prefab::object-collisions")

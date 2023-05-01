@@ -25,12 +25,12 @@ from seagulls.cat_demos.app.player._player_controls import (
     PlayerControlIds,
     PlayerControlsPrefab
 )
-from seagulls.cat_demos.engine.v2.collisions._collider_component import (
+from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     ColliderPrefabIds
 )
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.components._service_provider import (
@@ -144,7 +144,7 @@ class CatDemosComponentProviders:
                 (FrameEvents.OPEN, lambda: _set_background()),
                 (
                     FrameEvents.OPEN,
-                    lambda: scene_components.get(GameComponentId("RockManager")).tick(),
+                    lambda: scene_components.get(ObjectDataId("RockManager")).tick(),
                 ),
             ),
             ProcessType.CLIENT: lambda: (
@@ -196,7 +196,7 @@ class CatDemosComponentProviders:
                 (FrameEvents.OPEN, lambda: _set_background()),
                 (
                     FrameEvents.OPEN,
-                    lambda: scene_components.get(GameComponentId("RockManager")).tick(),
+                    lambda: scene_components.get(ObjectDataId("RockManager")).tick(),
                 ),
             ),
         }
@@ -216,7 +216,7 @@ class CatDemosComponentProviders:
                 ),
             ),
             (
-                GameComponentId("RockManager"),
+                ObjectDataId("RockManager"),
                 lambda: RockManager(
                     scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
                     clock=scene_components.get(SessionComponents.SCENE_CLOCK),

@@ -1,4 +1,4 @@
-from seagulls.cat_demos.engine.v2.collisions._collider_component import (
+from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     ColliderPrefabIds
 )
 from seagulls.cat_demos.engine.v2.components._component_containers import (

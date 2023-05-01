@@ -1,12 +1,12 @@
 from typing import NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import (
     GamePrefabId,
-    IExecutablePrefab
+    IPrefab
 )
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
@@ -26,7 +26,7 @@ class MouseControls(NamedTuple):
     """
 
 
-class MouseControlsPrefab(IExecutablePrefab[MouseControls]):
+class MouseControlsPrefab(IPrefab[MouseControls]):
     _scene_objects: SceneObjects
     _event_client: GameEventDispatcher
 
@@ -38,13 +38,13 @@ class MouseControlsPrefab(IExecutablePrefab[MouseControls]):
         self._scene_objects = scene_objects
         self._event_client = event_client
 
-    def __call__(self, config: MouseControls) -> None:
+    def execute(self, request: MouseControls) -> None:
         def on_mouse() -> None:
             event = self._event_client.event()
             payload: PygameMouseMotionEvent = event.payload
-            self._scene_objects.set_component(
-                entity_id=config.object_id,
-                component_id=GameComponentId[Position]("object-component::position"),
+            self._scene_objects.set_data(
+                entity_id=request.object_id,
+                data_id=ObjectDataId[Position]("object-component::position"),
                 config=payload.position,
             )
 
@@ -53,4 +53,4 @@ class MouseControlsPrefab(IExecutablePrefab[MouseControls]):
 
 class MouseControlIds:
     PREFAB = GamePrefabId[MouseControls]("prefab::mouse-controls")
-    PREFAB_COMPONENT = GameComponentId[MouseControlsPrefab]("prefab::mouse-controls")
+    PREFAB_COMPONENT = ObjectDataId[MouseControlsPrefab]("prefab::mouse-controls")

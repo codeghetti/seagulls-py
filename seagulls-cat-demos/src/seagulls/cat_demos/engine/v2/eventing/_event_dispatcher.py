@@ -1,28 +1,17 @@
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Optional,
-    Tuple,
-    TypeAlias,
+from typing import Any, Callable, Dict, Generic, List, NamedTuple, Optional, Tuple, TypeAlias, \
     TypeVar
-)
-
-from typing_extensions import NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._entities import TypedEntityId
 
-GameEventType = TypeVar("GameEventType", bound=NamedTuple)
+T_GameEventType = TypeVar("T_GameEventType", bound=NamedTuple)
 
 
-GameEventId: TypeAlias = TypedEntityId[GameEventType]
+GameEventId: TypeAlias = TypedEntityId[T_GameEventType]
 
 
-class GameEvent(NamedTuple, Generic[GameEventType]):
-    id: GameEventId[GameEventType]
-    payload: GameEventType
+class GameEvent(NamedTuple, Generic[T_GameEventType]):
+    id: GameEventId[T_GameEventType]
+    payload: T_GameEventType
 
 
 class GameEventDispatcher:

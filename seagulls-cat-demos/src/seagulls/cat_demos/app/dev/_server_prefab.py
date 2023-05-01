@@ -1,10 +1,12 @@
 import logging
 import multiprocessing
+import pygame
 import uuid
 from abc import abstractmethod
 from datetime import datetime
 from multiprocessing.connection import Connection
 from multiprocessing.context import DefaultContext, Process
+from pygame import SRCALPHA, Surface
 from threading import Event
 from typing import (
     Any,
@@ -16,16 +18,13 @@ from typing import (
     TypeAlias,
     cast
 )
-
-import pygame
-from pygame import SRCALPHA, Surface
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import (
@@ -33,7 +32,7 @@ from seagulls.cat_demos.engine.v2.components._prefabs import (
     GameObjectConfig,
     GameObjectPrefab,
     GamePrefabId,
-    IExecutablePrefab
+    IPrefab
 )
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._service_provider import (
@@ -188,7 +187,7 @@ class FilesystemMonitor(FileSystemEventHandler):
         self._trigger.clear()
 
 
-class GameServerPrefab(IExecutablePrefab[GameServer]):
+class GameServerPrefab(IPrefab[GameServer]):
     _scene_objects: SceneObjects
     _object_prefab: GameObjectPrefab
     _window_client: WindowClient
@@ -215,29 +214,29 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         self._process_manager = process_manager
         self._filesystem_monitor = filesystem_monitor
 
-    def __call__(self, config: GameServer) -> None:
+    def execute(self, request: GameServer) -> None:
         # TODO: I would like to be able to describe this scenario:
         #       "while this process is running, listen to events to communicate with the server"
         #       client.while(condition, game_object_context)
         pid = self._process_manager.start(self._executable)
         logger.debug(f"started game server: {pid}")
 
-        self._object_prefab(
+        self._object_prefab.execute(
             GameObjectConfig(
-                object_id=config.object_id,
+                object_id=request.object_id,
                 components=(
                     GameComponentConfig(
-                        component_id=GameComponentId[Position](
+                        component_id=ObjectDataId[Position](
                             "object-component::position"
                         ),
-                        config=config.position,
+                        config=request.position,
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[Size]("object-component::size"),
-                        config=config.size,
+                        component_id=ObjectDataId[Size]("object-component::size"),
+                        config=request.size,
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[GameServerProcess](
+                        component_id=ObjectDataId[GameServerProcess](
                             "object-component::server-process"
                         ),
                         config=GameServerProcess(
@@ -246,7 +245,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
                         ),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[DateTime](
+                        component_id=ObjectDataId[DateTime](
                             "object-component::created-at"
                         ),
                         config=DateTime(datetime.now()),
@@ -256,16 +255,16 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         )
 
     def on_scene_open(self) -> None:
-        component_id = GameComponentId[GameServerProcess](
+        component_id = ObjectDataId[GameServerProcess](
             "object-component::server-process"
         )
 
         def _on_mouse_motion() -> None:
-            for object_id in self._scene_objects.find_by_component(component_id):
+            for object_id in self._scene_objects.find_by_data_id(component_id):
                 self._send_mouse_event(object_id)
 
         def _on_keyboard() -> None:
-            for object_id in self._scene_objects.find_by_component(component_id):
+            for object_id in self._scene_objects.find_by_data_id(component_id):
                 # print(f"forwarding event to object: {object_id}")
                 self._send_keyboard_event(object_id)
 
@@ -278,7 +277,7 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         observer.start()
 
     def on_frame_close(self) -> None:
-        component_id = GameComponentId[GameServerProcess](
+        component_id = ObjectDataId[GameServerProcess](
             "object-component::server-process"
         )
 
@@ -287,27 +286,27 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
             self._filesystem_monitor.reset()
 
         # TODO: make a version that returns a tuple[objectid, component]
-        for object_id in self._scene_objects.find_by_component(component_id):
-            process_component = self._scene_objects.get_component(
+        for object_id in self._scene_objects.find_by_data_id(component_id):
+            process_component = self._scene_objects.get_data(
                 object_id, component_id
             )
 
             client_connection = self._process_manager.get_client_connection(
                 process_component.process_id
             )
-            position_component = self._scene_objects.get_component(
+            position_component = self._scene_objects.get_data(
                 object_id,
-                GameComponentId[Position]("object-component::position"),
+                ObjectDataId[Position]("object-component::position"),
             )
-            size_component = self._scene_objects.get_component(
+            size_component = self._scene_objects.get_data(
                 object_id,
-                GameComponentId[Size]("object-component::size"),
+                ObjectDataId[Size]("object-component::size"),
             )
 
             if toggled:
                 client_connection.send(GameEvent(PygameEvents.QUIT, None))
                 self._scene_objects.remove(object_id)
-                self(
+                self.execute(
                     GameServer(
                         object_id=GameObjectId(str(uuid.uuid4())),
                         position=position_component,
@@ -330,10 +329,10 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
                 )
 
     def _send_mouse_event(self, object_id: GameObjectId) -> None:
-        component_id = GameComponentId[GameServerProcess](
+        component_id = ObjectDataId[GameServerProcess](
             "object-component::server-process"
         )
-        process_component = self._scene_objects.get_component(object_id, component_id)
+        process_component = self._scene_objects.get_data(object_id, component_id)
 
         client_connection = self._process_manager.get_client_connection(
             process_component.process_id
@@ -344,10 +343,10 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
         client_connection.send((event.id, payload))
 
     def _send_keyboard_event(self, object_id: GameObjectId) -> None:
-        component_id = GameComponentId[GameServerProcess](
+        component_id = ObjectDataId[GameServerProcess](
             "object-component::server-process"
         )
-        process_component = self._scene_objects.get_component(object_id, component_id)
+        process_component = self._scene_objects.get_data(object_id, component_id)
 
         # TODO: this shouldn't be necessary here
         event = self._event_client.event()
@@ -390,11 +389,11 @@ class GameServerPrefab(IExecutablePrefab[GameServer]):
 
 class GameServerIds:
     PREFAB = GamePrefabId[GameServer]("prefab::game-server")
-    PREFAB_COMPONENT = GameComponentId[GameServerPrefab]("prefab::game-server")
-    SUBPROCESS_EXECUTABLE = GameComponentId[GameSubprocessExecutable](
+    PREFAB_COMPONENT = ObjectDataId[GameServerPrefab]("prefab::game-server")
+    SUBPROCESS_EXECUTABLE = ObjectDataId[GameSubprocessExecutable](
         "subprocess-executable"
     )
-    SERVER_PROCESS_CONNECTION = GameComponentId[Connection](
+    SERVER_PROCESS_CONNECTION = ObjectDataId[Connection](
         "server-subprocess-connection"
     )
-    SERVER_MSG_HANDLER = GameComponentId[ServerEventForwarder]("server-message-handler")
+    SERVER_MSG_HANDLER = ObjectDataId[ServerEventForwarder]("server-message-handler")

@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-from functools import lru_cache
-from typing import NamedTuple
-
 import pygame
+from functools import lru_cache
 from pygame import Surface
+from typing import NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -32,15 +31,15 @@ class TextComponent(IExecutable):
         self._window_client = window_client
 
     def __call__(self) -> None:
-        for object_id in self._objects.find_by_component(
-            GameComponentId[Text]("object-component::text")
+        for object_id in self._objects.find_by_data_id(
+            ObjectDataId[Text]("object-component::text")
         ):
-            text_component = self._objects.get_component(
-                object_id, GameComponentId[Text]("object-component::text")
+            text_component = self._objects.get_data(
+                object_id, ObjectDataId[Text]("object-component::text")
             )
-            position_component = self._objects.get_component(
+            position_component = self._objects.get_data(
                 object_id,
-                GameComponentId[Position]("object-component::position"),
+                ObjectDataId[Position]("object-component::position"),
             )
             text = self._create_text(text_component)
             surface = self._window_client.get_layer("ui")

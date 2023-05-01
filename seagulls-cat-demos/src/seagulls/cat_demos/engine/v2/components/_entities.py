@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Generic, TypeAlias, TypeVar
+from typing import Generic, NamedTuple, TypeAlias, TypeVar
 
 EntityType = TypeVar("EntityType")
 
@@ -53,3 +53,4 @@ class TypedEntityId(EntityId, Generic[EntityType]):
 
 GameSceneId: TypeAlias = EntityId
 GameObjectId: TypeAlias = EntityId
+GameDataId: TypeAlias = TypedEntityId[NamedTuple]

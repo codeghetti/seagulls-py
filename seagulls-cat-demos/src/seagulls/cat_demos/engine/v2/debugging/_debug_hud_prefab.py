@@ -2,14 +2,14 @@ from typing import NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import (
     GameComponentConfig,
     GameObjectConfig,
     GameObjectPrefab,
-    IExecutablePrefab
+    IPrefab
 )
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.input._game_clock import GameClock
@@ -21,7 +21,7 @@ class DebugHud(NamedTuple):
     show_fps: bool
 
 
-class DebugHudPrefab(IExecutablePrefab[DebugHud]):
+class DebugHudPrefab(IPrefab[DebugHud]):
     _scene_objects: SceneObjects
     _object_prefab: GameObjectPrefab
     _clock: GameClock
@@ -36,19 +36,19 @@ class DebugHudPrefab(IExecutablePrefab[DebugHud]):
         self._object_prefab = object_prefab
         self._clock = clock
 
-    def __call__(self, config: DebugHud) -> None:
-        self._object_prefab(
+    def execute(self, request: DebugHud) -> None:
+        self._object_prefab.execute(
             GameObjectConfig(
                 object_id=GameObjectId("debug-hud"),
                 components=(
                     GameComponentConfig(
-                        component_id=GameComponentId[Position](
+                        component_id=ObjectDataId[Position](
                             "object-component::position"
                         ),
                         config=Position(350, 10),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[Text]("object-component::text"),
+                        component_id=ObjectDataId[Text]("object-component::text"),
                         config=Text(
                             value="N/A",
                             font="monospace",
@@ -57,25 +57,25 @@ class DebugHudPrefab(IExecutablePrefab[DebugHud]):
                         ),
                     ),
                     GameComponentConfig(
-                        component_id=GameComponentId[DebugHud](
+                        component_id=ObjectDataId[DebugHud](
                             "object-component::debug-hud"
                         ),
-                        config=config,
+                        config=request,
                     ),
                 ),
             )
         )
 
     def tick(self) -> None:
-        component_id = GameComponentId[DebugHud]("object-component::debug-hud")
-        text_component_id = GameComponentId[Text]("object-component::text")
+        component_id = ObjectDataId[DebugHud]("object-component::debug-hud")
+        text_component_id = ObjectDataId[Text]("object-component::text")
 
-        for object_id in self._scene_objects.find_by_component(component_id):
-            text = self._scene_objects.get_component(object_id, text_component_id)
+        for object_id in self._scene_objects.find_by_data_id(component_id):
+            text = self._scene_objects.get_data(object_id, text_component_id)
             new_text = Text(
                 value=str(self._clock.get_fps()),
                 font=text.font,
                 size=text.size,
                 color=text.color,
             )
-            self._scene_objects.set_component(object_id, text_component_id, new_text)
+            self._scene_objects.set_data(object_id, text_component_id, new_text)

@@ -1,5 +1,5 @@
 from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId
+    ObjectDataId
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
@@ -21,13 +21,13 @@ class RockManager:
 
     def tick(self):
         delta = self._clock.get_delta()
-        current_position = self._scene_objects.get_component(
+        current_position = self._scene_objects.get_data(
             entity_id=GameObjectId("rock-large"),
-            component_id=GameComponentId[Position]("object-component::position"),
+            data_id=ObjectDataId[Position]("object-component::position"),
         )
         adjusted_direction = Position(x=0, y=1 * delta / 10)
-        self._scene_objects.set_component(
+        self._scene_objects.set_data(
             entity_id=GameObjectId("rock-large"),
-            component_id=GameComponentId[Position]("object-component::position"),
+            data_id=ObjectDataId[Position]("object-component::position"),
             config=current_position + adjusted_direction,
         )

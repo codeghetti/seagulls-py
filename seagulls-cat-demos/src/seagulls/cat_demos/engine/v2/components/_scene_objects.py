@@ -1,45 +1,20 @@
 import logging
-from typing import Any, Dict, Generic, Set, Tuple, TypeVar
+from typing import Any, Dict, Set, Tuple, TypeVar
 
-from ._component_containers import (
-    GameComponentContainer,
-    GameComponentId,
-    TypedGameComponentContainer
-)
 from ._entities import GameObjectId
-from ._service_provider import ServiceProvider
+from ._object_data import GameObjectData, ObjectDataId
 
 logger = logging.getLogger(__name__)
 T = TypeVar("T")
 
 
-class ObjectComponent(Generic[T]):
-    _context: ServiceProvider[GameObjectId]
-    _configs: Dict[GameObjectId, T]
-
-    def __init__(
-        self,
-        context: ServiceProvider[GameObjectId],
-    ) -> None:
-        self._context = context
-        self._configs = {}
-
-    def get(self) -> T:
-        return self._configs[self._context()]
-
-    def set(self, config: T) -> None:
-        self._configs[self._context()] = config
-
-
 class SceneObjects:
-    _container: TypedGameComponentContainer[ObjectComponent]
-    _entities: Dict[GameObjectId, Set[GameComponentId]]
-    _components: Dict[GameComponentId[Any], Dict[GameObjectId, ObjectComponent[Any]]]
+    _entities: Dict[GameObjectId, Set[ObjectDataId]]
+    _data: Dict[ObjectDataId[Any], Dict[GameObjectId, GameObjectData[Any]]]
 
-    def __init__(self, container: GameComponentContainer) -> None:
-        self._container = container
+    def __init__(self) -> None:
         self._entities = {}
-        self._components = {}
+        self._data = {}
 
     def add(self, entity_id: GameObjectId) -> None:
         if entity_id in self._entities:
@@ -56,55 +31,31 @@ class SceneObjects:
     def get(self) -> Tuple[GameObjectId, ...]:
         return tuple(self._entities.keys())
 
-    def attach_component(
-        self, entity_id: GameObjectId, component_id: GameComponentId
-    ) -> None:
-        if entity_id not in self._entities:
-            raise RuntimeError(f"entity not found: {entity_id}")
-
-        if component_id in self._entities[entity_id]:
-            raise RuntimeError(f"duplicate component found: {component_id}")
-
-        self._entities[entity_id].add(component_id)
-
-        if component_id not in self._components:
-            self._components[component_id] = {}
-        self._components[component_id][entity_id] = ObjectComponent(
-            context=lambda: entity_id
-        )
-
-    def detach_component(
-        self, entity_id: GameObjectId, component_id: GameComponentId
-    ) -> None:
-        if entity_id not in self._entities:
-            raise RuntimeError(f"entity not found: {entity_id}")
-
-        if component_id not in self._entities:
-            raise RuntimeError(f"component not found: {component_id}")
-
-        self._entities[entity_id].remove(component_id)
-
-    def set_component(
+    def set_data(
         self,
         entity_id: GameObjectId,
-        component_id: GameComponentId[T],
+        data_id: ObjectDataId[T],
         config: T,
     ) -> None:
-        self._components[component_id][entity_id].set(config)
+        if data_id not in self._data:
+            self._data[data_id] = {}
 
-    def get_component(
+        self._entities[entity_id].add(data_id)
+        self._data[data_id][entity_id] = config
+
+    def get_data(
         self,
         entity_id: GameObjectId,
-        component_id: GameComponentId[T],
+        data_id: ObjectDataId[T],
     ) -> T:
-        return self._components[component_id][entity_id].get()
+        return self._data[data_id][entity_id]
 
-    def find_by_component(
-        self, component_id: GameComponentId
+    def find_by_data_id(
+        self, data_id: ObjectDataId
     ) -> Tuple[GameObjectId, ...]:
         result = []
         for e, cs in self._entities.items():
-            if component_id in cs:
+            if data_id in cs:
                 result.append(e)
 
         return tuple(result)

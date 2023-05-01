@@ -1,20 +1,17 @@
 from argparse import ArgumentParser
 from typing import Iterable, Tuple, TypeAlias
 
-from seagulls.cli import ICliCommand
-
-from seagulls.cat_demos.engine.v2.components._component_containers import (
-    GameComponentId,
-    GameComponentProvider,
-    GameComponentType
-)
+from seagulls.cat_demos.engine.v2.components._component_containers import (GameComponentProvider,
+                                                                           GameComponentType,
+                                                                           ObjectDataId)
 from seagulls.cat_demos.engine.v2.components._service_provider import (
     ServiceProvider
 )
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp
+from seagulls.cli import ICliCommand
 
 ComponentProviderCollection: TypeAlias = Iterable[
-    Tuple[GameComponentId[GameComponentType], GameComponentProvider[GameComponentType]]
+    Tuple[ObjectDataId[GameComponentType], GameComponentProvider[GameComponentType]]
 ]
 
 
@@ -40,4 +37,5 @@ class GameCliCommand(ICliCommand):
             pass
 
     def _run(self) -> None:
+        # app = seagulls_app()
         self._app.run(*self._app_providers_factory())

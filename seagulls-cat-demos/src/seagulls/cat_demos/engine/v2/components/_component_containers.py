@@ -16,7 +16,7 @@ from ._service_provider import ServiceProvider
 
 GameComponentType = TypeVar("GameComponentType", covariant=True)
 T = TypeVar("T")
-GameComponentId: TypeAlias = TypedEntityId[GameComponentType]
+ObjectDataId: TypeAlias = TypedEntityId[GameComponentType]
 
 
 class GameComponentProvider(Protocol[GameComponentType]):
@@ -28,7 +28,7 @@ class GameComponentProvider(Protocol[GameComponentType]):
 class GameComponentContainer(Protocol):
     @abstractmethod
     def get(
-        self, component_id: GameComponentId[GameComponentType]
+        self, component_id: ObjectDataId[GameComponentType]
     ) -> GameComponentType:
         pass
 
@@ -39,17 +39,17 @@ class TypedGameComponentContainer(Protocol[T]):
     """
 
     @abstractmethod
-    def get(self, component_id: GameComponentId[T]) -> T:
+    def get(self, component_id: ObjectDataId[T]) -> T:
         pass
 
 
 class GameComponentFactory:
-    _providers: Dict[GameComponentId[Any], GameComponentProvider[Any]]
+    _providers: Dict[ObjectDataId[Any], GameComponentProvider[Any]]
 
     @staticmethod
     def with_providers(
         *provider: Tuple[
-            GameComponentId[GameComponentType], GameComponentProvider[GameComponentType]
+            ObjectDataId[GameComponentType], GameComponentProvider[GameComponentType]
         ],
     ) -> "GameComponentFactory":
         i = GameComponentFactory()
@@ -63,7 +63,7 @@ class GameComponentFactory:
     def set_missing(
         self,
         *provider: Tuple[
-            GameComponentId[GameComponentType], GameComponentProvider[GameComponentType]
+            ObjectDataId[GameComponentType], GameComponentProvider[GameComponentType]
         ],
     ) -> None:
         """
@@ -75,7 +75,7 @@ class GameComponentFactory:
 
     def set(
         self,
-        component_id: GameComponentId[GameComponentType],
+        component_id: ObjectDataId[GameComponentType],
         provider: GameComponentProvider[GameComponentType],
     ) -> None:
         if component_id in self._providers:
@@ -84,7 +84,7 @@ class GameComponentFactory:
         self._providers[component_id] = provider
 
     def get(
-        self, component_id: GameComponentId[GameComponentType]
+        self, component_id: ObjectDataId[GameComponentType]
     ) -> GameComponentType:
         if component_id not in self._providers:
             raise RuntimeError(f"entity not found: {component_id}")
@@ -100,7 +100,7 @@ class CachedGameComponentContainer(GameComponentContainer):
 
     @lru_cache()
     def get(
-        self, component_id: GameComponentId[GameComponentType]
+        self, component_id: ObjectDataId[GameComponentType]
     ) -> GameComponentType:
         return self._factory.get(component_id)
 
@@ -116,14 +116,14 @@ class ContextualGameComponentContainer(GameComponentContainer, Generic[T]):
         self._context = context
 
     def get(
-        self, component_id: GameComponentId[GameComponentType]
+        self, component_id: ObjectDataId[GameComponentType]
     ) -> GameComponentType:
         # The public function is never cached because we want to add the context
         return self._get(component_id, self._context())
 
     @lru_cache()
     def _get(
-        self, component_id: GameComponentId[GameComponentType], context: T
+        self, component_id: ObjectDataId[GameComponentType], context: T
     ) -> GameComponentType:
         # We don't have to use the context, we just want it in the args for caching
         return self._container.get(component_id)
@@ -131,18 +131,18 @@ class ContextualGameComponentContainer(GameComponentContainer, Generic[T]):
 
 class FilteredGameComponentRegistry(GameComponentContainer):
     _container: GameComponentContainer
-    _context: ServiceProvider[Iterable[GameComponentId]]
+    _context: ServiceProvider[Iterable[ObjectDataId]]
 
     def __init__(
         self,
         container: GameComponentContainer,
-        context: ServiceProvider[Iterable[GameComponentId]],
+        context: ServiceProvider[Iterable[ObjectDataId]],
     ) -> None:
         self._container = container
         self._context = context
 
     def get(
-        self, component_id: GameComponentId[GameComponentType]
+        self, component_id: ObjectDataId[GameComponentType]
     ) -> GameComponentType:
         if component_id not in self._context():
             raise RuntimeError(f"entity not found: {component_id}")

@@ -11,9 +11,7 @@ from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._prefabs import (
     GameComponentConfig,
     GameObjectConfig,
-    GameObjectPrefab,
-    GamePrefabId,
-    IPrefab
+    GameObjectPrefab
 )
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -36,13 +34,13 @@ class WorldElement(NamedTuple):
     position: Position
 
 
-class WorldElementPrefab(IPrefab[WorldElement]):
+class WorldElementClient:
     _object_prefab: GameObjectPrefab
 
     def __init__(self, object_prefab: GameObjectPrefab) -> None:
         self._object_prefab = object_prefab
 
-    def execute(self, request: WorldElement) -> None:
+    def spawn(self, request: WorldElement) -> None:
         object_config = GameObjectConfig(
             object_id=request.object_id,
             components=(
@@ -69,5 +67,4 @@ class WorldElementPrefab(IPrefab[WorldElement]):
 
 
 class WorldElementIds:
-    PREFAB = GamePrefabId[WorldElement]("prefab::world-element")
-    PREFAB_COMPONENT = ObjectDataId[WorldElementPrefab]("prefab::world-element")
+    CLIENT_ID = ObjectDataId[WorldElementClient]("world-element-client")

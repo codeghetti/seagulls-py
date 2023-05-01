@@ -2,8 +2,7 @@ import pygame
 
 from seagulls.cat_demos.app.environment._world_elements import (
     WorldElement,
-    WorldElementId,
-    WorldElementIds
+    WorldElementClient, WorldElementId
 )
 from seagulls.cat_demos.app.player._mouse_controls import (
     MouseControlIds,
@@ -46,16 +45,19 @@ class IndexScene(IExecutable):
     _prefab_client: PrefabClient
     _event_client: GameEventDispatcher
     _window_client: WindowClient
+    _world_elements: WorldElementClient
 
     def __init__(
         self,
         prefab_client: PrefabClient,
         event_client: GameEventDispatcher,
         window_client: WindowClient,
+        world_elements: WorldElementClient,
     ) -> None:
         self._prefab_client = prefab_client
         self._event_client = event_client
         self._window_client = window_client
+        self._world_elements = world_elements
 
     def __call__(self) -> None:
         # self._spawn_environment()
@@ -71,34 +73,25 @@ class IndexScene(IExecutable):
     def _spawn_environment(self):
         for x in range(15):
             for y in range(15):
-                self._prefab_client.run(
-                    WorldElementIds.PREFAB,
-                    WorldElement(
-                        object_id=GameObjectId(f"barrel::{x}.{y}"),
-                        sprite_id=WorldElementId.BARREL,
-                        position=Position(x=50 + (x * 32), y=50 + (y * 32)),
-                    ),
-                )
+                self._world_elements.spawn(WorldElement(
+                    object_id=GameObjectId(f"barrel::{x}.{y}"),
+                    sprite_id=WorldElementId.BARREL,
+                    position=Position(x=50 + (x * 32), y=50 + (y * 32)),
+                ))
 
     def _spawn_sc_environment(self):
-        self._prefab_client.run(
-            WorldElementIds.PREFAB,
-            WorldElement(
-                object_id=GameObjectId("star_background"),
-                sprite_id=WorldElementId.STAR_BACKGROUND,
-                position=Position(x=0, y=0),
-            ),
-        )
+        self._world_elements.spawn(WorldElement(
+            object_id=GameObjectId("star_background"),
+            sprite_id=WorldElementId.STAR_BACKGROUND,
+            position=Position(x=0, y=0),
+        ))
 
     def _spawn_sc_one_rock(self):
-        self._prefab_client.run(
-            WorldElementIds.PREFAB,
-            WorldElement(
-                object_id=GameObjectId("rock-large"),
-                sprite_id=WorldElementId.ROCK_LARGE,
-                position=Position(x=400, y=100),
-            ),
-        )
+        self._world_elements.spawn(WorldElement(
+            object_id=GameObjectId("rock-large"),
+            sprite_id=WorldElementId.ROCK_LARGE,
+            position=Position(x=400, y=100),
+        ))
 
     def _spawn_player(self):
         self._prefab_client.run(

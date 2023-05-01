@@ -13,10 +13,7 @@ from seagulls.cat_demos.app.dev._server_prefab import (
     GameServerProcessManager,
     ServerEventForwarder
 )
-from seagulls.cat_demos.app.environment._world_elements import (
-    WorldElementIds,
-    WorldElementPrefab
-)
+from seagulls.cat_demos.app.environment._world_elements import (WorldElementClient, WorldElementIds)
 from seagulls.cat_demos.app.player._mouse_controls import (
     MouseControlIds,
     MouseControlsPrefab
@@ -185,6 +182,9 @@ class CatDemosComponentProviders:
                         window_client=session_components.get(
                             SessionComponents.WINDOW_CLIENT
                         ),
+                        world_elements=scene_components.get(
+                            WorldElementIds.CLIENT_ID
+                        )
                     )(),
                 ),
                 (
@@ -230,8 +230,8 @@ class CatDemosComponentProviders:
                 ),
             ),
             (
-                WorldElementIds.PREFAB_COMPONENT,
-                lambda: WorldElementPrefab(
+                WorldElementIds.CLIENT_ID,
+                lambda: WorldElementClient(
                     object_prefab=scene_components.get(SessionComponents.OBJECT_PREFAB),
                 ),
             ),

@@ -5,10 +5,8 @@ from abc import abstractmethod
 from queue import Empty, Queue
 from typing import Dict, Iterable, NamedTuple, Optional, Protocol
 
+from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.components._service_provider import (
-    ServiceProvider
-)
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEvent,
     GameEventDispatcher,
@@ -131,7 +129,7 @@ class SceneComponent(IScene):
 
 
 class SceneRegistry:
-    _providers: Dict[GameSceneId, ServiceProvider[IScene]]
+    _providers: Dict[GameSceneId, GameClientProvider[IScene]]
 
     def __init__(self) -> None:
         self._providers = {}
@@ -145,7 +143,7 @@ class SceneRegistry:
         return client
 
     def register(
-        self, scene_id: GameSceneId, provider: ServiceProvider[IScene]
+        self, scene_id: GameSceneId, provider: GameClientProvider[IScene]
     ) -> None:
         self._providers[scene_id] = provider
 
@@ -155,7 +153,7 @@ class SceneRegistry:
 
 class SceneProvider(NamedTuple):
     scene_id: GameSceneId
-    provider: ServiceProvider[IScene]
+    provider: GameClientProvider[IScene]
 
 
 class SceneClient(IProvideScenes):

@@ -6,9 +6,7 @@ from pygame import Surface
 from typing import NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._color import Color
-from seagulls.cat_demos.engine.v2.components._component_containers import (
-    ObjectDataId
-)
+from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
@@ -32,14 +30,14 @@ class TextComponent(IExecutable):
 
     def __call__(self) -> None:
         for object_id in self._objects.find_by_data_id(
-            ObjectDataId[Text]("object-component::text")
+            ObjectDataId[Text]("text")
         ):
             text_component = self._objects.get_data(
-                object_id, ObjectDataId[Text]("object-component::text")
+                object_id, ObjectDataId[Text]("text")
             )
             position_component = self._objects.get_data(
                 object_id,
-                ObjectDataId[Position]("object-component::position"),
+                ObjectDataId[Position]("position"),
             )
             text = self._create_text(text_component)
             surface = self._window_client.get_layer("ui")

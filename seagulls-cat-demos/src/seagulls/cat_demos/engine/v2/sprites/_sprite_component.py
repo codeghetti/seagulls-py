@@ -5,10 +5,8 @@ from functools import lru_cache
 from pygame import SRCALPHA, Surface
 from typing import Dict, NamedTuple, Tuple, TypeAlias
 
-from seagulls.cat_demos.engine.v2.components._component_containers import (
-    ObjectDataId
-)
 from seagulls.cat_demos.engine.v2.components._entities import EntityId
+from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -53,11 +51,11 @@ class SpriteComponent(IExecutable):
 
     def __call__(self) -> None:
         for object_id in self._objects.find_by_data_id(
-            ObjectDataId[Sprite]("object-component::sprite")
+            ObjectDataId[Sprite]("sprite")
         ):
             sprite_component = self._objects.get_data(
                 object_id,
-                ObjectDataId[Sprite]("object-component::sprite"),
+                ObjectDataId[Sprite]("sprite"),
             )
             sprite_surface = self._create_surface(
                 self._sprite_sources[sprite_component.sprite_id]
@@ -65,7 +63,7 @@ class SpriteComponent(IExecutable):
 
             position_component = self._objects.get_data(
                 object_id,
-                ObjectDataId[Position]("object-component::position"),
+                ObjectDataId[Position]("position"),
             )
             surface = self._window_client.get_layer(sprite_component.layer)
             surface.blit(sprite_surface, position_component)

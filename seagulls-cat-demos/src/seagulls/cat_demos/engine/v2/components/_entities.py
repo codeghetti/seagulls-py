@@ -54,3 +54,4 @@ class TypedEntityId(EntityId, Generic[EntityType]):
 GameSceneId: TypeAlias = EntityId
 GameObjectId: TypeAlias = EntityId
 GameDataId: TypeAlias = TypedEntityId[NamedTuple]
+GameClientId: TypeAlias = TypedEntityId

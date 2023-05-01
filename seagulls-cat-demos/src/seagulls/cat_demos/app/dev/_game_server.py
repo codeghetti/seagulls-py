@@ -22,22 +22,11 @@ from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
+from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
 from seagulls.cat_demos.engine.v2.components._color import Color
-from seagulls.cat_demos.engine.v2.components._component_containers import (
-    ObjectDataId
-)
-from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
-from seagulls.cat_demos.engine.v2.components._prefabs import (
-    GameComponentConfig,
-    GameObjectConfig,
-    GameObjectPrefab,
-    GamePrefabId,
-    IPrefab
-)
+from seagulls.cat_demos.engine.v2.components._entities import GameClientId, GameObjectId
+from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
-from seagulls.cat_demos.engine.v2.components._service_provider import (
-    ServiceProvider
-)
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEvent,
@@ -80,14 +69,14 @@ class DateTime(NamedTuple):
 
 
 class DefaultExecutable(GameSubprocessExecutable):
-    _app_factory: ServiceProvider[
-        Tuple[SeagullsApp, ServiceProvider[ComponentProviderCollection]]
+    _app_factory: GameClientProvider[
+        Tuple[SeagullsApp, GameClientProvider[ComponentProviderCollection]]
     ]
 
     def __init__(
         self,
-        app_factory: ServiceProvider[
-            Tuple[SeagullsApp, ServiceProvider[ComponentProviderCollection]]
+        app_factory: GameClientProvider[
+            Tuple[SeagullsApp, GameClientProvider[ComponentProviderCollection]]
         ],
     ) -> None:
         self._app_factory = app_factory
@@ -95,7 +84,7 @@ class DefaultExecutable(GameSubprocessExecutable):
     def __call__(self, connection: Connection) -> None:
         app, component_provider = self._app_factory()
         providers = list(component_provider())
-        providers.append((GameServerIds.SERVER_PROCESS_CONNECTION, lambda: connection))
+        providers.append((GameServerComponent.SERVER_PROCESS_CONNECTION, lambda: connection))
 
         try:
             app.run(*providers)
@@ -187,9 +176,8 @@ class FilesystemMonitor(FileSystemEventHandler):
         self._trigger.clear()
 
 
-class GameServerPrefab(IPrefab[GameServer]):
+class GameServerClient:
     _scene_objects: SceneObjects
-    _object_prefab: GameObjectPrefab
     _window_client: WindowClient
     _event_client: GameEventDispatcher
     _executable: GameSubprocessExecutable
@@ -199,7 +187,6 @@ class GameServerPrefab(IPrefab[GameServer]):
     def __init__(
         self,
         scene_objects: SceneObjects,
-        object_prefab: GameObjectPrefab,
         window_client: WindowClient,
         event_client: GameEventDispatcher,
         executable: GameSubprocessExecutable,
@@ -207,7 +194,6 @@ class GameServerPrefab(IPrefab[GameServer]):
         filesystem_monitor: FilesystemMonitor,
     ) -> None:
         self._scene_objects = scene_objects
-        self._object_prefab = object_prefab
         self._window_client = window_client
         self._event_client = event_client
         self._executable = executable
@@ -221,37 +207,26 @@ class GameServerPrefab(IPrefab[GameServer]):
         pid = self._process_manager.start(self._executable)
         logger.debug(f"started game server: {pid}")
 
-        self._object_prefab.execute(
-            GameObjectConfig(
-                object_id=request.object_id,
-                components=(
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Position](
-                            "object-component::position"
-                        ),
-                        config=request.position,
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Size]("object-component::size"),
-                        config=request.size,
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[GameServerProcess](
-                            "object-component::server-process"
-                        ),
-                        config=GameServerProcess(
-                            process_id=pid,
-                            forward_input=True,
-                        ),
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[DateTime](
-                            "object-component::created-at"
-                        ),
-                        config=DateTime(datetime.now()),
-                    ),
-                ),
-            ),
+        self._scene_objects.add(request.object_id)
+        self._scene_objects.set_data(
+            entity_id=request.object_id,
+            data_id=ObjectDataId[Position]("position"),
+            config=request.position,
+        )
+        self._scene_objects.set_data(
+            entity_id=request.object_id,
+            data_id=ObjectDataId[Size]("size"),
+            config=request.size,
+        )
+        self._scene_objects.set_data(
+            entity_id=request.object_id,
+            data_id=ObjectDataId[GameServerProcess]("server-process"),
+            config=GameServerProcess(process_id=pid, forward_input=True),
+        )
+        self._scene_objects.set_data(
+            entity_id=request.object_id,
+            data_id=ObjectDataId[DateTime]("created-at"),
+            config=DateTime(datetime.now()),
         )
 
     def on_scene_open(self) -> None:
@@ -387,13 +362,8 @@ class GameServerPrefab(IPrefab[GameServer]):
         client_connection.send((event.id, payload))
 
 
-class GameServerIds:
-    PREFAB = GamePrefabId[GameServer]("prefab::game-server")
-    PREFAB_COMPONENT = ObjectDataId[GameServerPrefab]("prefab::game-server")
-    SUBPROCESS_EXECUTABLE = ObjectDataId[GameSubprocessExecutable](
-        "subprocess-executable"
-    )
-    SERVER_PROCESS_CONNECTION = ObjectDataId[Connection](
-        "server-subprocess-connection"
-    )
-    SERVER_MSG_HANDLER = ObjectDataId[ServerEventForwarder]("server-message-handler")
+class GameServerComponent:
+    CLIENT_ID = GameClientId[GameServerClient]("game-server-client")
+    SUBPROCESS_EXECUTABLE = GameClientId[GameSubprocessExecutable]("subprocess-executable")
+    SERVER_PROCESS_CONNECTION = GameClientId[Connection]("server-subprocess-connection")
+    SERVER_MSG_HANDLER = GameClientId[ServerEventForwarder]("server-message-handler")

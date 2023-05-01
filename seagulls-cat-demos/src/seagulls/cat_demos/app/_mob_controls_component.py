@@ -1,7 +1,5 @@
-from seagulls.cat_demos.engine.v2.components._component_containers import (
-    ObjectDataId
-)
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
+from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.input._game_clock import GameClock
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -23,11 +21,11 @@ class RockManager:
         delta = self._clock.get_delta()
         current_position = self._scene_objects.get_data(
             entity_id=GameObjectId("rock-large"),
-            data_id=ObjectDataId[Position]("object-component::position"),
+            data_id=ObjectDataId[Position]("position"),
         )
         adjusted_direction = Position(x=0, y=1 * delta / 10)
         self._scene_objects.set_data(
             entity_id=GameObjectId("rock-large"),
-            data_id=ObjectDataId[Position]("object-component::position"),
+            data_id=ObjectDataId[Position]("position"),
             config=current_position + adjusted_direction,
         )

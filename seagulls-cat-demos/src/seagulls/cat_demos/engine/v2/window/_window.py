@@ -7,12 +7,8 @@ from multiprocessing.connection import Connection
 from pygame import SRCALPHA, Surface
 from typing import Iterable, NamedTuple, Protocol
 
-from seagulls.cat_demos.engine.v2.components._component_containers import (
-    ObjectDataId
-)
-from seagulls.cat_demos.engine.v2.components._service_provider import (
-    ServiceProvider
-)
+from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
+from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEvent,
@@ -94,9 +90,9 @@ class WindowClient(IWindow):
 class ServerWindowClient(IWindow):
 
     _layers: Iterable[str]
-    _connection: ServiceProvider[Connection]
+    _connection: GameClientProvider[Connection]
 
-    def __init__(self, layers: Iterable[str], connection: ServiceProvider[Connection]) -> None:
+    def __init__(self, layers: Iterable[str], connection: GameClientProvider[Connection]) -> None:
         self._layers = layers
         self._connection = connection
 
@@ -145,7 +141,5 @@ class SeagullsWindows:
     # TODO: is this supposed to also be called window-client so the dev can choose which to
     #       initialize? or do they both exist in every app and the dev chooses which one to pass
     #       into methods?
-    SERVER_WINDOW_CLIENT_COMPONENT = ObjectDataId[WindowClient](
-        "server-window-client"
-    )
+    SERVER_WINDOW_CLIENT_COMPONENT = ObjectDataId[WindowClient]("server-window-client")
     SURFACE_BYTES_EVENT = GameEventId[SurfaceBytes]("window.surface-bytes")

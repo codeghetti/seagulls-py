@@ -2,9 +2,7 @@ from abc import abstractmethod
 from threading import Event
 from typing import Iterable, NamedTuple, Protocol
 
-from seagulls.cat_demos.engine.v2.components._service_provider import (
-    ServiceProvider
-)
+from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEvent,
     GameEventDispatcher,
@@ -85,12 +83,12 @@ class IStopScenes(Protocol):
 
 
 class FrameCollection(IFrameCollection, IStopScenes):
-    _frame_factory: ServiceProvider[IFrame]
+    _frame_factory: GameClientProvider[IFrame]
     _stop: Event
 
     def __init__(
         self,
-        frame_factory: ServiceProvider[IFrame],
+        frame_factory: GameClientProvider[IFrame],
     ) -> None:
         self._frame_factory = frame_factory
         self._stop = Event()

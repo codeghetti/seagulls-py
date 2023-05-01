@@ -5,33 +5,24 @@ from seagulls.cat_demos.app.environment._world_elements import (
     WorldElementClient, WorldElementId
 )
 from seagulls.cat_demos.app.player._mouse_controls import (
-    MouseControlIds,
-    MouseControls
+    MouseControlClient, MouseControls
 )
 from seagulls.cat_demos.app.player._player_controls import (
-    PlayerControlIds,
-    PlayerControls
+    PlayerControlClient, PlayerControls
 )
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     RectCollider
 )
 from seagulls.cat_demos.engine.v2.components._color import Color
-from seagulls.cat_demos.engine.v2.components._component_containers import (
-    ObjectDataId
-)
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
-from seagulls.cat_demos.engine.v2.components._prefabs import (
-    GameComponentConfig,
-    GameObjectConfig,
-    PrefabClient
-)
+from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
+from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._size import Size
-from seagulls.cat_demos.engine.v2.debugging._debug_hud_prefab import DebugHud
+from seagulls.cat_demos.engine.v2.debugging._debug_hud_client import DebugHud, DebugHudClient
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEventDispatcher
 )
 from seagulls.cat_demos.engine.v2.position._point import Position
-from seagulls.cat_demos.engine.v2.sessions._app import SessionComponents
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import (
     Sprite,
@@ -42,22 +33,31 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 
 class IndexScene(IExecutable):
-    _prefab_client: PrefabClient
+    _scene_objects: SceneObjects
     _event_client: GameEventDispatcher
     _window_client: WindowClient
     _world_elements: WorldElementClient
+    _mouse_controls: MouseControlClient
+    _player_controls: PlayerControlClient
+    _debug_hud: DebugHudClient
 
     def __init__(
         self,
-        prefab_client: PrefabClient,
+        scene_objects: SceneObjects,
         event_client: GameEventDispatcher,
         window_client: WindowClient,
         world_elements: WorldElementClient,
+        mouse_controls: MouseControlClient,
+        player_controls: PlayerControlClient,
+        debug_hud: DebugHudClient,
     ) -> None:
-        self._prefab_client = prefab_client
+        self._scene_objects = scene_objects
         self._event_client = event_client
         self._window_client = window_client
         self._world_elements = world_elements
+        self._mouse_controls = mouse_controls
+        self._player_controls = player_controls
+        self._debug_hud = debug_hud
 
     def __call__(self) -> None:
         # self._spawn_environment()
@@ -86,149 +86,101 @@ class IndexScene(IExecutable):
             position=Position(x=0, y=0),
         ))
 
-    def _spawn_sc_one_rock(self):
+    def _spawn_sc_one_rock(self) -> None:
         self._world_elements.spawn(WorldElement(
             object_id=GameObjectId("rock-large"),
             sprite_id=WorldElementId.ROCK_LARGE,
             position=Position(x=400, y=100),
         ))
 
-    def _spawn_player(self):
-        self._prefab_client.run(
-            SessionComponents.OBJECT_PREFAB,
-            GameObjectConfig(
-                object_id=GameObjectId("player"),
-                components=(
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Position](
-                            "object-component::position"
-                        ),
-                        config=Position(200, 700),
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Sprite](
-                            "object-component::sprite"
-                        ),
-                        config=Sprite(sprite_id=SpriteId("player"), layer="units"),
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[RectCollider](
-                            "object-component::rect-collider"
-                        ),
-                        config=RectCollider(size=Size(width=16, height=16)),
-                    ),
-                ),
-            ),
+    def _spawn_player(self) -> None:
+        object_id = GameObjectId("player")
+        self._scene_objects.add(object_id)
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Position]("position"),
+            config=Position(200, 700),
         )
-        self._prefab_client.run(
-            PlayerControlIds.PREFAB,
-            PlayerControls(
-                object_id=GameObjectId("player"),
-                left_key=pygame.K_a,
-                right_key=pygame.K_d,
-                up_key=pygame.K_w,
-                down_key=pygame.K_s,
-            ),
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Sprite]("sprite"),
+            config=Sprite(sprite_id=SpriteId("player"), layer="units"),
+        )
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[RectCollider]("rect-collider"),
+            config=RectCollider(size=Size(width=16, height=16)),
         )
 
-    def _spawn_sc_player(self):
-        self._prefab_client.run(
-            SessionComponents.OBJECT_PREFAB,
-            GameObjectConfig(
-                object_id=GameObjectId("spaceship"),
-                components=(
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Position](
-                            "object-component::position"
-                        ),
-                        config=Position(500, 550),
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Sprite](
-                            "object-component::sprite"
-                        ),
-                        config=Sprite(sprite_id=SpriteId("spaceship"), layer="units"),
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[RectCollider](
-                            "object-component::rect-collider"
-                        ),
-                        config=RectCollider(size=Size(width=112, height=75)),
-                    ),
-                ),
-            ),
+    def _spawn_sc_player(self) -> None:
+        object_id = GameObjectId("spaceship")
+        self._scene_objects.add(object_id)
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Position]("position"),
+            config=Position(500, 550),
         )
-        self._prefab_client.run(
-            PlayerControlIds.PREFAB,
-            PlayerControls(
-                object_id=GameObjectId("spaceship"),
-                left_key=pygame.K_a,
-                right_key=pygame.K_d,
-                up_key=pygame.K_w,
-                down_key=pygame.K_s,
-            ),
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Sprite]("sprite"),
+            config=Sprite(sprite_id=SpriteId("spaceship"), layer="units"),
         )
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[RectCollider]("rect-collider"),
+            config=RectCollider(size=Size(width=112, height=75)),
+        )
+
+        self._player_controls.execute(PlayerControls(
+            object_id=GameObjectId("spaceship"),
+            left_key=pygame.K_a,
+            right_key=pygame.K_d,
+            up_key=pygame.K_w,
+            down_key=pygame.K_s,
+        ))
 
     def _spawn_mouse(self) -> None:
-        self._prefab_client.run(
-            SessionComponents.OBJECT_PREFAB,
-            GameObjectConfig(
-                object_id=GameObjectId("mouse"),
-                components=(
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Position](
-                            "object-component::position"
-                        ),
-                        config=Position(0, 0),
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Sprite](
-                            "object-component::sprite"
-                        ),
-                        config=Sprite(sprite_id=SpriteId("mouse"), layer="mouse"),
-                    ),
-                ),
-            ),
+        object_id = GameObjectId("mouse")
+        self._scene_objects.add(object_id)
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Position]("position"),
+            config=Position(0, 0),
         )
-        self._prefab_client.run(
-            MouseControlIds.PREFAB, MouseControls(object_id=GameObjectId("mouse"))
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Sprite]("sprite"),
+            config=Sprite(sprite_id=SpriteId("mouse"), layer="mouse"),
         )
 
+        self._mouse_controls.attach_mouse(MouseControls(object_id=GameObjectId("mouse")))
+
     def _spawn_menu(self) -> None:
-        self._prefab_client.run(
-            SessionComponents.OBJECT_PREFAB,
-            GameObjectConfig(
-                object_id=GameObjectId("menu:quit"),
-                components=(
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Position](
-                            "object-component::position"
-                        ),
-                        config=Position(600, 10),
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Sprite](
-                            "object-component::sprite"
-                        ),
-                        config=Sprite(sprite_id=SpriteId("menu-button"), layer="ui"),
-                    ),
-                    GameComponentConfig(
-                        component_id=ObjectDataId[Text]("object-component::text"),
-                        config=Text(
-                            value="Quit!",
-                            font="monospace",
-                            size=40,
-                            color=Color(red=30, blue=30, green=30),
-                        ),
-                    ),
-                ),
+        object_id = GameObjectId("menu:quit")
+        self._scene_objects.add(object_id)
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Position]("position"),
+            config=Position(600, 10),
+        )
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Sprite]("sprite"),
+            config=Sprite(sprite_id=SpriteId("menu-button"), layer="ui"),
+        )
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Text]("text"),
+            config=Text(
+                value="Quit!",
+                font="monospace",
+                size=40,
+                color=Color(red=30, blue=30, green=30),
             ),
         )
 
     def _spawn_debug_hud(self) -> None:
-        self._prefab_client.run(
-            SessionComponents.DEBUG_HUD_PREFAB, DebugHud(show_fps=True)
-        )
+        self._debug_hud.execute(DebugHud(show_fps=True))
 
     def _configure_events(self) -> None:
         pass

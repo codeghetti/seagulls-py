@@ -5,34 +5,22 @@ from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
 from seagulls.cat_demos.app._index_scene import IndexScene
 from seagulls.cat_demos.app._mob_controls_component import RockManager
 from seagulls.cat_demos.app.dev._client_window_scene import ClientWindowScene
-from seagulls.cat_demos.app.dev._server_prefab import (
-    DefaultExecutable,
-    FilesystemMonitor,
-    GameServerIds,
-    GameServerPrefab,
-    GameServerProcessManager,
-    ServerEventForwarder
-)
-from seagulls.cat_demos.app.environment._world_elements import (WorldElementClient, WorldElementIds)
-from seagulls.cat_demos.app.player._mouse_controls import (
-    MouseControlIds,
-    MouseControlsPrefab
-)
-from seagulls.cat_demos.app.player._player_controls import (
-    PlayerControlIds,
-    PlayerControlsPrefab
-)
+from seagulls.cat_demos.app.dev._game_server import (DefaultExecutable, FilesystemMonitor,
+                                                     GameServerClient, GameServerComponent,
+                                                     GameServerProcessManager,
+                                                     ServerEventForwarder)
+from seagulls.cat_demos.app.environment._world_elements import (WorldElementClient,
+                                                                WorldElementComponent)
+from seagulls.cat_demos.app.player._mouse_controls import (MouseControlClient,
+                                                           MouseControlComponent)
+from seagulls.cat_demos.app.player._player_controls import (PlayerControlClient,
+                                                            PlayerControlComponent)
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
-    ColliderPrefabIds
+    ColliderComponent
 )
+from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
 from seagulls.cat_demos.engine.v2.components._color import Color
-from seagulls.cat_demos.engine.v2.components._component_containers import (
-    ObjectDataId
-)
-from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.components._service_provider import (
-    ServiceProvider
-)
+from seagulls.cat_demos.engine.v2.components._entities import GameClientId, GameSceneId
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.frames._frames_client import FrameEvents
 from seagulls.cat_demos.engine.v2.position._point import Position
@@ -63,10 +51,10 @@ class CatDemosAppSettings(NamedTuple):
 
 class CatDemosComponentProviders:
     _app: SeagullsApp
-    _settings: ServiceProvider[CatDemosAppSettings]
+    _settings: GameClientProvider[CatDemosAppSettings]
 
     def __init__(
-        self, app: SeagullsApp, settings: ServiceProvider[CatDemosAppSettings]
+        self, app: SeagullsApp, settings: GameClientProvider[CatDemosAppSettings]
     ) -> None:
         self._app = app
         self._settings = settings
@@ -98,18 +86,18 @@ class CatDemosComponentProviders:
                     lambda: ServerWindowClient(
                         layers=layers,
                         connection=lambda: scene_components.get(
-                            GameServerIds.SERVER_PROCESS_CONNECTION
+                            GameServerComponent.SERVER_PROCESS_CONNECTION
                         ),
                     ),
                 ),
                 (
-                    GameServerIds.SERVER_MSG_HANDLER,
+                    GameServerComponent.SERVER_MSG_HANDLER,
                     lambda: ServerEventForwarder(
                         connection=scene_components.get(
-                            GameServerIds.SERVER_PROCESS_CONNECTION
+                            GameServerComponent.SERVER_PROCESS_CONNECTION
                         ),
                         event_client=scene_components.get(
-                            SessionComponents.EVENT_CLIENT
+                            SessionComponents.EVENT_CLIENT_ID
                         ),
                     ),
                 ),
@@ -127,45 +115,57 @@ class CatDemosComponentProviders:
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
                     lambda: IndexScene(
-                        prefab_client=session_components.get(
-                            SessionComponents.PREFAB_CLIENT
+                        scene_objects=scene_components.get(
+                            SessionComponents.SCENE_OBJECTS_CLIENT_ID,
                         ),
                         event_client=scene_components.get(
-                            SessionComponents.EVENT_CLIENT
+                            SessionComponents.EVENT_CLIENT_ID
                         ),
                         window_client=session_components.get(
                             SessionComponents.WINDOW_CLIENT
+                        ),
+                        world_elements=scene_components.get(
+                            WorldElementComponent.CLIENT_ID
+                        ),
+                        mouse_controls=session_components.get(
+                            MouseControlComponent.CLIENT_ID,
+                        ),
+                        player_controls=session_components.get(
+                            PlayerControlComponent.CLIENT_ID,
+                        ),
+                        debug_hud=session_components.get(
+                            SessionComponents.DEBUG_HUD_CLIENT_ID,
                         ),
                     )(),
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
                 (
                     FrameEvents.OPEN,
-                    lambda: scene_components.get(ObjectDataId("RockManager")).tick(),
+                    lambda: scene_components.get(GameClientId("RockManager")).tick(),
                 ),
             ),
             ProcessType.CLIENT: lambda: (
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
                     lambda: ClientWindowScene(
-                        prefab_client=session_components.get(
-                            SessionComponents.PREFAB_CLIENT
-                        ),
                         event_client=scene_components.get(
-                            SessionComponents.EVENT_CLIENT
+                            SessionComponents.EVENT_CLIENT_ID
+                        ),
+                        server=scene_components.get(
+                            GameServerComponent.CLIENT_ID,
                         ),
                     )(),
                 ),
                 (
                     FrameEvents.CLOSE,
                     lambda: scene_components.get(
-                        GameServerIds.PREFAB_COMPONENT
+                        GameServerComponent.CLIENT_ID
                     ).on_frame_close(),
                 ),
                 (
                     SceneEvents.OPEN,
                     lambda: scene_components.get(
-                        GameServerIds.PREFAB_COMPONENT
+                        GameServerComponent.CLIENT_ID
                     ).on_scene_open(),
                 ),
             ),
@@ -173,30 +173,39 @@ class CatDemosComponentProviders:
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
                     lambda: IndexScene(
-                        prefab_client=session_components.get(
-                            SessionComponents.PREFAB_CLIENT
+                        scene_objects=scene_components.get(
+                            SessionComponents.SCENE_OBJECTS_CLIENT_ID,
                         ),
                         event_client=scene_components.get(
-                            SessionComponents.EVENT_CLIENT
+                            SessionComponents.EVENT_CLIENT_ID
                         ),
                         window_client=session_components.get(
                             SessionComponents.WINDOW_CLIENT
                         ),
                         world_elements=scene_components.get(
-                            WorldElementIds.CLIENT_ID
-                        )
+                            WorldElementComponent.CLIENT_ID
+                        ),
+                        mouse_controls=session_components.get(
+                            MouseControlComponent.CLIENT_ID,
+                        ),
+                        player_controls=session_components.get(
+                            PlayerControlComponent.CLIENT_ID,
+                        ),
+                        debug_hud=session_components.get(
+                            SessionComponents.DEBUG_HUD_CLIENT_ID,
+                        ),
                     )(),
                 ),
                 (
                     FrameEvents.OPEN,
                     lambda: scene_components.get(
-                        GameServerIds.SERVER_MSG_HANDLER
+                        GameServerComponent.SERVER_MSG_HANDLER
                     ).tick(),
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
                 (
                     FrameEvents.OPEN,
-                    lambda: scene_components.get(ObjectDataId("RockManager")).tick(),
+                    lambda: scene_components.get(GameClientId("RockManager")).tick(),
                 ),
             ),
         }
@@ -204,35 +213,35 @@ class CatDemosComponentProviders:
         return (
             *components_by_type[settings.process_type](),
             (
-                PlayerControlIds.PREFAB_COMPONENT,
-                lambda: PlayerControlsPrefab(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
-                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+                PlayerControlComponent.CLIENT_ID,
+                lambda: PlayerControlClient(
+                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
                     toggles=scene_components.get(
-                        SessionComponents.INPUT_TOGGLES_CLIENT
+                        SessionComponents.INPUT_TOGGLES_CLIENT_ID
                     ),
                     clock=scene_components.get(SessionComponents.SCENE_CLOCK),
-                    collisions=scene_components.get(ColliderPrefabIds.PREFAB_COMPONENT),
+                    collisions=scene_components.get(ColliderComponent.CLIENT_ID),
                 ),
             ),
             (
-                ObjectDataId("RockManager"),
+                GameClientId("RockManager"),
                 lambda: RockManager(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
+                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                     clock=scene_components.get(SessionComponents.SCENE_CLOCK),
                 ),
             ),
             (
-                MouseControlIds.PREFAB_COMPONENT,
-                lambda: MouseControlsPrefab(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
-                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+                MouseControlComponent.CLIENT_ID,
+                lambda: MouseControlClient(
+                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
                 ),
             ),
             (
-                WorldElementIds.CLIENT_ID,
+                WorldElementComponent.CLIENT_ID,
                 lambda: WorldElementClient(
-                    object_prefab=scene_components.get(SessionComponents.OBJECT_PREFAB),
+                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                 ),
             ),
             (
@@ -245,21 +254,20 @@ class CatDemosComponentProviders:
             ),
             (SessionComponents.PLUGIN_SPRITE_SOURCES, self._sprites),
             (
-                GameServerIds.PREFAB_COMPONENT,
-                lambda: GameServerPrefab(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS),
-                    object_prefab=scene_components.get(SessionComponents.OBJECT_PREFAB),
+                GameServerComponent.CLIENT_ID,
+                lambda: GameServerClient(
+                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                     window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
-                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT),
+                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
                     executable=scene_components.get(
-                        GameServerIds.SUBPROCESS_EXECUTABLE
+                        GameServerComponent.SUBPROCESS_EXECUTABLE
                     ),
                     process_manager=GameServerProcessManager(),
                     filesystem_monitor=FilesystemMonitor(),
                 ),
             ),
             (
-                GameServerIds.SUBPROCESS_EXECUTABLE,
+                GameServerComponent.SUBPROCESS_EXECUTABLE,
                 lambda: DefaultExecutable(
                     app_factory=create_server,
                 ),
@@ -321,7 +329,7 @@ class CatDemosComponentProviders:
         )
 
 
-def create_server() -> Tuple[SeagullsApp, ServiceProvider[ComponentProviderCollection]]:
+def create_server() -> Tuple[SeagullsApp, GameClientProvider[ComponentProviderCollection]]:
     app = SeagullsApp()
     return app, CatDemosComponentProviders(
         app=app, settings=lambda: CatDemosAppSettings(process_type=ProcessType.SERVER)

@@ -3,7 +3,6 @@ from typing import NamedTuple, Tuple
 
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
 from seagulls.cat_demos.app._index_scene import IndexScene
-from seagulls.cat_demos.app._mob_controls_component import RockManager
 from seagulls.cat_demos.app.dev._client_window_scene import ClientWindowScene
 from seagulls.cat_demos.app.dev._game_server import (DefaultExecutable, FilesystemMonitor,
                                                      GameServerClient, GameServerComponent,
@@ -15,6 +14,7 @@ from seagulls.cat_demos.app.player._mouse_controls import (MouseControlClient,
                                                            MouseControlComponent)
 from seagulls.cat_demos.app.player._player_controls import (PlayerControlClient,
                                                             PlayerControlComponent)
+from seagulls.cat_demos.app.space_shooter._mob_controls_client import RockManager
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     ColliderComponent
 )
@@ -85,7 +85,7 @@ class CatDemosComponentProviders:
                     SessionComponents.WINDOW_CLIENT,
                     lambda: ServerWindowClient(
                         layers=layers,
-                        connection=lambda: scene_components.get(
+                        connection=lambda: session_components.get(
                             GameServerComponent.SERVER_PROCESS_CONNECTION
                         ),
                     ),
@@ -93,7 +93,7 @@ class CatDemosComponentProviders:
                 (
                     GameServerComponent.SERVER_MSG_HANDLER,
                     lambda: ServerEventForwarder(
-                        connection=scene_components.get(
+                        connection=session_components.get(
                             GameServerComponent.SERVER_PROCESS_CONNECTION
                         ),
                         event_client=scene_components.get(
@@ -139,10 +139,11 @@ class CatDemosComponentProviders:
                     )(),
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
-                (
-                    FrameEvents.OPEN,
-                    lambda: scene_components.get(GameClientId("RockManager")).tick(),
-                ),
+                # TODO: move this to only be registered when we are running the space shooter
+                # (
+                #     FrameEvents.OPEN,
+                #     lambda: scene_components.get(GameClientId("RockManager")).tick(),
+                # ),
             ),
             ProcessType.CLIENT: lambda: (
                 (
@@ -203,10 +204,10 @@ class CatDemosComponentProviders:
                     ).tick(),
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
-                (
-                    FrameEvents.OPEN,
-                    lambda: scene_components.get(GameClientId("RockManager")).tick(),
-                ),
+                # (
+                #     FrameEvents.OPEN,
+                #     lambda: scene_components.get(GameClientId("RockManager")).tick(),
+                # ),
             ),
         }
 

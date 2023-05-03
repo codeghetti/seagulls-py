@@ -36,5 +36,4 @@ class GameCliCommand(ICliCommand):
             pass
 
     def _run(self) -> None:
-        # app = seagulls_app()
         self._app.run(*self._app_providers_factory())

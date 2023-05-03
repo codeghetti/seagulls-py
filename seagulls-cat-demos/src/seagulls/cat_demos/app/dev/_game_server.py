@@ -230,9 +230,7 @@ class GameServerClient:
         )
 
     def on_scene_open(self) -> None:
-        component_id = ObjectDataId[GameServerProcess](
-            "object-component::server-process"
-        )
+        component_id = ObjectDataId[GameServerProcess]("server-process")
 
         def _on_mouse_motion() -> None:
             for object_id in self._scene_objects.find_by_data_id(component_id):
@@ -240,7 +238,6 @@ class GameServerClient:
 
         def _on_keyboard() -> None:
             for object_id in self._scene_objects.find_by_data_id(component_id):
-                # print(f"forwarding event to object: {object_id}")
                 self._send_keyboard_event(object_id)
 
         self._event_client.register(PygameEvents.MOUSE_MOTION, _on_mouse_motion)
@@ -252,9 +249,7 @@ class GameServerClient:
         observer.start()
 
     def on_frame_close(self) -> None:
-        component_id = ObjectDataId[GameServerProcess](
-            "object-component::server-process"
-        )
+        component_id = ObjectDataId[GameServerProcess]("server-process")
 
         toggled = self._filesystem_monitor.toggled()
         if toggled:
@@ -271,12 +266,9 @@ class GameServerClient:
             )
             position_component = self._scene_objects.get_data(
                 object_id,
-                ObjectDataId[Position]("object-component::position"),
+                ObjectDataId[Position]("position"),
             )
-            size_component = self._scene_objects.get_data(
-                object_id,
-                ObjectDataId[Size]("object-component::size"),
-            )
+            size_component = self._scene_objects.get_data(object_id, ObjectDataId[Size]("size"))
 
             if toggled:
                 client_connection.send(GameEvent(PygameEvents.QUIT, None))
@@ -304,9 +296,7 @@ class GameServerClient:
                 )
 
     def _send_mouse_event(self, object_id: GameObjectId) -> None:
-        component_id = ObjectDataId[GameServerProcess](
-            "object-component::server-process"
-        )
+        component_id = ObjectDataId[GameServerProcess]("server-process")
         process_component = self._scene_objects.get_data(object_id, component_id)
 
         client_connection = self._process_manager.get_client_connection(
@@ -318,9 +308,7 @@ class GameServerClient:
         client_connection.send((event.id, payload))
 
     def _send_keyboard_event(self, object_id: GameObjectId) -> None:
-        component_id = ObjectDataId[GameServerProcess](
-            "object-component::server-process"
-        )
+        component_id = ObjectDataId[GameServerProcess]("server-process")
         process_component = self._scene_objects.get_data(object_id, component_id)
 
         # TODO: this shouldn't be necessary here

@@ -65,15 +65,13 @@ GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
 class SessionComponents:
     EVENT_CLIENT_ID = GameClientId[GameEventDispatcher]("event-client")
     INPUT_TOGGLES_CLIENT_ID = GameClientId[InputTogglesClient]("input-toggles-client")
-    SCENE_OBJECTS_CLIENT_ID = GameClientId[SceneObjects]("scene-objects")
-    TEXT_CLIENT_ID = GameClientId[TextComponent]("text-component")
+    SCENE_OBJECTS_CLIENT_ID = GameClientId[SceneObjects]("scene-object-client")
+    TEXT_CLIENT_ID = GameClientId[TextComponent]("text-client")
     RESOURCE_CLIENT_ID = GameClientId[ResourceClient]("resource-client")
-    SPRITE_CLIENT_ID = GameClientId[SpriteComponent]("sprite-component")
+    SPRITE_CLIENT_ID = GameClientId[SpriteComponent]("sprite-client")
     POSITION_CLIENT_ID = GameClientId[PositionClient]("position-client")
-    DEBUG_HUD_CLIENT_ID = GameClientId[DebugHudClient]("prefab.debug-hud")
-    COMPONENT_CONTAINER_CLIENT_ID = GameClientId[GameClientContainer](
-        "object-component-registry",
-    )
+    DEBUG_HUD_CLIENT_ID = GameClientId[DebugHudClient]("debug-hud-client")
+    COMPONENT_CONTAINER_CLIENT_ID = GameClientId[GameClientContainer]("client-container")
     FRAME_COLLECTION_CLIENT_ID = GameClientId[FrameCollection]("frame-collection")
     INDEX_SCENE = GameClientId[IScene]("index.scene")
     INDEX_OPEN_EXECUTABLE = GameClientId[OpenIndexScene]("index-scene:open.executable")

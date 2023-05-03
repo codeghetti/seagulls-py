@@ -1,5 +1,3 @@
-import pygame
-
 from seagulls.cat_demos.app.environment._world_elements import (
     WorldElement,
     WorldElementClient, WorldElementId
@@ -8,7 +6,7 @@ from seagulls.cat_demos.app.player._mouse_controls import (
     MouseControlClient, MouseControls
 )
 from seagulls.cat_demos.app.player._player_controls import (
-    PlayerControlClient, PlayerControls
+    PlayerControlClient
 )
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     RectCollider
@@ -32,7 +30,7 @@ from seagulls.cat_demos.engine.v2.text._text_component import Text
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 
-class IndexScene(IExecutable):
+class LandAdventureScene(IExecutable):
     _scene_objects: SceneObjects
     _event_client: GameEventDispatcher
     _window_client: WindowClient
@@ -93,13 +91,6 @@ class IndexScene(IExecutable):
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(size=Size(width=16, height=16)),
         )
-        self._player_controls.execute(PlayerControls(
-            object_id=object_id,
-            left_key=pygame.K_a,
-            right_key=pygame.K_d,
-            up_key=pygame.K_w,
-            down_key=pygame.K_s,
-        ))
 
     def _spawn_mouse(self) -> None:
         object_id = GameObjectId("mouse")

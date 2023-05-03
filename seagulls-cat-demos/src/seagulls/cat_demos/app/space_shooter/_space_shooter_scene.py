@@ -5,7 +5,7 @@ from seagulls.cat_demos.app.environment._world_elements import (
     WorldElementClient, WorldElementId
 )
 from seagulls.cat_demos.app.player._mouse_controls import (
-    MouseControlClient, MouseControls
+    MouseControlClient
 )
 from seagulls.cat_demos.app.player._player_controls import (
     PlayerControlClient, PlayerControls
@@ -13,7 +13,6 @@ from seagulls.cat_demos.app.player._player_controls import (
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     RectCollider
 )
-from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
@@ -28,11 +27,10 @@ from seagulls.cat_demos.engine.v2.sprites._sprite_component import (
     Sprite,
     SpriteId
 )
-from seagulls.cat_demos.engine.v2.text._text_component import Text
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 
-class IndexScene(IExecutable):
+class SpaceShooterScene(IExecutable):
     _scene_objects: SceneObjects
     _event_client: GameEventDispatcher
     _window_client: WindowClient
@@ -62,84 +60,49 @@ class IndexScene(IExecutable):
     def __call__(self) -> None:
         self._spawn_environment()
         self._spawn_player()
-        self._spawn_menu()
-        self._spawn_mouse()
+        self._spawn_one_rock()
         self._spawn_debug_hud()
 
     def _spawn_environment(self):
-        for x in range(15):
-            for y in range(15):
-                self._world_elements.spawn(WorldElement(
-                    object_id=GameObjectId(f"barrel::{x}.{y}"),
-                    sprite_id=WorldElementId.BARREL,
-                    position=Position(x=50 + (x * 32), y=50 + (y * 32)),
-                ))
+        self._world_elements.spawn(WorldElement(
+            object_id=GameObjectId("star_background"),
+            sprite_id=WorldElementId.STAR_BACKGROUND,
+            position=Position(x=0, y=0),
+        ))
+
+    def _spawn_one_rock(self) -> None:
+        self._world_elements.spawn(WorldElement(
+            object_id=GameObjectId("rock-large"),
+            sprite_id=WorldElementId.ROCK_LARGE,
+            position=Position(x=400, y=100),
+        ))
 
     def _spawn_player(self) -> None:
-        object_id = GameObjectId("player")
+        object_id = GameObjectId("spaceship")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
             entity_id=object_id,
             data_id=ObjectDataId[Position]("position"),
-            config=Position(200, 700),
+            config=Position(500, 550),
         )
         self._scene_objects.set_data(
             entity_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
-            config=Sprite(sprite_id=SpriteId("player"), layer="units"),
+            config=Sprite(sprite_id=SpriteId("spaceship"), layer="units"),
         )
         self._scene_objects.set_data(
             entity_id=object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
-            config=RectCollider(size=Size(width=16, height=16)),
+            config=RectCollider(size=Size(width=112, height=75)),
         )
+
         self._player_controls.execute(PlayerControls(
-            object_id=object_id,
+            object_id=GameObjectId("spaceship"),
             left_key=pygame.K_a,
             right_key=pygame.K_d,
             up_key=pygame.K_w,
             down_key=pygame.K_s,
         ))
-
-    def _spawn_mouse(self) -> None:
-        object_id = GameObjectId("mouse")
-        self._scene_objects.add(object_id)
-        self._scene_objects.set_data(
-            entity_id=object_id,
-            data_id=ObjectDataId[Position]("position"),
-            config=Position(0, 0),
-        )
-        self._scene_objects.set_data(
-            entity_id=object_id,
-            data_id=ObjectDataId[Sprite]("sprite"),
-            config=Sprite(sprite_id=SpriteId("mouse"), layer="mouse"),
-        )
-
-        self._mouse_controls.attach_mouse(MouseControls(object_id=GameObjectId("mouse")))
-
-    def _spawn_menu(self) -> None:
-        object_id = GameObjectId("menu:quit")
-        self._scene_objects.add(object_id)
-        self._scene_objects.set_data(
-            entity_id=object_id,
-            data_id=ObjectDataId[Position]("position"),
-            config=Position(600, 10),
-        )
-        self._scene_objects.set_data(
-            entity_id=object_id,
-            data_id=ObjectDataId[Sprite]("sprite"),
-            config=Sprite(sprite_id=SpriteId("menu-button"), layer="ui"),
-        )
-        self._scene_objects.set_data(
-            entity_id=object_id,
-            data_id=ObjectDataId[Text]("text"),
-            config=Text(
-                value="Quit!",
-                font="monospace",
-                size=40,
-                color=Color(red=30, blue=30, green=30),
-            ),
-        )
 
     def _spawn_debug_hud(self) -> None:
         self._debug_hud.execute(DebugHud(show_fps=True))

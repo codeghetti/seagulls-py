@@ -96,7 +96,7 @@ class SpaceShooterScene(IExecutable):
             config=RectCollider(size=Size(width=112, height=75)),
         )
 
-        self._player_controls.execute(PlayerControls(
+        self._player_controls.attach(PlayerControls(
             object_id=GameObjectId("spaceship"),
             left_key=pygame.K_a,
             right_key=pygame.K_d,

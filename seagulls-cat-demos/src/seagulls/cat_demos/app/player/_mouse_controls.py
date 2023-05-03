@@ -1,5 +1,6 @@
 from typing import NamedTuple
 
+from seagulls.cat_demos.engine.v2.collisions._collision_client import CollisionClient
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
@@ -23,14 +24,17 @@ class MouseControls(NamedTuple):
 class MouseControlClient:
     _scene_objects: SceneObjects
     _event_client: GameEventDispatcher
+    _collisions: CollisionClient
 
     def __init__(
         self,
         scene_objects: SceneObjects,
         event_client: GameEventDispatcher,
+        collisions: CollisionClient,
     ) -> None:
         self._scene_objects = scene_objects
         self._event_client = event_client
+        self._collisions = collisions
 
     def attach_mouse(self, request: MouseControls) -> None:
         def on_mouse() -> None:
@@ -41,6 +45,8 @@ class MouseControlClient:
                 data_id=ObjectDataId[Position]("position"),
                 config=payload.position,
             )
+
+            self._collisions.check_collisions(request.object_id)
 
         self._event_client.register(PygameEvents.MOUSE_MOTION, on_mouse)
 

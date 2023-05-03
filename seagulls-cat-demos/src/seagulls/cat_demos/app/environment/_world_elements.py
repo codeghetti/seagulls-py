@@ -2,7 +2,7 @@ from enum import Enum
 from typing import NamedTuple
 
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
-    RectCollider
+    RectCollider, SelectionLayerId, SelectionLayers
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
@@ -49,7 +49,13 @@ class WorldElementClient:
         self._scene_objects.set_data(
             entity_id=request.object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
-            config=RectCollider(size=Size(width=16, height=16)),
+            config=RectCollider(
+                size=Size(width=16, height=16),
+                layers=SelectionLayers(
+                    appears_in=frozenset({SelectionLayerId("world-elements")}),
+                    searches_in=frozenset({}),
+                ),
+            ),
         )
 
 

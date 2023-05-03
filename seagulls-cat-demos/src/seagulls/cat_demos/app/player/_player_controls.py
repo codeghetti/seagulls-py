@@ -56,7 +56,7 @@ class PlayerControlClient:
         self._clock = clock
         self._collisions = collisions
 
-    def execute(self, request: PlayerControls) -> None:
+    def attach(self, request: PlayerControls) -> None:
         mapping = {
             request.left_key: Position(-1, 0),
             request.down_key: Position(0, 1),
@@ -104,7 +104,7 @@ class PlayerControlClient:
             config=current_position + adjusted_direction,
         )
         self._previous_position = current_position
-        self._collisions.execute(payload.object_id)
+        self._collisions.check_collisions(payload.object_id)
 
     def _undo_move(self) -> None:
         event = self._event_client.event()

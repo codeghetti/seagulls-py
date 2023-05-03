@@ -237,6 +237,7 @@ class CatDemosComponentProviders:
                 lambda: MouseControlClient(
                     scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                     event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
+                    collisions=scene_components.get(ColliderComponent.CLIENT_ID),
                 ),
             ),
             (

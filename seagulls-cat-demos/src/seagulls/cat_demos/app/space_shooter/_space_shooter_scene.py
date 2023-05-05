@@ -59,7 +59,8 @@ class SpaceShooterScene(IExecutable):
 
     def __call__(self) -> None:
         self._spawn_environment()
-        self._spawn_player()
+        self._spawn_player_1()
+        self._spawn_player_2()
         self._spawn_one_rock()
         self._spawn_debug_hud()
 
@@ -77,18 +78,18 @@ class SpaceShooterScene(IExecutable):
             position=Position(x=400, y=100),
         ))
 
-    def _spawn_player(self) -> None:
-        object_id = GameObjectId("spaceship")
+    def _spawn_player_1(self) -> None:
+        object_id = GameObjectId("spaceship1")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
             entity_id=object_id,
             data_id=ObjectDataId[Position]("position"),
-            config=Position(500, 550),
+            config=Position(200, 550),
         )
         self._scene_objects.set_data(
             entity_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
-            config=Sprite(sprite_id=SpriteId("spaceship"), layer="units"),
+            config=Sprite(sprite_id=SpriteId("spaceship-orange"), layer="units"),
         )
         self._scene_objects.set_data(
             entity_id=object_id,
@@ -102,11 +103,45 @@ class SpaceShooterScene(IExecutable):
         )
 
         self._player_controls.attach(PlayerControls(
-            object_id=GameObjectId("spaceship"),
+            object_id=GameObjectId("spaceship1"),
             left_key=pygame.K_a,
             right_key=pygame.K_d,
             up_key=pygame.K_w,
             down_key=pygame.K_s,
+            fire_key=pygame.K_SPACE,
+        ))
+
+    def _spawn_player_2(self) -> None:
+        object_id = GameObjectId("spaceship2")
+        self._scene_objects.add(object_id)
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Position]("position"),
+            config=Position(500, 550),
+        )
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Sprite]("sprite"),
+            config=Sprite(sprite_id=SpriteId("spaceship-blue"), layer="units"),
+        )
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[RectCollider]("rect-collider"),
+            config=RectCollider(
+                size=Size(width=112, height=75),
+                layers=SelectionLayers(
+                    appears_in=frozenset({SelectionLayerId("buttons")}),
+                    searches_in=frozenset({}),
+                )),
+        )
+
+        self._player_controls.attach(PlayerControls(
+            object_id=GameObjectId("spaceship2"),
+            left_key=pygame.K_LEFT,
+            right_key=pygame.K_RIGHT,
+            up_key=pygame.K_UP,
+            down_key=pygame.K_DOWN,
+            fire_key=pygame.K_SLASH,
         ))
 
     def _spawn_debug_hud(self) -> None:

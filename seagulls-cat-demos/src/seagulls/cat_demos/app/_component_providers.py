@@ -140,10 +140,10 @@ class CatDemosComponentProviders:
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
                 # TODO: move this to only be registered when we are running the space shooter
-                # (
-                #     FrameEvents.OPEN,
-                #     lambda: scene_components.get(GameClientId("RockManager")).tick(),
-                # ),
+                (
+                    FrameEvents.OPEN,
+                    lambda: scene_components.get(GameClientId("RockManager")).tick(),
+                ),
             ),
             ProcessType.CLIENT: lambda: (
                 (
@@ -204,10 +204,10 @@ class CatDemosComponentProviders:
                     ).tick(),
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
-                # (
-                #     FrameEvents.OPEN,
-                #     lambda: scene_components.get(GameClientId("RockManager")).tick(),
-                # ),
+                (
+                    FrameEvents.OPEN,
+                    lambda: scene_components.get(GameClientId("RockManager")).tick(),
+                ),
             ),
         }
 
@@ -316,7 +316,7 @@ class CatDemosComponentProviders:
                     size=Size(height=600, width=1024),
                 ),
                 SpriteSource(
-                    sprite_id=SpriteId("spaceship"),
+                    sprite_id=SpriteId("spaceship-orange"),
                     image_name="space-shooter/ship-orange",
                     coordinates=Position(x=0, y=0),
                     size=Size(112, 75),
@@ -326,6 +326,18 @@ class CatDemosComponentProviders:
                     image_name="space-shooter/rock-large",
                     coordinates=Position(x=0, y=0),
                     size=Size(height=120, width=98),
+                ),
+                SpriteSource(
+                    sprite_id=SpriteId("laser"),
+                    image_name="space-shooter/laser-red",
+                    coordinates=Position(x=0, y=0),
+                    size=Size(height=54, width=9),
+                ),
+                SpriteSource(
+                    sprite_id=SpriteId("spaceship-blue"),
+                    image_name="space-shooter/ship-blue",
+                    coordinates=Position(x=0, y=0),
+                    size=Size(99, 75),
                 ),
             ]
         )

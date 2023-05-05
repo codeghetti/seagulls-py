@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pygame
 from typing import NamedTuple
 
@@ -18,6 +20,7 @@ from seagulls.cat_demos.engine.v2.input._input_toggles import (
 )
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents
 from seagulls.cat_demos.engine.v2.position._point import Position
+from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, SpriteId
 
 
 class PlayerControls(NamedTuple):
@@ -26,6 +29,7 @@ class PlayerControls(NamedTuple):
     right_key: int
     up_key: int
     down_key: int
+    fire_key: int
 
 
 class PlayerMoveEvent(NamedTuple):
@@ -54,21 +58,40 @@ class PlayerControlClient:
         self._clock = clock
         self._collisions = collisions
 
+    def _spawn_laser(self, player_id: GameObjectId) -> None:
+        object_id = GameObjectId(str(uuid4()))
+        self._scene_objects.add(object_id)
+        current_position = self._scene_objects.get_data(
+            entity_id=player_id,
+            data_id=ObjectDataId[Position]("position"),
+        )
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Position]("position"),
+            config=current_position,
+        )
+
+        self._scene_objects.set_data(
+            entity_id=object_id,
+            data_id=ObjectDataId[Sprite]("sprite"),
+            config=Sprite(sprite_id=SpriteId("laser"), layer="units"),
+        )
+
     def attach(self, request: PlayerControls) -> None:
-        mapping = {
+        movement_mapping = {
             request.left_key: Position(-1, 0),
             request.down_key: Position(0, 1),
             request.right_key: Position(1, 0),
             request.up_key: Position(0, -1),
         }
 
-        def on_keyboard() -> None:
+        def on_movement_key() -> None:
             event = self._event_client.event()
             game_event = GameEvent(
                 id=PlayerControlComponent.MOVE_EVENT,
                 payload=PlayerMoveEvent(
                     object_id=request.object_id,
-                    direction=mapping[event.payload.key],
+                    direction=movement_mapping[event.payload.key],
                 ),
             )
 
@@ -77,10 +100,16 @@ class PlayerControlClient:
             elif event.payload.type == pygame.KEYUP:
                 self._toggles.off(game_event)
 
-        self._event_client.register(PygameEvents.key(request.left_key), on_keyboard)
-        self._event_client.register(PygameEvents.key(request.right_key), on_keyboard)
-        self._event_client.register(PygameEvents.key(request.up_key), on_keyboard)
-        self._event_client.register(PygameEvents.key(request.down_key), on_keyboard)
+        def on_fire_key() -> None:
+            event = self._event_client.event()
+            if event.payload.type == pygame.KEYDOWN:
+                self._spawn_laser(request.object_id)
+
+        self._event_client.register(PygameEvents.key(request.left_key), on_movement_key)
+        self._event_client.register(PygameEvents.key(request.right_key), on_movement_key)
+        self._event_client.register(PygameEvents.key(request.up_key), on_movement_key)
+        self._event_client.register(PygameEvents.key(request.down_key), on_movement_key)
+        self._event_client.register(PygameEvents.key(request.fire_key), on_fire_key)
 
         self._event_client.register(PlayerControlComponent.MOVE_EVENT, self._move_player)
         self._event_client.register(CollisionComponent.COLLISION_EVENT, self._undo_move)

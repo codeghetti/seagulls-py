@@ -77,17 +77,17 @@ class LandAdventureScene(IExecutable):
         object_id = GameObjectId("player")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
             config=Position(200, 700),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=SpriteId("player"), layer="units"),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(size=Size(width=16, height=16)),
         )
@@ -96,12 +96,12 @@ class LandAdventureScene(IExecutable):
         object_id = GameObjectId("mouse")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
             config=Position(0, 0),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=SpriteId("mouse"), layer="mouse"),
         )
@@ -112,17 +112,17 @@ class LandAdventureScene(IExecutable):
         object_id = GameObjectId("menu:quit")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
             config=Position(600, 10),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=SpriteId("menu-button"), layer="ui"),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Text]("text"),
             config=Text(
                 value="Quit!",

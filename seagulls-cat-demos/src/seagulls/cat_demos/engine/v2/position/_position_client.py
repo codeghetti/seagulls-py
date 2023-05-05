@@ -21,7 +21,7 @@ class PositionClient:
         component_id = ObjectDataId[Position]("position")
 
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=component_id,
             config=request.position,
         )

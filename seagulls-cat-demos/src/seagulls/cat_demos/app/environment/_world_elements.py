@@ -37,17 +37,17 @@ class WorldElementClient:
     def spawn(self, request: WorldElement) -> None:
         self._scene_objects.add(request.object_id)
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[Position]("position"),
             config=request.position,
         )
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=request.sprite_id.value, layer="environment"),
         )
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(
                 size=Size(width=16, height=16),

@@ -82,17 +82,17 @@ class SpaceShooterScene(IExecutable):
         object_id = GameObjectId("spaceship1")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
             config=Position(200, 550),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=SpriteId("spaceship-orange"), layer="units"),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(
                 size=Size(width=112, height=75),
@@ -115,17 +115,17 @@ class SpaceShooterScene(IExecutable):
         object_id = GameObjectId("spaceship2")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
             config=Position(500, 550),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=SpriteId("spaceship-blue"), layer="units"),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(
                 size=Size(width=112, height=75),

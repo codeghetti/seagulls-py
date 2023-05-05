@@ -20,12 +20,12 @@ class RockManager:
     def tick(self):
         delta = self._clock.get_delta()
         current_position = self._scene_objects.get_data(
-            entity_id=GameObjectId("rock-large"),
+            object_id=GameObjectId("rock-large"),
             data_id=ObjectDataId[Position]("position"),
         )
         adjusted_direction = Position(x=0, y=1 * delta / 10)
         self._scene_objects.set_data(
-            entity_id=GameObjectId("rock-large"),
+            object_id=GameObjectId("rock-large"),
             data_id=ObjectDataId[Position]("position"),
             config=current_position + adjusted_direction,
         )

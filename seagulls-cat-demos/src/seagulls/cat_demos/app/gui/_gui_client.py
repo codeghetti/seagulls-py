@@ -37,17 +37,17 @@ class GuiClient:
     def create_button(self, request: ButtonConfig) -> None:
         self._scene_objects.add(request.object_id)
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[Position]("position"),
             config=request.position,
         )
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=request.sprite_id, layer="ui"),
         )
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[Text]("text"),
             config=Text(
                 value="Pew Pew!",
@@ -57,7 +57,7 @@ class GuiClient:
             ),
         )
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(
                 size=request.size,

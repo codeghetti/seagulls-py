@@ -29,12 +29,12 @@ class DebugHudClient:
         object_id = GameObjectId("debug-hud")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
             config=Position(350, 10),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Text]("text"),
             config=Text(
                 value="N/A",
@@ -44,7 +44,7 @@ class DebugHudClient:
             ),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[DebugHud]("debug-hud"),
             config=request,
         )

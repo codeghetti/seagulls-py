@@ -209,22 +209,22 @@ class GameServerClient:
 
         self._scene_objects.add(request.object_id)
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[Position]("position"),
             config=request.position,
         )
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[Size]("size"),
             config=request.size,
         )
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[GameServerProcess]("server-process"),
             config=GameServerProcess(process_id=pid, forward_input=True),
         )
         self._scene_objects.set_data(
-            entity_id=request.object_id,
+            object_id=request.object_id,
             data_id=ObjectDataId[DateTime]("created-at"),
             config=DateTime(datetime.now()),
         )

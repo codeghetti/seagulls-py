@@ -62,17 +62,17 @@ class PlayerControlClient:
         object_id = GameObjectId(str(uuid4()))
         self._scene_objects.add(object_id)
         current_position = self._scene_objects.get_data(
-            entity_id=player_id,
+            object_id=player_id,
             data_id=ObjectDataId[Position]("position"),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
             config=current_position,
         )
 
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=SpriteId("laser"), layer="units"),
         )
@@ -119,14 +119,14 @@ class PlayerControlClient:
         event = self._event_client.event()
         payload: PlayerMoveEvent = event.payload
         current_position = self._scene_objects.get_data(
-            entity_id=payload.object_id,
+            object_id=payload.object_id,
             data_id=ObjectDataId[Position]("position"),
         )
         adjusted_direction = Position(
             x=payload.direction.x * delta / 10, y=payload.direction.y * delta / 10
         )
         self._scene_objects.set_data(
-            entity_id=payload.object_id,
+            object_id=payload.object_id,
             data_id=ObjectDataId[Position]("position"),
             config=current_position + adjusted_direction,
         )
@@ -137,7 +137,7 @@ class PlayerControlClient:
         event = self._event_client.event()
         payload: CollisionEvent = event.payload
         self._scene_objects.set_data(
-            entity_id=payload.source_id,
+            object_id=payload.source_id,
             data_id=ObjectDataId[Position]("position"),
             config=self._previous_position,
         )

@@ -16,39 +16,39 @@ class SceneObjects:
         self._entities = {}
         self._data = {}
 
-    def add(self, entity_id: GameObjectId) -> None:
-        if entity_id in self._entities:
-            raise RuntimeError(f"duplicate entity found: {entity_id}")
+    def add(self, object_id: GameObjectId) -> None:
+        if object_id in self._entities:
+            raise RuntimeError(f"duplicate entity found: {object_id}")
 
-        self._entities[entity_id] = set()
+        self._entities[object_id] = set()
 
-    def remove(self, entity_id: GameObjectId) -> None:
-        if entity_id not in self._entities:
-            raise RuntimeError(f"entity not found: {entity_id}")
+    def remove(self, object_id: GameObjectId) -> None:
+        if object_id not in self._entities:
+            raise RuntimeError(f"entity not found: {object_id}")
 
-        del self._entities[entity_id]
+        del self._entities[object_id]
 
     def get(self) -> Tuple[GameObjectId, ...]:
         return tuple(self._entities.keys())
 
     def set_data(
         self,
-        entity_id: GameObjectId,
+        object_id: GameObjectId,
         data_id: ObjectDataId[T],
         config: T,
     ) -> None:
         if data_id not in self._data:
             self._data[data_id] = {}
 
-        self._entities[entity_id].add(data_id)
-        self._data[data_id][entity_id] = config
+        self._entities[object_id].add(data_id)
+        self._data[data_id][object_id] = config
 
     def get_data(
         self,
-        entity_id: GameObjectId,
+        object_id: GameObjectId,
         data_id: ObjectDataId[T],
     ) -> T:
-        return self._data[data_id][entity_id]
+        return self._data[data_id][object_id]
 
     def find_by_data_id(
         self, data_id: ObjectDataId

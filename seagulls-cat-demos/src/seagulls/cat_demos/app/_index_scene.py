@@ -75,17 +75,17 @@ class IndexScene(IExecutable):
         object_id = GameObjectId("mouse")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
             config=Position(0, 0),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=SpriteId("mouse"), layer="mouse"),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(
                 size=Size(height=49, width=190),
@@ -102,17 +102,17 @@ class IndexScene(IExecutable):
         object_id = GameObjectId("menu:pew")
         self._scene_objects.add(object_id)
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
             config=Position(600, 10),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
             config=Sprite(sprite_id=SpriteId("menu-button"), layer="ui"),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Text]("text"),
             config=Text(
                 value="Pew Pew!",
@@ -122,7 +122,7 @@ class IndexScene(IExecutable):
             ),
         )
         self._scene_objects.set_data(
-            entity_id=object_id,
+            object_id=object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(
                 size=Size(height=49, width=190),

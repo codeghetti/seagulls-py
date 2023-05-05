@@ -70,7 +70,7 @@ class MouseControlClient:
             event = self._event_client.event()
             payload: PygameMouseMotionEvent = event.payload
             self._scene_objects.set_data(
-                entity_id=request.object_id,
+                object_id=request.object_id,
                 data_id=ObjectDataId[Position]("position"),
                 config=payload.position,
             )

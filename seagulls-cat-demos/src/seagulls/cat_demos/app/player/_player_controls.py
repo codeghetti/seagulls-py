@@ -1,11 +1,9 @@
 import pygame
 from typing import NamedTuple
 
-from seagulls.cat_demos.engine.v2.collisions._collision_client import (
-    ColliderComponent,
-    CollisionClient,
-    CollisionEvent,
-)
+from seagulls.cat_demos.engine.v2.collisions._collision_client import (CollisionClient,
+                                                                       CollisionComponent,
+                                                                       CollisionEvent)
 from seagulls.cat_demos.engine.v2.components._entities import GameClientId, GameObjectId
 from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
@@ -85,7 +83,7 @@ class PlayerControlClient:
         self._event_client.register(PygameEvents.key(request.down_key), on_keyboard)
 
         self._event_client.register(PlayerControlComponent.MOVE_EVENT, self._move_player)
-        self._event_client.register(ColliderComponent.COLLISION_EVENT, self._undo_move)
+        self._event_client.register(CollisionComponent.COLLISION_EVENT, self._undo_move)
 
     def _move_player(self) -> None:
         delta = self._clock.get_delta()

@@ -1,10 +1,8 @@
 from functools import lru_cache
 from typing import Any, Callable, NamedTuple, Tuple, TypeAlias
 
-from seagulls.cat_demos.engine.v2.collisions._collision_client import (
-    ColliderComponent,
-    CollisionClient
-)
+from seagulls.cat_demos.engine.v2.collisions._collision_client import (CollisionClient,
+                                                                       CollisionComponent)
 from seagulls.cat_demos.engine.v2.components._client_containers import (CachedGameClientContainer,
                                                                         ContextualGameClientContainer,
                                                                         FilteredGameComponentRegistry,
@@ -301,7 +299,7 @@ class SeagullsApp:
                 ),
             ),
             (
-                ColliderComponent.CLIENT_ID,
+                CollisionComponent.CLIENT_ID,
                 lambda: CollisionClient(
                     objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                     event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),

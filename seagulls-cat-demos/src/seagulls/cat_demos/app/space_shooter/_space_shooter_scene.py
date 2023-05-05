@@ -11,7 +11,7 @@ from seagulls.cat_demos.app.player._player_controls import (
     PlayerControlClient, PlayerControls
 )
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
-    RectCollider
+    RectCollider, SelectionLayerId, SelectionLayers
 )
 from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
 from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
@@ -93,7 +93,12 @@ class SpaceShooterScene(IExecutable):
         self._scene_objects.set_data(
             entity_id=object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
-            config=RectCollider(size=Size(width=112, height=75)),
+            config=RectCollider(
+                size=Size(width=112, height=75),
+                layers=SelectionLayers(
+                    appears_in=frozenset({SelectionLayerId("buttons")}),
+                    searches_in=frozenset({}),
+                )),
         )
 
         self._player_controls.attach(PlayerControls(

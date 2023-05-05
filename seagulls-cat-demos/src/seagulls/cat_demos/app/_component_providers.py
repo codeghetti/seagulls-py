@@ -2,7 +2,6 @@ from enum import Enum, auto
 from typing import NamedTuple, Tuple
 
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
-from seagulls.cat_demos.app._index_scene import IndexScene
 from seagulls.cat_demos.app.dev._client_window_scene import ClientWindowScene
 from seagulls.cat_demos.app.dev._game_server import (DefaultExecutable, FilesystemMonitor,
                                                      GameServerClient, GameServerComponent,
@@ -15,8 +14,9 @@ from seagulls.cat_demos.app.player._mouse_controls import (MouseControlClient,
 from seagulls.cat_demos.app.player._player_controls import (PlayerControlClient,
                                                             PlayerControlComponent)
 from seagulls.cat_demos.app.space_shooter._mob_controls_client import RockManager
+from seagulls.cat_demos.app.space_shooter._space_shooter_scene import SpaceShooterScene
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
-    ColliderComponent
+    CollisionComponent
 )
 from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
 from seagulls.cat_demos.engine.v2.components._color import Color
@@ -114,7 +114,7 @@ class CatDemosComponentProviders:
             ProcessType.STANDALONE: lambda: (
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
-                    lambda: IndexScene(
+                    lambda: SpaceShooterScene(
                         scene_objects=scene_components.get(
                             SessionComponents.SCENE_OBJECTS_CLIENT_ID,
                         ),
@@ -173,7 +173,7 @@ class CatDemosComponentProviders:
             ProcessType.SERVER: lambda: (
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
-                    lambda: IndexScene(
+                    lambda: SpaceShooterScene(
                         scene_objects=scene_components.get(
                             SessionComponents.SCENE_OBJECTS_CLIENT_ID,
                         ),
@@ -222,7 +222,7 @@ class CatDemosComponentProviders:
                         SessionComponents.INPUT_TOGGLES_CLIENT_ID
                     ),
                     clock=scene_components.get(SessionComponents.SCENE_CLOCK),
-                    collisions=scene_components.get(ColliderComponent.CLIENT_ID),
+                    collisions=scene_components.get(CollisionComponent.CLIENT_ID),
                 ),
             ),
             (
@@ -237,7 +237,7 @@ class CatDemosComponentProviders:
                 lambda: MouseControlClient(
                     scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                     event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
-                    collisions=scene_components.get(ColliderComponent.CLIENT_ID),
+                    collisions=scene_components.get(CollisionComponent.CLIENT_ID),
                 ),
             ),
             (

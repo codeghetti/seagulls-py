@@ -89,18 +89,25 @@ class CollisionClient:
         for i in indices:
             collisions.append(target_ids[i])
 
-        print(f"checking mouse collisions? indices: {indices}")
-        print(f"checking mouse collisions? collisions: {collisions}")
-
         if len(collisions) > 0:
             self._event_client.trigger(
                 event=GameEvent(
-                    id=ColliderComponent.COLLISION_EVENT,
+                    id=CollisionComponent.COLLISION_EVENT,
+                    payload=CollisionEvent(source_id=source_id, target_ids=tuple(target_ids)),
+                ),
+            )
+            self._event_client.trigger(
+                event=GameEvent(
+                    id=CollisionComponent.object_collision_event(source_id),
                     payload=CollisionEvent(source_id=source_id, target_ids=tuple(target_ids)),
                 ),
             )
 
 
-class ColliderComponent:
+class CollisionComponent:
     CLIENT_ID = GameClientId[CollisionClient]("collider-client")
     COLLISION_EVENT = GameEventId[CollisionEvent]("object-collisions")
+
+    @staticmethod
+    def object_collision_event(source_id: GameObjectId) -> GameEventId[CollisionEvent]:
+        return GameEventId(f"object-collisions/{source_id.name}")

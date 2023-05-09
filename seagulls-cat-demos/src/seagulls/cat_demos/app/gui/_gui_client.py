@@ -1,6 +1,7 @@
 from typing import NamedTuple
 
-from seagulls.cat_demos.app.player._mouse_controls import MouseControlClient, MouseControls
+from seagulls.cat_demos.app.player._mouse_controls import MouseControlClient, MouseControlComponent, \
+    MouseControls
 from seagulls.cat_demos.engine.v2.collisions._collision_client import RectCollider, \
     SelectionLayerId, SelectionLayers
 from seagulls.cat_demos.engine.v2.components._color import Color
@@ -20,6 +21,7 @@ class ButtonConfig(NamedTuple):
     size: Size
     sprite_id: SpriteId
     hover_sprite_id: SpriteId
+    down_sprite_id: SpriteId
     text: str
 
 
@@ -98,4 +100,27 @@ class GuiClient:
                     searches_in=frozenset({}),
                 ),
             ),
+        )
+
+        def on_enter() -> None:
+            self._scene_objects.set_data(
+                object_id=button.object_id,
+                data_id=ObjectDataId[Sprite]("sprite"),
+                config=Sprite(sprite_id=button.hover_sprite_id, layer="ui"),
+            )
+
+        def on_exit() -> None:
+            self._scene_objects.set_data(
+                object_id=button.object_id,
+                data_id=ObjectDataId[Sprite]("sprite"),
+                config=Sprite(sprite_id=button.sprite_id, layer="ui"),
+            )
+
+        self._event_client.register(
+            event=MouseControlComponent.target_mouse_enter_event(button.object_id),
+            callback=on_enter,
+        )
+        self._event_client.register(
+            event=MouseControlComponent.target_mouse_exit_event(button.object_id),
+            callback=on_exit,
         )

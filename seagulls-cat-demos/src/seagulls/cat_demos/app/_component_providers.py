@@ -293,6 +293,18 @@ class CatDemosComponentProviders:
                     size=Size(height=49, width=190),
                 ),
                 SpriteSource(
+                    sprite_id=SpriteId("menu-button/hover"),
+                    image_name="kenney.ui-pack-rpg-expansion/tilemap",
+                    coordinates=Position(x=0, y=47 * 6),
+                    size=Size(height=49, width=190),
+                ),
+                SpriteSource(
+                    sprite_id=SpriteId("menu-button/down"),
+                    image_name="kenney.ui-pack-rpg-expansion/tilemap",
+                    coordinates=Position(x=0, y=47 * 7),
+                    size=Size(height=49, width=190),
+                ),
+                SpriteSource(
                     sprite_id=SpriteId("barrel"),
                     image_name="kenney.tiny-dungeon/tilemap-packed",
                     coordinates=Position(x=16 * 10, y=16 * 6),

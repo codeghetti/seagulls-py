@@ -46,7 +46,8 @@ class IndexScene(IExecutable):
             position=Position(600, 10),
             size=Size(height=49, width=190),
             sprite_id=SpriteId("menu-button"),
-            hover_sprite_id=SpriteId("menu-button"),
+            hover_sprite_id=SpriteId("menu-button/hover"),
+            down_sprite_id=SpriteId("menu-button/down"),
             text="Pew Pew!",
         ))
         self._debug_hud.execute(DebugHud(show_fps=True))

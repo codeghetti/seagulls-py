@@ -1,5 +1,6 @@
 import logging
-from typing import NamedTuple
+from datetime import datetime
+from typing import NamedTuple, Set
 
 from seagulls.cat_demos.engine.v2.collisions._collision_client import CollisionClient, \
     CollisionComponent, CollisionEvent
@@ -46,7 +47,11 @@ class MouseControlClient:
         self._collisions = collisions
 
     def attach_mouse(self, request: MouseControls) -> None:
-        def on_hover() -> None:
+
+        this_frame: Set[GameObjectId] = set()
+        active: Set[GameObjectId] = set()
+
+        def on_collide() -> None:
             event = self._event_client.event()
             payload: CollisionEvent = event.payload
             source_id = payload.source_id
@@ -54,19 +59,31 @@ class MouseControlClient:
             if source_id != request.object_id:
                 raise RuntimeError(f"this shouldn't happen: {source_id} != {request.object_id}")
 
-            for target_id in target_ids:
-                # We shouldn't get multiple targets many times
-                # But it's possible when objects overlap
-                logger.warning(f"hovering {source_id} -> {target_id}")
-                self._event_client.trigger(GameEvent(
-                    id=MouseControlComponent.target_hover_event(target_id),
-                    payload=MouseHoverEvent(
-                        mouse_id=source_id,
-                        target_id=target_id,
-                    ),
-                ))
+            logger.debug(f"previously active: {active} ({datetime.now()})")
+
+            for target in target_ids:
+                this_frame.add(target)
+                if target in active:
+                    logger.debug(f"still hovering: {target} ({datetime.now()})")
+                    self._event_client.trigger(GameEvent(
+                        id=MouseControlComponent.target_hover_event(target),
+                        payload=MouseHoverEvent(
+                            mouse_id=source_id,
+                            target_id=target,
+                        ),
+                    ))
+                else:
+                    logger.debug(f"newly hovering: {target} ({datetime.now()})")
+                    self._event_client.trigger(GameEvent(
+                        id=MouseControlComponent.target_mouse_enter_event(target),
+                        payload=MouseHoverEvent(
+                            mouse_id=source_id,
+                            target_id=target,
+                        ),
+                    ))
 
         def on_mouse() -> None:
+            this_frame.clear()
             event = self._event_client.event()
             payload: PygameMouseMotionEvent = event.payload
             self._scene_objects.set_data(
@@ -77,10 +94,26 @@ class MouseControlClient:
 
             self._collisions.check_collisions(request.object_id)
 
+            for candidate in active:
+                if candidate not in this_frame:
+                    # no longer hovering
+                    self._event_client.trigger(GameEvent(
+                        id=MouseControlComponent.target_mouse_exit_event(candidate),
+                        payload=MouseHoverEvent(
+                            mouse_id=request.object_id,
+                            target_id=candidate,
+                        ),
+                    ))
+                    logger.debug(f"no longer hovering: {candidate} ({datetime.now()})")
+
+            active.clear()
+            for active_object in this_frame:
+                active.add(active_object)
+
         self._event_client.register(PygameEvents.MOUSE_MOTION, on_mouse)
         self._event_client.register(
             CollisionComponent.object_collision_event(request.object_id),
-            on_hover,
+            on_collide,
         )
 
 
@@ -89,4 +122,15 @@ class MouseControlComponent:
 
     @staticmethod
     def target_hover_event(target_id: GameObjectId) -> GameEventId[MouseHoverEvent]:
+        """
+        This event fires on each frame containing mouse movement events within the target colliders.
+        """
         return GameEventId(f"mouse-hover/{target_id.name}")
+
+    @staticmethod
+    def target_mouse_enter_event(target_id: GameObjectId) -> GameEventId[MouseHoverEvent]:
+        return GameEventId(f"mouse-enter/{target_id.name}")
+
+    @staticmethod
+    def target_mouse_exit_event(target_id: GameObjectId) -> GameEventId[MouseHoverEvent]:
+        return GameEventId(f"mouse-exit/{target_id.name}")

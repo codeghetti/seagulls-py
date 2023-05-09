@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, Set, Tuple, TypeVar
+from typing import Any, Dict, FrozenSet, Set, Tuple, TypeVar
 
 from ._entities import GameObjectId
 from ._object_data import GameObjectData, ObjectDataId
@@ -52,10 +52,10 @@ class SceneObjects:
 
     def find_by_data_id(
         self, data_id: ObjectDataId
-    ) -> Tuple[GameObjectId, ...]:
-        result = []
+    ) -> FrozenSet[GameObjectId]:
+        result = set()
         for e, cs in self._entities.items():
             if data_id in cs:
-                result.append(e)
+                result.add(e)
 
-        return tuple(result)
+        return frozenset(result)

@@ -1,5 +1,5 @@
 from pygame import Rect
-from typing import FrozenSet, NamedTuple, Tuple
+from typing import FrozenSet, NamedTuple
 
 from seagulls.cat_demos.engine.v2.components._entities import GameClientId, GameObjectId
 from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
@@ -30,7 +30,7 @@ class RectCollider(NamedTuple):
 
 class CollisionEvent(NamedTuple):
     source_id: GameObjectId
-    target_ids: Tuple[GameObjectId, ...]
+    target_ids: FrozenSet[GameObjectId]
 
 
 class CollisionClient:
@@ -62,6 +62,7 @@ class CollisionClient:
             ObjectDataId[RectCollider]("rect-collider")
         ):
             if target_id == source_id:
+                # skip checking collisions on the source object itself
                 continue
 
             target_rect_collider = self._objects.get_data(
@@ -93,13 +94,13 @@ class CollisionClient:
             self._event_client.trigger(
                 event=GameEvent(
                     id=CollisionComponent.COLLISION_EVENT,
-                    payload=CollisionEvent(source_id=source_id, target_ids=tuple(target_ids)),
+                    payload=CollisionEvent(source_id=source_id, target_ids=frozenset(target_ids)),
                 ),
             )
             self._event_client.trigger(
                 event=GameEvent(
                     id=CollisionComponent.object_collision_event(source_id),
-                    payload=CollisionEvent(source_id=source_id, target_ids=tuple(target_ids)),
+                    payload=CollisionEvent(source_id=source_id, target_ids=frozenset(target_ids)),
                 ),
             )
 

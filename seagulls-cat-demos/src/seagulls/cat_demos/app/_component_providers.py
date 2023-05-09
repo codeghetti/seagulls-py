@@ -2,6 +2,7 @@ from enum import Enum, auto
 from typing import NamedTuple, Tuple
 
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
+from seagulls.cat_demos.app._index_scene import IndexScene
 from seagulls.cat_demos.app.dev._client_window_scene import ClientWindowScene
 from seagulls.cat_demos.app.dev._game_server import (DefaultExecutable, FilesystemMonitor,
                                                      GameServerClient, GameServerComponent,
@@ -9,12 +10,12 @@ from seagulls.cat_demos.app.dev._game_server import (DefaultExecutable, Filesyst
                                                      ServerEventForwarder)
 from seagulls.cat_demos.app.environment._world_elements import (WorldElementClient,
                                                                 WorldElementComponent)
+from seagulls.cat_demos.app.gui._gui_client import GuiClient
 from seagulls.cat_demos.app.player._mouse_controls import (MouseControlClient,
                                                            MouseControlComponent)
 from seagulls.cat_demos.app.player._player_controls import (PlayerControlClient,
                                                             PlayerControlComponent)
 from seagulls.cat_demos.app.space_shooter._mob_controls_client import RockManager
-from seagulls.cat_demos.app.space_shooter._space_shooter_scene import SpaceShooterScene
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     CollisionComponent
 )
@@ -114,28 +115,20 @@ class CatDemosComponentProviders:
             ProcessType.STANDALONE: lambda: (
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
-                    lambda: SpaceShooterScene(
+                    lambda: IndexScene(
                         scene_objects=scene_components.get(
                             SessionComponents.SCENE_OBJECTS_CLIENT_ID,
                         ),
                         event_client=scene_components.get(
                             SessionComponents.EVENT_CLIENT_ID
                         ),
-                        window_client=session_components.get(
-                            SessionComponents.WINDOW_CLIENT
-                        ),
                         world_elements=scene_components.get(
                             WorldElementComponent.CLIENT_ID
-                        ),
-                        mouse_controls=session_components.get(
-                            MouseControlComponent.CLIENT_ID,
-                        ),
-                        player_controls=session_components.get(
-                            PlayerControlComponent.CLIENT_ID,
                         ),
                         debug_hud=session_components.get(
                             SessionComponents.DEBUG_HUD_CLIENT_ID,
                         ),
+                        gui_client=scene_components.get(SessionComponents.GUI_CLIENT),
                     )(),
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
@@ -173,28 +166,20 @@ class CatDemosComponentProviders:
             ProcessType.SERVER: lambda: (
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
-                    lambda: SpaceShooterScene(
+                    lambda: IndexScene(
                         scene_objects=scene_components.get(
                             SessionComponents.SCENE_OBJECTS_CLIENT_ID,
                         ),
                         event_client=scene_components.get(
                             SessionComponents.EVENT_CLIENT_ID
                         ),
-                        window_client=session_components.get(
-                            SessionComponents.WINDOW_CLIENT
-                        ),
                         world_elements=scene_components.get(
                             WorldElementComponent.CLIENT_ID
-                        ),
-                        mouse_controls=session_components.get(
-                            MouseControlComponent.CLIENT_ID,
-                        ),
-                        player_controls=session_components.get(
-                            PlayerControlComponent.CLIENT_ID,
                         ),
                         debug_hud=session_components.get(
                             SessionComponents.DEBUG_HUD_CLIENT_ID,
                         ),
+                        gui_client=scene_components.get(SessionComponents.GUI_CLIENT),
                     )(),
                 ),
                 (
@@ -213,6 +198,16 @@ class CatDemosComponentProviders:
 
         return (
             *components_by_type[settings.process_type](),
+            (
+                SessionComponents.GUI_CLIENT,
+                lambda: GuiClient(
+                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
+                    mouse_controls=session_components.get(
+                        MouseControlComponent.CLIENT_ID,
+                    ),
+                ),
+            ),
             (
                 PlayerControlComponent.CLIENT_ID,
                 lambda: PlayerControlClient(

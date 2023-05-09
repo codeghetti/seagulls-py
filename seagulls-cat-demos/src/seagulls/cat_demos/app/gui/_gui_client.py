@@ -1,5 +1,6 @@
 from typing import NamedTuple
 
+from seagulls.cat_demos.app.player._mouse_controls import MouseControlClient, MouseControls
 from seagulls.cat_demos.engine.v2.collisions._collision_client import RectCollider, \
     SelectionLayerId, SelectionLayers
 from seagulls.cat_demos.engine.v2.components._color import Color
@@ -24,30 +25,61 @@ class ButtonConfig(NamedTuple):
 
 class GuiClient:
     _scene_objects: SceneObjects
+    _mouse_controls: MouseControlClient
     _event_client: GameEventDispatcher
 
     def __init__(
             self,
             scene_objects: SceneObjects,
+            mouse_controls: MouseControlClient,
             event_client: GameEventDispatcher,
+
     ) -> None:
         self._scene_objects = scene_objects
+        self._mouse_controls = mouse_controls
         self._event_client = event_client
 
-    def create_button(self, request: ButtonConfig) -> None:
-        self._scene_objects.add(request.object_id)
+    def create_mouse(self) -> None:
+        object_id = GameObjectId("mouse")
+        self._scene_objects.add(object_id)
         self._scene_objects.set_data(
-            object_id=request.object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Position]("position"),
-            config=request.position,
+            config=Position(0, 0),
         )
         self._scene_objects.set_data(
-            object_id=request.object_id,
+            object_id=object_id,
             data_id=ObjectDataId[Sprite]("sprite"),
-            config=Sprite(sprite_id=request.sprite_id, layer="ui"),
+            config=Sprite(sprite_id=SpriteId("mouse"), layer="mouse"),
         )
         self._scene_objects.set_data(
-            object_id=request.object_id,
+            object_id=object_id,
+            data_id=ObjectDataId[RectCollider]("rect-collider"),
+            config=RectCollider(
+                size=Size(height=49, width=190),
+                layers=SelectionLayers(
+                    appears_in=frozenset({SelectionLayerId("mouse")}),
+                    searches_in=frozenset({SelectionLayerId("buttons")}),
+                ),
+            ),
+        )
+
+        self._mouse_controls.attach_mouse(MouseControls(object_id=GameObjectId("mouse")))
+
+    def create_button(self, button: ButtonConfig) -> None:
+        self._scene_objects.add(button.object_id)
+        self._scene_objects.set_data(
+            object_id=button.object_id,
+            data_id=ObjectDataId[Position]("position"),
+            config=button.position,
+        )
+        self._scene_objects.set_data(
+            object_id=button.object_id,
+            data_id=ObjectDataId[Sprite]("sprite"),
+            config=Sprite(sprite_id=button.sprite_id, layer="ui"),
+        )
+        self._scene_objects.set_data(
+            object_id=button.object_id,
             data_id=ObjectDataId[Text]("text"),
             config=Text(
                 value="Pew Pew!",
@@ -57,10 +89,10 @@ class GuiClient:
             ),
         )
         self._scene_objects.set_data(
-            object_id=request.object_id,
+            object_id=button.object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(
-                size=request.size,
+                size=button.size,
                 layers=SelectionLayers(
                     appears_in=frozenset({SelectionLayerId("buttons")}),
                     searches_in=frozenset({}),

@@ -1,6 +1,7 @@
 from functools import lru_cache
 from typing import Any, Callable, NamedTuple, Tuple, TypeAlias
 
+from seagulls.cat_demos.app.gui._gui_client import GuiClient
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (CollisionClient,
                                                                        CollisionComponent)
 from seagulls.cat_demos.engine.v2.components._client_containers import (CachedGameClientContainer,
@@ -12,6 +13,7 @@ from seagulls.cat_demos.engine.v2.components._client_containers import (CachedGa
                                                                         Tco_GameClientType)
 from seagulls.cat_demos.engine.v2.components._entities import GameClientId, GameSceneId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
+from seagulls.cat_demos.engine.v2.debugging._debug_hud_client import DebugHudClient
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEventDispatcher,
     GameEventId
@@ -55,7 +57,6 @@ from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._executables import QuitGameExecutable
 from ._index import CloseIndexScene, OpenIndexScene
 from ._session_client import SessionClient
-from ..debugging._debug_hud_client import DebugHudClient
 
 GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
 
@@ -83,6 +84,8 @@ class SessionComponents:
 
     PLUGIN_EVENT_CALLBACKS = GameClientId[Tuple[GameEventCallback, ...]]("plugin:event-callbacks")
     PLUGIN_SPRITE_SOURCES = GameClientId[Tuple[SpriteSource, ...]]("sprite-sources")
+
+    GUI_CLIENT = GameClientId[GuiClient]("gui-client")
 
 
 class SeagullsAppProvider(NamedTuple):

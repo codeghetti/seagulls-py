@@ -10,7 +10,7 @@ GameEventId: TypeAlias = TypedEntityId[T_GameEventType]
 
 
 class GameEvent(NamedTuple, Generic[T_GameEventType]):
-    id: GameEventId[T_GameEventType]
+    event_id: GameEventId[T_GameEventType]
     payload: T_GameEventType
 
 
@@ -42,7 +42,7 @@ class GameEventDispatcher:
         prev = self._active_event
         self._active_event = event
 
-        for callback in self._callbacks.get(event.id, []):
+        for callback in self._callbacks.get(event.event_id, []):
             callback()
 
         self._active_event = prev

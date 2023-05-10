@@ -62,7 +62,7 @@ class CatDemosComponentProviders:
 
     def __call__(self):
         session_components = self._app.session_components()
-        scene_components = self._app.scene_components()
+        # scene_components = self._app.scene_components()
         settings = self._settings()
 
         print(f"settings: {settings}")
@@ -97,9 +97,7 @@ class CatDemosComponentProviders:
                         connection=session_components.get(
                             GameServerComponent.SERVER_PROCESS_CONNECTION
                         ),
-                        event_client=scene_components.get(
-                            SessionComponents.EVENT_CLIENT_ID
-                        ),
+                        event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
                     ),
                 ),
             ),
@@ -116,49 +114,49 @@ class CatDemosComponentProviders:
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
                     lambda: IndexScene(
-                        scene_objects=scene_components.get(
+                        scene_objects=session_components.get(
                             SessionComponents.SCENE_OBJECTS_CLIENT_ID,
                         ),
-                        event_client=scene_components.get(
+                        event_client=session_components.get(
                             SessionComponents.EVENT_CLIENT_ID
                         ),
-                        world_elements=scene_components.get(
+                        world_elements=session_components.get(
                             WorldElementComponent.CLIENT_ID
                         ),
                         debug_hud=session_components.get(
                             SessionComponents.DEBUG_HUD_CLIENT_ID,
                         ),
-                        gui_client=scene_components.get(SessionComponents.GUI_CLIENT),
+                        gui_client=session_components.get(SessionComponents.GUI_CLIENT),
                     )(),
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
                 # TODO: move this to only be registered when we are running the space shooter
                 (
                     FrameEvents.OPEN,
-                    lambda: scene_components.get(GameClientId("RockManager")).tick(),
+                    lambda: session_components.get(GameClientId("RockManager")).tick(),
                 ),
             ),
             ProcessType.CLIENT: lambda: (
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
                     lambda: ClientWindowScene(
-                        event_client=scene_components.get(
+                        event_client=session_components.get(
                             SessionComponents.EVENT_CLIENT_ID
                         ),
-                        server=scene_components.get(
+                        server=session_components.get(
                             GameServerComponent.CLIENT_ID,
                         ),
                     )(),
                 ),
                 (
                     FrameEvents.CLOSE,
-                    lambda: scene_components.get(
+                    lambda: session_components.get(
                         GameServerComponent.CLIENT_ID
                     ).on_frame_close(),
                 ),
                 (
                     SceneEvents.OPEN,
-                    lambda: scene_components.get(
+                    lambda: session_components.get(
                         GameServerComponent.CLIENT_ID
                     ).on_scene_open(),
                 ),
@@ -167,31 +165,31 @@ class CatDemosComponentProviders:
                 (
                     SceneEvents.open_scene(GameSceneId("index")),
                     lambda: IndexScene(
-                        scene_objects=scene_components.get(
+                        scene_objects=session_components.get(
                             SessionComponents.SCENE_OBJECTS_CLIENT_ID,
                         ),
-                        event_client=scene_components.get(
+                        event_client=session_components.get(
                             SessionComponents.EVENT_CLIENT_ID
                         ),
-                        world_elements=scene_components.get(
+                        world_elements=session_components.get(
                             WorldElementComponent.CLIENT_ID
                         ),
                         debug_hud=session_components.get(
                             SessionComponents.DEBUG_HUD_CLIENT_ID,
                         ),
-                        gui_client=scene_components.get(SessionComponents.GUI_CLIENT),
+                        gui_client=session_components.get(SessionComponents.GUI_CLIENT),
                     )(),
                 ),
                 (
                     FrameEvents.OPEN,
-                    lambda: scene_components.get(
+                    lambda: session_components.get(
                         GameServerComponent.SERVER_MSG_HANDLER
                     ).tick(),
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
                 (
                     FrameEvents.OPEN,
-                    lambda: scene_components.get(GameClientId("RockManager")).tick(),
+                    lambda: session_components.get(GameClientId("RockManager")).tick(),
                 ),
             ),
         }
@@ -201,8 +199,8 @@ class CatDemosComponentProviders:
             (
                 SessionComponents.GUI_CLIENT,
                 lambda: GuiClient(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
-                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
                     mouse_controls=session_components.get(
                         MouseControlComponent.CLIENT_ID,
                     ),
@@ -211,34 +209,34 @@ class CatDemosComponentProviders:
             (
                 PlayerControlComponent.CLIENT_ID,
                 lambda: PlayerControlClient(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
-                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
-                    toggles=scene_components.get(
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
+                    toggles=session_components.get(
                         SessionComponents.INPUT_TOGGLES_CLIENT_ID
                     ),
-                    clock=scene_components.get(SessionComponents.SCENE_CLOCK),
-                    collisions=scene_components.get(CollisionComponent.CLIENT_ID),
+                    clock=session_components.get(SessionComponents.SCENE_CLOCK),
+                    collisions=session_components.get(CollisionComponent.CLIENT_ID),
                 ),
             ),
             (
                 GameClientId("RockManager"),
                 lambda: RockManager(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
-                    clock=scene_components.get(SessionComponents.SCENE_CLOCK),
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    clock=session_components.get(SessionComponents.SCENE_CLOCK),
                 ),
             ),
             (
                 MouseControlComponent.CLIENT_ID,
                 lambda: MouseControlClient(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
-                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
-                    collisions=scene_components.get(CollisionComponent.CLIENT_ID),
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
+                    collisions=session_components.get(CollisionComponent.CLIENT_ID),
                 ),
             ),
             (
                 WorldElementComponent.CLIENT_ID,
                 lambda: WorldElementClient(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                 ),
             ),
             (
@@ -253,10 +251,10 @@ class CatDemosComponentProviders:
             (
                 GameServerComponent.CLIENT_ID,
                 lambda: GameServerClient(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                     window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
-                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
-                    executable=scene_components.get(
+                    event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
+                    executable=session_components.get(
                         GameServerComponent.SUBPROCESS_EXECUTABLE
                     ),
                     process_manager=GameServerProcessManager(),
@@ -301,7 +299,7 @@ class CatDemosComponentProviders:
                 SpriteSource(
                     sprite_id=SpriteId("menu-button/down"),
                     image_name="kenney.ui-pack-rpg-expansion/tilemap",
-                    coordinates=Position(x=0, y=47 * 7),
+                    coordinates=Position(x=0, y=47 * 5),
                     size=Size(height=49, width=190),
                 ),
                 SpriteSource(

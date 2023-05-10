@@ -35,7 +35,7 @@ from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
 from seagulls.cat_demos.engine.v2.input._pygame import (
     PygameEvents,
     PygameKeyboardEvent,
-    PygameMouseMotionEvent
+    PygameMouseButtonEvent, PygameMouseMotionEvent
 )
 from seagulls.cat_demos.engine.v2.position._point import Position
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp
@@ -234,14 +234,19 @@ class GameServerClient:
 
         def _on_mouse_motion() -> None:
             for object_id in self._scene_objects.find_by_data_id(component_id):
-                self._send_mouse_event(object_id)
+                self._send_mouse_motion_event(object_id)
 
         def _on_keyboard() -> None:
             for object_id in self._scene_objects.find_by_data_id(component_id):
                 self._send_keyboard_event(object_id)
 
+        def _on_mouse_button() -> None:
+            for object_id in self._scene_objects.find_by_data_id(component_id):
+                self._send_mouse_button_event(object_id)
+
         self._event_client.register(PygameEvents.MOUSE_MOTION, _on_mouse_motion)
         self._event_client.register(PygameEvents.KEYBOARD, _on_keyboard)
+        self._event_client.register(PygameEvents.MOUSE_BUTTON, _on_mouse_button)
 
         observer = Observer()
         handler = self._filesystem_monitor
@@ -295,7 +300,7 @@ class GameServerClient:
                     server_screen, position_component
                 )
 
-    def _send_mouse_event(self, object_id: GameObjectId) -> None:
+    def _send_mouse_motion_event(self, object_id: GameObjectId) -> None:
         component_id = ObjectDataId[GameServerProcess]("server-process")
         process_component = self._scene_objects.get_data(object_id, component_id)
 
@@ -305,7 +310,7 @@ class GameServerClient:
 
         event = self._event_client.event()
         payload: PygameMouseMotionEvent = event.payload
-        client_connection.send((event.id, payload))
+        client_connection.send((event.event_id, payload))
 
     def _send_keyboard_event(self, object_id: GameObjectId) -> None:
         component_id = ObjectDataId[GameServerProcess]("server-process")
@@ -347,7 +352,36 @@ class GameServerClient:
                 )
             )
 
-        client_connection.send((event.id, payload))
+        client_connection.send((event.event_id, payload))
+
+    def _send_mouse_button_event(self, object_id: GameObjectId) -> None:
+        component_id = ObjectDataId[GameServerProcess]("server-process")
+        process_component = self._scene_objects.get_data(object_id, component_id)
+
+        # TODO: this shouldn't be necessary here
+        event = self._event_client.event()
+        payload: PygameMouseButtonEvent = event.payload
+
+        client_connection = self._process_manager.get_client_connection(
+            process_component.process_id
+        )
+
+        if payload.type in [pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP]:
+            # Forward the general mouse button event
+            client_connection.send(GameEvent(event_id=PygameEvents.MOUSE_BUTTON, payload=payload))
+            for x in range(5):
+                # Each pressed button-specific event
+                if payload.button_num(x + 1):
+                    event_id = PygameEvents.mouse_button(x + 1)
+                    client_connection.send(GameEvent(event_id=event_id, payload=payload))
+                    if payload.type == pygame.MOUSEBUTTONDOWN:
+                        event_id = PygameEvents.mouse_button_pressed(x + 1)
+                        client_connection.send(GameEvent(event_id=event_id, payload=payload))
+            if payload.type == pygame.MOUSEBUTTONUP:
+                event_id = PygameEvents.MOUSE_BUTTON_RELEASED
+                client_connection.send(GameEvent(event_id=event_id, payload=payload))
+
+        client_connection.send((event.event_id, payload))
 
 
 class GameServerComponent:

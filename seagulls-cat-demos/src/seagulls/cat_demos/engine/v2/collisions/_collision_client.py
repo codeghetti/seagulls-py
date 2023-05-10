@@ -93,13 +93,13 @@ class CollisionClient:
         if len(collisions) > 0:
             self._event_client.trigger(
                 event=GameEvent(
-                    id=CollisionComponent.COLLISION_EVENT,
+                    event_id=CollisionComponent.COLLISION_EVENT,
                     payload=CollisionEvent(source_id=source_id, target_ids=frozenset(target_ids)),
                 ),
             )
             self._event_client.trigger(
                 event=GameEvent(
-                    id=CollisionComponent.object_collision_event(source_id),
+                    event_id=CollisionComponent.object_collision_event(source_id),
                     payload=CollisionEvent(source_id=source_id, target_ids=frozenset(target_ids)),
                 ),
             )

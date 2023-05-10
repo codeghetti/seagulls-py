@@ -84,7 +84,7 @@ class GuiClient:
             object_id=button.object_id,
             data_id=ObjectDataId[Text]("text"),
             config=Text(
-                value="Pew Pew!",
+                value=button.text,
                 font="monospace",
                 size=40,
                 color=Color(red=30, blue=30, green=30),
@@ -116,6 +116,21 @@ class GuiClient:
                 config=Sprite(sprite_id=button.sprite_id, layer="ui"),
             )
 
+        def on_click() -> None:
+            self._scene_objects.set_data(
+                object_id=button.object_id,
+                data_id=ObjectDataId[Sprite]("sprite"),
+                config=Sprite(sprite_id=button.hover_sprite_id, layer="ui"),
+            )
+
+        def on_active() -> None:
+            print(f"activating button?")
+            self._scene_objects.set_data(
+                object_id=button.object_id,
+                data_id=ObjectDataId[Sprite]("sprite"),
+                config=Sprite(sprite_id=button.down_sprite_id, layer="ui"),
+            )
+
         self._event_client.register(
             event=MouseControlComponent.target_mouse_enter_event(button.object_id),
             callback=on_enter,
@@ -123,4 +138,12 @@ class GuiClient:
         self._event_client.register(
             event=MouseControlComponent.target_mouse_exit_event(button.object_id),
             callback=on_exit,
+        )
+        self._event_client.register(
+            event=MouseControlComponent.target_click_event(button.object_id),
+            callback=on_click,
+        )
+        self._event_client.register(
+            event=MouseControlComponent.target_active_event(button.object_id),
+            callback=on_active,
         )

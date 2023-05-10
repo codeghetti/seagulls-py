@@ -119,7 +119,7 @@ class ServerWindowClient(IWindow):
 
         surface_bytes = pygame.image.tobytes(window_surface, "RGBA")
         event = GameEvent(
-            id=SeagullsWindows.SURFACE_BYTES_EVENT,
+            event_id=SeagullsWindows.SURFACE_BYTES_EVENT,
             payload=SurfaceBytes(surface_bytes, Size(*window_surface.get_size())),
         )
         self._connection().send(event)

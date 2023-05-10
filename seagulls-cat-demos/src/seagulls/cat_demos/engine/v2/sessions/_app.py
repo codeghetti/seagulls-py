@@ -104,7 +104,7 @@ class SeagullsApp:
         # Components built by this class are cached for the duration of the session
         session_components = self.session_components()
         # Components built by this class are cached for the duration of the scene
-        scene_components = self.scene_components()
+        # scene_components = self.scene_components()
 
         for p in providers:
             component_factory.set(p[0], p[1])
@@ -136,10 +136,10 @@ class SeagullsApp:
             (
                 SessionComponents.INDEX_SCENE,
                 lambda: SceneComponent(
-                    frame_collection=scene_components.get(
+                    frame_collection=session_components.get(
                         SessionComponents.FRAME_COLLECTION_CLIENT_ID,
                     ),
-                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
+                    event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
                     scene_context=session_components.get(
                         SessionComponents.SCENE_CONTEXT
                     ),
@@ -149,16 +149,16 @@ class SeagullsApp:
                 SessionComponents.FRAME_COLLECTION_CLIENT_ID,
                 lambda: FrameCollection(
                     lambda: FrameClient(
-                        event_client=scene_components.get(
+                        event_client=session_components.get(
                             SessionComponents.EVENT_CLIENT_ID
                         ),
                         window_client=session_components.get(
                             SessionComponents.WINDOW_CLIENT
                         ),
-                        pygame_input_client=scene_components.get(
+                        pygame_input_client=session_components.get(
                             SessionComponents.PYGAME_INPUT_CLIENT
                         ),
-                        toggles=scene_components.get(
+                        toggles=session_components.get(
                             SessionComponents.INPUT_TOGGLES_CLIENT_ID
                         ),
                     )
@@ -169,7 +169,7 @@ class SeagullsApp:
             (
                 SessionComponents.PYGAME_INPUT_CLIENT,
                 lambda: PygameKeyboardInputPublisher(
-                    event_dispatcher=scene_components.get(
+                    event_dispatcher=session_components.get(
                         SessionComponents.EVENT_CLIENT_ID
                     ),
                 ),
@@ -177,7 +177,7 @@ class SeagullsApp:
             (
                 SessionComponents.TEXT_CLIENT_ID,
                 lambda: TextComponent(
-                    objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                     window_client=session_components.get(
                         SessionComponents.WINDOW_CLIENT
                     ),
@@ -186,7 +186,7 @@ class SeagullsApp:
             (
                 SessionComponents.SPRITE_CLIENT_ID,
                 lambda: SpriteComponent(
-                    objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                     window_client=session_components.get(
                         SessionComponents.WINDOW_CLIENT
                     ),
@@ -208,7 +208,7 @@ class SeagullsApp:
             (
                 SessionComponents.COMPONENT_CONTAINER_CLIENT_ID,
                 lambda: FilteredGameComponentRegistry(
-                    container=scene_components,
+                    container=session_components,
                     context=lambda: [
                         GameClientId("object-position"),
                     ],
@@ -225,37 +225,37 @@ class SeagullsApp:
                     ),
                     (
                         FrameEvents.OPEN,
-                        lambda: scene_components.get(
+                        lambda: session_components.get(
                             SessionComponents.SCENE_CLOCK
                         ).tick(),
                     ),
                     (
                         FrameEvents.CLOSE,
-                        lambda: scene_components.get(
+                        lambda: session_components.get(
                             SessionComponents.SPRITE_CLIENT_ID
                         )(),
                     ),
                     (
                         FrameEvents.CLOSE,
-                        lambda: scene_components.get(
+                        lambda: session_components.get(
                             SessionComponents.TEXT_CLIENT_ID
                         )(),
                     ),
                     (
                         FrameEvents.CLOSE,
-                        lambda: scene_components.get(
+                        lambda: session_components.get(
                             SessionComponents.DEBUG_HUD_CLIENT_ID
                         ).tick(),
                     ),
                     (
                         SceneEvents.OPEN,
-                        lambda: scene_components.get(
+                        lambda: session_components.get(
                             SessionComponents.INDEX_OPEN_EXECUTABLE
                         )(),
                     ),
                     (
                         SceneEvents.CLOSE,
-                        lambda: scene_components.get(
+                        lambda: session_components.get(
                             SessionComponents.INDEX_CLOSE_EXECUTABLE
                         )(),
                     ),
@@ -266,46 +266,46 @@ class SeagullsApp:
             (
                 SessionComponents.QUIT_GAME_EXECUTABLE,
                 lambda: QuitGameExecutable(
-                    stop=scene_components.get(SessionComponents.FRAME_COLLECTION_CLIENT_ID)
+                    stop=session_components.get(SessionComponents.FRAME_COLLECTION_CLIENT_ID)
                 ),
             ),
             (
                 SessionComponents.TEXT_CLIENT_ID,
                 lambda: TextClient(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                 ),
             ),
             (
                 SessionComponents.SPRITE_CLIENT_ID,
                 lambda: SpriteClient(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                 ),
             ),
             (
                 SessionComponents.POSITION_CLIENT_ID,
                 lambda: PositionClient(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                 ),
             ),
             (
                 SessionComponents.DEBUG_HUD_CLIENT_ID,
                 lambda: DebugHudClient(
-                    scene_objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
-                    clock=scene_components.get(SessionComponents.SCENE_CLOCK),
+                    scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    clock=session_components.get(SessionComponents.SCENE_CLOCK),
                 ),
             ),
             (SessionComponents.RESOURCE_CLIENT_ID, lambda: ResourceClient()),
             (
                 SessionComponents.INPUT_TOGGLES_CLIENT_ID,
                 lambda: InputTogglesClient(
-                    input_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
+                    input_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
                 ),
             ),
             (
                 CollisionComponent.CLIENT_ID,
                 lambda: CollisionClient(
-                    objects=scene_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
-                    event_client=scene_components.get(SessionComponents.EVENT_CLIENT_ID),
+                    objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
                 ),
             ),
             (SessionComponents.SCENE_CLOCK, lambda: GameClock()),

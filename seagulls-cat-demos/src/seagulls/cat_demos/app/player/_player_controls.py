@@ -1,7 +1,6 @@
-from uuid import uuid4
-
 import pygame
 from typing import NamedTuple
+from uuid import uuid4
 
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (CollisionClient,
                                                                        CollisionComponent,
@@ -88,7 +87,7 @@ class PlayerControlClient:
         def on_movement_key() -> None:
             event = self._event_client.event()
             game_event = GameEvent(
-                id=PlayerControlComponent.MOVE_EVENT,
+                event_id=PlayerControlComponent.MOVE_EVENT,
                 payload=PlayerMoveEvent(
                     object_id=request.object_id,
                     direction=movement_mapping[event.payload.key],

@@ -31,6 +31,11 @@ class MouseHoverEvent(NamedTuple):
     target_id: GameObjectId
 
 
+class MouseClickEvent(NamedTuple):
+    mouse_id: GameObjectId
+    target_id: GameObjectId
+
+
 class MouseControlClient:
     _scene_objects: SceneObjects
     _event_client: GameEventDispatcher
@@ -66,7 +71,7 @@ class MouseControlClient:
                 if target in active:
                     logger.debug(f"still hovering: {target} ({datetime.now()})")
                     self._event_client.trigger(GameEvent(
-                        id=MouseControlComponent.target_hover_event(target),
+                        event_id=MouseControlComponent.target_hover_event(target),
                         payload=MouseHoverEvent(
                             mouse_id=source_id,
                             target_id=target,
@@ -75,14 +80,14 @@ class MouseControlClient:
                 else:
                     logger.debug(f"newly hovering: {target} ({datetime.now()})")
                     self._event_client.trigger(GameEvent(
-                        id=MouseControlComponent.target_mouse_enter_event(target),
+                        event_id=MouseControlComponent.target_mouse_enter_event(target),
                         payload=MouseHoverEvent(
                             mouse_id=source_id,
                             target_id=target,
                         ),
                     ))
 
-        def on_mouse() -> None:
+        def on_mouse_move() -> None:
             this_frame.clear()
             event = self._event_client.event()
             payload: PygameMouseMotionEvent = event.payload
@@ -98,7 +103,7 @@ class MouseControlClient:
                 if candidate not in this_frame:
                     # no longer hovering
                     self._event_client.trigger(GameEvent(
-                        id=MouseControlComponent.target_mouse_exit_event(candidate),
+                        event_id=MouseControlComponent.target_mouse_exit_event(candidate),
                         payload=MouseHoverEvent(
                             mouse_id=request.object_id,
                             target_id=candidate,
@@ -110,7 +115,31 @@ class MouseControlClient:
             for active_object in this_frame:
                 active.add(active_object)
 
-        self._event_client.register(PygameEvents.MOUSE_MOTION, on_mouse)
+        def on_mouse_press() -> None:
+            for target_id in active:
+                self._event_client.trigger(GameEvent(
+                    event_id=MouseControlComponent.target_active_event(target_id),
+                    payload=MouseClickEvent(
+                        mouse_id=request.object_id,
+                        target_id=target_id,
+                    ),
+                ))
+                logger.debug(f"activated: {target_id} ({datetime.now()})")
+
+        def on_mouse_release() -> None:
+            for target_id in active:
+                self._event_client.trigger(GameEvent(
+                    event_id=MouseControlComponent.target_click_event(target_id),
+                    payload=MouseClickEvent(
+                        mouse_id=request.object_id,
+                        target_id=target_id,
+                    ),
+                ))
+                logger.debug(f"clicked: {target_id} ({datetime.now()})")
+
+        self._event_client.register(PygameEvents.MOUSE_MOTION, on_mouse_move)
+        self._event_client.register(PygameEvents.mouse_button_pressed(1), on_mouse_press)
+        self._event_client.register(PygameEvents.MOUSE_BUTTON_RELEASED, on_mouse_release)
         self._event_client.register(
             CollisionComponent.object_collision_event(request.object_id),
             on_collide,
@@ -134,3 +163,14 @@ class MouseControlComponent:
     @staticmethod
     def target_mouse_exit_event(target_id: GameObjectId) -> GameEventId[MouseHoverEvent]:
         return GameEventId(f"mouse-exit/{target_id.name}")
+
+    @staticmethod
+    def target_active_event(target_id: GameObjectId) -> GameEventId[MouseClickEvent]:
+        """
+        The element is typically active when clicked down on but not yet released.
+        """
+        return GameEventId(f"mouse-active/{target_id.name}")
+
+    @staticmethod
+    def target_click_event(target_id: GameObjectId) -> GameEventId[MouseClickEvent]:
+        return GameEventId(f"mouse-click/{target_id.name}")

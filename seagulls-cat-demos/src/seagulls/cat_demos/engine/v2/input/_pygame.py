@@ -1,8 +1,7 @@
 import logging
-from functools import lru_cache
-from typing import NamedTuple
-
 import pygame
+from functools import lru_cache
+from typing import NamedTuple, Tuple
 
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEvent,
@@ -19,6 +18,19 @@ class PygameKeyboardEvent(NamedTuple):
     key: int
 
 
+class PygameMouseButtonEvent(NamedTuple):
+    type: int
+    button_1: bool
+    button_2: bool
+    button_3: bool
+    button_4: bool
+    button_5: bool
+
+    def button_num(self, x: int) -> bool:
+        # I've made a terrible mistake.
+        return getattr(self, f"button_{x}")
+
+
 class PygameMouseMotionEvent(NamedTuple):
     position: Position
     previous_position: Position
@@ -29,28 +41,48 @@ class PygameMouseMotionEvent(NamedTuple):
 
 
 class PygameEvents:
-    KEYBOARD = GameEventId[PygameKeyboardEvent](name="seagulls:pygame-input.keyboard")
-    MOUSE_MOTION = GameEventId[PygameMouseMotionEvent](
-        name="seagulls:pygame-input.mouse-motion"
+    KEYBOARD = GameEventId[PygameKeyboardEvent](name="pygame-input.keyboard")
+    MOUSE_MOTION = GameEventId[PygameMouseMotionEvent](name="pygame-input.mouse-motion")
+    MOUSE_BUTTON = GameEventId[PygameMouseButtonEvent](name="pygame-input.mouse-button")
+    MOUSE_BUTTON_RELEASED = GameEventId[PygameMouseButtonEvent](
+        name="pygame-input.mouse-button::released",
     )
-    QUIT = GameEventId[None](name="seagulls:pygame-input.quit")
+    QUIT = GameEventId[None](name="pygame-input.quit")
 
     @staticmethod
     def key(x: int) -> GameEventId[PygameKeyboardEvent]:
         return GameEventId[PygameKeyboardEvent](
-            name=f"seagulls:pygame-input.keyboard:{x}"
+            name=f"pygame-input.keyboard:{x}"
         )
 
     @staticmethod
     def key_pressed(x: int) -> GameEventId[PygameKeyboardEvent]:
         return GameEventId[PygameKeyboardEvent](
-            name=f"seagulls:pygame-input.keyboard:{x}:pressed"
+            name=f"pygame-input.keyboard:{x}:pressed"
         )
 
     @staticmethod
     def key_released(x: int) -> GameEventId[PygameKeyboardEvent]:
         return GameEventId[PygameKeyboardEvent](
-            name=f"seagulls:pygame-input.keyboard:{x}:released"
+            name=f"pygame-input.keyboard:{x}:released"
+        )
+
+    @staticmethod
+    def mouse_button(button_num: int) -> GameEventId[PygameMouseButtonEvent]:
+        return GameEventId[PygameMouseButtonEvent](
+            name=f"pygame-input.mouse-button:{button_num}"
+        )
+
+    @staticmethod
+    def mouse_button_pressed(button_num: int) -> GameEventId[PygameMouseButtonEvent]:
+        return GameEventId[PygameMouseButtonEvent](
+            name=f"pygame-input.mouse-button:{button_num}:pressed"
+        )
+
+    @staticmethod
+    def mouse_button_released(button_num: int) -> GameEventId[PygameMouseButtonEvent]:
+        return GameEventId[PygameMouseButtonEvent](
+            name=f"pygame-input.mouse-button:{button_num}:released"
         )
 
 
@@ -145,6 +177,8 @@ class PygameKeyboardInputPublisher:
 
     def tick(self) -> None:
         events = pygame.event.get()
+        buttons: Tuple[bool, bool, bool, bool, bool] = pygame.mouse.get_pressed(5)
+
         for event in events:
             if event.type in [pygame.KEYDOWN, pygame.KEYUP]:
                 self._event_dispatcher.trigger(
@@ -159,20 +193,78 @@ class PygameKeyboardInputPublisher:
                         PygameKeyboardEvent(type=event.type, key=event.key),
                     )
                 )
-            if event.type == pygame.KEYDOWN:
+            if event.type in [pygame.KEYDOWN]:
                 self._event_dispatcher.trigger(
                     GameEvent(
                         PygameEvents.key_pressed(event.key),
                         PygameKeyboardEvent(type=event.type, key=event.key),
                     )
                 )
-            if event.type == pygame.KEYUP:
+            if event.type in [pygame.KEYUP]:
                 self._event_dispatcher.trigger(
                     GameEvent(
                         PygameEvents.key_released(event.key),
                         PygameKeyboardEvent(type=event.type, key=event.key),
                     )
                 )
+            if event.type in [pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP]:
+                self._event_dispatcher.trigger(
+                    GameEvent(
+                        PygameEvents.MOUSE_BUTTON,
+                        PygameMouseButtonEvent(
+                            type=event.type,
+                            button_1=buttons[0],
+                            button_2=buttons[1],
+                            button_3=buttons[2],
+                            button_4=buttons[3],
+                            button_5=buttons[4],
+                        ),
+                    )
+                )
+                for x in range(5):
+                    if buttons[x]:
+                        self._event_dispatcher.trigger(
+                            GameEvent(
+                                PygameEvents.mouse_button(x + 1),
+                                PygameMouseButtonEvent(
+                                    type=event.type,
+                                    button_1=buttons[0],
+                                    button_2=buttons[1],
+                                    button_3=buttons[2],
+                                    button_4=buttons[3],
+                                    button_5=buttons[4],
+                                ),
+                            )
+                        )
+                        if event.type in [pygame.MOUSEBUTTONDOWN]:
+                            self._event_dispatcher.trigger(
+                                GameEvent(
+                                    PygameEvents.mouse_button_pressed(x + 1),
+                                    PygameMouseButtonEvent(
+                                        type=event.type,
+                                        button_1=buttons[0],
+                                        button_2=buttons[1],
+                                        button_3=buttons[2],
+                                        button_4=buttons[3],
+                                        button_5=buttons[4],
+                                    ),
+                                )
+                            )
+            if event.type == pygame.MOUSEBUTTONUP:
+                self._event_dispatcher.trigger(
+                    GameEvent(
+                        PygameEvents.MOUSE_BUTTON_RELEASED,
+                        PygameMouseButtonEvent(
+                            type=event.type,
+                            button_1=buttons[0],
+                            button_2=buttons[1],
+                            button_3=buttons[2],
+                            button_4=buttons[3],
+                            button_5=buttons[4],
+                        ),
+                    )
+                )
+
             if event.type == pygame.QUIT:
                 self._event_dispatcher.trigger(GameEvent(PygameEvents.QUIT, None))
             if event.type == pygame.MOUSEMOTION:

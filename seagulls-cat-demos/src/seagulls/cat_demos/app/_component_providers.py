@@ -299,8 +299,8 @@ class CatDemosComponentProviders:
                 SpriteSource(
                     sprite_id=SpriteId("menu-button/down"),
                     image_name="kenney.ui-pack-rpg-expansion/tilemap",
-                    coordinates=Position(x=0, y=47 * 5),
-                    size=Size(height=49, width=190),
+                    coordinates=Position(x=0, y=237),
+                    size=Size(height=45, width=190),
                 ),
                 SpriteSource(
                     sprite_id=SpriteId("barrel"),

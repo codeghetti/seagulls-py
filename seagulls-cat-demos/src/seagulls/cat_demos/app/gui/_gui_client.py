@@ -124,7 +124,6 @@ class GuiClient:
             )
 
         def on_active() -> None:
-            print(f"activating button?")
             self._scene_objects.set_data(
                 object_id=button.object_id,
                 data_id=ObjectDataId[Sprite]("sprite"),

@@ -58,7 +58,7 @@ class GuiClient:
             object_id=object_id,
             data_id=ObjectDataId[RectCollider]("rect-collider"),
             config=RectCollider(
-                size=Size(height=49, width=190),
+                size=Size(height=2, width=2),
                 layers=SelectionLayers(
                     appears_in=frozenset({SelectionLayerId("mouse")}),
                     searches_in=frozenset({SelectionLayerId("buttons")}),

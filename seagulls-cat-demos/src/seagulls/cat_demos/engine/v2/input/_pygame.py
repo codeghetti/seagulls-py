@@ -44,6 +44,9 @@ class PygameEvents:
     KEYBOARD = GameEventId[PygameKeyboardEvent](name="pygame-input.keyboard")
     MOUSE_MOTION = GameEventId[PygameMouseMotionEvent](name="pygame-input.mouse-motion")
     MOUSE_BUTTON = GameEventId[PygameMouseButtonEvent](name="pygame-input.mouse-button")
+    MOUSE_BUTTON_PRESSED = GameEventId[PygameMouseButtonEvent](
+        name="pygame-input.mouse-button::pressed",
+    )
     MOUSE_BUTTON_RELEASED = GameEventId[PygameMouseButtonEvent](
         name="pygame-input.mouse-button::released",
     )
@@ -250,6 +253,20 @@ class PygameKeyboardInputPublisher:
                                     ),
                                 )
                             )
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self._event_dispatcher.trigger(
+                    GameEvent(
+                        PygameEvents.MOUSE_BUTTON_PRESSED,
+                        PygameMouseButtonEvent(
+                            type=event.type,
+                            button_1=buttons[0],
+                            button_2=buttons[1],
+                            button_3=buttons[2],
+                            button_4=buttons[3],
+                            button_5=buttons[4],
+                        ),
+                    )
+                )
             if event.type == pygame.MOUSEBUTTONUP:
                 self._event_dispatcher.trigger(
                     GameEvent(

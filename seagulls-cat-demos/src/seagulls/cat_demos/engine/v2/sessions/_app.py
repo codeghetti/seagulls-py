@@ -2,26 +2,25 @@ from functools import lru_cache
 from typing import Any, Callable, NamedTuple, Tuple, TypeAlias
 
 from seagulls.cat_demos.app.gui._gui_client import GuiClient
-from seagulls.cat_demos.engine.v2.collisions._collision_client import (CollisionClient,
-                                                                       CollisionComponent)
-from seagulls.cat_demos.engine.v2.components._client_containers import (CachedGameClientContainer,
-                                                                        ContextualGameClientContainer,
-                                                                        FilteredGameComponentRegistry,
-                                                                        GameClientContainer,
-                                                                        GameClientFactory,
-                                                                        GameClientProvider,
-                                                                        Tco_GameClientType)
+from seagulls.cat_demos.engine.v2.collisions._collision_client import (
+    CollisionClient,
+    CollisionComponent,
+)
+from seagulls.cat_demos.engine.v2.components._client_containers import (
+    CachedGameClientContainer,
+    ContextualGameClientContainer,
+    FilteredGameComponentRegistry,
+    GameClientContainer,
+    GameClientFactory,
+    GameClientProvider,
+    Tco_GameClientType,
+)
 from seagulls.cat_demos.engine.v2.components._entities import GameClientId, GameSceneId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.debugging._debug_hud_client import DebugHudClient
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEventDispatcher,
     GameEventId
-)
-from seagulls.cat_demos.engine.v2.frames._frames_client import (
-    FrameClient,
-    FrameCollection,
-    FrameEvents
 )
 from seagulls.cat_demos.engine.v2.input._game_clock import GameClock
 from seagulls.cat_demos.engine.v2.input._input_toggles import (
@@ -37,14 +36,15 @@ from seagulls.cat_demos.engine.v2.position._position_client import (
 from seagulls.cat_demos.engine.v2.resources._resources_client import (
     ResourceClient
 )
-from seagulls.cat_demos.engine.v2.scenes._client import (
-    IScene,
+from seagulls.cat_demos.engine.v2.scenes._frame_client import (
+    FrameClient,
+    FrameCollection,
+    FrameEvents
+)
+from seagulls.cat_demos.engine.v2.scenes._scene_client import (
     SceneClient,
-    SceneComponent,
     SceneContext,
     SceneEvents,
-    SceneProvider,
-    SceneRegistry
 )
 from seagulls.cat_demos.engine.v2.sprites._sprite_client import SpriteClient
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import (
@@ -72,12 +72,12 @@ class SessionComponents:
     DEBUG_HUD_CLIENT_ID = GameClientId[DebugHudClient]("debug-hud-client")
     COMPONENT_CONTAINER_CLIENT_ID = GameClientId[GameClientContainer]("client-container")
     FRAME_COLLECTION_CLIENT_ID = GameClientId[FrameCollection]("frame-collection")
-    INDEX_SCENE = GameClientId[IScene]("index.scene")
     INDEX_OPEN_EXECUTABLE = GameClientId[OpenIndexScene]("index-scene:open.executable")
     INDEX_CLOSE_EXECUTABLE = GameClientId[CloseIndexScene]("index-scene:close.executable")
     PYGAME_INPUT_CLIENT = GameClientId[PygameKeyboardInputPublisher]("pygame-input-client")
     QUIT_GAME_EXECUTABLE = GameClientId[QuitGameExecutable]("quit-game-executable")
     SCENE_CONTEXT = GameClientId[SceneContext]("scene-context")
+    SCENE_CLIENT = GameClientId[SceneClient]("scene-client")
     SESSION_CLIENT = GameClientId[SessionClient]("session-client")
     WINDOW_CLIENT = GameClientId[WindowClient]("window-client")
     SCENE_CLOCK = GameClientId[GameClock]("scene-clock")
@@ -104,7 +104,7 @@ class SeagullsApp:
         # Components built by this class are cached for the duration of the session
         session_components = self.session_components()
         # Components built by this class are cached for the duration of the scene
-        # scene_components = self.scene_components()
+        session_components = self.session_components()
 
         for p in providers:
             component_factory.set(p[0], p[1])
@@ -117,38 +117,32 @@ class SeagullsApp:
                     window_client=session_components.get(
                         SessionComponents.WINDOW_CLIENT
                     ),
-                    scene_client=SceneClient(
-                        scene_registry=SceneRegistry.with_providers(
-                            SceneProvider(
-                                GameSceneId("index"),
-                                lambda: component_factory.get(
-                                    SessionComponents.INDEX_SCENE
-                                ),
-                            )
-                        ),
-                        scene_context=session_components.get(
-                            SessionComponents.SCENE_CONTEXT
-                        ),
-                    ),
+                    scene_client=session_components.get(SessionComponents.SCENE_CLIENT),
                     first_scene=lambda: GameSceneId("index"),
                 ),
             ),
             (
-                SessionComponents.INDEX_SCENE,
-                lambda: SceneComponent(
+                SessionComponents.SCENE_CLIENT,
+                lambda: SceneClient(
+                    scene_context=session_components.get(SessionComponents.SCENE_CONTEXT),
                     frame_collection=session_components.get(
                         SessionComponents.FRAME_COLLECTION_CLIENT_ID,
                     ),
                     event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
-                    scene_context=session_components.get(
-                        SessionComponents.SCENE_CONTEXT
-                    ),
+                    # scene_registry=SceneRegistry.with_providers(
+                    #     SceneProvider(
+                    #         scene_id=GameSceneId("index"),
+                    #         provider=lambda: session_components.get(
+                    #         SessionComponents.INDEX_SCENE),
+                    #     ),
+                    #     *session_components.get(SessionComponents.SCENE_PROVIDERS),
+                    # ),
                 ),
             ),
             (
                 SessionComponents.FRAME_COLLECTION_CLIENT_ID,
                 lambda: FrameCollection(
-                    lambda: FrameClient(
+                    frame_factory=lambda: FrameClient(
                         event_client=session_components.get(
                             SessionComponents.EVENT_CLIENT_ID
                         ),
@@ -161,7 +155,8 @@ class SeagullsApp:
                         toggles=session_components.get(
                             SessionComponents.INPUT_TOGGLES_CLIENT_ID
                         ),
-                    )
+                    ),
+                    scene_context=session_components.get(SessionComponents.SCENE_CONTEXT),
                 ),
             ),
             (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenIndexScene()),
@@ -200,9 +195,11 @@ class SeagullsApp:
             ),
             (
                 SessionComponents.SCENE_OBJECTS_CLIENT_ID,
-                lambda: SceneObjects(),
+                lambda: SceneObjects(
+                    scene_context=session_components.get(SessionComponents.SCENE_CONTEXT),
+                ),
             ),
-            (SessionComponents.WINDOW_CLIENT, lambda: WindowClient()),
+            # (SessionComponents.WINDOW_CLIENT, lambda: WindowClient()),
             (SessionComponents.SCENE_CONTEXT, lambda: SceneContext()),
             # TODO: add a filter to this container
             (
@@ -221,7 +218,7 @@ class SeagullsApp:
                         PygameEvents.QUIT,
                         lambda: session_components.get(
                             SessionComponents.QUIT_GAME_EXECUTABLE
-                        )(),
+                        ).execute(),
                     ),
                     (
                         FrameEvents.OPEN,
@@ -233,13 +230,11 @@ class SeagullsApp:
                         FrameEvents.CLOSE,
                         lambda: session_components.get(
                             SessionComponents.SPRITE_CLIENT_ID
-                        )(),
+                        ).execute(),
                     ),
                     (
                         FrameEvents.CLOSE,
-                        lambda: session_components.get(
-                            SessionComponents.TEXT_CLIENT_ID
-                        )(),
+                        lambda: session_components.get(SessionComponents.TEXT_CLIENT_ID).execute(),
                     ),
                     (
                         FrameEvents.CLOSE,
@@ -251,13 +246,13 @@ class SeagullsApp:
                         SceneEvents.OPEN,
                         lambda: session_components.get(
                             SessionComponents.INDEX_OPEN_EXECUTABLE
-                        )(),
+                        ).execute(),
                     ),
                     (
                         SceneEvents.CLOSE,
                         lambda: session_components.get(
                             SessionComponents.INDEX_CLOSE_EXECUTABLE
-                        )(),
+                        ).execute(),
                     ),
                     # Append any external event callbacks
                     *session_components.get(SessionComponents.PLUGIN_EVENT_CALLBACKS),
@@ -317,15 +312,13 @@ class SeagullsApp:
     def scene_components(self) -> GameClientContainer:
         return ContextualGameClientContainer(
             container=self.component_factory(),
-            context=lambda: self.session_components().get(
-                SessionComponents.SCENE_CONTEXT
-            )(),
+            context=lambda: self.session_components().get(SessionComponents.SCENE_CONTEXT).get(),
         )
 
     @lru_cache()
     def session_components(self) -> GameClientContainer:
         return CachedGameClientContainer(
-            factory=self.component_factory(),
+            container=self.component_factory(),
         )
 
     def component_factory(self) -> GameClientContainer:

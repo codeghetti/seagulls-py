@@ -1,8 +1,9 @@
 from abc import abstractmethod
 from threading import Event
-from typing import Iterable, NamedTuple, Protocol
+from typing import Dict, Iterable, NamedTuple, Protocol
 
 from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
+from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEvent,
     GameEventDispatcher,
@@ -14,19 +15,8 @@ from seagulls.cat_demos.engine.v2.input._input_toggles import (
 from seagulls.cat_demos.engine.v2.input._pygame import (
     PygameKeyboardInputPublisher
 )
+from seagulls.cat_demos.engine.v2.scenes._scene_client import IFrame, IFrameCollection, SceneContext
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
-
-
-class IFrame(Protocol):
-    @abstractmethod
-    def process(self) -> None:
-        pass
-
-
-class IFrameCollection(Protocol):
-    @abstractmethod
-    def items(self) -> Iterable[IFrame]:
-        pass
 
 
 class Frame(NamedTuple):
@@ -84,18 +74,23 @@ class IStopScenes(Protocol):
 
 class FrameCollection(IFrameCollection, IStopScenes):
     _frame_factory: GameClientProvider[IFrame]
-    _stop: Event
+    _scene_context: SceneContext
+    _stop: Dict[GameSceneId, Event]
 
     def __init__(
         self,
         frame_factory: GameClientProvider[IFrame],
+        scene_context: SceneContext,
     ) -> None:
         self._frame_factory = frame_factory
-        self._stop = Event()
+        self._scene_context = scene_context
+        self._stop = {}
 
     def stop(self) -> None:
-        self._stop.set()
+        self._stop[self._scene_context.get()].set()
 
     def items(self) -> Iterable[IFrame]:
-        while not self._stop.is_set():
+        scene_id = self._scene_context.get()
+        self._stop[scene_id] = Event()
+        while not self._stop[scene_id].is_set():
             yield self._frame_factory()

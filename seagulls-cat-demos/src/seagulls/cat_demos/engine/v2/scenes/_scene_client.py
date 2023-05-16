@@ -3,39 +3,26 @@ from __future__ import annotations
 import logging
 from abc import abstractmethod
 from queue import Empty, Queue
-from typing import Dict, Iterable, NamedTuple, Optional, Protocol
+from typing import Iterable, NamedTuple, Optional, Protocol
 
-from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEvent,
-    GameEventDispatcher,
-    GameEventId
+    GameEventDispatcher, GameEventId
 )
-from seagulls.cat_demos.engine.v2.frames._frames_client import IFrameCollection
 
 logger = logging.getLogger(__name__)
 
 
-class IScene(Protocol):
+class IFrame(Protocol):
     @abstractmethod
     def process(self) -> None:
         pass
 
 
-class IProvideScenes(Protocol):
+class IFrameCollection(Protocol):
     @abstractmethod
-    def get_scenes(self) -> Iterable[IScene]:
-        pass
-
-    @abstractmethod
-    def load_scene(self, scene_id: GameSceneId) -> None:
-        pass
-
-
-class IProvideSessionState(Protocol):
-    @abstractmethod
-    def is_open(self) -> bool:
+    def items(self) -> Iterable[IFrame]:
         pass
 
 
@@ -80,22 +67,25 @@ class SceneEvents:
         return GameEventId[SceneEvent](f"scene.close:{scene_id.name}")
 
 
-class SceneComponent(IScene):
+class SceneClient:
+    _next_scene: Queue[GameSceneId]
+    _scene_context: SceneContext
     _frame_collection: IFrameCollection
     _event_client: GameEventDispatcher
-    _scene_context: SceneContext
 
     def __init__(
         self,
+        scene_context: SceneContext,
         frame_collection: IFrameCollection,
         event_client: GameEventDispatcher,
-        scene_context: SceneContext,
     ) -> None:
+        self._next_scene = Queue(maxsize=1)
+        self._scene_context = scene_context
         self._frame_collection = frame_collection
         self._event_client = event_client
-        self._scene_context = scene_context
 
-    def process(self) -> None:
+    def process(self, scene_id: GameSceneId) -> None:
+        self._scene_context.set(scene_id)
         self._open_scene()
         self._execute_scene()
         self._close_scene()
@@ -127,59 +117,15 @@ class SceneComponent(IScene):
         )
         self._event_client.trigger(GameEvent(SceneEvents.CLOSE, payload))
 
-
-class SceneRegistry:
-    _providers: Dict[GameSceneId, GameClientProvider[IScene]]
-
-    def __init__(self) -> None:
-        self._providers = {}
-
-    @staticmethod
-    def with_providers(*providers: SceneProvider) -> SceneRegistry:
-        client = SceneRegistry()
-        for p in providers:
-            client.register(scene_id=p.scene_id, provider=p.provider)
-
-        return client
-
-    def register(
-        self, scene_id: GameSceneId, provider: GameClientProvider[IScene]
-    ) -> None:
-        self._providers[scene_id] = provider
-
-    def get(self, scene_id: GameSceneId) -> IScene:
-        return self._providers[scene_id]()
-
-
-class SceneProvider(NamedTuple):
-    scene_id: GameSceneId
-    provider: GameClientProvider[IScene]
-
-
-class SceneClient(IProvideScenes):
-    _next_scene: Queue[GameSceneId]
-    _scene_registry: SceneRegistry
-    _scene_context: SceneContext
-
-    def __init__(
-        self, scene_registry: SceneRegistry, scene_context: SceneContext
-    ) -> None:
-        self._next_scene = Queue(maxsize=1)
-        self._scene_registry = scene_registry
-        self._scene_context = scene_context
-
     def load_scene(self, scene_id: GameSceneId) -> None:
+        print(f"loading: {scene_id} ({self})")
         self._next_scene.put_nowait(scene_id)
 
-    def get_scenes(self) -> Iterable[IScene]:
+    def get_scenes(self) -> Iterable[GameSceneId]:
         try:
             while True:
                 scene_id = self._next_scene.get_nowait()
-                self._scene_context.set(scene_id)
-                yield self._scene_registry.get(scene_id)
+                logger.warning(f"getting next scene: {scene_id}")
+                yield scene_id
         except Empty:
-            pass
-
-
-class GameSceneObjects:
-    pass
+            logger.warning("no more scenes found")

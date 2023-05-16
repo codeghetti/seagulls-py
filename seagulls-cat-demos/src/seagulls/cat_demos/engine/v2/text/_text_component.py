@@ -28,7 +28,7 @@ class TextComponent(IExecutable):
         self._objects = objects
         self._window_client = window_client
 
-    def __call__(self) -> None:
+    def execute(self) -> None:
         for object_id in self._objects.find_by_data_id(
             ObjectDataId[Text]("text")
         ):

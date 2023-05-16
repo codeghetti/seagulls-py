@@ -4,13 +4,15 @@ from seagulls.cat_demos.app.player._mouse_controls import MouseControlClient, Mo
     MouseControls
 from seagulls.cat_demos.engine.v2.collisions._collision_client import RectCollider, \
     SelectionLayerId, SelectionLayers
+from seagulls.cat_demos.engine.v2.components._client_containers import TypedGameClientContainer
 from seagulls.cat_demos.engine.v2.components._color import Color
-from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
+from seagulls.cat_demos.engine.v2.components._entities import GameClientId, GameObjectId
 from seagulls.cat_demos.engine.v2.components._object_data import ObjectDataId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import GameEventDispatcher
 from seagulls.cat_demos.engine.v2.position._point import Position
+from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, SpriteId
 from seagulls.cat_demos.engine.v2.text._text_component import Text
 
@@ -29,17 +31,19 @@ class GuiClient:
     _scene_objects: SceneObjects
     _mouse_controls: MouseControlClient
     _event_client: GameEventDispatcher
+    _handlers: TypedGameClientContainer[IExecutable]
 
     def __init__(
             self,
             scene_objects: SceneObjects,
             mouse_controls: MouseControlClient,
             event_client: GameEventDispatcher,
-
+            handlers: TypedGameClientContainer[IExecutable],
     ) -> None:
         self._scene_objects = scene_objects
         self._mouse_controls = mouse_controls
         self._event_client = event_client
+        self._handlers = handlers
 
     def create_mouse(self) -> None:
         object_id = GameObjectId("mouse")
@@ -122,6 +126,7 @@ class GuiClient:
                 data_id=ObjectDataId[Sprite]("sprite"),
                 config=Sprite(sprite_id=button.hover_sprite_id, layer="ui"),
             )
+            self._handlers.get(button.object_id.name).execute()
 
         def on_active() -> None:
             self._scene_objects.set_data(
@@ -146,3 +151,7 @@ class GuiClient:
             event=MouseControlComponent.target_active_event(button.object_id),
             callback=on_active,
         )
+
+
+class GuiComponents:
+    GUI_CLIENT_ID = GameClientId[GuiClient]("gui-client")

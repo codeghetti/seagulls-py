@@ -36,12 +36,20 @@ class TypedGameClientContainer(Protocol[T_GameClientType]):
     A container object that provides components of a single type.
     """
 
-    @abstractmethod
-    def get(self, client_id: GameClientId[T_GameClientType]) -> T_GameClientType:
-        pass
+    _container: GameClientContainer
+
+    def __init__(self, container: GameClientContainer) -> None:
+        self._container = container
+
+    def get(self, client_name: str) -> T_GameClientType:
+        return self._container.get(self.client_id(client_name))
+
+    def client_id(self, client_name: str) -> GameClientId[T_GameClientType]:
+        return GameClientId[T_GameClientType](client_name)
 
 
-class GameClientFactory:
+class GameClientFactory(GameClientContainer):
+
     _providers: Dict[GameClientId[Any], GameClientProvider[Any]]
 
     @staticmethod
@@ -91,16 +99,16 @@ class GameClientFactory:
 
 
 class CachedGameClientContainer(GameClientContainer):
-    _factory: GameClientContainer
+    _container: GameClientContainer
 
-    def __init__(self, factory: GameClientContainer) -> None:
-        self._factory = factory
+    def __init__(self, container: GameClientContainer) -> None:
+        self._container = container
 
     @lru_cache()
     def get(
         self, client_id: GameClientId[Tco_GameClientType]
     ) -> Tco_GameClientType:
-        return self._factory.get(client_id)
+        return self._container.get(client_id)
 
 
 class ContextualGameClientContainer(GameClientContainer, Generic[T_GameClientType]):

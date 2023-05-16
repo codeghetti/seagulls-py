@@ -3,7 +3,7 @@ from seagulls.cat_demos.app.environment._world_elements import (
     WorldElementClient, WorldElementId
 )
 from seagulls.cat_demos.app.gui._gui_client import ButtonConfig, GuiClient
-from seagulls.cat_demos.engine.v2.components._entities import GameObjectId
+from seagulls.cat_demos.engine.v2.components._entities import GameObjectId, GameSceneId
 from seagulls.cat_demos.engine.v2.components._scene_objects import SceneObjects
 from seagulls.cat_demos.engine.v2.components._size import Size
 from seagulls.cat_demos.engine.v2.debugging._debug_hud_client import DebugHud, DebugHudClient
@@ -11,10 +11,27 @@ from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEventDispatcher
 )
 from seagulls.cat_demos.engine.v2.position._point import Position
+from seagulls.cat_demos.engine.v2.scenes._frame_client import FrameCollection
+from seagulls.cat_demos.engine.v2.scenes._scene_client import SceneClient
 from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import (
     SpriteId
 )
+
+
+class PewButton(IExecutable):
+
+    _scene_client: SceneClient
+    _frame: FrameCollection
+
+    def __init__(self, scenes: SceneClient, frame: FrameCollection) -> None:
+        self._scene_client = scenes
+        self._frame = frame
+
+    def execute(self) -> None:
+        print("CLICKY!!")
+        self._scene_client.load_scene(GameSceneId("space-shooter"))
+        self._frame.stop()
 
 
 class IndexScene(IExecutable):
@@ -38,7 +55,7 @@ class IndexScene(IExecutable):
         self._debug_hud = debug_hud
         self._gui_client = gui_client
 
-    def __call__(self) -> None:
+    def execute(self) -> None:
         self._spawn_environment()
         self._gui_client.create_mouse()
         self._gui_client.create_button(ButtonConfig(

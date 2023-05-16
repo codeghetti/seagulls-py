@@ -57,7 +57,7 @@ class SpaceShooterScene(IExecutable):
         self._player_controls = player_controls
         self._debug_hud = debug_hud
 
-    def __call__(self) -> None:
+    def execute(self) -> None:
         self._spawn_environment()
         self._spawn_player_1()
         self._spawn_player_2()

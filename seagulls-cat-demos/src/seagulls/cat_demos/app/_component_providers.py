@@ -2,7 +2,7 @@ from enum import Enum, auto
 from typing import NamedTuple, Tuple
 
 from seagulls.cat_demos.app._cli_command import ComponentProviderCollection
-from seagulls.cat_demos.app._index_scene import IndexScene
+from seagulls.cat_demos.app._index_scene import IndexScene, PewButton
 from seagulls.cat_demos.app.dev._client_window_scene import ClientWindowScene
 from seagulls.cat_demos.app.dev._game_server import (DefaultExecutable, FilesystemMonitor,
                                                      GameServerClient, GameServerComponent,
@@ -16,20 +16,25 @@ from seagulls.cat_demos.app.player._mouse_controls import (MouseControlClient,
 from seagulls.cat_demos.app.player._player_controls import (PlayerControlClient,
                                                             PlayerControlComponent)
 from seagulls.cat_demos.app.space_shooter._mob_controls_client import RockManager
+from seagulls.cat_demos.app.space_shooter._space_shooter_scene import SpaceShooterScene
 from seagulls.cat_demos.engine.v2.collisions._collision_client import (
     CollisionComponent
 )
-from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
+from seagulls.cat_demos.engine.v2.components._client_containers import (
+    GameClientProvider,
+    TypedGameClientContainer,
+)
 from seagulls.cat_demos.engine.v2.components._color import Color
 from seagulls.cat_demos.engine.v2.components._entities import GameClientId, GameSceneId
 from seagulls.cat_demos.engine.v2.components._size import Size
-from seagulls.cat_demos.engine.v2.frames._frames_client import FrameEvents
 from seagulls.cat_demos.engine.v2.position._point import Position
-from seagulls.cat_demos.engine.v2.scenes._client import SceneEvents
+from seagulls.cat_demos.engine.v2.scenes._frame_client import FrameEvents
+from seagulls.cat_demos.engine.v2.scenes._scene_client import SceneEvents
 from seagulls.cat_demos.engine.v2.sessions._app import (
     SeagullsApp,
     SessionComponents
 )
+from seagulls.cat_demos.engine.v2.sessions._executables import IExecutable
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import (
     SpriteId,
     SpriteSource
@@ -62,7 +67,6 @@ class CatDemosComponentProviders:
 
     def __call__(self):
         session_components = self._app.session_components()
-        # scene_components = self._app.scene_components()
         settings = self._settings()
 
         print(f"settings: {settings}")
@@ -127,7 +131,27 @@ class CatDemosComponentProviders:
                             SessionComponents.DEBUG_HUD_CLIENT_ID,
                         ),
                         gui_client=session_components.get(SessionComponents.GUI_CLIENT),
-                    )(),
+                    ).execute(),
+                ),
+                (
+                    SceneEvents.open_scene(GameSceneId("space-shooter")),
+                    lambda: SpaceShooterScene(
+                        scene_objects=session_components.get(
+                            SessionComponents.SCENE_OBJECTS_CLIENT_ID,
+                        ),
+                        event_client=session_components.get(
+                            SessionComponents.EVENT_CLIENT_ID
+                        ),
+                        world_elements=session_components.get(
+                            WorldElementComponent.CLIENT_ID
+                        ),
+                        debug_hud=session_components.get(
+                            SessionComponents.DEBUG_HUD_CLIENT_ID,
+                        ),
+                        mouse_controls=session_components.get(MouseControlComponent.CLIENT_ID),
+                        player_controls=session_components.get(PlayerControlComponent.CLIENT_ID),
+                        window_client=session_components.get(SessionComponents.WINDOW_CLIENT),
+                    ).execute(),
                 ),
                 (FrameEvents.OPEN, lambda: _set_background()),
                 # TODO: move this to only be registered when we are running the space shooter
@@ -146,7 +170,7 @@ class CatDemosComponentProviders:
                         server=session_components.get(
                             GameServerComponent.CLIENT_ID,
                         ),
-                    )(),
+                    ).execute(),
                 ),
                 (
                     FrameEvents.CLOSE,
@@ -178,7 +202,7 @@ class CatDemosComponentProviders:
                             SessionComponents.DEBUG_HUD_CLIENT_ID,
                         ),
                         gui_client=session_components.get(SessionComponents.GUI_CLIENT),
-                    )(),
+                    ).execute(),
                 ),
                 (
                     FrameEvents.OPEN,
@@ -196,14 +220,31 @@ class CatDemosComponentProviders:
 
         return (
             *components_by_type[settings.process_type](),
+            # (
+            #     SessionComponents.SCENE_PROVIDERS,
+            #     lambda: (
+            #         SceneProvider(
+            #             scene_id=GameSceneId("space-shooter"),
+            #             provider=lambda: self._app.component_factory().get(
+            #                 SessionComponents.INDEX_SCENE,
+            #             ),
+            #         ),
+            #     )
+            # ),
+            (
+                GameClientId[PewButton]("menu:pew"),
+                lambda: PewButton(
+                    scenes=session_components.get(SessionComponents.SCENE_CLIENT),
+                    frame=session_components.get(SessionComponents.FRAME_COLLECTION_CLIENT_ID),
+                ),
+            ),
             (
                 SessionComponents.GUI_CLIENT,
                 lambda: GuiClient(
                     scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
                     event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
-                    mouse_controls=session_components.get(
-                        MouseControlComponent.CLIENT_ID,
-                    ),
+                    mouse_controls=session_components.get(MouseControlComponent.CLIENT_ID),
+                    handlers=TypedGameClientContainer[IExecutable](session_components),
                 ),
             ),
             (

@@ -20,7 +20,7 @@ class ClientWindowScene(IExecutable):
         self._event_client = event_client
         self._server = server
 
-    def __call__(self) -> None:
+    def execute(self) -> None:
         self._spawn_server()
 
     def _spawn_server(self) -> None:

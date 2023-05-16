@@ -1,12 +1,12 @@
 from abc import abstractmethod
 from typing import Callable, Protocol
 
-from seagulls.cat_demos.engine.v2.frames._frames_client import IStopScenes
+from seagulls.cat_demos.engine.v2.scenes._frame_client import IStopScenes
 
 
 class IExecutable(Protocol):
     @abstractmethod
-    def __call__(self) -> None:
+    def execute(self) -> None:
         pass
 
 
@@ -16,7 +16,7 @@ class Executable(IExecutable):
     def __init__(self, cb: Callable[[], None]) -> None:
         self._cb = cb
 
-    def __call__(self) -> None:
+    def execute(self) -> None:
         self._cb()
 
 
@@ -29,5 +29,5 @@ class QuitGameExecutable(IExecutable):
     def __init__(self, stop: IStopScenes) -> None:
         self._stop = stop
 
-    def __call__(self) -> None:
+    def execute(self) -> None:
         self._stop.stop()

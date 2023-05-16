@@ -49,10 +49,11 @@ class SpriteComponent(IExecutable):
         self._resource_client = resource_client
         self._sprite_sources = {source.sprite_id: source for source in sprite_sources}
 
-    def __call__(self) -> None:
+    def execute(self) -> None:
         for object_id in self._objects.find_by_data_id(
             ObjectDataId[Sprite]("sprite")
         ):
+
             sprite_component = self._objects.get_data(
                 object_id,
                 ObjectDataId[Sprite]("sprite"),

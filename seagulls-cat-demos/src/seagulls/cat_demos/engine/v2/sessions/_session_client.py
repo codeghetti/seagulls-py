@@ -4,7 +4,7 @@ from typing import Protocol
 
 from seagulls.cat_demos.engine.v2.components._client_containers import GameClientProvider
 from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
-from seagulls.cat_demos.engine.v2.scenes._client import IProvideScenes
+from seagulls.cat_demos.engine.v2.scenes._scene_client import SceneClient
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 
 logger = logging.getLogger(__name__)
@@ -18,13 +18,13 @@ class ISession(Protocol):
 
 class SessionClient(ISession):
     _window_client: WindowClient
-    _scene_client: IProvideScenes
+    _scene_client: SceneClient
     _first_scene: GameClientProvider[GameSceneId]
 
     def __init__(
         self,
         window_client: WindowClient,
-        scene_client: IProvideScenes,
+        scene_client: SceneClient,
         first_scene: GameClientProvider[GameSceneId],
     ) -> None:
         self._window_client = window_client
@@ -36,6 +36,6 @@ class SessionClient(ISession):
         self._scene_client.load_scene(self._first_scene())
 
         for scene in self._scene_client.get_scenes():
-            scene.process()
+            self._scene_client.process(scene)
 
         self._window_client.close()

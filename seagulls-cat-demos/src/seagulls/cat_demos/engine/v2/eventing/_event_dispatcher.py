@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Generic, List, NamedTuple, Optional, Tuple, TypeAlias, \
+from typing import Any, Callable, Dict, Generic, List, NamedTuple, Optional, Self, Tuple, TypeAlias, \
     TypeVar
 
 from seagulls.cat_demos.engine.v2.components._entities import TypedEntityId
@@ -12,6 +12,12 @@ GameEventId: TypeAlias = TypedEntityId[T_GameEventType]
 class GameEvent(NamedTuple, Generic[T_GameEventType]):
     event_id: GameEventId[T_GameEventType]
     payload: T_GameEventType
+
+    def namespace(self, name: str) -> Self:
+        return GameEvent(
+            event_id=self.event_id.namespace(name),
+            payload=self.payload,
+        )
 
 
 class GameEventDispatcher:

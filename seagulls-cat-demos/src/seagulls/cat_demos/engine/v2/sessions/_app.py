@@ -44,8 +44,7 @@ from seagulls.cat_demos.engine.v2.scenes._frame_client import (
 from seagulls.cat_demos.engine.v2.scenes._scene_client import (
     SceneClient,
     SceneContext,
-    SceneEvents,
-)
+    SceneEvents, )
 from seagulls.cat_demos.engine.v2.sprites._sprite_client import SpriteClient
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import (
     SpriteComponent,
@@ -55,7 +54,7 @@ from seagulls.cat_demos.engine.v2.text._text_client import TextClient
 from seagulls.cat_demos.engine.v2.text._text_component import TextComponent
 from seagulls.cat_demos.engine.v2.window._window import WindowClient
 from ._executables import QuitGameExecutable
-from ._index import CloseIndexScene, OpenIndexScene
+from ._index import CloseScene, OpenScene
 from ._session_client import SessionClient
 
 GameEventCallback: TypeAlias = Tuple[GameEventId[Any], Callable[[], None]]
@@ -72,8 +71,8 @@ class SessionComponents:
     DEBUG_HUD_CLIENT_ID = GameClientId[DebugHudClient]("debug-hud-client")
     COMPONENT_CONTAINER_CLIENT_ID = GameClientId[GameClientContainer]("client-container")
     FRAME_COLLECTION_CLIENT_ID = GameClientId[FrameCollection]("frame-collection")
-    INDEX_OPEN_EXECUTABLE = GameClientId[OpenIndexScene]("index-scene:open.executable")
-    INDEX_CLOSE_EXECUTABLE = GameClientId[CloseIndexScene]("index-scene:close.executable")
+    INDEX_OPEN_EXECUTABLE = GameClientId[OpenScene]("index-scene:open.executable")
+    INDEX_CLOSE_EXECUTABLE = GameClientId[CloseScene]("index-scene:close.executable")
     PYGAME_INPUT_CLIENT = GameClientId[PygameKeyboardInputPublisher]("pygame-input-client")
     QUIT_GAME_EXECUTABLE = GameClientId[QuitGameExecutable]("quit-game-executable")
     SCENE_CONTEXT = GameClientId[SceneContext]("scene-context")
@@ -102,8 +101,6 @@ class SeagullsApp:
     ) -> None:
         component_factory = self._factory()
         # Components built by this class are cached for the duration of the session
-        session_components = self.session_components()
-        # Components built by this class are cached for the duration of the scene
         session_components = self.session_components()
 
         for p in providers:
@@ -159,14 +156,19 @@ class SeagullsApp:
                     scene_context=session_components.get(SessionComponents.SCENE_CONTEXT),
                 ),
             ),
-            (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenIndexScene()),
-            (SessionComponents.INDEX_CLOSE_EXECUTABLE, lambda: CloseIndexScene()),
+            (SessionComponents.INDEX_OPEN_EXECUTABLE, lambda: OpenScene(
+                scene=session_components.get(SessionComponents.SCENE_CONTEXT),
+            )),
+            (SessionComponents.INDEX_CLOSE_EXECUTABLE, lambda: CloseScene(
+                scene=session_components.get(SessionComponents.SCENE_CONTEXT),
+            )),
             (
                 SessionComponents.PYGAME_INPUT_CLIENT,
                 lambda: PygameKeyboardInputPublisher(
                     event_dispatcher=session_components.get(
                         SessionComponents.EVENT_CLIENT_ID
                     ),
+                    scene_context=session_components.get(SessionComponents.SCENE_CONTEXT),
                 ),
             ),
             (
@@ -222,8 +224,18 @@ class SeagullsApp:
                     ),
                     (
                         FrameEvents.OPEN,
+                        lambda: session_components.get(SessionComponents.SCENE_CLOCK).tick(),
+                    ),
+                    (
+                        FrameEvents.OPEN,
                         lambda: session_components.get(
-                            SessionComponents.SCENE_CLOCK
+                            SessionComponents.PYGAME_INPUT_CLIENT,
+                        ).tick(),
+                    ),
+                    (
+                        FrameEvents.OPEN,
+                        lambda: session_components.get(
+                            SessionComponents.INPUT_TOGGLES_CLIENT_ID,
                         ).tick(),
                     ),
                     (
@@ -241,6 +253,10 @@ class SeagullsApp:
                         lambda: session_components.get(
                             SessionComponents.DEBUG_HUD_CLIENT_ID
                         ).tick(),
+                    ),
+                    (
+                        FrameEvents.CLOSE,
+                        lambda: session_components.get(SessionComponents.WINDOW_CLIENT).commit(),
                     ),
                     (
                         SceneEvents.OPEN,

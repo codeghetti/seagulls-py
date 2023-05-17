@@ -251,6 +251,7 @@ class CatDemosComponentProviders:
                 PlayerControlComponent.CLIENT_ID,
                 lambda: PlayerControlClient(
                     scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    scene_context=session_components.get(SessionComponents.SCENE_CONTEXT),
                     event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
                     toggles=session_components.get(
                         SessionComponents.INPUT_TOGGLES_CLIENT_ID
@@ -270,6 +271,7 @@ class CatDemosComponentProviders:
                 MouseControlComponent.CLIENT_ID,
                 lambda: MouseControlClient(
                     scene_objects=session_components.get(SessionComponents.SCENE_OBJECTS_CLIENT_ID),
+                    scene_context=session_components.get(SessionComponents.SCENE_CONTEXT),
                     event_client=session_components.get(SessionComponents.EVENT_CLIENT_ID),
                     collisions=session_components.get(CollisionComponent.CLIENT_ID),
                 ),

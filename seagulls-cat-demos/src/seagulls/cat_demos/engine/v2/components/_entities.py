@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Generic, NamedTuple, TypeAlias, TypeVar
+from typing import Generic, NamedTuple, Self, TypeAlias, TypeVar
 
 EntityType = TypeVar("EntityType")
 
 
-@dataclass(frozen=True)
-class EntityId:
+class EntityId(NamedTuple):
     """
     Identity object used as a primary key in various collections.
 
@@ -22,12 +20,11 @@ class EntityId:
 
     name: str
 
-    @classmethod
-    def make(cls, name: str) -> EntityId:
-        return cls(f"{cls.__module__}/{cls.__name__}/{name}")
-
     def __post_init__(self) -> None:
         pass
+
+    def namespace(self, name: str) -> Self:
+        return EntityId(f"/{name}/{self.name}")
 
 
 class TypedEntityId(EntityId, Generic[EntityType]):

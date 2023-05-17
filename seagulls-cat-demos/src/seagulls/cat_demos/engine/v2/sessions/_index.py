@@ -1,17 +1,28 @@
 import logging
 
-from seagulls.cat_demos.engine.v2.components._entities import GameSceneId
 from ._executables import IExecutable
+from ..scenes._scene_client import SceneContext
 
 logger = logging.getLogger(__name__)
 
 
-class OpenIndexScene(IExecutable):
+class OpenScene(IExecutable):
+
+    _scene: SceneContext
+
+    def __init__(self, scene: SceneContext) -> None:
+        self._scene = scene
+
     def execute(self) -> None:
-        scene_id = GameSceneId("index")
-        logger.debug(f"scene loaded: {scene_id}")
+        print(f"scene opened: {self._scene.get()}")
 
 
-class CloseIndexScene(IExecutable):
+class CloseScene(IExecutable):
+
+    _scene: SceneContext
+
+    def __init__(self, scene: SceneContext) -> None:
+        self._scene = scene
+
     def execute(self) -> None:
-        print("Goodbye!")
+        print(f"scene closed: {self._scene.get()}")

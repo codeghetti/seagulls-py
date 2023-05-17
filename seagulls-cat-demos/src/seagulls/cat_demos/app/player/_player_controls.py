@@ -19,6 +19,7 @@ from seagulls.cat_demos.engine.v2.input._input_toggles import (
 )
 from seagulls.cat_demos.engine.v2.input._pygame import PygameEvents
 from seagulls.cat_demos.engine.v2.position._point import Position
+from seagulls.cat_demos.engine.v2.scenes._scene_client import SceneContext
 from seagulls.cat_demos.engine.v2.sprites._sprite_component import Sprite, SpriteId
 
 
@@ -38,6 +39,7 @@ class PlayerMoveEvent(NamedTuple):
 
 class PlayerControlClient:
     _scene_objects: SceneObjects
+    _scene_context: SceneContext
     _event_client: GameEventDispatcher
     _toggles: InputTogglesClient
     _clock: GameClock
@@ -46,12 +48,14 @@ class PlayerControlClient:
     def __init__(
         self,
         scene_objects: SceneObjects,
+        scene_context: SceneContext,
         event_client: GameEventDispatcher,
         toggles: InputTogglesClient,
         clock: GameClock,
         collisions: CollisionClient,
     ) -> None:
         self._scene_objects = scene_objects
+        self._scene_context = scene_context
         self._event_client = event_client
         self._toggles = toggles
         self._clock = clock
@@ -104,11 +108,26 @@ class PlayerControlClient:
             if event.payload.type == pygame.KEYDOWN:
                 self._spawn_laser(request.object_id)
 
-        self._event_client.register(PygameEvents.key(request.left_key), on_movement_key)
-        self._event_client.register(PygameEvents.key(request.right_key), on_movement_key)
-        self._event_client.register(PygameEvents.key(request.up_key), on_movement_key)
-        self._event_client.register(PygameEvents.key(request.down_key), on_movement_key)
-        self._event_client.register(PygameEvents.key(request.fire_key), on_fire_key)
+        self._event_client.register(
+            PygameEvents.key(request.left_key).namespace(self._scene_context.get().name),
+            on_movement_key,
+        )
+        self._event_client.register(
+            PygameEvents.key(request.right_key).namespace(self._scene_context.get().name),
+            on_movement_key,
+        )
+        self._event_client.register(
+            PygameEvents.key(request.up_key).namespace(self._scene_context.get().name),
+            on_movement_key,
+        )
+        self._event_client.register(
+            PygameEvents.key(request.down_key).namespace(self._scene_context.get().name),
+            on_movement_key,
+        )
+        self._event_client.register(
+            PygameEvents.key(request.fire_key).namespace(self._scene_context.get().name),
+            on_fire_key,
+        )
 
         self._event_client.register(PlayerControlComponent.MOVE_EVENT, self._move_player)
         self._event_client.register(CollisionComponent.COLLISION_EVENT, self._undo_move)

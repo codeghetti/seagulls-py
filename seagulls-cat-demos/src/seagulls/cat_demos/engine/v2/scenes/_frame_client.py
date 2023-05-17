@@ -48,22 +48,9 @@ class FrameClient(IFrame):
         self._toggles = toggles
 
     def process(self) -> None:
-        self._open_frame()
-        self._execute_frame()
-        self._close_frame()
-
-    def _open_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.OPEN, None))
-        # self._window_client.get_surface()
-        self._pygame_input_client.tick()
-        self._toggles.tick()
-
-    def _execute_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.EXECUTE, None))
-
-    def _close_frame(self) -> None:
         self._event_client.trigger(GameEvent(FrameEvents.CLOSE, None))
-        self._window_client.commit()
 
 
 class IStopScenes(Protocol):

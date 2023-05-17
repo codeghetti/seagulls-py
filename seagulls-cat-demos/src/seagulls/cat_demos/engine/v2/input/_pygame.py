@@ -9,6 +9,7 @@ from seagulls.cat_demos.engine.v2.eventing._event_dispatcher import (
     GameEventId
 )
 from seagulls.cat_demos.engine.v2.position._point import Point, Position
+from seagulls.cat_demos.engine.v2.scenes._scene_client import SceneContext
 
 logger = logging.getLogger(__name__)
 
@@ -174,9 +175,11 @@ event_dispatcher.context_manager(event_id, set_active_object_id)
 
 class PygameKeyboardInputPublisher:
     _event_dispatcher: GameEventDispatcher
+    _scene_context: SceneContext
 
-    def __init__(self, event_dispatcher: GameEventDispatcher) -> None:
+    def __init__(self, event_dispatcher: GameEventDispatcher, scene_context: SceneContext) -> None:
         self._event_dispatcher = event_dispatcher
+        self._scene_context = scene_context
 
     def tick(self) -> None:
         events = pygame.event.get()
@@ -186,34 +189,34 @@ class PygameKeyboardInputPublisher:
             if event.type in [pygame.KEYDOWN, pygame.KEYUP]:
                 self._event_dispatcher.trigger(
                     GameEvent(
-                        PygameEvents.KEYBOARD,
+                        PygameEvents.KEYBOARD.namespace(self._scene_context.get().name),
                         PygameKeyboardEvent(type=event.type, key=event.key),
                     )
                 )
                 self._event_dispatcher.trigger(
                     GameEvent(
-                        PygameEvents.key(event.key),
+                        PygameEvents.key(event.key).namespace(self._scene_context.get().name),
                         PygameKeyboardEvent(type=event.type, key=event.key),
                     )
                 )
             if event.type in [pygame.KEYDOWN]:
                 self._event_dispatcher.trigger(
                     GameEvent(
-                        PygameEvents.key_pressed(event.key),
+                        PygameEvents.key_pressed(event.key).namespace(self._scene_context.get().name),
                         PygameKeyboardEvent(type=event.type, key=event.key),
                     )
                 )
             if event.type in [pygame.KEYUP]:
                 self._event_dispatcher.trigger(
                     GameEvent(
-                        PygameEvents.key_released(event.key),
+                        PygameEvents.key_released(event.key).namespace(self._scene_context.get().name),
                         PygameKeyboardEvent(type=event.type, key=event.key),
                     )
                 )
             if event.type in [pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP]:
                 self._event_dispatcher.trigger(
                     GameEvent(
-                        PygameEvents.MOUSE_BUTTON,
+                        PygameEvents.MOUSE_BUTTON.namespace(self._scene_context.get().name),
                         PygameMouseButtonEvent(
                             type=event.type,
                             button_1=buttons[0],
@@ -228,7 +231,7 @@ class PygameKeyboardInputPublisher:
                     if buttons[x]:
                         self._event_dispatcher.trigger(
                             GameEvent(
-                                PygameEvents.mouse_button(x + 1),
+                                PygameEvents.mouse_button(x + 1).namespace(self._scene_context.get().name),
                                 PygameMouseButtonEvent(
                                     type=event.type,
                                     button_1=buttons[0],
@@ -242,7 +245,7 @@ class PygameKeyboardInputPublisher:
                         if event.type in [pygame.MOUSEBUTTONDOWN]:
                             self._event_dispatcher.trigger(
                                 GameEvent(
-                                    PygameEvents.mouse_button_pressed(x + 1),
+                                    PygameEvents.mouse_button_pressed(x + 1).namespace(self._scene_context.get().name),
                                     PygameMouseButtonEvent(
                                         type=event.type,
                                         button_1=buttons[0],
@@ -256,7 +259,7 @@ class PygameKeyboardInputPublisher:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self._event_dispatcher.trigger(
                     GameEvent(
-                        PygameEvents.MOUSE_BUTTON_PRESSED,
+                        PygameEvents.MOUSE_BUTTON_PRESSED.namespace(self._scene_context.get().name),
                         PygameMouseButtonEvent(
                             type=event.type,
                             button_1=buttons[0],
@@ -270,7 +273,7 @@ class PygameKeyboardInputPublisher:
             if event.type == pygame.MOUSEBUTTONUP:
                 self._event_dispatcher.trigger(
                     GameEvent(
-                        PygameEvents.MOUSE_BUTTON_RELEASED,
+                        PygameEvents.MOUSE_BUTTON_RELEASED.namespace(self._scene_context.get().name),
                         PygameMouseButtonEvent(
                             type=event.type,
                             button_1=buttons[0],
@@ -287,7 +290,7 @@ class PygameKeyboardInputPublisher:
             if event.type == pygame.MOUSEMOTION:
                 self._event_dispatcher.trigger(
                     GameEvent(
-                        PygameEvents.MOUSE_MOTION,
+                        PygameEvents.MOUSE_MOTION.namespace(self._scene_context.get().name),
                         PygameMouseMotionEvent(
                             position=Position(*event.pos),
                             previous_position=Position(

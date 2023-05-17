@@ -40,9 +40,13 @@ class SceneContext:
 
     def get(self) -> GameSceneId:
         if self._current is None:
-            raise RuntimeError("No active scene found")
+            raise SceneNotFoundError("No active scene found")
 
         return self._current
+
+
+class SceneNotFoundError(RuntimeError):
+    pass
 
 
 class SceneEvent(NamedTuple):

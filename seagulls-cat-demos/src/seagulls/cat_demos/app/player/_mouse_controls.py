@@ -15,6 +15,7 @@ from seagulls.cat_demos.engine.v2.input._pygame import (
     PygameMouseMotionEvent
 )
 from seagulls.cat_demos.engine.v2.position._point import Position
+from seagulls.cat_demos.engine.v2.scenes._scene_client import SceneContext
 
 logger = logging.getLogger(__name__)
 
@@ -38,16 +39,19 @@ class MouseClickEvent(NamedTuple):
 
 class MouseControlClient:
     _scene_objects: SceneObjects
+    _scene_context: SceneContext
     _event_client: GameEventDispatcher
     _collisions: CollisionClient
 
     def __init__(
         self,
         scene_objects: SceneObjects,
+        scene_context: SceneContext,
         event_client: GameEventDispatcher,
         collisions: CollisionClient,
     ) -> None:
         self._scene_objects = scene_objects
+        self._scene_context = scene_context
         self._event_client = event_client
         self._collisions = collisions
 
@@ -137,9 +141,18 @@ class MouseControlClient:
                 ))
                 logger.debug(f"clicked: {target_id} ({datetime.now()})")
 
-        self._event_client.register(PygameEvents.MOUSE_MOTION, on_mouse_move)
-        self._event_client.register(PygameEvents.mouse_button_pressed(1), on_mouse_press)
-        self._event_client.register(PygameEvents.MOUSE_BUTTON_RELEASED, on_mouse_release)
+        self._event_client.register(
+            PygameEvents.MOUSE_MOTION.namespace(self._scene_context.get().name),
+            on_mouse_move,
+        )
+        self._event_client.register(
+            PygameEvents.mouse_button_pressed(1).namespace(self._scene_context.get().name),
+            on_mouse_press,
+        )
+        self._event_client.register(
+            PygameEvents.MOUSE_BUTTON_RELEASED.namespace(self._scene_context.get().name),
+            on_mouse_release,
+        )
         self._event_client.register(
             CollisionComponent.object_collision_event(request.object_id),
             on_collide,

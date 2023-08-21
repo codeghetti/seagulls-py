@@ -1,14 +1,10 @@
+import sys
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict
 
-import sys
-
 from seagulls.assets import AssetManager
-from seagulls.engine import (
-    GameClock,
-    GameControls
-)
+from seagulls.engine import GameClock, GameControls
 from seagulls.pygame import PygameCameraPrinter, WindowSurface
 from seagulls.rendering import (
     Camera,
@@ -24,6 +20,7 @@ from seagulls.seagulls_cli import (
     SeagullsRuntimeClient
 )
 from seagulls.session import BlockingGameSession, NullGameSession
+
 from ._cli_command import GameCliCommand
 from ._cli_plugin import RpgDemoCliPlugin
 from ._pygame_screen import PygameScreen

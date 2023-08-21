@@ -1,7 +1,4 @@
-from seagulls.session import (
-    IGameSession,
-    IProvideGameSessions,
-)
+from seagulls.session import IGameSession, IProvideGameSessions
 
 
 class RpgSessionProvider(IProvideGameSessions):

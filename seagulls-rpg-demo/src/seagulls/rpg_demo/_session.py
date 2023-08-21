@@ -1,22 +1,4 @@
-from seagulls.session import (
-    IGameSession,
-    IProvideGameSessions,
-    IStopGameSessions
-)
-
-
-class MySessionStopper(IStopGameSessions):
-
-    _session: IStopGameSessions
-
-    def __init__(self, session: IStopGameSessions):
-        self._session = session
-
-    def wait_for_completion(self) -> None:
-        raise RuntimeError("Can't wait for completion?")
-
-    def stop(self) -> None:
-        self._session.stop()
+from seagulls.session import IGameSession, IProvideGameSessions
 
 
 class RpgSessionProvider(IProvideGameSessions):

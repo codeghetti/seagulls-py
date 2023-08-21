@@ -137,7 +137,7 @@ class ContextualGameClientContainer(GameClientContainer, Generic[T_GameClientTyp
         return self._container.get(component_id)
 
 
-class FilteredGameComponentRegistry(GameClientContainer):
+class FilteredGameComponentContainer(GameClientContainer):
     _container: GameClientContainer
     _context: GameClientProvider[Iterable[GameClientId]]
 

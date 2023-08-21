@@ -55,6 +55,30 @@ class CatDemosAppSettings(NamedTuple):
     process_type: ProcessType
 
 
+class CatDemoComponents:
+
+    _app: SeagullsApp
+    _settings: GameClientProvider[CatDemosAppSettings]
+
+    def __init__(
+        self,
+        app: SeagullsApp,
+        settings: GameClientProvider[CatDemosAppSettings]
+    ) -> None:
+        self._app = app
+        self._settings = settings
+
+    def window_client(self) -> Tuple[GameClientId, GameClientProvider[WindowClient]]:
+        # STANDALONE
+        return SessionComponents.WINDOW_CLIENT, lambda: WindowClient(layers=(
+            "background",
+            "environment",
+            "units",
+            "ui",
+            "mouse",
+        ))
+
+
 class CatDemosComponentProviders:
     _app: SeagullsApp
     _settings: GameClientProvider[CatDemosAppSettings]

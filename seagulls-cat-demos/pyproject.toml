@@ -52,7 +52,8 @@ addopts = "-s --cache-clear --cov --cov-report=term-missing --cov-report=xml --j
 [tool.coverage.run]
 branch = true
 data_file = "../.tmp/seagulls-cat-demos/.coverage"
-source = ["src/seagulls"]
+# pycharm coverage only works without this arg :(
+#source = ["src/seagulls"]
 relative_files = true
 
 [tool.coverage.xml]

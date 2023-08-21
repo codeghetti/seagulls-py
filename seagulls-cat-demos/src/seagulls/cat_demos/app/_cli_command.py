@@ -31,9 +31,6 @@ class GameCliCommand(ICliCommand):
 
     def execute(self) -> None:
         try:
-            self._run()
+            self._app.run(*self._app_providers_factory())
         except KeyboardInterrupt:
             pass
-
-    def _run(self) -> None:
-        self._app.run(*self._app_providers_factory())

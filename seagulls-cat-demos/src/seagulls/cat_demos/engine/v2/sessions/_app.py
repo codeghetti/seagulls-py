@@ -9,7 +9,7 @@ from seagulls.cat_demos.engine.v2.collisions._collision_client import (
 from seagulls.cat_demos.engine.v2.components._client_containers import (
     CachedGameClientContainer,
     ContextualGameClientContainer,
-    FilteredGameComponentRegistry,
+    FilteredGameComponentContainer,
     GameClientContainer,
     GameClientFactory,
     GameClientProvider,
@@ -92,7 +92,13 @@ class SeagullsAppProvider(NamedTuple):
     provider: GameClientProvider[Any]
 
 
+"""
+
+"""
+
+
 class SeagullsApp:
+
     def run(
         self,
         *providers: Tuple[
@@ -206,7 +212,7 @@ class SeagullsApp:
             # TODO: add a filter to this container
             (
                 SessionComponents.COMPONENT_CONTAINER_CLIENT_ID,
-                lambda: FilteredGameComponentRegistry(
+                lambda: FilteredGameComponentContainer(
                     container=session_components,
                     context=lambda: [
                         GameClientId("object-position"),
@@ -343,3 +349,8 @@ class SeagullsApp:
     @lru_cache()
     def _factory(self) -> GameClientFactory:
         return GameClientFactory()
+
+
+def seagulls_app() -> SeagullsApp:
+    app = SeagullsApp()
+    return app

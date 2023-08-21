@@ -1,7 +1,5 @@
 from functools import lru_cache
 
-from seagulls.seagulls_cli import SeagullsCliApplication
-
 from seagulls.cat_demos.app._cli_command import GameCliCommand
 from seagulls.cat_demos.app._cli_plugin import CatDemosCliPlugin
 from seagulls.cat_demos.app._component_providers import (
@@ -10,13 +8,14 @@ from seagulls.cat_demos.app._component_providers import (
     ProcessType
 )
 from seagulls.cat_demos.engine.v2.sessions._app import SeagullsApp
+from seagulls.seagulls_cli import SeagullsCliApplication
 
 
 class CatDemosDiContainer:
     _application: SeagullsCliApplication
 
-    def __init__(self, application: SeagullsCliApplication) -> None:
-        self._application = application
+    # def __init__(self, application: SeagullsCliApplication) -> None:
+    #     self._application = application
 
     @lru_cache()
     def plugin(self) -> CatDemosCliPlugin:
@@ -29,7 +28,7 @@ class CatDemosDiContainer:
     @lru_cache()
     def _launch_command(self) -> GameCliCommand:
         return GameCliCommand(
-            app=self.app(), app_providers_factory=self._standalone_providers()
+            app=self.app(), app_providers_factory=self.standalone_providers()
         )
 
     @lru_cache()
@@ -39,7 +38,7 @@ class CatDemosDiContainer:
         )
 
     @lru_cache()
-    def _standalone_providers(self) -> CatDemosComponentProviders:
+    def standalone_providers(self) -> CatDemosComponentProviders:
         return CatDemosComponentProviders(
             app=self.app(),
             settings=lambda: CatDemosAppSettings(

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import logging
 
 import pygame
@@ -36,6 +38,8 @@ class Sprites(SpritesType):
     flag_pole = "flag-pole"
     green_ghost = "green-ghost"
     dark_wizard = "dark-wizard"
+    menu_button = "menu-button"
+    menu_button_text = "menu-button-text"
 
 
 class RpgScene2(IGameScene):
@@ -106,11 +110,20 @@ class RpgScene2(IGameScene):
         self.heart_health(self._health_points)
 
         if self._is_game_won:
+            self._printer.print_text(
+                "You win!", Path("seagulls_assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 100,
+                Color({"r": 250, "g": 140, "b": 0}), Size({"height": 200, "width": 150}),
+                self._camera.relative_position(Position({"x": 300, "y": 0})))
+
             self._sprite_client.render_sprite(
-                Sprites.you_win,
+                Sprites.menu_button,
                 self._camera.relative_position(
-                    Position({"x": 225, "y": 225}))
+                    Position({"x": 350, "y": 350}))
             )
+            self._printer.print_text(
+                "Main Menu", Path("seagulls_assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 100,
+                Color({"r": 250, "g": 69, "b": 0}), Size({"height": 80, "width": 60}),
+                self._camera.relative_position(Position({"x": 450, "y": 340})))
 
         if self._ghost_alive:
             self.walking_ghost(delta)
@@ -332,6 +345,43 @@ class RpgScene2(IGameScene):
             Sprites.floor_single_piece,
             Position({"x": self._scene_right_limit - 225, "y": 550}))
 
+    def make_button(self):
+        self._sprite_client.render_sprite(
+            Sprites.menu_button,
+            Position({"x": 100, "y": 100})
+        )
+#
+# button.blit(text, (10, padding))
+#         surface.blit(button, (self._get_position()[0], self._get_position()[1] + 160))
+#         surface.blit(ship_sprite, (self._get_position()[0], self._get_position()[1]))
+#         surface.blit(ship_velocity, (self._get_position()[0], self._get_position()[1] + 100))
+#         surface.blit(ship_power, (self._get_position()[0], self._get_position()[1] + 120))
+#
+#     def _detect_state(self) -> None:
+#         _button_width = self._get_button_width()
+#         _button_height = self._get_button_height()
+#         rect = Rect(
+#             (self._get_position()[0], self._get_position()[1] + 160),
+#             (_button_width,
+#              _button_height))
+#
+#         if rect.collidepoint(pygame.mouse.get_pos()):
+#             self._is_highlighted.set()
+#             click = self._game_controls.is_click_initialized()
+#             if click:
+#                 logger.debug("CLICKY")
+#                 self._is_clicked.set()
+#             if not self._game_controls.is_mouse_down():
+#                 if self._is_clicked.is_set():
+#                     logger.debug("SWITCH")
+#                     # TODO fix typing issue below
+#                     self._scene.reset()  # type: ignore
+#                     self._active_scene_manager.set_active_scene(self._scene)
+#                     self._active_ship_manager.set_active_ship(self._ship)
+#                 self._is_clicked.clear()
+#         else:
+#             self._is_highlighted.clear()
+#             self._is_clicked.clear()
 
 class SceneProvider(IProvideGameScenes):
 

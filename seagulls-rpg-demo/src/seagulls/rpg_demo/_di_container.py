@@ -121,6 +121,10 @@ class RpgDemoDiContainer:
         game_over = str(asset_client.get_path(
             "kenney.shooting-gallery-pack/PNG/HUD/text_gameover.png").resolve())
         you_win = str(asset_client.get_path("customs/you_win.png").resolve())
+        menu_button = str(asset_client.get_path(
+            "kenney.ui-pack-rpg-expansion/PNG/buttonLong_brown.png").resolve())
+        menu_button_text = str(asset_client.get_path("customs/main_menu.png").resolve())
+
         return {
             Sprites.floor_left_corner: SpriteInfo(
                 path=assets,
@@ -240,6 +244,20 @@ class RpgDemoDiContainer:
                 size=(16, 16),
                 game_size=(35, 35),
                 coordinates=(0, 144)
+            ),
+            Sprites.menu_button: SpriteInfo(
+                path=menu_button,
+                resolution=(190, 49),
+                size=(190, 49),
+                game_size=(300, 80),
+                coordinates=(0, 0),
+            ),
+            Sprites.menu_button_text: SpriteInfo(
+                path=menu_button_text,
+                resolution=(302, 45),
+                size=(302, 45),
+                game_size=(200, 25),
+                coordinates=(0, 0),
             )
         }
 

@@ -1,7 +1,8 @@
-import sys
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict
+
+import sys
 
 from seagulls.assets import AssetManager
 from seagulls.engine import (
@@ -25,7 +26,6 @@ from seagulls.seagulls_cli import (
     SeagullsRuntimeClient
 )
 from seagulls.session import BlockingGameSession, NullGameSession
-
 from ._character import Character
 from ._cli_command import GameCliCommand
 from ._cli_plugin import RpgDemoCliPlugin
@@ -120,10 +120,8 @@ class RpgDemoDiContainer:
             asset_client.get_path("kenney.pixel-platformer/Tilemap/tiles_packed.png").resolve())
         game_over = str(asset_client.get_path(
             "kenney.shooting-gallery-pack/PNG/HUD/text_gameover.png").resolve())
-        you_win = str(asset_client.get_path("customs/you_win.png").resolve())
         menu_button = str(asset_client.get_path(
             "kenney.ui-pack-rpg-expansion/PNG/buttonLong_brown.png").resolve())
-        menu_button_text = str(asset_client.get_path("customs/main_menu.png").resolve())
 
         return {
             Sprites.floor_left_corner: SpriteInfo(
@@ -231,13 +229,6 @@ class RpgDemoDiContainer:
                 game_size=(50, 50),
                 coordinates=(140, 1260),
             ),
-            Sprites.you_win: SpriteInfo(
-                path=you_win,
-                resolution=(600, 200),
-                size=(371, 52),
-                game_size=(484, 100),
-                coordinates=(7, 27),
-            ),
             Sprites.green_ghost: SpriteInfo(
                 path=ghost,
                 resolution=(192, 176),
@@ -252,13 +243,6 @@ class RpgDemoDiContainer:
                 game_size=(300, 80),
                 coordinates=(0, 0),
             ),
-            Sprites.menu_button_text: SpriteInfo(
-                path=menu_button_text,
-                resolution=(302, 45),
-                size=(302, 45),
-                game_size=(200, 25),
-                coordinates=(0, 0),
-            )
         }
 
     @lru_cache()

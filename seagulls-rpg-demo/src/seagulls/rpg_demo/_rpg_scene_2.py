@@ -108,25 +108,9 @@ class RpgScene2(IGameScene):
         self.heart_health(self._health_points)
 
         if self._is_game_won:
-            self._printer.print_text(
-                # with this font, the font size is equal to the height of the surface created
-                # with a font size of 100, each character is 50 wide
-                # the size of the surface will always be
-                # width = num_chars * (font_size / 2)
-                # height = font_size
-                "You win!", Path("seagulls_assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 100,
-                Color({"r": 250, "g": 140, "b": 0}), Size({"height": 100, "width": 400}),
-                self._camera.relative_position(Position({"x": 200, "y": 0})))
-
-            self._sprite_client.render_sprite(
-                Sprites.menu_button,
-                self._camera.relative_position(
-                    Position({"x": 350, "y": 350}))
-            )
-            self._printer.print_text(
-                "Main Menu", Path("seagulls_assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 60,
-                Color({"r": 250, "g": 69, "b": 0}), Size({"height": 60, "width": 270}),
-                self._camera.relative_position(Position({"x": 370, "y": 360})))
+            self.render_text("You win!", 100, Position({"x": 200, "y": 0}))
+            self.render_button("Main Menu", Position({"x": 360, "y": 350}))
+            self.render_button("Quit", Position({"x": 360, "y": 450}))
 
         if self._ghost_alive:
             self.walking_ghost(delta)
@@ -246,6 +230,36 @@ class RpgScene2(IGameScene):
                         }
                     )
                 )
+
+    def render_button(self, text: str, position: Position):
+        self._sprite_client.render_sprite(
+            Sprites.menu_button,
+            self._camera.relative_position(position),
+        )
+        text_position = Position({
+            "x": position.get()["x"] + 15,
+            "y": position.get()["y"] + 5,
+        })
+        self.render_text(text, 60, text_position)
+
+    def render_text(self, text: str, size: int, position: Position) -> None:
+        if size % 2 == 1:
+            raise ValueError("even sizes only please?")
+
+        # this math has only been checked with this specific font
+        font_path = Path("seagulls_assets/fonts/ubuntu-mono-v10-latin-regular.ttf")
+        font_size = size
+        height = font_size
+        # we can only do this calculation with monospace fonts
+        width = int(len(text) * (font_size / 2))
+        self._printer.print_text(
+            text,
+            font_path,
+            font_size,
+            Color({"r": 250, "g": 140, "b": 0}),
+            Size({"height": height, "width": width}),
+            self._camera.relative_position(position),
+        )
 
     def pumpkin_x_axis_movement(self, delta):
         if not self._is_game_won:

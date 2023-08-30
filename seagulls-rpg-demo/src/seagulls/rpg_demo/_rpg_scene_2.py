@@ -19,6 +19,10 @@ from seagulls.session import IProvideGameSessions
 
 logger = logging.getLogger(__name__)
 
+BUTTON_STATE_INACTIVE = 0
+BUTTON_STATE_ACTIVE = 1
+BUTTON_STATE_PRESSED = 2
+
 
 class Sprites(SpritesType):
     floor_left_corner = "floor-left-corner"
@@ -92,6 +96,7 @@ class RpgScene2(IGameScene):
         self._x_sword_position = 0
         self._y_position_sword = 0
         self._lava = pygame.Rect((0, 750), (self._scene_right_limit, 50))
+        self._active_menu_index = 0
 
     def tick(self) -> None:
         self._printer.clear()
@@ -110,9 +115,29 @@ class RpgScene2(IGameScene):
         self.heart_health(self._health_points)
 
         if self._is_game_won:
+            if self._game_controls.is_up_moving():
+                self._active_menu_index += 1
+            elif self._game_controls.is_down_moving() and self._active_menu_index > 1:
+                self._active_menu_index -= 1
+
+            if self._active_menu_index < 0:
+                self._active_menu_index = 0
+
+            if self._active_menu_index > 2:
+                self._active_menu_index = 2
+
             self.render_text("You win!", 100, Position({"x": 200, "y": 0}))
-            self.render_button("Main Menu", Position({"x": 360, "y": 350}))
-            self.render_button("Quit", Position({"x": 360, "y": 450}))
+
+            self.render_button(
+                "Quit",
+                Position({"x": 360, "y": 450}),
+                1 if self._active_menu_index == 1 else 0,
+            )
+            self.render_button(
+                "Main Menu",
+                Position({"x": 360, "y": 350}),
+                1 if self._active_menu_index == 2 else 0,
+            )
 
         if self._ghost_alive:
             self.walking_ghost(delta)
@@ -227,9 +252,18 @@ class RpgScene2(IGameScene):
                     )
                 )
 
-    def render_button(self, text: str, position: Position):
+    def render_button(self, text: str, position: Position, state: int) -> None:
+        if state == BUTTON_STATE_INACTIVE:
+            sprite = Sprites.menu_button
+        elif state == BUTTON_STATE_ACTIVE:
+            sprite = Sprites.menu_button_active
+        elif state == BUTTON_STATE_PRESSED:
+            sprite = Sprites.menu_button_pressed
+        else:
+            raise RuntimeError(f"invalid button state: {state}")
+
         self._sprite_client.render_sprite(
-            Sprites.menu_button,
+            sprite,
             self._camera.relative_position(position),
         )
         text_position = Position({

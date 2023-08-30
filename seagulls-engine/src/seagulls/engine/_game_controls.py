@@ -48,10 +48,18 @@ class GameControls(GameObject):
         return pygame.key.get_pressed()[pygame.K_RIGHT]
 
     def is_up_moving(self) -> bool:
-        return pygame.key.get_pressed()[pygame.K_UP]
+        for event in self._events:
+            if self._is_key_down_event(event, pygame.K_UP):
+                return True
+
+        return False
 
     def is_down_moving(self) -> bool:
-        return pygame.key.get_pressed()[pygame.K_DOWN]
+        for event in self._events:
+            if self._is_key_down_event(event, pygame.K_DOWN):
+                return True
+
+        return False
 
     def should_toggle_debug_hud(self) -> bool:
         for event in self._events:

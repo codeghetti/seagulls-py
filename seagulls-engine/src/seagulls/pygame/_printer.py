@@ -16,7 +16,6 @@ from seagulls.rendering import (
     Size,
     Sprite
 )
-
 from ._surface import IProvideSurfaces
 
 logger = logging.getLogger(__name__)
@@ -47,9 +46,7 @@ class PygamePrinter(IPrinter):
         p = self._get_adjusted_position(position).get()
 
         font = Font(font_path, font_size)
-        surface = font.render(text, True, (c["r"], c["g"], c["b"]), "black")
-        surface.set_colorkey((0, 0, 0))
-
+        surface = font.render(text, True, (c["r"], c["g"], c["b"]))
         surface = pygame.transform.scale(surface, (s["width"], s["height"]))
 
         self._get_frame().blit(surface, (p["x"], p["y"]))

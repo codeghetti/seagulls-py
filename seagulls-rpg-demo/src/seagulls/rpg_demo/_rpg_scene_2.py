@@ -1,8 +1,8 @@
+import logging
 from pathlib import Path
 
-import logging
-
 import pygame
+
 from seagulls.assets import AssetManager
 from seagulls.engine import GameClock, GameControls
 from seagulls.pygame import PygamePrinter, WindowSurface
@@ -33,13 +33,11 @@ class Sprites(SpritesType):
     half_health = "half-health"
     zero_health = "zero-health"
     game_over = "game-over"
-    you_win = "you-win"
     flag_banner = "flag-banner"
     flag_pole = "flag-pole"
     green_ghost = "green-ghost"
     dark_wizard = "dark-wizard"
     menu_button = "menu-button"
-    menu_button_text = "menu-button-text"
 
 
 class RpgScene2(IGameScene):
@@ -111,9 +109,14 @@ class RpgScene2(IGameScene):
 
         if self._is_game_won:
             self._printer.print_text(
+                # with this font, the font size is equal to the height of the surface created
+                # with a font size of 100, each character is 50 wide
+                # the size of the surface will always be
+                # width = num_chars * (font_size / 2)
+                # height = font_size
                 "You win!", Path("seagulls_assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 100,
-                Color({"r": 250, "g": 140, "b": 0}), Size({"height": 200, "width": 150}),
-                self._camera.relative_position(Position({"x": 300, "y": 0})))
+                Color({"r": 250, "g": 140, "b": 0}), Size({"height": 100, "width": 400}),
+                self._camera.relative_position(Position({"x": 200, "y": 0})))
 
             self._sprite_client.render_sprite(
                 Sprites.menu_button,
@@ -121,9 +124,9 @@ class RpgScene2(IGameScene):
                     Position({"x": 350, "y": 350}))
             )
             self._printer.print_text(
-                "Main Menu", Path("seagulls_assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 100,
-                Color({"r": 250, "g": 69, "b": 0}), Size({"height": 80, "width": 60}),
-                self._camera.relative_position(Position({"x": 450, "y": 340})))
+                "Main Menu", Path("seagulls_assets/fonts/ubuntu-mono-v10-latin-regular.ttf"), 60,
+                Color({"r": 250, "g": 69, "b": 0}), Size({"height": 60, "width": 270}),
+                self._camera.relative_position(Position({"x": 370, "y": 360})))
 
         if self._ghost_alive:
             self.walking_ghost(delta)

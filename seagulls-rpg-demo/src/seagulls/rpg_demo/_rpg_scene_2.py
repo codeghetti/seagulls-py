@@ -38,6 +38,8 @@ class Sprites(SpritesType):
     green_ghost = "green-ghost"
     dark_wizard = "dark-wizard"
     menu_button = "menu-button"
+    menu_button_active = "menu-button-active"
+    menu_button_pressed = "menu-button-pressed"
 
 
 class RpgScene2(IGameScene):
@@ -202,13 +204,7 @@ class RpgScene2(IGameScene):
             self._session.get().stop()
 
     def render_fps(self, fps: float) -> None:
-        self._printer.print_text(
-            str(int(fps)),
-            self._asset_manager.get_path("fonts/ubuntu-mono-v10-latin-regular.ttf"),
-            32,
-            Color({"r": 16, "g": 16, "b": 16}),
-            Size({"height": 32, "width": 64}),
-            self._camera.relative_position(Position({"x": 900, "y": 200})))
+        self.render_text(str(int(fps)), 40, Position({"x": 900, "y": 10}))
 
     def weapon_firing(self, delta):
         if self._game_controls.should_fire() and not self._is_weapon_out:

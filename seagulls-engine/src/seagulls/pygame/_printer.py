@@ -106,6 +106,7 @@ class PygamePrinter(IPrinter):
         scaled_surface = pygame.transform.scale(unit_surface, (s["width"], s["height"]))
         self._get_frame().blit(scaled_surface, (p["x"], p["y"]))
 
+    @lru_cache()
     def _load_png(self, file: Path) -> Surface:
         loaded_sprite = pygame.image.load(file.resolve())
         if loaded_sprite.get_alpha() is None:

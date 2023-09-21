@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict
@@ -111,6 +112,47 @@ class RpgDemoDiContainer:
     @lru_cache()
     def _sprite_mapping(self) -> Dict[SpritesType, SpriteInfo]:
         asset_client = self._asset_manager()
+        current_month = datetime.now().month
+
+        if current_month < 8:
+            char_sprite_path = str(asset_client.get_path(
+            "kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png").resolve())
+
+            char_sprite_info = SpriteInfo(
+                path=char_sprite_path,
+                resolution=(288, 126),
+                size=(18, 18),
+                game_size=(35, 35),
+                coordinates=(90, 0),
+            )
+
+            dead_char_info = SpriteInfo(
+                path= char_sprite_path,
+                resolution=(288, 126),
+                size=(18, 18),
+                game_size=(35, 35),
+                coordinates=(72, 0),
+                )
+        else:
+            char_sprite_path = str(asset_client.get_path(
+            "kenney.ski/tilemap-packed.png").resolve())
+
+            char_sprite_info = SpriteInfo(
+                path=char_sprite_path,
+                resolution=(192, 176),
+                size=(16, 16),
+                game_size=(35, 35),
+                coordinates=(144, 80),
+                )
+
+            dead_char_info = SpriteInfo(
+                path=char_sprite_path,
+                resolution=(192, 176),
+                size=(16, 16),
+                game_size=(35, 35),
+                coordinates=(176, 112),
+                )
+
         assets = str(asset_client.get_path(
             "kenney.pixel-platformer-farm-expansion/Tilemap/tilemap-packed.png").resolve())
         medieval = str(asset_client.get_path("kenney.medieval-pack/medieval-packed.png").resolve())
@@ -150,21 +192,10 @@ class RpgDemoDiContainer:
                 game_size=(50, 50),
                 coordinates=(0, 0),
             ),
-            Sprites.pumpkin: SpriteInfo(
-                path=assets,
-                resolution=(288, 126),
-                size=(18, 18),
-                game_size=(35, 35),
-                coordinates=(90, 0),
-            ),
 
-            Sprites.dead_pumpkin: SpriteInfo(
-                path=assets,
-                resolution=(288, 126),
-                size=(18, 18),
-                game_size=(35, 35),
-                coordinates=(72, 0),
-            ),
+            Sprites.main_character: char_sprite_info,
+
+            Sprites.dead_pumpkin: dead_char_info,
 
             Sprites.ghost: SpriteInfo(
                 path=ghost,

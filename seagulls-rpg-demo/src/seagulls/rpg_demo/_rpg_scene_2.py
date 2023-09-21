@@ -23,7 +23,7 @@ class Sprites(SpritesType):
     floor_middle = "floor-middle"
     floor_right_corner = "floor-right-corner"
     floor_single_piece = "floor-single-piece"
-    pumpkin = "pumpkin"
+    main_character = "pumpkin"
     dead_pumpkin = "dead-pumpkin"
     ghost = "ghost"
     sword = "sword"
@@ -144,7 +144,7 @@ class RpgScene2(IGameScene):
             )
 
             self._sprite_client.render_sprite(
-                Sprites.pumpkin,
+                Sprites.main_character,
                 Position({"x": self._x_pumpkin_position, "y": int(self._y_position_pumpkin)})
             )
 
